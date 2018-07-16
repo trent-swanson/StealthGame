@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class NPC : Agent {
 
-	GameObject target;
+	[Space]
+	[Space]
+	public GameObject playerTarget;
+	public GameObject workNodeTarget;
+	public GameObject guardTarget;
+	public GameObject target;
+
+	private enum State { AMBIENT, SUSPICIOUS, ALERT }
+	private State state;
 
 	[Space]
 	[Space]
@@ -16,21 +24,11 @@ public class NPC : Agent {
 		bool desiredWorldState = false;
 	}
 
-	//AI goals
-	public Goal idle;
-	public Goal patrol;
-	public Goal useWorkNode;
-	public Goal investigate;
-	public Goal guardEnemy;
-	public Goal killEnemy;
-	public Goal findEnemy;
-	public Goal ambush;
-	public Goal helpGuard;
-
 
 	void Start() {
 		//todo: need to remove this agent from the unitList when it is killed
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>().unitList.Add(this);
+		state = State.AMBIENT;
 		Init();
 	}
 
@@ -63,7 +61,7 @@ public class NPC : Agent {
 
 	void NextWaypoint() {
 		if (waypoints.Count == 0) {
-			FindNearestTarget();
+			//FindNearestTarget();
 			return;
 		}
 		if (Vector3.Distance(transform.position, waypoints[currentWaypoint].transform.position) < 0.15f) {
@@ -75,6 +73,7 @@ public class NPC : Agent {
 		target = waypoints[currentWaypoint];
 	}
 
+	/*
 	void FindNearestTarget() {
 		//find all players, change this to accept waypoints
 		GameObject[] targets = GameObject.FindGameObjectsWithTag("Player");
@@ -93,7 +92,7 @@ public class NPC : Agent {
 		}
 
 		target = nearest;
-	}
+	}*/
 
 	//========================================================================================	
 	public List<Action> availableActions = new List<Action>();
@@ -114,7 +113,7 @@ public class NPC : Agent {
 		// check what actions can run using their checkProceduralPrecondition
 		List<Action> usableActions = new List<Action> ();
 		foreach (Action a in availableActions) {
-			if ( a.CheckProceduralPrecondition(p_agent) )
+			if ( a.CheckProceduralPrecondition(p_agent, target) )
 				usableActions.Add(a);
 		}
 

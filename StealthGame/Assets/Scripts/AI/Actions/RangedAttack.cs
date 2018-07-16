@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "RangedAttack", menuName = "AI Actions/RangedAttack")]
 public class RangedAttack : Action {
 
 	private bool attacked = false;
@@ -26,10 +27,11 @@ public class RangedAttack : Action {
     }
      
     public override bool RequiresInRange () {
-        return true; // yes we need to be near a rock
+        return true;
     }
      
-    public override bool CheckProceduralPrecondition (GameObject agent) {
+    public override bool CheckProceduralPrecondition (GameObject agent, GameObject p_target) {
+		target = p_target;
         //get a list of all players in scene
         List<PlayerController> players =  new List<PlayerController>();
 		foreach(PlayerController player in GameObject.FindObjectsOfType(typeof(PlayerController))) { 

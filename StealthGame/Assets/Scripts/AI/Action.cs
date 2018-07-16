@@ -10,8 +10,8 @@ public abstract class Action : ScriptableObject {
     private bool inRange = false;
  
     public int cost = 1;
- 
-    public GameObject target;
+
+    public GameObject target = null;
  
     public Action() {
         preconditions = new HashSet<KeyValuePair<string, object>> ();
@@ -20,7 +20,6 @@ public abstract class Action : ScriptableObject {
  
     public void DoReset() {
         inRange = false;
-        target = null;
         Reset ();
     }
 
@@ -31,7 +30,7 @@ public abstract class Action : ScriptableObject {
     public abstract bool IsDone();
  
     //Procedurally check if this action can run. Not all actions will need this, but some might.
-    public abstract bool CheckProceduralPrecondition(GameObject agent);
+    public abstract bool CheckProceduralPrecondition(GameObject agent, GameObject target);
  
     //Returns True if the action performed successfully
     public abstract bool Perform(GameObject agent);
