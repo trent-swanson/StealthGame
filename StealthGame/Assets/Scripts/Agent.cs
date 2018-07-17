@@ -7,6 +7,8 @@ public class Agent : MonoBehaviour {
 
     //public List<Action> actionList = new List<Action>();
 
+    SquadManager squadManager;
+
     [Header("Debugging Only")]
     [Tooltip("Do Not Assign")]
     public bool turn = false;
@@ -70,6 +72,7 @@ public class Agent : MonoBehaviour {
 
     //Initialise agents
     protected void Init() {
+        squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();
         currentActionPoints = actionPoints;
         halfHeight = GetComponent<Collider>().bounds.extents.y;
         unitCanvas.SetActive(false);
@@ -346,7 +349,7 @@ public class Agent : MonoBehaviour {
     }
 
     //A* pathfinding
-    protected void FindPath(Tile p_target, bool p_isWaypoint) {
+    public void FindPath(Tile p_target, bool p_moveOntoTile) {
         ComputeAdjacentcyLists(jumpHeight, p_target);
         GetCurrentTile();
 
@@ -364,7 +367,7 @@ public class Agent : MonoBehaviour {
 
             if (t == p_target) {
                 //found path
-                actualTargetTile = FindEndTile(t, p_isWaypoint);
+                actualTargetTile = FindEndTile(t, p_moveOntoTile);
                 CheckMoveToTile(actualTargetTile, false);
                 return;
             }
@@ -401,7 +404,7 @@ public class Agent : MonoBehaviour {
         Debug.Log("Path not found");
     }
 
-    protected Tile FindEndTile(Tile p_t, bool p_isWaypoint) {
+    protected Tile FindEndTile(Tile p_t, bool p_moveOntoTile) {
         Stack<Tile> tempPath = new Stack<Tile>();
 
         Tile next = p_t.parent;
@@ -413,7 +416,7 @@ public class Agent : MonoBehaviour {
 
         //if in move range return target tile
         if (tempPath.Count <= moveAmount) {
-            if (p_isWaypoint)
+            if (p_moveOntoTile)
                 return p_t;
             else
                 return p_t.parent;
@@ -450,10 +453,20 @@ public class Agent : MonoBehaviour {
     }*/
 
     void EndAction() {
-        APNumber.text = currentActionPoints.ToString();
-        if (currentActionPoints <= 0) {
-			TurnManager.EndTurn();
-		}
+        if (GetComponent<NPC>()) {
+            NPC AI = GetComponent<NPC>();
+            AI.currentAction = null;
+            AI.currentActionNum++;
+            if (AI.currentActionNum > AI.maxActionNum) {
+                AI.currentActionNum = 0;
+                squadManager.AgentHasFinishedActionPlan(AI);
+            }
+        } else {
+            APNumber.text = currentActionPoints.ToString();
+            if (currentActionPoints <= 0) {
+                TurnManager.EndPlayerTurn();
+            }
+        }
 	}
 
     public void BeginTurn() {
@@ -472,6 +485,6 @@ public class Agent : MonoBehaviour {
 	public void Knockout() {
 		knockedout = true;
 		transform.position = new Vector3(0, 100, 0);
-		TurnManager.EndTurn();
+		TurnManager.EndPlayerTurn();
 	}
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class Action : ScriptableObject {
 
-	private HashSet<KeyValuePair<string,object>> preconditions;
-    private HashSet<KeyValuePair<string,object>> effects;
+	protected HashSet<KeyValuePair<string,object>> preconditions;
+    protected HashSet<KeyValuePair<string,object>> effects;
  
     private bool inRange = false;
  
@@ -33,7 +33,8 @@ public abstract class Action : ScriptableObject {
     public abstract bool CheckProceduralPrecondition(GameObject agent, GameObject target);
  
     //Returns True if the action performed successfully
-    public abstract bool Perform(GameObject agent);
+    //Happens in Update()
+    public abstract void Perform(Agent agent);
  
     /**
      * Does this action need to be within range of a target game object?

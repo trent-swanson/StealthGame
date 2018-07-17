@@ -94,8 +94,7 @@ public class RangedAttack : Action {
         return false;
     }
      
-    public override bool Perform (GameObject agent) {
+    public override void Perform (Agent agent) {
 		Debug.Log("Shot Player: " + target.name);
-        return true;
     }
 }

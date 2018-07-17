@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "GotoTarget", menuName = "AI Actions/GotoTarget")]
 public class GotoTarget : Action {
 
 	private bool attacked = false;
@@ -10,9 +11,9 @@ public class GotoTarget : Action {
     public float attackRange = 10;
  
     public GotoTarget () {
-        AddPrecondition ("NearTarget", target);
         AddPrecondition ("TargetLineOfSight", target);
-        AddEffect ("AttackingTarget", target);
+        AddEffect ("AtTarget", target);
+        AddEffect ("NearTarget", target);
     }
      
      
@@ -34,8 +35,18 @@ public class GotoTarget : Action {
 		return true;
     }
      
-    public override bool Perform (GameObject agent) {
-		Debug.Log("Shot Player: " + target.name);
-        return true;
+    public override void Perform (Agent agent) {
+		if (!agent.moving) {
+			CalculatePath(agent);
+			agent.actualTargetTile.target = true;
+        }
+        else {
+            agent.Move(false);
+        }
     }
+
+    void CalculatePath(Agent agent) {
+		Tile targetTile = agent.GetTargetTile(target);
+		agent.FindPath(targetTile, false);
+	}
 }

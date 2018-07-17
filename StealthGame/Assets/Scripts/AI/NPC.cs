@@ -6,19 +6,31 @@ public class NPC : Agent {
 
 	[Space]
 	[Space]
+	[Header("Waypoints")]
+	public List<GameObject> waypoints = new List<GameObject>();
+	public int currentWaypoint = 0;
+
+	[Space]
+	[Space]
 	public GameObject playerTarget;
 	public GameObject workNodeTarget;
 	public GameObject guardTarget;
 	public GameObject target;
 
-	private enum State { AMBIENT, SUSPICIOUS, ALERT }
-	private State state;
+	public enum State { AMBIENT, SUSPICIOUS, ALERT }
+	public State state;
 
 	[Space]
 	[Space]
-	[Header("Waypoints")]
-	public List<GameObject> waypoints = new List<GameObject>();
-	public int currentWaypoint = 0;
+	[Header("Actions")]
+	public List<Action> availableActions = new List<Action>();
+	private HashSet<KeyValuePair<string,object>> currentWorldState;
+	public Action currentGoal;
+
+	public Action currentAction;
+	public int currentActionNum = 0;
+	public int maxActionNum = 3;
+
 
 	public class Goal {
 		bool desiredWorldState = false;
@@ -30,81 +42,30 @@ public class NPC : Agent {
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>().unitList.Add(this);
 		state = State.AMBIENT;
 		Init();
+
+		//temp - remove this
+		state = State.AMBIENT;
 	}
 
 	void Update() {
 		Debug.DrawRay(transform.position, transform.forward);
 
+		//Listen for inputs and change state
+
         //if not my turn then don't run Update()
         if (!turn)
             return;
 
-        if (!moving && currentActionPoints > 0) {
-			//FindNearestTarget();
-			NextWaypoint();
-			CalculatePath();
-            //FindSelectableTiles();
-			actualTargetTile.target = true;
-        }
-        else {
-            Move(false);
-        }
+
+		if(currentAction != null)
+			currentAction.Perform(this);
     }
-
-	void CalculatePath() {
-		Tile targetTile = GetTargetTile(target);
-		if (waypoints.Count > 0)
-			FindPath(targetTile, true);
-		else
-			FindPath(targetTile, false);
-	}
-
-	void NextWaypoint() {
-		if (waypoints.Count == 0) {
-			//FindNearestTarget();
-			return;
-		}
-		if (Vector3.Distance(transform.position, waypoints[currentWaypoint].transform.position) < 0.15f) {
-			currentWaypoint++;
-			if (currentWaypoint >= waypoints.Count) {
-				currentWaypoint = 0;
-			}
-		}
-		target = waypoints[currentWaypoint];
-	}
-
-	/*
-	void FindNearestTarget() {
-		//find all players, change this to accept waypoints
-		GameObject[] targets = GameObject.FindGameObjectsWithTag("Player");
-
-		GameObject nearest = null;
-		float distance = Mathf.Infinity;
-
-		//find closes target in targets array
-		foreach (GameObject obj in targets) {
-			//SqrMagnitude is more efficent than vector3.Distance
-			float dis = Vector3.SqrMagnitude(transform.position - obj.transform.position);
-			if (dis < distance) {
-				distance = dis;
-				nearest = obj;
-			}
-		}
-
-		target = nearest;
-	}*/
-
-	//========================================================================================	
-	public List<Action> availableActions = new List<Action>();
-	private Stack<Action> actionPlan = new Stack<Action>();
-	private HashSet<KeyValuePair<string,object>> currentWorldState;
-	public Goal currentGoal;
-
-	//todo - IsValid chack on goals (e.g. does the AI know where the player is, if not dont do Kill Enemy Goal)
 
 	//Plan what sequence of actions can fulfill the goal
 	//Returns null if a plan could not be found
-	public Action Plan(GameObject p_agent, HashSet<KeyValuePair<string,object>> desiredWorldState) {
+	public Action Plan(Action goal, GameObject p_target) {
+		target = p_target;
+		
 		// reset the actions so we can start fresh with them
 		foreach (Action a in availableActions) {
 			a.DoReset ();
@@ -113,15 +74,15 @@ public class NPC : Agent {
 		// check what actions can run using their checkProceduralPrecondition
 		List<Action> usableActions = new List<Action> ();
 		foreach (Action a in availableActions) {
-			if ( a.CheckProceduralPrecondition(p_agent, target) )
+			if ( a.CheckProceduralPrecondition(this.gameObject, target) )
 				usableActions.Add(a);
 		}
 
 		List<Node> openSet = new List<Node>();
 		HashSet<Node> closeSet = new HashSet<Node>();
 
-		Node startNode = new Node(null, null, currentWorldState);
-		Node targetNode = new Node(null, null, desiredWorldState);
+		Node startNode = new Node(currentWorldState);
+		Node targetNode = new Node(goal);
 		openSet.Add(targetNode);
 
 		//==================
@@ -140,7 +101,9 @@ public class NPC : Agent {
 			openSet.Remove(currentNode);
 			closeSet.Add(currentNode);
 
-			if (currentNode.worldState == startNode.worldState) {
+			Debug.Log(currentNode.action.Preconditions.Count);
+			if (currentNode.action.Preconditions.Count == 0 || currentNode.worldState == startNode.worldState) {
+				Debug.Log("Got Action");
 				return currentNode.action;
 			}
 			
@@ -152,6 +115,7 @@ public class NPC : Agent {
 		}
 
 		//failed to find a plan for this goal
+		Debug.Log("Plan Failed");
 		return null;
 	}
 
@@ -159,12 +123,14 @@ public class NPC : Agent {
 	private List<Node> GetActionsThatMeetPreconditions(Node p_node, List<Action> p_usableActions) {
 		List<Node> subActionList = new List<Node>();
 
+		//Debug.Log(p_usableActions.Count);
+
 		// go through each action available and see if we can use it here
 		foreach (Action action in p_usableActions) {
 
 			//check if any of p_node's preconditions are met by action effects
 			if (CheckPreconditionsAreMet(p_node.action.Preconditions, action.Effects)) {
-				subActionList.Add(new Node(action, p_node, action.Preconditions));
+				subActionList.Add(new Node(action, p_node));
 			}
 		}
 		return subActionList;
@@ -223,11 +189,31 @@ public class NPC : Agent {
 		public HashSet<KeyValuePair<string, object>> worldState;
 		public Action action;
 
-		public Node (Action p_action, Node p_parent, HashSet<KeyValuePair<string, object>> p_worldState) {
+		public Node (Action p_action) {
+			if (p_action != null) {
+				gCost = p_action.cost;
+				hCost = p_action.Preconditions.Count;
+				action = p_action;
+				worldState = p_action.Preconditions;
+			}
+			parent = null;
+		}
+
+		public Node (Action p_action, Node p_parent) {
+			if (p_action != null) {
+				gCost = p_action.cost;
+				hCost = p_action.Preconditions.Count;
+				action = p_action;
+				worldState = p_action.Preconditions;
+			}
 			parent = p_parent;
-			gCost = p_action.cost;
-			hCost = p_action.Preconditions.Count;
-			action = p_action;
+		}
+
+		public Node (HashSet<KeyValuePair<string, object>> p_worldState) {
+			gCost = 0;
+			hCost = 0;
+			action = null;
+			parent = null;
 			worldState = p_worldState;
 		}
 	}
