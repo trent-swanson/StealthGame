@@ -9,23 +9,38 @@ public class SquadManager : MonoBehaviour {
 
 	private List<NPC> processingUnit = new List<NPC>();
 
+	enum PressureState { LOW, MEDIUM, HIGH, ULTRA }
+	PressureState pressureState = PressureState.LOW;
+
 	public void StartTurn() {
 		AddUnitsToProcessing();
 		AssignSquadGoals();
 		AllUnitsPerformAction();
 	}
 	
-	void AssignSquadGoals() {
-		//temp - remove this
-		foreach (NPC agent in processingUnit) {
-			agent.currentGoal = goals[0];
-			agent.currentAction = agent.Plan(goals[0], null);
-			Debug.Log(agent.currentAction.name);
-		}
+	//CurrentWorldState
+	//KnowladgeState
 
-		//todo:
-		//
-		//IsValid chack on goals (e.g. does the AI know where the player is, if not dont do Kill Enemy Goal)
+	//overrides agent goals
+	void AssignSquadGoals() {
+		switch (pressureState) {
+			case PressureState.LOW:
+			//check if multiple AI want to attack the same target
+
+			//*** temp - remove this ***
+			foreach (NPC agent in processingUnit) {
+				agent.currentGoal = goals[0];
+				agent.currentAction = agent.Plan(goals[0], null);
+				Debug.Log(agent.currentAction.name);
+			}
+			break;
+			case PressureState.MEDIUM:
+			break;
+			case PressureState.HIGH:
+			break;
+			case PressureState.ULTRA:
+			break;
+		}
 	}
 
 	void AllUnitsPerformAction() {
@@ -37,6 +52,7 @@ public class SquadManager : MonoBehaviour {
 	void AddUnitsToProcessing() {
 		foreach (NPC agent in unitList) {
 			processingUnit.Add(agent);
+			//agent.StartTurn();
 		}
 	}
 
