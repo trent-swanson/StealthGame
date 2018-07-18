@@ -4,9 +4,6 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
 public class GotoNode : Action {
-
-	private bool attacked = false;
-    private PlayerController targetPlayer;
  
     public float attackRange = 10;
  
@@ -16,14 +13,9 @@ public class GotoNode : Action {
     }
      
      
-    public override void Reset () {
-        attacked = false;
-        targetPlayer = null;
-    }
+    public override void Reset () {}
      
-    public override bool IsDone () {
-        return attacked;
-    }
+    public override bool IsDone () { Debug.Log("IsDone()"); return true; }
      
     public override bool RequiresInRange () {
         return false;

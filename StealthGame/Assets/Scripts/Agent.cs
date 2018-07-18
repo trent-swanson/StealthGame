@@ -478,6 +478,7 @@ public class Agent : MonoBehaviour {
 	}
 
 	public void EndTurn() {
+        Debug.Log("EndTurn()");
         unitCanvas.SetActive(false);
 		turn = false;			
 	}

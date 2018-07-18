@@ -80,6 +80,7 @@ public class TurnManager : MonoBehaviour {
     }
 
     public static void StartAITurn() {
+        Debug.Log("Start AI Turn");
         squadManager.StartTurn();
     }
 
