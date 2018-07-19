@@ -19,6 +19,8 @@ public class TurnManager : MonoBehaviour {
 
     static SquadManager squadManager;
 
+    static CameraController camPivot;
+
     /*
     * Important Note:
     * Check any code relating to agents being dead and removing them from turn manager
@@ -29,6 +31,7 @@ public class TurnManager : MonoBehaviour {
 		//Find all tiles in level and add them to GameManager tile list
 		GameManager.tiles = GameObject.FindGameObjectsWithTag("Tile");
         squadManager = GetComponent<SquadManager>();
+        camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
         if (turnTeam.Count == 0) {
             InitTeamTurnMove();
         }
@@ -52,6 +55,7 @@ public class TurnManager : MonoBehaviour {
 				if(OnUnitSelect != null && turnKey.Peek() == "Player") {
 					OnUnitSelect(turnTeam.Peek().GetComponent<PlayerController>());
 				}
+                camPivot.Focus(turnTeam.Peek().transform);
 				turnTeam.Peek().BeginTurn();
 			}
 			else
@@ -80,8 +84,11 @@ public class TurnManager : MonoBehaviour {
     }
 
     public static void StartAITurn() {
-        Debug.Log("Start AI Turn");
-        squadManager.StartTurn();
+        if (GameObject.FindGameObjectsWithTag("Enemy").Length > 0) {
+            squadManager.StartTurn();
+        } else {
+            EndAITurn();
+        }
     }
 
     //add agents
