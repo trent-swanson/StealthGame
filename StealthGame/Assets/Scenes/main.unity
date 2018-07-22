@@ -4151,9 +4151,43 @@ Prefab:
       propertyPath: maxMove
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114826910992417790, guid: 1521cd7ed092a414ab06585092f98bd3, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 1521cd7ed092a414ab06585092f98bd3, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &668793291 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1177980653304478, guid: 1521cd7ed092a414ab06585092f98bd3,
+    type: 2}
+  m_PrefabInternal: {fileID: 668793290}
+--- !u!114 &668793292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 668793291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad80542d21a45a4da44728356e2f4c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &668793293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 668793291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f9d1f5fcca968b4ca7654fadf8a2cb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_range: 5
+  m_possibleGoals:
+  - {fileID: 0}
+  m_possibleActions:
+  - {fileID: 0}
+  m_waypoints: []
 --- !u!1 &686874206
 GameObject:
   m_ObjectHideFlags: 0
@@ -5251,7 +5285,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1177980653304478, guid: 1521cd7ed092a414ab06585092f98bd3, type: 2}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114826910992417790, guid: 1521cd7ed092a414ab06585092f98bd3,
         type: 2}

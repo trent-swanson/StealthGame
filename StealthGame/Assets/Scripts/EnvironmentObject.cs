@@ -13,7 +13,7 @@ public class EnvironmentObject : MonoBehaviour {
     void Start() {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
-        TurnManager.AddUnit(this);
+        //TurnManager.AddUnit(this);
     }
 
     void Update() {
