@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GotoTarget", menuName = "AI Actions/GotoTarget")]
-public class GotoTarget : Action {
+public class GotoTarget : AIAction {
 
 	private bool attacked = false;
     private PlayerController targetPlayer;

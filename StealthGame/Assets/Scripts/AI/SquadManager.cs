@@ -5,7 +5,7 @@ using UnityEngine;
 public class SquadManager : MonoBehaviour {
 
 	public List<NPC> unitList = new List<NPC>();
-	public List<Action> goals = new List<Action>();
+	public List<AIAction> goals = new List<AIAction>();
 
 	private List<NPC> processingUnit = new List<NPC>();
 

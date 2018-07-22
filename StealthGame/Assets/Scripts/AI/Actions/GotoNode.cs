@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
-public class GotoNode : Action {
+public class GotoNode : AIAction {
  
     public float attackRange = 10;
  

@@ -23,11 +23,11 @@ public class NPC : Agent {
 	[Space]
 	[Space]
 	[Header("Actions")]
-	public List<Action> availableActions = new List<Action>();
+	public List<AIAction> availableActions = new List<AIAction>();
 	private HashSet<KeyValuePair<string,object>> currentWorldState;
-	public Action currentGoal;
+	public AIAction currentGoal;
 
-	public Action currentAction;
+	public AIAction currentAction;
 	public int currentActionNum = 0;
 	public int maxActionNum = 3;
 
@@ -63,17 +63,17 @@ public class NPC : Agent {
 
 	//Plan what sequence of actions can fulfill the goal
 	//Returns null if a plan could not be found
-	public Action Plan(Action goal, GameObject p_target) {
+	public AIAction Plan(AIAction goal, GameObject p_target) {
 		target = p_target;
 		
 		// reset the actions so we can start fresh with them
-		foreach (Action a in availableActions) {
+		foreach (AIAction a in availableActions) {
 			a.DoReset ();
 		}
 
 		// check what actions can run using their checkProceduralPrecondition
-		List<Action> usableActions = new List<Action> ();
-		foreach (Action a in availableActions) {
+		List<AIAction> usableActions = new List<AIAction> ();
+		foreach (AIAction a in availableActions) {
 			if ( a.CheckProceduralPrecondition(this.gameObject, target) )
 				usableActions.Add(a);
 		}
@@ -120,13 +120,13 @@ public class NPC : Agent {
 	}
 
 	//these 2 functions get a list of all the sub nodes that meet the preconditions of the current node
-	private List<Node> GetActionsThatMeetPreconditions(Node p_node, List<Action> p_usableActions) {
+	private List<Node> GetActionsThatMeetPreconditions(Node p_node, List<AIAction> p_usableActions) {
 		List<Node> subActionList = new List<Node>();
 
 		//Debug.Log(p_usableActions.Count);
 
 		// go through each action available and see if we can use it here
-		foreach (Action action in p_usableActions) {
+		foreach (AIAction action in p_usableActions) {
 
 			//check if any of p_node's preconditions are met by action effects
 			if (CheckPreconditionsAreMet(p_node.action.Preconditions, action.Effects)) {
@@ -187,9 +187,9 @@ public class NPC : Agent {
 		public int hCost;
 		public int fCost { get { return gCost + hCost; } }
 		public HashSet<KeyValuePair<string, object>> worldState;
-		public Action action;
+		public AIAction action;
 
-		public Node (Action p_action) {
+		public Node (AIAction p_action) {
 			if (p_action != null) {
 				gCost = p_action.cost;
 				hCost = p_action.Preconditions.Count;
@@ -199,7 +199,7 @@ public class NPC : Agent {
 			parent = null;
 		}
 
-		public Node (Action p_action, Node p_parent) {
+		public Node (AIAction p_action, Node p_parent) {
 			if (p_action != null) {
 				gCost = p_action.cost;
 				hCost = p_action.Preconditions.Count;

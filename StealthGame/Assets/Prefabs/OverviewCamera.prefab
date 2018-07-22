@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 20928320310657074}
   - component: {fileID: 124088955601694494}
   - component: {fileID: 81836837631008556}
+  - component: {fileID: 114938783837674644}
+  - component: {fileID: 114470810708883514}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -208,6 +210,31 @@ MonoBehaviour:
   maxY: 12
   rotateSpeed: 95
   altRotateSpeed: 195
+--- !u!114 &114470810708883514
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1110599011996792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4a79e8cbc3708b4daf2b14ef6f37632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Post_Outline: {fileID: 4800000, guid: f745f1649a39407418398585a606a744, type: 3}
+  DrawSimple: {fileID: 4800000, guid: aae7351ba25629b4ba5ccc14525af997, type: 3}
+--- !u!114 &114938783837674644
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1110599011996792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 31fdc9c680f967141b4d477e7eca3598, type: 2}
 --- !u!124 &124088955601694494
 Behaviour:
   m_ObjectHideFlags: 1

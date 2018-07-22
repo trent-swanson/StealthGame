@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Patrol", menuName = "AI Goals/Patrol")]
-public class Patrol : Action {
+public class Patrol : AIAction {
 	public HashSet<KeyValuePair<string,object>> desiredWorldState = new HashSet<KeyValuePair<string, object>> ();
 	public int priority = 1;
  

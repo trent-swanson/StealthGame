@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "RangedAttack", menuName = "AI Actions/RangedAttack")]
-public class RangedAttack : Action {
+public class RangedAttack : AIAction {
 
 	private bool attacked = false;
  
