@@ -1595,15 +1595,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad8984f6b5952ed42b60a0e897796a14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySlots:
+  m_inventorySlots:
   - {fileID: 1602029260966422}
   - {fileID: 1256445631314372}
   - {fileID: 1858234406962268}
   - {fileID: 1140684420791704}
   - {fileID: 1607126379029324}
   - {fileID: 1068106451379928}
-  inventorySlotInfo: {fileID: 1724533210929502}
-  portraitImage: {fileID: 114477694330485768}
+  m_inventorySlotInfo: {fileID: 1724533210929502}
+  m_portraitImage: {fileID: 114477694330485768}
 --- !u!114 &114997980058225538
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1842,7 +1842,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.10029921, y: 0}
   m_AnchorMax: {x: 1, y: 0.125}
-  m_AnchoredPosition: {x: -0.11999893, y: 0}
+  m_AnchoredPosition: {x: -0.11999512, y: 0}
   m_SizeDelta: {x: 0.25, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!224 &224067522562278820

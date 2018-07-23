@@ -7,36 +7,72 @@ public class GotoNode : AIAction {
  
     public float attackRange = 10;
  
-    public GotoNode () {
-        AddEffect ("AtNode", target);
-        AddEffect ("Patrolling", true);
+     //--------------------------------------------------------------------------------------
+    // Initialisation of an action 
+    // Runs once when action starts from the list
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void ActionInit(Agent agent)
+    {
+
     }
-     
-     
-    public override void Reset () {}
-     
-    public override bool IsDone () { Debug.Log("IsDone()"); return true; }
-     
-    public override bool RequiresInRange () {
+
+    //--------------------------------------------------------------------------------------
+    // Has the action been completed
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    // Return:
+    //		Is all action moves have been completed
+    //--------------------------------------------------------------------------------------
+    public override bool IsDone(Agent agent)
+    {
         return false;
     }
-     
+
+    //--------------------------------------------------------------------------------------
+    // Agent Has been completed, clean up anything that needs to be
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void EndAction(Agent agent)
+    {
+
+    }
+
+
+    //--------------------------------------------------------------------------------------
+    // Perform actions effects, e.g. Moving towards opposing agent
+    // Should happen on each update
+    //
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void Perform(Agent agent)
+    {
+
+    }
+
+    /* 
     public override bool CheckProceduralPrecondition (GameObject agent, GameObject p_target) {
 		if (p_target != null) {
 			target = p_target;
 		} else if (agent.GetComponent<NPC>()) {
 			NPC npc = agent.GetComponent<NPC>();
-			target = npc.waypoints[npc.currentWaypoint];
+			target = npc.m_waypoints[npc.m_currentWaypoint];
 		}
 		return true;
     }
      
     public override void Perform (Agent agent) {
         Debug.Log("Perform");
-		if (!agent.moving) {
+		if (!agent.m_moving) {
 			NextWaypoint(agent);
 			CalculatePath(agent);
-			agent.actualTargetTile.target = true;
+			agent.m_actualTargetTile.target = true;
         }
         else {
             agent.Move(false);
@@ -45,24 +81,24 @@ public class GotoNode : AIAction {
 
     void CalculatePath(Agent agent) {
         NPC npc = agent.GetComponent<NPC>();
-        if (npc.target == null) {
-            Tile targetTile = agent.GetTargetTile(npc.waypoints[npc.currentWaypoint]);
+        if (npc.m_target == null) {
+            Tile targetTile = agent.GetTargetTile(npc.m_waypoints[npc.m_currentWaypoint]);
 		    agent.FindPath(targetTile, true);
         } else {
            Tile targetTile = agent.GetTargetTile(target);
 		    agent.FindPath(targetTile, true);
         }
-        agent.moving = true;
+        agent.m_moving = true;
 	}
 
 	void NextWaypoint(Agent agent) {
-        List<GameObject> waypoints = agent.GetComponent<NPC>().waypoints;
-		if (Vector3.Distance(agent.transform.position, waypoints[agent.GetComponent<NPC>().currentWaypoint].transform.position) < 0.15f) {
-			agent.GetComponent<NPC>().currentWaypoint++;
-			if (agent.GetComponent<NPC>().currentWaypoint >= waypoints.Count) {
-				agent.GetComponent<NPC>().currentWaypoint = 0;
+        List<GameObject> waypoints = agent.GetComponent<NPC>().m_waypoints;
+		if (Vector3.Distance(agent.transform.position, waypoints[agent.GetComponent<NPC>().m_currentWaypoint].transform.position) < 0.15f) {
+			agent.GetComponent<NPC>().m_currentWaypoint++;
+			if (agent.GetComponent<NPC>().m_currentWaypoint >= waypoints.Count) {
+				agent.GetComponent<NPC>().m_currentWaypoint = 0;
 			}
 		}
-		target = waypoints[agent.GetComponent<NPC>().currentWaypoint];
-	}
+		target = waypoints[agent.GetComponent<NPC>().m_currentWaypoint];
+	}*/
 }

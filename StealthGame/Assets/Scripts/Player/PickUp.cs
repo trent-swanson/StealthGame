@@ -48,7 +48,7 @@ public class PickUp : MonoBehaviour {
 	}
 
 	public void PickedUp(Agent p_agent) {
-		p_agent.currentItems.Add(item);
+		p_agent.m_currentItems.Add(item);
 		Destroy(this);
 	}
 

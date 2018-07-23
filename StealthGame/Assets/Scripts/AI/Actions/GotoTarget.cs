@@ -10,35 +10,60 @@ public class GotoTarget : AIAction {
  
     public float attackRange = 10;
  
-    public GotoTarget () {
-        AddPrecondition ("TargetLineOfSight", target);
-        AddEffect ("AtTarget", target);
-        AddEffect ("NearTarget", target);
+     //--------------------------------------------------------------------------------------
+    // Initialisation of an action 
+    // Runs once when action starts from the list
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void ActionInit(Agent agent)
+    {
+
     }
-     
-     
-    public override void Reset () {
-        attacked = false;
-        targetPlayer = null;
-    }
-     
-    public override bool IsDone () {
-        return attacked;
-    }
-     
-    public override bool RequiresInRange () {
+
+    //--------------------------------------------------------------------------------------
+    // Has the action been completed
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    // Return:
+    //		Is all action moves have been completed
+    //--------------------------------------------------------------------------------------
+    public override bool IsDone(Agent agent)
+    {
         return false;
     }
-     
-    public override bool CheckProceduralPrecondition (GameObject agent, GameObject p_target) {
-		target = p_target;
-		return true;
+
+    //--------------------------------------------------------------------------------------
+    // Agent Has been completed, clean up anything that needs to be
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void EndAction(Agent agent)
+    {
+
     }
-     
+
+
+    //--------------------------------------------------------------------------------------
+    // Perform actions effects, e.g. Moving towards opposing agent
+    // Should happen on each update
+    //
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void Perform(Agent agent)
+    {
+
+    }
+
+    /* 
     public override void Perform (Agent agent) {
-		if (!agent.moving) {
+		if (!agent.m_moving) {
 			CalculatePath(agent);
-			agent.actualTargetTile.target = true;
+			agent.m_actualTargetTile.target = true;
         }
         else {
             agent.Move(false);
@@ -48,5 +73,5 @@ public class GotoTarget : AIAction {
     void CalculatePath(Agent agent) {
 		Tile targetTile = agent.GetTargetTile(target);
 		agent.FindPath(targetTile, false);
-	}
+	}*/
 }

@@ -7,89 +7,145 @@ public class NPC : Agent {
 	[Space]
 	[Space]
 	[Header("Waypoints")]
-	public List<GameObject> waypoints = new List<GameObject>();
-	public int currentWaypoint = 0;
+	public List<GameObject> m_waypoints = new List<GameObject>();
+	public int m_currentWaypoint = 0;
 
 	[Space]
 	[Space]
-	public GameObject playerTarget;
-	public GameObject workNodeTarget;
-	public GameObject guardTarget;
-	public GameObject target;
+	public GameObject m_playerTarget;
+	public GameObject m_workNodeTarget;
+	public GameObject m_guardTarget;
+	public GameObject m_target;
 
 	public enum State { AMBIENT, SUSPICIOUS, ALERT }
-	public State state;
+	public State m_state;
+
+	//-----------------------
+    // Agent States
+    //-----------------------
+
+    [System.Serializable]
+    public class AgentState {
+        //Items I'm holding
+        public List<Item> m_currentItems = new List<Item>();
+        
+        //Weapon information
+        public enum WEAPON_TYPE {MELEE, RANGED }; //Fixed
+        private WEAPON_TYPE m_weaponType = WEAPON_TYPE.MELEE; //Fixed
+
+
+        //Node this agent wants to go to
+        private GameObject m_targetNode = null; //Fixed
+
+        //Seen targets
+        private List<GameObject> m_possibleTargets = new List<GameObject>(); //Realtime
+
+        //Targets which have gone missing
+        private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+
+        //Waypoints
+        [SerializeField]
+        private List<GameObject> m_waypoints = new List<GameObject>();
+
+        private int m_waypointIndex = 0;
+    }
+
+    public struct InvestigationNode
+    {
+        private GameObject m_target;
+        public GameObject Target
+        {
+            get { return m_target; }
+            set { m_target = value; }
+        }
+        private GameObject m_node;
+        public GameObject Node
+        {
+            get { return m_node; }
+            set { m_node = value; }
+        }
+    }
+
+    [Space]
+    [Space]
+    [Header("AgentState")]
+    public AgentState m_agentState;
+
+    [Space]
+
+    [SerializeField]
+    public List<Goal> m_possibleGoals = new List<Goal>();
+    public List<AIAction> m_possibleActions = new List<AIAction>();
 
 	[Space]
+	public AIAction m_currentAction;
+
 	[Space]
-	[Header("Actions")]
-	public List<AIAction> availableActions = new List<AIAction>();
-	private HashSet<KeyValuePair<string,object>> currentWorldState;
-	public AIAction currentGoal;
+	public int m_currentActionNum = 0;
+	public int m_maxActionNum = 3;
 
-	public AIAction currentAction;
-	public int currentActionNum = 0;
-	public int maxActionNum = 3;
-
-
-	public class Goal {
-		bool desiredWorldState = false;
-	}
+	[Space]
+    private List<GameObject> m_opposingTeam;
 
 
 	void Start() {
 		//todo: need to remove this agent from the unitList when it is killed
 		GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>().unitList.Add(this);
-		state = State.AMBIENT;
+		m_state = State.AMBIENT;
+
+		//duck tape
+        List<Agent> opposingAgents = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>().m_playerTeam;
+        foreach (Agent agent in opposingAgents)
+        {
+            m_opposingTeam.Add(agent.gameObject);
+        }
+
 		Init();
 
-		//temp - remove this
-		state = State.AMBIENT;
+		//temp - remove this - also duck tape
+		m_state = State.AMBIENT;
+	}
+
+	public override void StartUnitTurn() {
+		//Determine Goal TODO, based off priority override, when one fails loop to next etc
+        Goal currentGoal = m_possibleGoals[0];
+
+        //Setup first action : what happens if no action found?
+        m_currentAction = GetActionPlan(currentGoal);
+
+		BeginTurn();
+
+		//should be here?
+        if (m_currentActionNum > m_maxActionNum)
+            EndTurn();
+	}
+
+	public override void TurnUpdate() {
+		if(m_currentAction != null)
+			m_currentAction.Perform(this);
 	}
 
 	void Update() {
 		Debug.DrawRay(transform.position, transform.forward);
 
 		//Listen for inputs and change state
-
-        //if not my turn then don't run Update()
-        if (!turn)
-            return;
-
-
-		if(currentAction != null)
-			currentAction.Perform(this);
     }
 
 	//Plan what sequence of actions can fulfill the goal
 	//Returns null if a plan could not be found
-	public AIAction Plan(AIAction goal, GameObject p_target) {
-		target = p_target;
-		
-		// reset the actions so we can start fresh with them
-		foreach (AIAction a in availableActions) {
-			a.DoReset ();
-		}
-
-		// check what actions can run using their checkProceduralPrecondition
-		List<AIAction> usableActions = new List<AIAction> ();
-		foreach (AIAction a in availableActions) {
-			if ( a.CheckProceduralPrecondition(this.gameObject, target) )
-				usableActions.Add(a);
-		}
+	public AIAction GetActionPlan(Goal p_goal) {
 
 		List<Node> openSet = new List<Node>();
 		HashSet<Node> closeSet = new HashSet<Node>();
 
-		Node startNode = new Node(currentWorldState);
-		Node targetNode = new Node(goal);
+		//Node startNode = new Node();
+		Node targetNode = new Node(p_goal);
 		openSet.Add(targetNode);
 
-		//==================
 		//A* ===================
 		while (openSet.Count > 0) {
 			Node currentNode = openSet[0];
-			//get action Node with the smallest cost (action cost + number of preconditions)
+			//get action Node with the smallest fcost (action cost + number of preconditions not yet met)
 			if (openSet.Count > 1) {
 				for (int i = 0; i < openSet.Count; i++) {
 					if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost) {
@@ -101,13 +157,13 @@ public class NPC : Agent {
 			openSet.Remove(currentNode);
 			closeSet.Add(currentNode);
 
-			Debug.Log(currentNode.action.Preconditions.Count);
-			if (currentNode.action.Preconditions.Count == 0 || currentNode.worldState == startNode.worldState) {
+			//Found an action we can do now
+			if (currentNode.hCost == 0) {
 				Debug.Log("Got Action");
 				return currentNode.action;
 			}
 			
-			foreach (Node subNode in GetActionsThatMeetPreconditions(currentNode, usableActions)) {
+			foreach (Node subNode in GetActionsThatMeetPreconditions(currentNode)) {
 				if (!openSet.Contains(subNode)) {
 					openSet.Add(subNode);
 				}
@@ -120,32 +176,27 @@ public class NPC : Agent {
 	}
 
 	//these 2 functions get a list of all the sub nodes that meet the preconditions of the current node
-	private List<Node> GetActionsThatMeetPreconditions(Node p_node, List<AIAction> p_usableActions) {
+	private List<Node> GetActionsThatMeetPreconditions(Node p_node) {
 		List<Node> subActionList = new List<Node>();
 
-		//Debug.Log(p_usableActions.Count);
-
 		// go through each action available and see if we can use it here
-		foreach (AIAction action in p_usableActions) {
+		foreach (AIAction action in m_possibleActions) {
 
-			//check if any of p_node's preconditions are met by action effects
-			if (CheckPreconditionsAreMet(p_node.action.Preconditions, action.Effects)) {
-				subActionList.Add(new Node(action, p_node));
+			//check if any of current nodes m_requiredWorldStates are met by action's m_satisfiedWorldStates
+			if (CheckPreconditionsAreMet(p_node.action, action)) {
+				subActionList.Add(new Node(this, action, p_node));
 			}
 		}
 		return subActionList;
 	}
-	private bool CheckPreconditionsAreMet(HashSet<KeyValuePair<string,object>> p_preconditions, HashSet<KeyValuePair<string,object>> p_effects) {
-		bool match = false;
-		foreach (KeyValuePair<string,object> p in p_preconditions) {
-			foreach (KeyValuePair<string,object> e in p_effects) {
-				if (e.Equals(p)) {
-					match = true;
-					break;
-				}
+
+	private bool CheckPreconditionsAreMet(AIAction p_currentAction, AIAction p_action) {
+		foreach (WorldState.WORLD_STATE reqiredState in p_currentAction.m_requiredWorldStates) {
+			if (p_action.m_satisfiedWorldStates.Contains(reqiredState)) {
+				return true;
 			}
 		}
-		return match;
+		return false;
 	}
 
 
@@ -186,35 +237,43 @@ public class NPC : Agent {
 		public int gCost;
 		public int hCost;
 		public int fCost { get { return gCost + hCost; } }
-		public HashSet<KeyValuePair<string, object>> worldState;
 		public AIAction action;
+		public Goal goal;
 
-		public Node (AIAction p_action) {
+		public Node (Agent p_agent, AIAction p_action) {
 			if (p_action != null) {
-				gCost = p_action.cost;
-				hCost = p_action.Preconditions.Count;
+				gCost = p_action.m_actionCost;
+				hCost = DetermineHCost(p_agent, p_action.m_requiredWorldStates);
 				action = p_action;
-				worldState = p_action.Preconditions;
 			}
 			parent = null;
 		}
 
-		public Node (AIAction p_action, Node p_parent) {
+		public Node (Agent p_agent, AIAction p_action, Node p_parent) {
 			if (p_action != null) {
-				gCost = p_action.cost;
-				hCost = p_action.Preconditions.Count;
+				gCost = p_action.m_actionCost;
+				hCost = DetermineHCost(p_agent, p_action.m_requiredWorldStates);
 				action = p_action;
-				worldState = p_action.Preconditions;
 			}
 			parent = p_parent;
 		}
 
-		public Node (HashSet<KeyValuePair<string, object>> p_worldState) {
-			gCost = 0;
-			hCost = 0;
+		public Node (Goal p_goal) {
+			gCost = p_goal.m_goalPriority;
+			hCost = 1;
 			action = null;
 			parent = null;
-			worldState = p_worldState;
 		}
+
+		private int DetermineHCost(Agent p_agent, List<WorldState.WORLD_STATE> p_requiredWorldStates) {
+			int tempHCost = 0;
+			foreach (WorldState.WORLD_STATE wState in p_requiredWorldStates) {
+				if (!WorldState.CheckForValidState(p_agent, wState)) {
+					tempHCost++;
+				}
+			}
+			return tempHCost;
+		}
+
 	}
 }

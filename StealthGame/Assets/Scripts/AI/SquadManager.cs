@@ -29,9 +29,9 @@ public class SquadManager : MonoBehaviour {
 
 			//*** temp - remove this ***
 			foreach (NPC agent in processingUnit) {
-				agent.currentGoal = goals[0];
-				agent.currentAction = agent.Plan(goals[0], null);
-				Debug.Log(agent.currentAction.name);
+				//agent.m_currentGoal = goals[0];
+				//agent.m_currentAction = agent.GetActionPlan();
+				//Debug.Log(agent.m_currentAction.name);
 			}
 			break;
 			case PressureState.MEDIUM:
@@ -45,7 +45,7 @@ public class SquadManager : MonoBehaviour {
 
 	void AllUnitsPerformAction() {
 		foreach (NPC agent in processingUnit) {
-			agent.currentAction.Perform(agent);
+			agent.m_currentAction.Perform(agent);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class SquadManager : MonoBehaviour {
 	public void AgentHasFinishedActionPlan(NPC agent) {
 		processingUnit.Remove(agent);
 		if (processingUnit.Count <= 0) {
-			TurnManager.EndAITurn();
+			GetComponent<TurnManager>().EndUnitTurn();
 		}
 	}
 

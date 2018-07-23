@@ -4,24 +4,23 @@ using UnityEngine;
 
 public class TurnManager : MonoBehaviour {
 
-	static Dictionary<string, List<Agent>> units = new Dictionary<string, List<Agent>>();
-    static Queue<string> turnKey = new Queue<string>();
-	static Queue<Agent> turnTeam = new Queue<Agent>();
+	public List<Agent> m_playerTeam = new List<Agent>();
+    public List<Agent> m_enemyTeam = new List<Agent>();
 
+    private List<Agent> m_turnTeam = new List<Agent>();
+
+    private enum TEAM {PLAYER,ENEMY };
+    private TEAM m_currentTeam = TEAM.PLAYER;
     public delegate void UnitSelect(PlayerController p_unit);
-	public static event UnitSelect OnUnitSelect;
-	
-	public delegate void UnitDeselect();
-	public static event UnitDeselect OnUnitDeselect;
+    public static event UnitSelect OnUnitSelect;
+
+    public delegate void UnitDeselect();
+    public static event UnitDeselect OnUnitDeselect;
 
     enum Team { AI, PLAYER }
     Team team;
 
-    static SquadManager squadManager;
-
-    static CameraController camPivot;
-
-    static UIController uiController;
+    static SquadManager m_squadManager;
 
     /*
     * Important Note:
@@ -32,123 +31,50 @@ public class TurnManager : MonoBehaviour {
 	void Start() {
 		//Find all tiles in level and add them to GameManager tile list
 		GameManager.tiles = GameObject.FindGameObjectsWithTag("Tile");
-        squadManager = GetComponent<SquadManager>();
-        camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
-        uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
-        if (turnTeam.Count == 0) {
+        m_squadManager = GetComponent<SquadManager>();
+	}
+
+    private void Update()
+    {
+        if (m_turnTeam.Count != 0)
+        {
+            m_turnTeam[0].TurnUpdate();
+        }
+        else
+        {
             InitTeamTurnMove();
         }
-	}
+    }
 
     //initilise unit team
-	static void InitTeamTurnMove() {
-		List<Agent> teamList = units[turnKey.Peek()];
-
-		foreach (Agent unit in teamList) {
-			turnTeam.Enqueue(unit);
-		}
-
-		StartTurn();
-	}
-
-    //start of unit turn
-    public static void StartTurn() {
-		if (turnTeam.Count > 0) {
-			if (!turnTeam.Peek().knockedout) {
-				if(OnUnitSelect != null && turnKey.Peek() == "Player") {
-					OnUnitSelect(turnTeam.Peek().GetComponent<PlayerController>());
-				}
-                camPivot.Focus(turnTeam.Peek().transform);
-                uiController.UpdateUI(turnTeam.Peek());
-				turnTeam.Peek().BeginTurn();
-			}
-			else
-				RemoveUnit();
-		}
-	}
-
-	public static void EndPlayerTurn() {
-		Agent unit = turnTeam.Peek();
-        if (!unit.moving) {
-            turnTeam.Dequeue();
-            unit.EndTurn();
-
-            if (turnTeam.Count > 0) {
-                StartTurn();
-            }
-            else {
-                //player's turn is finished
-                if(OnUnitDeselect != null && turnKey.Peek() == "Player") {
-                    OnUnitDeselect();
-                }
-                StartAITurn();
-            }
+    private void InitTeamTurnMove()
+    {
+        if(m_currentTeam == TEAM.PLAYER)
+        {
+            m_currentTeam = TEAM.ENEMY;
+            m_turnTeam = new List<Agent>(m_enemyTeam);
         }
-	}
-
-    public static void EndAITurn() {
-        InitTeamTurnMove();
-    }
-
-    public static void StartAITurn() {
-        if (GameObject.FindGameObjectsWithTag("Enemy").Length > 0) {
-            squadManager.StartTurn();
-        } else {
-            EndAITurn();
+        else
+        {
+            m_currentTeam = TEAM.PLAYER;
+            m_turnTeam = new List<Agent>(m_playerTeam);
+        }
+        if (m_turnTeam.Count > 0) {
+            if(OnUnitSelect != null && m_turnTeam[0].tag == "Player") {
+				OnUnitSelect(m_turnTeam[0].GetComponent<PlayerController>());
+			}
+            m_turnTeam[0].StartUnitTurn();
         }
     }
 
-    //add agents
-	public static void AddUnit(Agent p_unit) {
-		List<Agent> list;
-
-		if (!units.ContainsKey(p_unit.tag)) {
-			list = new List<Agent>();
-			units[p_unit.tag] = list;
-
-			if (!turnKey.Contains(p_unit.tag)) {
-				turnKey.Enqueue(p_unit.tag);
-			}
-		}
-		else {
-			list = units[p_unit.tag];
-		}
-
-		list.Add(p_unit);
-	}
-
-    //remove agents
-    public static void RemoveUnit() {
-        //remove unit from turnTeam
-        Agent tempUnit = turnTeam.Dequeue();
-
-        //remove unity from dictionary
-        List<Agent> list;
-        list = units[tempUnit.tag];
-        list.Remove(tempUnit);
-        if (list.Count > 0) {
-            units[tempUnit.tag] = list;
+    //end of unit turn
+    public void EndUnitTurn()
+    {
+        if(OnUnitDeselect != null && m_turnTeam[0].tag == "Player") {
+            OnUnitDeselect();
         }
-        else {
-            units.Remove(tempUnit.tag);
-        }
-
-        //remove gameobject
-        Destroy(tempUnit.gameObject);
-
-        //if still units in team start next turn, else initialise next team
-        if (turnTeam.Count > 0) {
-            StartTurn();
-        }
-        else {
-            string team = turnKey.Dequeue();
-
-            //if no unit type in dictionary, remove unit turnKey
-            if (units.ContainsKey(tempUnit.tag)) {
-                turnKey.Enqueue(team);
-            }
-
-            InitTeamTurnMove();
-        }
+        m_turnTeam.RemoveAt(0);
+        if(m_turnTeam.Count > 0)
+            m_turnTeam[0].StartUnitTurn();
     }
 }

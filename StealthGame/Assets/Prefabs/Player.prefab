@@ -236,26 +236,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7433ad7ed7cf124ab07bcbaad4a8529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turn: 0
-  knockedout: 0
-  currentTile: {fileID: 0}
-  moving: 0
-  actualTargetTile: {fileID: 0}
-  unitCanvas: {fileID: 1526278153166904}
-  APNumber: {fileID: 114793874252535386}
-  actionPoints: 4
-  maxMove: 3
-  jumpHeight: 1
-  moveSpeed: 3
-  jumpVelocity: 4.5
-  jumpUpPop: 0.7
-  jumpUpVelSlow: 2.2
-  jumpDownPop: 2.7
-  jumpDownVelSlow: 2.5
-  currentItems:
-  - {fileID: 11400000, guid: 6a77c34bbc9d4e04c950ff78b7eea8ad, type: 2}
-  - {fileID: 11400000, guid: 3200ddc724d01d1439063a6813176c52, type: 2}
-  highlightInteractablesRange: 6
+  m_turn: 0
+  m_knockedout: 0
+  m_currentTile: {fileID: 0}
+  m_moving: 0
+  m_actualTargetTile: {fileID: 0}
+  m_unitCanvas: {fileID: 1526278153166904}
+  m_APNumber: {fileID: 114793874252535386}
+  m_actionPoints: 5
+  m_maxMove: 3
+  m_jumpHeight: 1
+  m_moveSpeed: 2
+  m_jumpVelocity: 4.5
+  m_jumpUpPop: 0.7
+  m_jumpUpVelSlow: 1.2
+  m_jumpDownPop: 2.7
+  m_jumpDownVelSlow: 2.5
+  m_highlightInteractablesRange: 6
+  m_currentItems: []
   portrait: {fileID: 21300000, guid: 3b0b64358afa369499afa5dc7f367992, type: 3}
 --- !u!114 &114870478592781582
 MonoBehaviour:

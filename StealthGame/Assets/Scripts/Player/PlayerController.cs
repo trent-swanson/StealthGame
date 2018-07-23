@@ -9,27 +9,33 @@ public class PlayerController : Agent {
     [Space]
     public Sprite portrait;
 
+    static CameraController m_camPivot;
+    static UIController m_uiController;
+
     void Awake() {
+        m_camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
+        m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         Init();
     }
 
-    void Start() {
+    public override void StartUnitTurn() {
+        m_camPivot.Focus(transform);
+        m_uiController.UpdateUI(this);
+        BeginTurn();
     }
 
-    void Update() {
-        Debug.DrawRay(transform.position, transform.forward);
-
-        //if not my turn then don't run Update()
-        if (!turn)
-            return;
-
-        if (!moving && currentActionPoints > 0) {
+    public override void TurnUpdate() {
+        if (!m_moving && m_currentActionPoints > 0) {
             FindSelectableTiles();
             MouseClick();
         }
         else {
             Move(true);
         }
+    }
+
+    void Update() {
+        Debug.DrawRay(transform.position, transform.forward);
     }
 
     void MouseClick() {

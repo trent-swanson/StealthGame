@@ -8,28 +8,58 @@ public class RangedAttack : AIAction {
 	private bool attacked = false;
  
     public float attackRange = 10;
- 
-    public RangedAttack () {
-        AddPrecondition ("NearTarget", target);
-        AddPrecondition ("TargetLineOfSight", target);
-        AddEffect ("AttackingTarget", target);
+     
+     
+     //--------------------------------------------------------------------------------------
+    // Initialisation of an action 
+    // Runs once when action starts from the list
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void ActionInit(Agent agent)
+    {
+
     }
-     
-     
-    public override void Reset () {
-        attacked = false;
+
+    //--------------------------------------------------------------------------------------
+    // Has the action been completed
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    // Return:
+    //		Is all action moves have been completed
+    //--------------------------------------------------------------------------------------
+    public override bool IsDone(Agent agent)
+    {
+        return false;
     }
-     
-    public override bool IsDone () {
-        Debug.Log("IsDone()");
-		return attacked;
+
+    //--------------------------------------------------------------------------------------
+    // Agent Has been completed, clean up anything that needs to be
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void EndAction(Agent agent)
+    {
+
     }
-     
-    public override bool RequiresInRange () {
-		Debug.Log("RequiresInRange()");
-        return true;
+
+
+    //--------------------------------------------------------------------------------------
+    // Perform actions effects, e.g. Moving towards opposing agent
+    // Should happen on each update
+    //
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void Perform(Agent agent)
+    {
+
     }
-     
+
+	/* 
     public override bool CheckProceduralPrecondition (GameObject agent, GameObject p_target) {
         //get a list of all players in scene
         List<PlayerController> validPlayers =  new List<PlayerController>();
@@ -55,7 +85,7 @@ public class RangedAttack : AIAction {
 			//find closest player
 			foreach (PlayerController player in validPlayers) {
 				if (closest == null) {
-					if (player.knockedout) {
+					if (player.m_knockedout) {
 						validPlayers.Remove(player);
 						continue;
 					} else {
@@ -65,7 +95,7 @@ public class RangedAttack : AIAction {
 					}
 				} else {
 					//check is player is knocked out
-					if (player.knockedout) {
+					if (player.m_knockedout) {
 						validPlayers.Remove(player);
 						continue;
 					} else {
@@ -88,9 +118,5 @@ public class RangedAttack : AIAction {
 		} else {
 			return false;
 		}
-    }
-     
-    public override void Perform (Agent agent) {
-		Debug.Log("Shot Player: " + target.name);
-    }
+    }*/
 }

@@ -5,94 +5,102 @@ using UnityEngine.UI;
 
 public class Agent : MonoBehaviour {
 
-    //public List<Action> actionList = new List<Action>();
-
     SquadManager squadManager;
 
     [Header("Debugging Only")]
     [Tooltip("Do Not Assign")]
-    public bool turn = false;
+    public bool m_turn = false;
     [Tooltip("Do Not Assign")]
-    public bool knockedout = false;
+    public bool m_knockedout = false;
 
-    List<Tile> selectableTiles = new List<Tile>();
-    Tile unreachableTile;
+    List<Tile> m_selectableTiles = new List<Tile>();
+    Tile m_unreachableTile;
 
-    Stack<Tile> path = new Stack<Tile>();
+    Stack<Tile> m_path = new Stack<Tile>();
     [Tooltip("Do Not Assign")]
-    public Tile currentTile;
+    public Tile m_currentTile;
 
     [Tooltip("Do Not Assign")]
-    public bool moving = false;
+    public bool m_moving = false;
     [Tooltip("Do Not Assign")]
-    public Tile actualTargetTile;
+    public Tile m_actualTargetTile;
 
     [Space]
     [Space]
     [Header("Unit Editable Variables")]
-    public GameObject unitCanvas;
-    public Text APNumber;
+    public GameObject m_unitCanvas;
+    public Text m_APNumber;
     [Tooltip("# of actions unit can perform")]
-    public int actionPoints = 2;
+    public int m_actionPoints = 2;
     [Tooltip("# of tiles unit can move")]
-    public int maxMove = 2;
-    int moveAmount;
+    public int m_maxMove = 2;
+    int m_moveAmount;
     [Tooltip("# of tiles unit can jump")]
-    public float jumpHeight = 1;
+    public float m_jumpHeight = 1;
     [Tooltip("Move speed between tiles")]
-    public float moveSpeed = 2;
+    public float m_moveSpeed = 2;
     [Tooltip("How quickly unit jumps")]
-    public float jumpVelocity = 4.5f;
+    public float m_jumpVelocity = 4.5f;
     [Tooltip("Aditional height when jumping up")]
-    public float jumpUpPop = 0.7f;
+    public float m_jumpUpPop = 0.7f;
     [Tooltip("Amount forward movement is / when jumping")]
-    public float jumpUpVelSlow = 1.2f;
+    public float m_jumpUpVelSlow = 1.2f;
     [Tooltip("Aditional hope when jumping down")]
-    public float jumpDownPop = 2.7f;
+    public float m_jumpDownPop = 2.7f;
     [Tooltip("Amount forward movement is / when falling")]
-    public float jumpDownVelSlow = 2.5f;
+    public float m_jumpDownVelSlow = 2.5f;
 
-    Vector3 velocity = new Vector3();
-    Vector3 heading = new Vector3();
+    Vector3 m_velocity = new Vector3();
+    Vector3 m_heading = new Vector3();
 
-    float halfHeight;
+    float m_halfHeight;
 
-    bool fallingDown = false;
-    bool jumpingUp = false;
-    bool movingToEdge = false;
-    bool isLowerThanJumpTarget = false;
-    bool isHigherThanJumpTarget = false;
-    float targetY;
-    Vector3 jumpTarget;
+    bool m_fallingDown = false;
+    bool m_jumpingUp = false;
+    bool m_movingToEdge = false;
+    bool m_isLowerThanJumpTarget = false;
+    bool m_isHigherThanJumpTarget = false;
+    float m_targetY;
+    Vector3 m_jumpTarget;
 
-    protected int currentActionPoints;
-    private bool hiding = false;
-    private bool haveWallPos = false;
-    private Vector3 wallTargetPos = new Vector3();
-
-    [Space]
-    [Space]
-    [Header("Items")]
-    public List<Item> currentItems = new List<Item>();
+    protected int m_currentActionPoints;
+    private bool m_hiding = false;
+    private bool m_haveWallPos = false;
+    private Vector3 m_wallTargetPos = new Vector3();
 
     [Space]
-    public float highlightInteractablesRange = 6;
+    public float m_highlightInteractablesRange = 6;
 
-    UIController uiController;
+    UIController m_uiController;
+
+    protected TurnManager m_turnManager = null;
+
+    [Space]
+    public List<Item> m_currentItems = new List<Item>();
+
 
     //Initialise agents
     protected void Init() {
-        uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
+        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
+        m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();
-        currentActionPoints = actionPoints;
-        halfHeight = GetComponent<Collider>().bounds.extents.y;
-        unitCanvas.SetActive(false);
-        TurnManager.AddUnit(this);
+        m_currentActionPoints = m_actionPoints;
+        m_halfHeight = GetComponent<Collider>().bounds.extents.y;
+        m_unitCanvas.SetActive(false);
+    }
+
+    public virtual void StartUnitTurn() {}
+
+    public virtual void TurnUpdate() {}
+
+    public void TurnEnd()
+    {
+        m_turnManager.EndUnitTurn();
     }
 
     public void GetCurrentTile() {
-        currentTile = GetTargetTile(gameObject);
-        currentTile.current = true;
+        m_currentTile = GetTargetTile(gameObject);
+        m_currentTile.current = true;
     }
 
     public Tile GetTargetTile(GameObject p_target) {
@@ -114,30 +122,30 @@ public class Agent : MonoBehaviour {
 
     //process the current tile and its adjacent tiles and their adjacent tiles if in move range to find selectable tiles
     public void FindSelectableTiles() {
-        hiding = true;
-        haveWallPos = false;
+        m_hiding = true;
+        m_haveWallPos = false;
 
-        moveAmount = currentActionPoints;
-        if (moveAmount > maxMove) {
-            moveAmount = maxMove;
+        m_moveAmount = m_currentActionPoints;
+        if (m_moveAmount > m_maxMove) {
+            m_moveAmount = m_maxMove;
         }
 
-        ComputeAdjacentcyLists(jumpHeight, null);
+        ComputeAdjacentcyLists(m_jumpHeight, null);
         GetCurrentTile();
 
         Queue<Tile> process = new Queue<Tile>();
 
-        process.Enqueue(currentTile);
-        currentTile.visited = true;
+        process.Enqueue(m_currentTile);
+        m_currentTile.visited = true;
 
         while (process.Count > 0) {
             Tile t = process.Dequeue();
             
-            selectableTiles.Add(t);
+            m_selectableTiles.Add(t);
             t.selectable = true;
             t.selectableBy = this;
 
-            if (t.distance < moveAmount) {
+            if (t.distance < m_moveAmount) {
                 foreach (Tile tile in t.adjacencyList) {
                     if (!tile.visited) {
                         tile.parent = t;
@@ -150,15 +158,15 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    //Get Path in reverse order
+    //Get m_path in reverse order
     public void CheckMoveToTile(Tile p_tile, bool hover) {
-        path.Clear();
+        m_path.Clear();
         int pathCost = 0;
 
         Tile next = p_tile;
         while (next != null) {
             pathCost++;
-            path.Push(next);
+            m_path.Push(next);
             next = next.parent;
         }
         //-1 from pathcost because while loop counts current Tile
@@ -166,23 +174,23 @@ public class Agent : MonoBehaviour {
 
         if (hover) {
             p_tile.target = true;
-            int tempAP = currentActionPoints - pathCost;
-            APNumber.text = tempAP.ToString();
+            int tempAP = m_currentActionPoints - pathCost;
+            m_APNumber.text = tempAP.ToString();
         }
         else {
             p_tile.target = true;
-            moving = true;
-            currentActionPoints -= pathCost;
+            m_moving = true;
+            m_currentActionPoints -= pathCost;
         }
     }
 
     public void Move(bool hide) {
-        if (path.Count > 0) {
-            Tile t = path.Peek();
+        if (m_path.Count > 0) {
+            Tile t = m_path.Peek();
             Vector3 targetPos = t.transform.position;
 
             //calculate the agents position on top of the target tile
-            targetPos.y += halfHeight + t.GetComponent<Collider>().bounds.extents.y;
+            targetPos.y += m_halfHeight + t.GetComponent<Collider>().bounds.extents.y;
 
             if (Vector3.Distance(transform.position, targetPos) >= 0.15f) {
                 bool jump = transform.position.y != targetPos.y;
@@ -196,21 +204,21 @@ public class Agent : MonoBehaviour {
                 }
 
                 //Locomotion (add animations here)
-                transform.forward = heading;
-                transform.position += velocity * Time.deltaTime;
+                transform.forward = m_heading;
+                transform.position += m_velocity * Time.deltaTime;
             }
             else {
                 //tile center reached
                 transform.position = targetPos;
-                path.Pop();
+                m_path.Pop();
             }
         }
         else {
-            if (hide && hiding) {
+            if (hide && m_hiding) {
                 WallHide();
             } else {
                 RemoveSelectableTiles();
-                moving = false;
+                m_moving = false;
 
                 if (GetComponent<PlayerController>()) {
                     FindInteractables();
@@ -223,168 +231,168 @@ public class Agent : MonoBehaviour {
     }
 
     protected void WallHide() {
-        if (!haveWallPos) {
+        if (!m_haveWallPos) {
             RaycastHit hit;
             Vector3 rayPoint = new Vector3(transform.position.x, transform.position.y - 0.5f, transform.position.z);
             if (Physics.Raycast(rayPoint, Vector3.forward, out hit, 2)) {
-                wallTargetPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.65f);
-                haveWallPos = true;
+                m_wallTargetPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.65f);
+                m_haveWallPos = true;
             } else if (Physics.Raycast(rayPoint, Vector3.back, out hit, 2)) {
-                wallTargetPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.65f);
-                haveWallPos = true;
+                m_wallTargetPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.65f);
+                m_haveWallPos = true;
             } else if (Physics.Raycast(rayPoint, Vector3.left, out hit, 2)) {
-                wallTargetPos = new Vector3(transform.position.x - 0.65f, transform.position.y, transform.position.z);
-                haveWallPos = true;
+                m_wallTargetPos = new Vector3(transform.position.x - 0.65f, transform.position.y, transform.position.z);
+                m_haveWallPos = true;
             } else if (Physics.Raycast(rayPoint, Vector3.right, out hit, 2)) {
-                wallTargetPos = new Vector3(transform.position.x + 0.65f, transform.position.y, transform.position.z);
-                haveWallPos = true;
+                m_wallTargetPos = new Vector3(transform.position.x + 0.65f, transform.position.y, transform.position.z);
+                m_haveWallPos = true;
             } else {
-                hiding = false;
+                m_hiding = false;
             }
         }
 
-        transform.position = transform.position = Vector3.MoveTowards(transform.position, wallTargetPos, moveSpeed * Time.deltaTime);
+        transform.position = transform.position = Vector3.MoveTowards(transform.position, m_wallTargetPos, m_moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, wallTargetPos) <= 0.15f) {
-            hiding = false;
+        if (Vector3.Distance(transform.position, m_wallTargetPos) <= 0.15f) {
+            m_hiding = false;
         }
     }
 
     protected void RemoveSelectableTiles() {
-        if (currentTile != null) {
-            currentTile.current = false;
-            currentTile = null;
+        if (m_currentTile != null) {
+            m_currentTile.current = false;
+            m_currentTile = null;
         }
-        foreach (Tile tile in selectableTiles) {
+        foreach (Tile tile in m_selectableTiles) {
             tile.Reset();
         }
-        selectableTiles.Clear();
+        m_selectableTiles.Clear();
     }
 
     //calculate the direction we have to head to reach target
     void CalculateHeading(Vector3 p_target) {
-        heading = p_target - transform.position;
-        heading.Normalize();
+        m_heading = p_target - transform.position;
+        m_heading.Normalize();
     }
 
     //set the velocity of agent to the heading direction
     void SetHorizontalVelocity() {
-        velocity = heading * moveSpeed;
+        m_velocity = m_heading * m_moveSpeed;
     }
 
     void Jump(Vector3 p_target) {
-        if (fallingDown)
+        if (m_fallingDown)
             FallDownward(p_target);
-        else if (jumpingUp)
+        else if (m_jumpingUp)
             JumpUpward(p_target);
-        else if (movingToEdge)
+        else if (m_movingToEdge)
             MoveToEdge();
         else
             PrepareJump(p_target);
     }
 
     void PrepareJump(Vector3 p_target) {
-        isHigherThanJumpTarget = false;
-        isLowerThanJumpTarget = false;
-        targetY = p_target.y;
+        m_isHigherThanJumpTarget = false;
+        m_isLowerThanJumpTarget = false;
+        m_targetY = p_target.y;
         p_target.y = transform.position.y;
 
         CalculateHeading(p_target);
 
         //if heigher
-        if (transform.position.y > targetY) {
-            fallingDown = false;
-            jumpingUp = false;
-            movingToEdge = true;
+        if (transform.position.y > m_targetY) {
+            m_fallingDown = false;
+            m_jumpingUp = false;
+            m_movingToEdge = true;
 
-            jumpTarget = transform.position + (p_target - transform.position) / 2.0f;
+            m_jumpTarget = transform.position + (p_target - transform.position) / 2.0f;
 
-            isHigherThanJumpTarget = true;
+            m_isHigherThanJumpTarget = true;
         }
         //if lower
         else {
-            fallingDown = false;
-            jumpingUp = false;
-            movingToEdge = true;
+            m_fallingDown = false;
+            m_jumpingUp = false;
+            m_movingToEdge = true;
 
-            jumpTarget = transform.position + (p_target - transform.position) / 4.5f;
+            m_jumpTarget = transform.position + (p_target - transform.position) / 4.5f;
 
-            isLowerThanJumpTarget = true;
+            m_isLowerThanJumpTarget = true;
         }
     }
 
     void FallDownward(Vector3 p_target) {
-        velocity += Physics.gravity * Time.deltaTime;
+        m_velocity += Physics.gravity * Time.deltaTime;
 
         if (transform.position.y <= p_target.y) {
-            fallingDown = false;
-            jumpingUp = false;
-            movingToEdge = false;
+            m_fallingDown = false;
+            m_jumpingUp = false;
+            m_movingToEdge = false;
 
             Vector3 pos = transform.position;
             pos.y = p_target.y;
             transform.position = pos;
 
-            velocity = new Vector3();
+            m_velocity = new Vector3();
         }
     }
 
     void JumpUpward(Vector3 p_target) {
-        velocity += Physics.gravity * Time.deltaTime;
+        m_velocity += Physics.gravity * Time.deltaTime;
 
         if (transform.position.y > p_target.y) {
-            jumpingUp = false;
-            fallingDown = true;
+            m_jumpingUp = false;
+            m_fallingDown = true;
         }
     }
 
     void MoveToEdge() {
-        if (Vector3.Distance(transform.position, jumpTarget) >= 0.05f) {
+        if (Vector3.Distance(transform.position, m_jumpTarget) >= 0.05f) {
             SetHorizontalVelocity();
         }
-        else if (isHigherThanJumpTarget) {
-            movingToEdge = false;
-            fallingDown = true;
+        else if (m_isHigherThanJumpTarget) {
+            m_movingToEdge = false;
+            m_fallingDown = true;
 
             //devide velocity to slow down movement while falling
-            velocity /= jumpDownVelSlow;
+            m_velocity /= m_jumpDownVelSlow;
             //add small vertical velocity for 'hop' off edge
-            velocity.y = jumpDownPop;
+            m_velocity.y = m_jumpDownPop;
         }
-        else if (isLowerThanJumpTarget) {
-            movingToEdge = false;
-            jumpingUp = true;
+        else if (m_isLowerThanJumpTarget) {
+            m_movingToEdge = false;
+            m_jumpingUp = true;
 
             //devide velocity to slow down movement while jumping
-            velocity = heading * moveSpeed / jumpUpVelSlow;
+            m_velocity = m_heading * m_moveSpeed / m_jumpUpVelSlow;
 
-            float difference = targetY - transform.position.y;
+            float difference = m_targetY - transform.position.y;
             //jump velocity
-            velocity.y = jumpVelocity * (jumpUpPop + difference / 2.0f);
+            m_velocity.y = m_jumpVelocity * (m_jumpUpPop + difference / 2.0f);
         }
     }
 
     //A* pathfinding
     public void FindPath(Tile p_target, bool p_moveOntoTile) {
-        ComputeAdjacentcyLists(jumpHeight, p_target);
+        ComputeAdjacentcyLists(m_jumpHeight, p_target);
         GetCurrentTile();
 
         List<Tile> openList = new List<Tile>();
         List<Tile> closeList = new List<Tile>();
 
-        openList.Add(currentTile);
+        openList.Add(m_currentTile);
 
-        currentTile.hCost = Vector3.SqrMagnitude(currentTile.transform.position - p_target.transform.position);
-        currentTile.fCost = currentTile.hCost;
+        m_currentTile.hCost = Vector3.SqrMagnitude(m_currentTile.transform.position - p_target.transform.position);
+        m_currentTile.fCost = m_currentTile.hCost;
 
         while (openList.Count > 0) {
             Tile t = FindLowestFCost(openList);
             closeList.Add(t);
 
             if (t == p_target) {
-                //found path
-                actualTargetTile = FindEndTile(t, p_moveOntoTile);
-                CheckMoveToTile(actualTargetTile, false);
+                //found m_path
+                m_actualTargetTile = FindEndTile(t, p_moveOntoTile);
+                CheckMoveToTile(m_actualTargetTile, false);
                 return;
             }
 
@@ -393,7 +401,7 @@ public class Agent : MonoBehaviour {
                     //Do nothing, already processed
                 }
                 else if (openList.Contains(tile)) {
-                    //check if path is faster
+                    //check if m_path is faster
                     float tempG = t.gCost + Vector3.Distance(tile.transform.position, t.transform.position);
 
                     if (tempG < tile.gCost) {
@@ -401,7 +409,7 @@ public class Agent : MonoBehaviour {
                         tile.gCost = tempG;
                         tile.fCost = tile.gCost + tile.hCost;
                     }
-                    //else is path not fast, do nothing
+                    //else is m_path not fast, do nothing
                 }
                 else {
                     //new tile, calculate fCost and add to openList
@@ -416,7 +424,7 @@ public class Agent : MonoBehaviour {
             }
         }
 
-        //todo - what to do if no path to target tile
+        //todo - what to do if no m_path to target tile
         Debug.Log("Path not found");
     }
 
@@ -431,7 +439,7 @@ public class Agent : MonoBehaviour {
         }
 
         //if in move range return target tile
-        if (tempPath.Count <= moveAmount) {
+        if (tempPath.Count <= m_moveAmount) {
             if (p_moveOntoTile)
                 return p_t;
             else
@@ -440,7 +448,7 @@ public class Agent : MonoBehaviour {
 
         //if not in range return last tile in range
         Tile endTile = null;
-        for (int i = 0; i <= moveAmount; i++) {
+        for (int i = 0; i <= m_moveAmount; i++) {
             endTile = tempPath.Pop();
         }
 
@@ -462,7 +470,7 @@ public class Agent : MonoBehaviour {
     }
 
     /*public void DoAction(Action p_action) {
-        if (!moving && currentActionPoints > 0) {
+        if (!m_moving && currentActionPoints > 0) {
             //p_action.DoAction();
             EndAction();
         }
@@ -471,26 +479,26 @@ public class Agent : MonoBehaviour {
     void EndAction() {
         if (GetComponent<NPC>()) {
             NPC AI = GetComponent<NPC>();
-            AI.currentAction = null;
-            AI.currentActionNum++;
-            if (AI.currentActionNum > AI.maxActionNum) {
-                AI.currentActionNum = 0;
+            AI.m_currentAction = null;
+            AI.m_currentActionNum++;
+            if (AI.m_currentActionNum > AI.m_maxActionNum) {
+                AI.m_currentActionNum = 0;
                 squadManager.AgentHasFinishedActionPlan(AI);
             }
         } else {
-            APNumber.text = currentActionPoints.ToString();
-            if (currentActionPoints <= 0) {
-                TurnManager.EndPlayerTurn();
+            m_APNumber.text = m_currentActionPoints.ToString();
+            if (m_currentActionPoints <= 0) {
+                TurnEnd();
             }
         }
 	}
 
     public void BeginTurn() {
-		turn = true;
-        unitCanvas.SetActive(true);
-        currentActionPoints = actionPoints;
-        APNumber.text = currentActionPoints.ToString();
-		moveAmount = maxMove;
+		m_turn = true;
+        m_unitCanvas.SetActive(true);
+        m_currentActionPoints = m_actionPoints;
+        m_APNumber.text = m_currentActionPoints.ToString();
+		m_moveAmount = m_maxMove;
 
         if (GetComponent<PlayerController>()) {
             FindInteractables();
@@ -499,14 +507,14 @@ public class Agent : MonoBehaviour {
 
 	public void EndTurn() {
         Debug.Log("EndTurn()");
-        unitCanvas.SetActive(false);
-		turn = false;			
+        m_unitCanvas.SetActive(false);
+		m_turn = false;			
 	}
 
 	public void Knockout() {
-		knockedout = true;
+		m_knockedout = true;
 		transform.position = new Vector3(0, 100, 0);
-		TurnManager.EndPlayerTurn();
+		TurnEnd();
 	}
 
     //highlight interactable objects in range
@@ -515,7 +523,7 @@ public class Agent : MonoBehaviour {
             pickUp.GetComponent<PickUp>().TurnOffOutline();
         }
 
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, highlightInteractablesRange);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_highlightInteractablesRange);
         for (int i = 0; i < hitColliders.Length; i++) {
             if (hitColliders[i].tag == "PickUp") {
                 hitColliders[i].GetComponent<PickUp>().TurnOnOutline();
@@ -524,7 +532,7 @@ public class Agent : MonoBehaviour {
     }
 
     public void AddItem(Item p_item) {
-        currentItems.Add(p_item);
-        uiController.AddItem(this);
+        m_currentItems.Add(p_item);
+        m_uiController.AddItem(this);
     }
 }
