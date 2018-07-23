@@ -18,11 +18,7 @@ public class CameraFollow : MonoBehaviour {
 	void Update() {
 		Vector3 pos = Vector3.zero;
 
-		if (Input.GetKey(KeyCode.LeftAlt) && Input.GetMouseButton(2)) {
-			transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * cameraController.altRotateSpeed * Time.deltaTime);
-			cameraPivot.rotation = transform.rotation;
-		}
-		else if (Input.GetMouseButton(2)) {
+		if (Input.GetMouseButton(1)) {
 			pos.x -= Input.GetAxis("Mouse X") * cameraController.panSpeed * 2 * Time.deltaTime;
 			pos.z -= Input.GetAxis("Mouse Y") * cameraController.panSpeed * 2 * Time.deltaTime;
 

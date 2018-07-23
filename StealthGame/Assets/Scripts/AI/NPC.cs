@@ -107,12 +107,8 @@ public class NPC : Agent {
 	}
 
 	public override void StartUnitTurn() {
-		//Determine Goal TODO, based off priority override, when one fails loop to next etc
-        Goal currentGoal = m_possibleGoals[0];
 
-        //Setup first action : what happens if no action found?
-        m_currentAction = GetActionPlan(currentGoal);
-
+		StartCoroutine("ActionPlanning");
 		BeginTurn();
 
 		//should be here?
@@ -130,6 +126,15 @@ public class NPC : Agent {
 
 		//Listen for inputs and change state
     }
+
+	IEnumerator ActionPlanning() {
+		//Determine Goal TODO, based off priority override, when one fails loop to next etc
+        Goal currentGoal = m_possibleGoals[0];
+
+        //Setup first action : what happens if no action found?
+        m_currentAction = GetActionPlan(currentGoal);
+		yield return null;
+	}
 
 	//Plan what sequence of actions can fulfill the goal
 	//Returns null if a plan could not be found

@@ -20,8 +20,6 @@ public class TurnManager : MonoBehaviour {
     enum Team { AI, PLAYER }
     Team team;
 
-    static SquadManager m_squadManager;
-
     /*
     * Important Note:
     * Check any code relating to agents being dead and removing them from turn manager
@@ -31,7 +29,6 @@ public class TurnManager : MonoBehaviour {
 	void Start() {
 		//Find all tiles in level and add them to GameManager tile list
 		GameManager.tiles = GameObject.FindGameObjectsWithTag("Tile");
-        m_squadManager = GetComponent<SquadManager>();
 	}
 
     private void Update()

@@ -43,11 +43,11 @@ public class CameraController : MonoBehaviour {
 			pos.x -= panSpeed * Time.deltaTime;
 		}
 
-		if (Input.GetKey("q")) {
-			transform.Rotate(Vector3.down * rotateSpeed * Time.deltaTime);
+		if (Input.GetKeyDown("q")) {
+			transform.Rotate(transform.rotation.x, transform.rotation.y + 90, transform.rotation.z);
 		}
-		if (Input.GetKey("e")) {
-			transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
+		if (Input.GetKeyDown("e")) {
+			transform.Rotate(transform.rotation.x, transform.rotation.y - 90, transform.rotation.z);
 		}
 
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
