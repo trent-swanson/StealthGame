@@ -20,6 +20,7 @@ public class GenerateGrid : MonoBehaviour {
     }
 
     public void Generate() {
+        GameManager.grid = new GameObject[(int)gridSize.x, (int)gridSize.y];
 
         string holderName = "Generate Grid";
         //Destroy grid if already exists
