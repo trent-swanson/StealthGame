@@ -2,17 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Goal {
+public abstract class Goal : ScriptableObject
+{
+    [Tooltip("What state this goal will achieve")]
+    [SerializeField]
+    public WorldState.WORLD_STATE m_desiredWorldState = WorldState.WORLD_STATE.IDLE;
+    
+    public int m_goalPriority;
 
-	public HashSet<KeyValuePair<string,object>> desiredWorldState = new HashSet<KeyValuePair<string, object>> ();
-	public int priority;
-
-	public Goal(string p_key, object p_value, int p_priority) {
-		desiredWorldState.Add(new KeyValuePair<string, object>(p_key, p_value));
-		priority = p_priority;
-	}
-
-	public int CalculateNewPriority() {
-		return priority;
-	}
+    //--------------------------------------------------------------------------------------
+    // Determining a goals priority
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    // Return:
+    //		realtive priority based off agents's states, range from 0-1
+    //      In future this is where squad manager can "buff" desiered goals
+    //--------------------------------------------------------------------------------------
+    public abstract float DetermineGoalPriority(GameObject agent); 
 }

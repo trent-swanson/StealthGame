@@ -2,50 +2,91 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangedAttack : Action {
+[CreateAssetMenu(fileName = "RangedAttack", menuName = "AI Actions/RangedAttack")]
+public class RangedAttack : AIAction {
 
 	private bool attacked = false;
-    private PlayerController targetPlayer;
  
     public float attackRange = 10;
- 
-    public RangedAttack () {
-        AddPrecondition ("NearTarget", target);
-        AddPrecondition ("TargetLineOfSight", target);
-        AddEffect ("AttackingTarget", target);
+     
+     
+     //--------------------------------------------------------------------------------------
+    // Initialisation of an action 
+    // Runs once when action starts from the list
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void ActionInit(Agent agent)
+    {
+
     }
-     
-     
-    public override void Reset () {
-        attacked = false;
-        targetPlayer = null;
+
+    //--------------------------------------------------------------------------------------
+    // Has the action been completed
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    // Return:
+    //		Is all action moves have been completed
+    //--------------------------------------------------------------------------------------
+    public override bool IsDone(Agent agent)
+    {
+        return false;
     }
-     
-    public override bool IsDone () {
-        return attacked;
+
+    //--------------------------------------------------------------------------------------
+    // Agent Has been completed, clean up anything that needs to be
+    // 
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void EndAction(Agent agent)
+    {
+
     }
-     
-    public override bool RequiresInRange () {
-        return true; // yes we need to be near a rock
+
+
+    //--------------------------------------------------------------------------------------
+    // Perform actions effects, e.g. Moving towards opposing agent
+    // Should happen on each update
+    //
+    // Param
+    //		agent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void Perform(Agent agent)
+    {
+
     }
-     
-    public override bool CheckProceduralPrecondition (GameObject agent) {
+
+	/* 
+    public override bool CheckProceduralPrecondition (GameObject agent, GameObject p_target) {
         //get a list of all players in scene
-        List<PlayerController> players =  new List<PlayerController>();
-		foreach(PlayerController player in GameObject.FindObjectsOfType(typeof(PlayerController))) { 
-        	players.Add(player);
+        List<PlayerController> validPlayers =  new List<PlayerController>();
+		//find all players in range with line of sight
+		foreach(PlayerController player in GameObject.FindObjectsOfType(typeof(PlayerController))) {
+			//is in range?
+			if (Vector3.Distance(player.gameObject.transform.position, agent.transform.position) <= attackRange) {
+				//check if we have line of sight
+				RaycastHit hit;
+				if (Physics.Raycast(agent.transform.position, player.gameObject.transform.position, out hit, attackRange)) {
+					if (hit.transform.tag == "Player") {
+						//we found a valid target
+						validPlayers.Add(player);
+					}
+				}
+			}
 		}
         PlayerController closest = null;
         float closestDist = 0;
-        bool hasLineOfSight = false;
+        //bool hasLineOfSight = false;
 
-		//continue until we have line of sight on a player
-		while (!hasLineOfSight) {
+		if (validPlayers.Count > 0) {
 			//find closest player
-			foreach (PlayerController player in players) {
+			foreach (PlayerController player in validPlayers) {
 				if (closest == null) {
-					if (player.knockedout) {
-						players.Remove(player);
+					if (player.m_knockedout) {
+						validPlayers.Remove(player);
 						continue;
 					} else {
 						// first one, so choose it for now, if it is not knockedout
@@ -54,8 +95,8 @@ public class RangedAttack : Action {
 					}
 				} else {
 					//check is player is knocked out
-					if (player.knockedout) {
-						players.Remove(player);
+					if (player.m_knockedout) {
+						validPlayers.Remove(player);
 						continue;
 					} else {
 						// is this one closer than the last?
@@ -68,32 +109,14 @@ public class RangedAttack : Action {
 					}
 				}
 			}
-			targetPlayer = closest;
-
-			//check if closest player is within attack range
-			if (Vector3.Distance(targetPlayer.gameObject.transform.position, agent.transform.position) <= attackRange) {
-				//check if we have line of sight on closest player
-				RaycastHit hit;
-				if (Physics.Raycast(agent.transform.position, targetPlayer.gameObject.transform.position, out hit, attackRange)) {
-					if (hit.transform.tag == "Player") {
-						//we found a valid target
-						target = targetPlayer.gameObject;
-						return true;
-					} else {
-						players.Remove(targetPlayer);
-						continue;
-					}
-				}
+			if (closest != null) {
+				target = closest.gameObject;
+				return true;
 			} else {
-				//if closest player greater than attack range, no need to keep looking, return false
 				return false;
 			}
+		} else {
+			return false;
 		}
-        return false;
-    }
-     
-    public override bool Perform (GameObject agent) {
-		Debug.Log("Shot Player: " + target.name);
-        return true;
-    }
+    }*/
 }
