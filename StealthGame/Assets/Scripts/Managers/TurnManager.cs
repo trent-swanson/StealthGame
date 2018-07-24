@@ -11,11 +11,6 @@ public class TurnManager : MonoBehaviour {
 
     private enum TEAM {PLAYER,ENEMY };
     private TEAM m_currentTeam = TEAM.PLAYER;
-    public delegate void UnitSelect(PlayerController p_unit);
-    public static event UnitSelect OnUnitSelect;
-
-    public delegate void UnitDeselect();
-    public static event UnitDeselect OnUnitDeselect;
 
     enum Team { AI, PLAYER }
     Team team;
@@ -57,9 +52,6 @@ public class TurnManager : MonoBehaviour {
             m_turnTeam = new List<Agent>(m_playerTeam);
         }
         if (m_turnTeam.Count > 0) {
-            if(OnUnitSelect != null && m_turnTeam[0].tag == "Player") {
-				OnUnitSelect(m_turnTeam[0].GetComponent<PlayerController>());
-			}
             m_turnTeam[0].StartUnitTurn();
         }
     }
@@ -67,9 +59,7 @@ public class TurnManager : MonoBehaviour {
     //end of unit turn
     public void EndUnitTurn()
     {
-        if(OnUnitDeselect != null && m_turnTeam[0].tag == "Player") {
-            OnUnitDeselect();
-        }
+        m_turnTeam[0].EndTurn();
         m_turnTeam.RemoveAt(0);
         if(m_turnTeam.Count > 0)
             m_turnTeam[0].StartUnitTurn();

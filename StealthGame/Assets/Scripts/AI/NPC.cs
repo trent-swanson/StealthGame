@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class NPC : Agent {
 
@@ -25,7 +26,7 @@ public class NPC : Agent {
     //-----------------------
 
     [System.Serializable]
-    public class AgentState {
+    public class AgentWorldState {
         //Items I'm holding
         public List<Item> m_currentItems = new List<Item>();
         
@@ -69,12 +70,12 @@ public class NPC : Agent {
     [Space]
     [Space]
     [Header("AgentState")]
-    public AgentState m_agentState;
+    public AgentWorldState m_agentWorldState;
 
     [Space]
-
-    [SerializeField]
-    public List<Goal> m_possibleGoals = new List<Goal>();
+    public List<Goal> m_ambientGoals = new List<Goal>();
+	public List<Goal> m_suspiciousGoals = new List<Goal>();
+	public List<Goal> m_alertGoals = new List<Goal>();
     public List<AIAction> m_possibleActions = new List<AIAction>();
 
 	[Space]
@@ -90,7 +91,7 @@ public class NPC : Agent {
 
 	void Start() {
 		//todo: need to remove this agent from the unitList when it is killed
-		GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>().unitList.Add(this);
+		squadManager.unitList.Add(this);
 		m_state = State.AMBIENT;
 
 		//duck tape
@@ -106,12 +107,13 @@ public class NPC : Agent {
 		m_state = State.AMBIENT;
 	}
 
-	public override void StartUnitTurn() {
-
+	public override void DetermineGoal() {
 		StartCoroutine("ActionPlanning");
 		BeginTurn();
+	}
 
-		//should be here?
+	public override void StartUnitTurn() {
+		//should be here? - should not be here
         if (m_currentActionNum > m_maxActionNum)
             EndTurn();
 	}
@@ -128,11 +130,46 @@ public class NPC : Agent {
     }
 
 	IEnumerator ActionPlanning() {
-		//Determine Goal TODO, based off priority override, when one fails loop to next etc
-        Goal currentGoal = m_possibleGoals[0];
+		//list of state goals
+		//foreach goal DetermineGoalPriority() and add to a queue in order of cheapest
+		//Find action plan for goal, if no plan found go to next goal
+		//Tell Squad Manager what my goal is
+		
+		List<Goal> possibleGoals = new List<Goal>();
 
-        //Setup first action : what happens if no action found?
-        m_currentAction = GetActionPlan(currentGoal);
+		switch (m_state) {
+			case State.AMBIENT:
+				possibleGoals = m_ambientGoals;
+			break;
+			case State.SUSPICIOUS:
+				possibleGoals = m_suspiciousGoals;
+			break;
+			case State.ALERT:
+				possibleGoals = m_alertGoals;
+			break;
+		}
+
+		Queue<Goal> goalQueue = new Queue<Goal>();
+
+		foreach (Goal goal in possibleGoals) {
+			goal.DetermineGoalPriority(this);
+			goalQueue.Enqueue(goal);
+		}
+
+		goalQueue.OrderByDescending(goal => goal.m_goalPriority);
+
+		m_currentAction = null;
+
+		while (m_currentAction == null) {
+			Goal currentGoal = goalQueue.Dequeue();
+
+			m_currentAction = GetActionPlan(currentGoal);
+			
+			if (m_currentAction != null) {
+				break;
+			}
+		}
+
 		yield return null;
 	}
 
