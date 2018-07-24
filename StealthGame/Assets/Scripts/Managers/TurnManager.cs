@@ -38,7 +38,18 @@ public class TurnManager : MonoBehaviour {
     {
         if (m_turnTeam.Count != 0)
         {
-            m_turnTeam[0].TurnUpdate();
+            if (m_currentTeam== TEAM.PLAYER)
+            {
+                m_turnTeam[0].TurnUpdate();
+            }
+            else
+            {
+                List<Agent> tempTeam = new List<Agent>(m_turnTeam);
+                foreach (Agent agent in tempTeam)
+                {
+                    agent.TurnUpdate();
+                }
+            }
         }
         else
         {
@@ -60,10 +71,35 @@ public class TurnManager : MonoBehaviour {
             m_turnTeam = new List<Agent>(m_playerTeam);
         }
         if (m_turnTeam.Count > 0) {
-            if(OnUnitSelect != null && m_turnTeam[0].tag == "Player") {
-				OnUnitSelect(m_turnTeam[0].GetComponent<PlayerController>());
-			}
-            m_turnTeam[0].StartUnitTurn();
+
+            if (m_currentTeam == TEAM.PLAYER)
+            {
+                if (OnUnitSelect != null && m_turnTeam[0].tag == "Player")
+                {
+                    OnUnitSelect(m_turnTeam[0].GetComponent<PlayerController>());
+                }
+                m_turnTeam[0].StartUnitTurn();
+            }
+            else//AI stuff
+            {
+                //All AI get goals
+                m_turnTeam[0].DetermineGoal();
+                //Update squadmanager, possible update of goals
+
+                //Run first AI turn
+
+                m_turnTeam[0].StartUnitTurn();
+            }
+            for (int i = 0; i < m_turnTeam.Count;)
+            {
+                if (m_turnTeam[i].m_knockedout)
+                    m_turnTeam.RemoveAt(i);
+                else
+                {
+                    m_turnTeam[i].StartUnitTurn();
+                    i++;
+                }
+            }
         }
     }
 

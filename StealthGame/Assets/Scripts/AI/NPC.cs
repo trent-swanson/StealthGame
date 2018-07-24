@@ -33,21 +33,20 @@ public class NPC : Agent {
         public enum WEAPON_TYPE {MELEE, RANGED }; //Fixed
         private WEAPON_TYPE m_weaponType = WEAPON_TYPE.MELEE; //Fixed
 
-
         //Node this agent wants to go to
-        private GameObject m_targetNode = null; //Fixed
+        public GameObject m_targetNode = null; //Fixed
 
         //Seen targets
-        private List<GameObject> m_possibleTargets = new List<GameObject>(); //Realtime
+        public List<GameObject> m_possibleTargets = new List<GameObject>(); //Realtime
 
         //Targets which have gone missing
-        private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+        public List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
 
         //Waypoints
         [SerializeField]
-        private List<GameObject> m_waypoints = new List<GameObject>();
+        public List<GameObject> m_waypoints = new List<GameObject>();
 
-        private int m_waypointIndex = 0;
+        public int m_waypointIndex = 0;
     }
 
     public struct InvestigationNode
@@ -77,6 +76,9 @@ public class NPC : Agent {
     public List<Goal> m_possibleGoals = new List<Goal>();
     public List<AIAction> m_possibleActions = new List<AIAction>();
 
+    [Space]
+    public Goal m_currentGoal;
+
 	[Space]
 	public AIAction m_currentAction;
 
@@ -85,7 +87,7 @@ public class NPC : Agent {
 	public int m_maxActionNum = 3;
 
 	[Space]
-    private List<GameObject> m_opposingTeam;
+    private List<GameObject> m_opposingTeam = new List<GameObject>();
 
 
 	void Start() {
@@ -106,14 +108,17 @@ public class NPC : Agent {
 		m_state = State.AMBIENT;
 	}
 
-	public override void StartUnitTurn() {
-		//Determine Goal TODO, based off priority override, when one fails loop to next etc
-        Goal currentGoal = m_possibleGoals[0];
-
+    public override void DetermineGoal()
+    {
+        //Determine Goal TODO, based off priority override, when one fails loop to next etc
+        m_currentGoal = m_possibleGoals[0];
         //Setup first action : what happens if no action found?
-        m_currentAction = GetActionPlan(currentGoal);
+        m_currentAction = GetActionPlan(m_currentGoal);
+    }
 
-		BeginTurn();
+    public override void StartUnitTurn()
+    {
+        BeginTurn();
 
 		//should be here?
         if (m_currentActionNum > m_maxActionNum)
@@ -123,7 +128,11 @@ public class NPC : Agent {
 	public override void TurnUpdate() {
 		if(m_currentAction != null)
 			m_currentAction.Perform(this);
-	}
+        if (m_currentAction.IsDone(this))
+            m_turnManager.EndUnitTurn();
+
+
+    }
 
 	void Update() {
 		Debug.DrawRay(transform.position, transform.forward);
@@ -139,8 +148,20 @@ public class NPC : Agent {
 		HashSet<Node> closeSet = new HashSet<Node>();
 
 		//Node startNode = new Node();
+        //Changed how first node is made due to goal not having an action
+
 		Node targetNode = new Node(p_goal);
-		openSet.Add(targetNode);
+
+        foreach (AIAction action in m_possibleActions)
+        {
+            if(action.m_satisfiedWorldStates.Contains(p_goal.m_desiredWorldState))
+            {
+                Node newNode = new Node(this, action, targetNode);
+                openSet.Add(newNode);
+            }
+        }
+
+		//openSet.Add(targetNode);
 
 		//A* ===================
 		while (openSet.Count > 0) {
@@ -159,7 +180,6 @@ public class NPC : Agent {
 
 			//Found an action we can do now
 			if (currentNode.hCost == 0) {
-				Debug.Log("Got Action");
 				return currentNode.action;
 			}
 			

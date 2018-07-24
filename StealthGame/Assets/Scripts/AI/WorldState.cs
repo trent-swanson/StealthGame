@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class WorldState : ScriptableObject
 {
-    public enum WORLD_STATE { IDLE, PATROL, USING_NODE, AT_NODE, ATTACKING_TARGET, HAS_TARGET, HAS_LINE_OF_SIGHT, HAS_TARGET_NODE, CLOSE_TO_TARGET }
+    public enum WORLD_STATE { IDLE, PATROL, USING_NODE, AT_NODE, ATTACKING_TARGET, HAS_TARGET, HAS_LINE_OF_SIGHT, HAS_TARGET_NODE, CLOSE_TO_TARGET}
     public static Dictionary<WORLD_STATE, Func<GameObject, bool>> m_StateFunctions = new Dictionary<WORLD_STATE, Func<GameObject, bool>>
     {
         //{WORLD_STATE.IDLE, Idle}
         //{WORLD_STATE.CLOSE_TO_TARGET, CloseToTarget},
         //{WORLD_STATE.HAS_TARGET, HasTarget},
-        //{WORLD_STATE.HAS_TARGET_NODE, HasTargetNode},
+        {WORLD_STATE.HAS_TARGET_NODE, HasTargetNode}
         //{WORLD_STATE.AT_NODE, AtNode}
     };
 
@@ -44,20 +44,20 @@ public class WorldState : ScriptableObject
     // Return:
     //		true when range is greater than distance
     //--------------------------------------------------------------------------------------
-    /*public static bool CloseToTarget(GameObject agent)
-    {
-        Agent agentScript = agent.GetComponent<Agent>();
-        NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
-        if (agentScript != null && planner != null)
-        {
-            GameObject closestTarget = null;
-            float dis = 0.0f;
-            planner.GetClosesetTarget(ref closestTarget, ref dis);
-            if (closestTarget && dis < agentScript.m_range)
-                return true;
-        }
-        return false;
-    }
+    //public static bool CloseToTarget(GameObject agent)
+    //{
+    //    Agent agentScript = agent.GetComponent<Agent>();
+    //    NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
+    //    if (agentScript != null && planner != null)
+    //    {
+    //        GameObject closestTarget = null;
+    //        float dis = 0.0f;
+    //        planner.GetClosesetTarget(ref closestTarget, ref dis);
+    //        if (closestTarget && dis < agentScript.m_range)
+    //            return true;
+    //    }
+    //    return false;
+    //}
 
     //--------------------------------------------------------------------------------------
     // Check agents seen targets to see if theres any valid targets 
@@ -67,19 +67,19 @@ public class WorldState : ScriptableObject
     // Return:
     //		true when at least one target still is seen
     //--------------------------------------------------------------------------------------
-    public static bool HasTarget(GameObject agent)
-    {
-        NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
-        if (planner != null)
-        {
-            return planner.PossibleTargets.Count > 0;
-        }
-        return false;
-    }
+    //public static bool HasTarget(GameObject agent)
+    //{
+    //    NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
+    //    if (planner != null)
+    //    {
+    //        return planner.PossibleTargets.Count > 0;
+    //    }
+    //    return false;
+    //}
 
     //--------------------------------------------------------------------------------------
     // Check agents seen targets to see if theres any valid targets 
-    // 
+     
     // Param
     //		agent: Gameobject which script is used on
     // Return:
@@ -87,10 +87,10 @@ public class WorldState : ScriptableObject
     //--------------------------------------------------------------------------------------
     public static bool HasTargetNode(GameObject agent)
     {
-        NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
+        NPC planner = agent.GetComponent<NPC>();
         if (planner != null)
         {
-            return planner.TargetNode != null;
+            return planner.m_agentState.m_targetNode != null;
         }
         return false;
     }
@@ -103,14 +103,14 @@ public class WorldState : ScriptableObject
     // Return:
     //		true when the node below agent is equal to agents target node
     //--------------------------------------------------------------------------------------
-    public static bool AtNode(GameObject agent)
-    {
-        Agent agentScript = agent.GetComponent<Agent>();
-        NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
-        if (agentScript != null && planner != null)
-        {
-            return agentScript.GetNodeBelow() == planner.TargetNode;
-        }
-        return false;
-    }*/
+    //public static bool AtNode(GameObject agent)
+    //{
+    //    Agent agentScript = agent.GetComponent<Agent>();
+    //    NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
+    //    if (agentScript != null && planner != null)
+    //    {
+    //        return agentScript.GetNodeBelow() == planner.TargetNode;
+    //    }
+    //    return false;
+    //}
 }

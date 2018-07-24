@@ -89,6 +89,8 @@ public class Agent : MonoBehaviour {
         m_unitCanvas.SetActive(false);
     }
 
+    public virtual void DetermineGoal() { }
+
     public virtual void StartUnitTurn() {}
 
     public virtual void TurnUpdate() {}

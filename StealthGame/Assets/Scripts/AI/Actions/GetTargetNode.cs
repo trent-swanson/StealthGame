@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
-public class GotoNode : AIAction {
- 
-    public float attackRange = 10;
-
+[CreateAssetMenu(fileName = "GetTargetNode", menuName = "AI Actions/GetTargetNode")]
+public class GetTargetNode : AIAction
+{
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
@@ -16,11 +14,9 @@ public class GotoNode : AIAction {
     //--------------------------------------------------------------------------------------
     public override void ActionInit(Agent agent)
     {
-        Tile targetTile = agent.GetTargetTile(agent.GetComponent<NPC>().m_target);
-        agent.FindPath(targetTile, true);
-        agent.GetComponent<NPC>().m_moving = true;
-        agent.m_actualTargetTile.target = true;
+
     }
+
     //--------------------------------------------------------------------------------------
     // Has the action been completed
     // 
@@ -31,7 +27,7 @@ public class GotoNode : AIAction {
     //--------------------------------------------------------------------------------------
     public override bool IsDone(Agent agent)
     {
-        return !agent.GetComponent<NPC>().m_moving;
+        return true;
     }
 
     //--------------------------------------------------------------------------------------
@@ -55,6 +51,19 @@ public class GotoNode : AIAction {
     //--------------------------------------------------------------------------------------
     public override void Perform(Agent agent)
     {
-        agent.Move(false);
+        NPC NPCScript = agent.GetComponent<NPC>();
+        Goal goal = NPCScript.m_currentGoal;
+
+        switch (goal.m_desiredWorldState)
+        {
+            case WorldState.WORLD_STATE.PATROL:
+                NPCScript.m_agentState.m_targetNode = NPCScript.m_waypoints[NPCScript.m_currentWaypoint];
+                break;
+            case WorldState.WORLD_STATE.ATTACKING_TARGET:
+                NPCScript.m_agentState.m_targetNode = NPCScript.m_agentState.m_possibleTargets[0]; // TODO get better target
+                break;
+            default:
+                break;
+        }
     }
 }

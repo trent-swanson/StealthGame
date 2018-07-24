@@ -8,7 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0263d400a6f518a4a8fd5985fb9bc636, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e16c3616405c8246bf8bdb498a4aaf1, type: 3}
   m_Name: Patrol
   m_EditorClassIdentifier: 
-  priority: 1
+  m_satisfiedWorldStates: 01000000
+  m_requiredWorldStates: 03000000
+  m_actionCost: 0

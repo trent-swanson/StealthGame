@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
-public class GotoNode : AIAction {
- 
-    public float attackRange = 10;
+[CreateAssetMenu(fileName = "Patrol", menuName = "AI Actions/Patrol")]
+public class Patrol : AIAction {
 
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
@@ -16,11 +14,9 @@ public class GotoNode : AIAction {
     //--------------------------------------------------------------------------------------
     public override void ActionInit(Agent agent)
     {
-        Tile targetTile = agent.GetTargetTile(agent.GetComponent<NPC>().m_target);
-        agent.FindPath(targetTile, true);
-        agent.GetComponent<NPC>().m_moving = true;
-        agent.m_actualTargetTile.target = true;
+
     }
+
     //--------------------------------------------------------------------------------------
     // Has the action been completed
     // 
@@ -31,7 +27,7 @@ public class GotoNode : AIAction {
     //--------------------------------------------------------------------------------------
     public override bool IsDone(Agent agent)
     {
-        return !agent.GetComponent<NPC>().m_moving;
+        return true;
     }
 
     //--------------------------------------------------------------------------------------
@@ -55,6 +51,23 @@ public class GotoNode : AIAction {
     //--------------------------------------------------------------------------------------
     public override void Perform(Agent agent)
     {
-        agent.Move(false);
+        List<GameObject> waypoints = agent.GetComponent<NPC>().m_waypoints;
+        Vector3 target = waypoints[agent.GetComponent<NPC>().m_currentWaypoint].transform.position;
+
+        Vector3 currentPos = agent.transform.position;
+        Vector3 dir = target - currentPos;
+
+        Vector3 velocity = dir.normalized * Time.deltaTime * agent.m_moveSpeed;
+
+        if (Vector3.Magnitude(velocity) > Vector3.Magnitude(dir))
+        {
+            agent.transform.position = target;
+
+            agent.GetComponent<NPC>().m_currentWaypoint++;
+            if (agent.GetComponent<NPC>().m_currentWaypoint >= waypoints.Count)
+            {
+                agent.GetComponent<NPC>().m_currentWaypoint = 0;
+            }
+        }
     }
 }

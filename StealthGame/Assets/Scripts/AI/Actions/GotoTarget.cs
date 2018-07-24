@@ -58,20 +58,4 @@ public class GotoTarget : AIAction {
     {
 
     }
-
-    /* 
-    public override void Perform (Agent agent) {
-		if (!agent.m_moving) {
-			CalculatePath(agent);
-			agent.m_actualTargetTile.target = true;
-        }
-        else {
-            agent.Move(false);
-        }
-    }
-
-    void CalculatePath(Agent agent) {
-		Tile targetTile = agent.GetTargetTile(target);
-		agent.FindPath(targetTile, false);
-	}*/
 }
