@@ -73,6 +73,7 @@ public class Tile : MonoBehaviour {
             Tile tile = item.GetComponent<Tile>();
             if (tile != null && tile.walkable) {
                 RaycastHit hit;
+                //CHANGE HERE - TODO - change Neighbors to GameManager.grid cordinates
                 if (!Physics.Raycast(tile.transform.position, Vector3.up, out hit, 1.0f) || (tile == p_target)) {
                     adjacencyList.Add(tile);
                 }
