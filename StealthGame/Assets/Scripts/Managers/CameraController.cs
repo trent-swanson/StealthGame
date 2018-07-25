@@ -14,13 +14,9 @@ public class CameraController : MonoBehaviour {
 	public float minY = 0f;
 	public float maxY = 15f;
 
-	[Header("Rotating")]
-	public float rotateSpeed = 95f;
-	public float altRotateSpeed = 195f;
-
 	void OnDrawGizmosSelected() {
         Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(new Vector3(0f, cam.position.y, 0f), new Vector3((panLimit.x * 2f), 1f, (panLimit.y * 2f)));
+        Gizmos.DrawWireCube(new Vector3(transform.parent.position.x, cam.position.y, transform.parent.position.z), new Vector3((panLimit.x * 2f), 1f, (panLimit.y * 2f)));
     }
 
 	public void Focus(Transform p_focusTarget) {
@@ -43,17 +39,17 @@ public class CameraController : MonoBehaviour {
 			pos.x -= panSpeed * Time.deltaTime;
 		}
 
-		if (Input.GetKey("q")) {
-			transform.Rotate(Vector3.down * rotateSpeed * Time.deltaTime);
+		if (Input.GetKeyDown("q")) {
+			transform.rotation *= Quaternion.Euler(0, -90, 0);
 		}
-		if (Input.GetKey("e")) {
-			transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
+		if (Input.GetKeyDown("e")) {
+			transform.rotation *= Quaternion.Euler(0, 90, 0);
 		}
 
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
 		pos.y -= scroll * scrollSpeed * 100f * Time.deltaTime;
 
 		transform.Translate(pos);
-		transform.position = new Vector3(Mathf.Clamp(transform.position.x, -panLimit.x, panLimit.x), Mathf.Clamp(transform.position.y, minY, maxY), Mathf.Clamp(transform.position.z, -panLimit.y, panLimit.y));
+		transform.position = new Vector3(Mathf.Clamp(transform.position.x, transform.parent.position.x - panLimit.x, transform.parent.position.x + panLimit.x), Mathf.Clamp(transform.position.y, minY, maxY), Mathf.Clamp(transform.position.z, transform.parent.position.z - panLimit.y, transform.parent.position.z + panLimit.y));
 	}
 }

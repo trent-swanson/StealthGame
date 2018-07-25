@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Agent : MonoBehaviour {
 
-    SquadManager squadManager;
+    protected SquadManager squadManager;
 
     [Header("Debugging Only")]
     [Tooltip("Do Not Assign")]
@@ -89,12 +89,15 @@ public class Agent : MonoBehaviour {
         m_unitCanvas.SetActive(false);
     }
 
+    public virtual void DetermineGoal() {}
+
     public virtual void StartUnitTurn() {}
 
     public virtual void TurnUpdate() {}
 
     public void TurnEnd()
     {
+        EndTurn();
         m_turnManager.EndUnitTurn();
     }
 
@@ -372,7 +375,7 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    //A* pathfinding
+    //A* pathfinding - Movement
     public void FindPath(Tile p_target, bool p_moveOntoTile) {
         ComputeAdjacentcyLists(m_jumpHeight, p_target);
         GetCurrentTile();
@@ -483,7 +486,6 @@ public class Agent : MonoBehaviour {
             AI.m_currentActionNum++;
             if (AI.m_currentActionNum > AI.m_maxActionNum) {
                 AI.m_currentActionNum = 0;
-                squadManager.AgentHasFinishedActionPlan(AI);
             }
         } else {
             m_APNumber.text = m_currentActionPoints.ToString();
@@ -506,7 +508,6 @@ public class Agent : MonoBehaviour {
 	}
 
 	public void EndTurn() {
-        Debug.Log("EndTurn()");
         m_unitCanvas.SetActive(false);
 		m_turn = false;			
 	}

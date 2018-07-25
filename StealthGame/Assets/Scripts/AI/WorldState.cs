@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class WorldState : ScriptableObject
 {
-    public enum WORLD_STATE { IDLE, PATROL, USING_NODE, AT_NODE, ATTACKING_TARGET, HAS_TARGET, HAS_LINE_OF_SIGHT, HAS_TARGET_NODE, CLOSE_TO_TARGET }
+    public enum WORLD_STATE { IDLING, PATROLING, USING_NODE, AT_NODE, ATTACKING_TARGET, AT_TARGET, TARGET_IN_LINE_OF_SIGHT,
+                                NEAR_TARGET, AT_LAST_TARGET_LOCATION, AT_INVESTIGATE_LOCATION, KO_GUARD_IN_LINE_OF_SIGHT, HELPING_GUARD,
+                                SEARCHED_AREA, INVESTIGATED, GUARDING_TARGET, FOUND_TARGET, AMBUSHED_TARGET}
     public static Dictionary<WORLD_STATE, Func<GameObject, bool>> m_StateFunctions = new Dictionary<WORLD_STATE, Func<GameObject, bool>>
     {
-        //{WORLD_STATE.IDLE, Idle}
+        //{WORLD_STATE.IDLING, Idle}
         //{WORLD_STATE.CLOSE_TO_TARGET, CloseToTarget},
         //{WORLD_STATE.HAS_TARGET, HasTarget},
         //{WORLD_STATE.HAS_TARGET_NODE, HasTargetNode},
