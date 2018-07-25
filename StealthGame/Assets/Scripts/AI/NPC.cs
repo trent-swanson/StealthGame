@@ -205,6 +205,16 @@ public class NPC : Agent {
 				return currentNode.action;
 			}
 			
+			//TODO
+			//for current action
+			//CheckForValidState() //do this but make a TODO for saving this when we check it in subnodes
+			//if not valid check IsPotentiallyValid()
+			//Find all actions that can validate current action
+
+			//something to double check - that the order of Required World States is the priority order we check.
+			//TODO So if first Required World State can't be validated dont check the next Required World State - Failded IsPotentiallyValid()
+
+			//change this
 			foreach (Node subNode in GetActionsThatMeetPreconditions(currentNode)) {
 				if (!openSet.Contains(subNode)) {
 					openSet.Add(subNode);
@@ -307,6 +317,7 @@ public class NPC : Agent {
 			parent = null;
 		}
 
+		//TODO - is wrong
 		private int DetermineHCost(Agent p_agent, List<WorldState.WORLD_STATE> p_requiredWorldStates) {
 			int tempHCost = 0;
 			foreach (WorldState.WORLD_STATE wState in p_requiredWorldStates) {

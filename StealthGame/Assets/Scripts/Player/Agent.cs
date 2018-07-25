@@ -375,7 +375,7 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    //A* pathfinding
+    //A* pathfinding - Movement
     public void FindPath(Tile p_target, bool p_moveOntoTile) {
         ComputeAdjacentcyLists(m_jumpHeight, p_target);
         GetCurrentTile();
