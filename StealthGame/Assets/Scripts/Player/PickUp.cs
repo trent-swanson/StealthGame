@@ -11,6 +11,8 @@ public class PickUp : MonoBehaviour {
 	bool beingPickedUp = false;
 	Tile occupingTile;
 
+	public Color highlightColour;
+
 	void Start() {
 		canvas.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.icon;
 		RaycastHit hit;
@@ -57,6 +59,7 @@ public class PickUp : MonoBehaviour {
 		if (outlineShader != null) {
 			Renderer renderer = GetComponent<Renderer>();
 			renderer.material.shader = outlineShader;
+			renderer.material.SetColor("_OutlineColor", highlightColour);
 		}
 		isInRange = true;
 	}

@@ -21,11 +21,6 @@ public class TurnManager : MonoBehaviour {
     * Agents can be knocked out, but then revived so must be readded
     */
 
-	void Start() {
-		//Find all tiles in level and add them to GameManager tile list
-		GameManager.tiles = GameObject.FindGameObjectsWithTag("Tile");
-	}
-
     private void Update()
     {
         if (m_turnTeam.Count != 0)

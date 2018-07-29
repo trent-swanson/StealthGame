@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Agent : MonoBehaviour {
 
@@ -13,7 +14,9 @@ public class Agent : MonoBehaviour {
     [Tooltip("Do Not Assign")]
     public bool m_knockedout = false;
 
-    List<Tile> m_selectableTiles = new List<Tile>();
+    [HideInInspector]
+    protected List<Tile> m_selectableTiles = new List<Tile>();
+    protected List<Vector3> m_selectableOutline = new List<Vector3>();
     Tile m_unreachableTile;
 
     Stack<Tile> m_path = new Stack<Tile>();
@@ -29,7 +32,10 @@ public class Agent : MonoBehaviour {
     [Space]
     [Header("Unit Editable Variables")]
     public GameObject m_unitCanvas;
-    public Text m_APNumber;
+    public Image m_APDisplay;
+    public Sprite m_defualtAPDisplay;
+    public Sprite m_selectedAPDisplay;
+    public TextMeshProUGUI m_APNumber;
     [Tooltip("# of actions unit can perform")]
     public int m_actionPoints = 2;
     [Tooltip("# of tiles unit can move")]
@@ -86,7 +92,8 @@ public class Agent : MonoBehaviour {
         squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();
         m_currentActionPoints = m_actionPoints;
         m_halfHeight = GetComponent<Collider>().bounds.extents.y;
-        m_unitCanvas.SetActive(false);
+        m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
+        //m_unitCanvas.SetActive(false);
     }
 
     public virtual void DetermineGoal() {}
@@ -154,37 +161,98 @@ public class Agent : MonoBehaviour {
                         tile.parent = t;
                         tile.visited = true;
                         tile.distance = 1 + t.distance;
+
+                        //fade out selectable tile color
+                        if (tile.distance == 2) {
+                            tile.spriteColor.a = 0.6f;
+                            tile.spriteRenderer.color = tile.spriteColor;
+                        }
+                        if (tile.distance == 3) {
+                            tile.spriteColor.a = 0.4f;
+                            tile.spriteRenderer.color = tile.spriteColor;
+                        }
+
                         process.Enqueue(tile);
                     }
                 }
+            }
+
+            if (t.distance == m_moveAmount) {
+                m_selectableOutline.Add(t.transform.position);
             }
         }
     }
 
     //Get m_path in reverse order
-    public void CheckMoveToTile(Tile p_tile, bool hover) {
+    public Vector3[] CheckMoveToTile(Tile p_tile, bool hover) {
         m_path.Clear();
         int pathCost = 0;
+        List<Vector3> pathRenderList = new List<Vector3>();
 
         Tile next = p_tile;
         while (next != null) {
+            //get path
             pathCost++;
             m_path.Push(next);
+
+            //Calculate pathRenderList
+            pathRenderList.Add(new Vector3(next.transform.position.x, next.transform.position.y + 0.7f, next.transform.position.z));
+            if (next.parent != null) {
+                //going down
+                if (next.parent.transform.position.y > next.transform.position.y) {
+                    float offsetX = 0;
+                    float offsetZ = 0;
+                    if (next.parent.transform.position.x > next.transform.position.x) {
+                        offsetX += 0.8f;
+                    } else if (next.parent.transform.position.x < next.transform.position.x) {
+                        offsetX -= 0.8f;
+                    } else if (next.parent.transform.position.z > next.transform.position.z) {
+                        offsetZ += 0.8f;
+                    } else if (next.parent.transform.position.z < next.transform.position.z) {
+                        offsetZ -= 0.8f;
+                    }
+                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.parent.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+                }
+                //going up
+                else if (next.parent.transform.position.y < next.transform.position.y) {
+                    float offsetX = 0;
+                    float offsetZ = 0;
+                    if (next.parent.transform.position.x > next.transform.position.x) {
+                        offsetX += 1.2f;
+                    } else if (next.parent.transform.position.x < next.transform.position.x) {
+                        offsetX -= 1.2f;
+                    } else if (next.parent.transform.position.z > next.transform.position.z) {
+                        offsetZ += 1.2f;
+                    } else if (next.parent.transform.position.z < next.transform.position.z) {
+                        offsetZ -= 1.2f;
+                    }
+                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.parent.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+                }
+            }
+
+            //get next tile
             next = next.parent;
         }
+
         //-1 from pathcost because while loop counts current Tile
         pathCost -= 1;
 
+        //displayer path AP cost
         if (hover) {
             p_tile.target = true;
             int tempAP = m_currentActionPoints - pathCost;
             m_APNumber.text = tempAP.ToString();
         }
+        //Take path AP cost
         else {
             p_tile.target = true;
             m_moving = true;
             m_currentActionPoints -= pathCost;
         }
+
+        return pathRenderList.ToArray();
     }
 
     public void Move(bool hide) {
@@ -350,7 +418,7 @@ public class Agent : MonoBehaviour {
     }
 
     void MoveToEdge() {
-        if (Vector3.Distance(transform.position, m_jumpTarget) >= 0.05f) {
+        if (Vector3.Distance(transform.position, m_jumpTarget) >= 0.15f) {
             SetHorizontalVelocity();
         }
         else if (m_isHigherThanJumpTarget) {
@@ -497,7 +565,9 @@ public class Agent : MonoBehaviour {
 
     public void BeginTurn() {
 		m_turn = true;
-        m_unitCanvas.SetActive(true);
+        //m_unitCanvas.SetActive(true);
+        m_APDisplay.sprite = m_selectedAPDisplay;
+        m_APDisplay.rectTransform.sizeDelta = Vector2.zero;
         m_currentActionPoints = m_actionPoints;
         m_APNumber.text = m_currentActionPoints.ToString();
 		m_moveAmount = m_maxMove;
@@ -508,7 +578,9 @@ public class Agent : MonoBehaviour {
 	}
 
 	public void EndTurn() {
-        m_unitCanvas.SetActive(false);
+        //m_unitCanvas.SetActive(false);
+        m_APDisplay.sprite = m_defualtAPDisplay;
+        m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
 		m_turn = false;			
 	}
 

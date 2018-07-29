@@ -1,6 +1,6 @@
 ﻿Shader "Custom/Outline" {
 	Properties {
-		_OutlineColor("Outline Color", Color) = (0,0,0,1)
+		_OutlineColor("Outline Color", Color) = (255,125,41,255)
 		_OutlineWidth("Outline Width", Range(1.0,5.0)) = 1.01
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}

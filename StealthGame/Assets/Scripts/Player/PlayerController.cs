@@ -12,6 +12,8 @@ public class PlayerController : Agent {
     static CameraController m_camPivot;
     static UIController m_uiController;
 
+    public LineRenderer pathRenderer;
+
     void Awake() {
         m_camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
@@ -30,7 +32,7 @@ public class PlayerController : Agent {
             MouseClick();
         }
         else {
-            Move(true);
+            Move(false);
         }
     }
 
@@ -45,9 +47,15 @@ public class PlayerController : Agent {
             if (hit.collider.tag == "Tile") {
                 Tile t = hit.collider.GetComponent<Tile>();
                 if (t.selectable) {
-                    CheckMoveToTile(t, true);
+                    CalculatePathRender(CheckMoveToTile(t, true));
+                } else {
+                    ClearPathRender();
                 }
+            } else {
+                ClearPathRender();
             }
+        } else {
+            ClearPathRender();
         }
         if (Input.GetMouseButtonUp(0)) {
             if (!EventSystem.current.IsPointerOverGameObject()) { //check if are not clicking on a UI element
@@ -56,10 +64,21 @@ public class PlayerController : Agent {
                         Tile t = hit.collider.GetComponent<Tile>();
                         if (t.selectable) {
                             CheckMoveToTile(t, false);
+                            ClearPathRender();
+                            RemoveSelectableTiles();
                         }
                     }
                 }
             }
         }
+    }
+
+    void CalculatePathRender(Vector3[] p_path) {
+        pathRenderer.positionCount = p_path.Length;
+        pathRenderer.SetPositions(p_path);
+    }
+
+    public void ClearPathRender() {
+        pathRenderer.positionCount = 0;
     }
 }

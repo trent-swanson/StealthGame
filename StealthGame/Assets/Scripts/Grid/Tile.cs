@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour {
 
+    public GameObject selectableUI;
+    public GameObject selecteTile;
+    public Sprite selectedSprite;
+    public Sprite defualtSprite;
+    [HideInInspector]
+    public Color spriteColor;
+    public SpriteRenderer spriteRenderer;
+
     public bool walkable = true;
     public bool current = false;
     public bool target = false;
@@ -32,25 +40,36 @@ public class Tile : MonoBehaviour {
 
     private void Start() {
         myRenderer = GetComponent<Renderer>();
+        spriteRenderer = selectableUI.GetComponent<SpriteRenderer>();
+        spriteColor = spriteRenderer.color;
         CheckAllIfOccupied();
     }
 
     void Update() {
         //Updates tile material to display its state
         if (current) {
-            myRenderer.material = matList[(int)matEnum.current];
+            //myRenderer.material = matList[(int)matEnum.current];
+            selectableUI.SetActive(true);
         }
         else if (unreachable) {
             myRenderer.material = matList[(int)matEnum.unreachable];
         }
         else if (target) {
-            myRenderer.material = matList[(int)matEnum.target];
+            //myRenderer.material = matList[(int)matEnum.target];
+            selecteTile.SetActive(true);
+            spriteRenderer.sprite = selectedSprite;
         }
         else if (selectable) {
-            myRenderer.material = matList[(int)matEnum.active];
+            //myRenderer.material = matList[(int)matEnum.active];
+            selectableUI.SetActive(true);
+            selecteTile.SetActive(false);
+            spriteRenderer.sprite = defualtSprite;
         }
         else {
             myRenderer.material = matList[(int)matEnum.defualt];
+            selectableUI.SetActive(false);
+            selecteTile.SetActive(false);
+            spriteRenderer.sprite = defualtSprite;
         }
     }
 
