@@ -8,16 +8,16 @@ public class RangedAttack : AIAction {
 	private bool attacked = false;
  
     public float attackRange = 10;
-     
-     
-     //--------------------------------------------------------------------------------------
+
+
+    //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void ActionInit(Agent agent)
+    public override void ActionInit(NPC NPCAgent)
     {
 
     }
@@ -26,11 +26,11 @@ public class RangedAttack : AIAction {
     // Has the action been completed
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     // Return:
     //		Is all action moves have been completed
     //--------------------------------------------------------------------------------------
-    public override bool IsDone(Agent agent)
+    public override bool IsDone(NPC NPCAgent)
     {
         return false;
     }
@@ -39,9 +39,9 @@ public class RangedAttack : AIAction {
     // Agent Has been completed, clean up anything that needs to be
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void EndAction(Agent agent)
+    public override void EndAction(NPC NPCAgent)
     {
 
     }
@@ -52,9 +52,9 @@ public class RangedAttack : AIAction {
     // Should happen on each update
     //
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void Perform(Agent agent)
+    public override void Perform(NPC NPCAgent)
     {
 
     }

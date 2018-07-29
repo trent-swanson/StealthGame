@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
-public class GotoNode : AIAction
-{
-    private List<NavNode> m_navPath = new List<NavNode>();
-    private bool m_isDone = false;
+[CreateAssetMenu(fileName = "Patrol", menuName = "AI Actions/Patrol")]
+public class Patrol : AIAction {
 
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
@@ -17,10 +14,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionInit(NPC NPCAgent)
     {
-        m_isDone = false;
-        RaycastHit hit;
-        if (Physics.Raycast(NPCAgent.transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
-            m_navPath = Navigation.Instance.GetNavPath(hit.collider.GetComponent<NavNode>(), NPCAgent.m_agentWorldState.m_targetNode);
+
     }
 
     //--------------------------------------------------------------------------------------
@@ -33,7 +27,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return m_isDone;
+        return (NPCAgent.transform.position == NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex].transform.position);
     }
 
     //--------------------------------------------------------------------------------------
@@ -44,7 +38,11 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
+        NPCAgent.m_agentWorldState.m_waypointIndex++;
+        if (NPCAgent.m_agentWorldState.m_waypointIndex >= NPCAgent.m_agentWorldState.m_waypoints.Count)
+            NPCAgent.m_agentWorldState.m_waypointIndex = 0;
 
+        NPCAgent.m_agentWorldState.m_targetNode = null;
     }
 
 
@@ -57,26 +55,6 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void Perform(NPC NPCAgent)
     {
-        if(m_navPath.Count == 0)
-        {
-            m_isDone = true;
-            return;
-        }
 
-        Vector3 velocityVector = m_navPath[0].transform.position - NPCAgent.transform.position;
-        float translateDis = velocityVector.magnitude;
-
-        velocityVector = velocityVector.normalized * Time.deltaTime * NPCAgent.m_moveSpeed;
-
-        if(velocityVector.magnitude > translateDis)//Arrived at node
-        {
-            NPCAgent.transform.position = m_navPath[0].transform.position;
-            m_navPath.RemoveAt(0);
-            m_isDone = true;
-        }
-        else
-        {
-            NPCAgent.transform.position += velocityVector;
-        }
     }
 }

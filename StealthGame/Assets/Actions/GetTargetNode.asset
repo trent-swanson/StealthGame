@@ -8,9 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 165b14888ac53294e95d79dffe5afa2b, type: 3}
-  m_Name: GotoNode
+  m_Script: {fileID: 11500000, guid: fb979ad838f121f4fa8be8845baa116a, type: 3}
+  m_Name: GetTargetNode
   m_EditorClassIdentifier: 
-  cost: 1
-  target: {fileID: 0}
-  attackRange: 10
+  m_satisfiedWorldStates: 04000000
+  m_requiredWorldStates: 
+  m_actionCost: 0

@@ -21,9 +21,9 @@ public abstract class AIAction : ScriptableObject {
     // Runs once when action starts from the list
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void ActionInit(Agent agent);
+    public abstract void ActionInit(NPC NPCAgent);
 
     //--------------------------------------------------------------------------------------
     // Has the action been completed
@@ -33,22 +33,22 @@ public abstract class AIAction : ScriptableObject {
     // Return:
     //		Is all action moves have been completed
     //--------------------------------------------------------------------------------------
-    public abstract bool IsDone(Agent agent);
+    public abstract bool IsDone(NPC NPCAgent);
 
     //--------------------------------------------------------------------------------------
     // Agent Has been completed, clean up anything that needs to be
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void EndAction(Agent agent);
+    public abstract void EndAction(NPC NPCAgent);
 
     //--------------------------------------------------------------------------------------
     // Perform actions effects, e.g. Moving towards opposing agent
     // Should happen on each update
     //
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void Perform(Agent agent);
+    public abstract void Perform(NPC NPCAgent);
 }

@@ -7,7 +7,7 @@ public class Agent : MonoBehaviour {
 
     protected SquadManager squadManager;
 
-    [Header("Debugging Only")]
+    [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
     public bool m_turn = false;
     [Tooltip("Do Not Assign")]
@@ -31,7 +31,8 @@ public class Agent : MonoBehaviour {
     public GameObject m_unitCanvas;
     public Text m_APNumber;
     [Tooltip("# of actions unit can perform")]
-    public int m_actionPoints = 2;
+    public int m_maxActionPoints = 2;
+    public int m_currentActionPoints = 2;
     [Tooltip("# of tiles unit can move")]
     public int m_maxMove = 2;
     int m_moveAmount;
@@ -63,7 +64,6 @@ public class Agent : MonoBehaviour {
     float m_targetY;
     Vector3 m_jumpTarget;
 
-    protected int m_currentActionPoints;
     private bool m_hiding = false;
     private bool m_haveWallPos = false;
     private Vector3 m_wallTargetPos = new Vector3();
@@ -78,18 +78,14 @@ public class Agent : MonoBehaviour {
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 
-
-    //Initialise agents
-    protected void Init() {
+    protected virtual void Start()
+    {
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();
-        m_currentActionPoints = m_actionPoints;
         m_halfHeight = GetComponent<Collider>().bounds.extents.y;
         m_unitCanvas.SetActive(false);
     }
-
-    public virtual void DetermineGoal() {}
 
     public virtual void StartUnitTurn() {}
 
@@ -98,7 +94,7 @@ public class Agent : MonoBehaviour {
     public void TurnEnd()
     {
         EndTurn();
-        m_turnManager.EndUnitTurn();
+        m_turnManager.EndUnitTurn(this);
     }
 
     public void GetCurrentTile() {
@@ -479,7 +475,7 @@ public class Agent : MonoBehaviour {
         }
     }*/
 
-    void EndAction() {
+    public void EndAction() {
         if (GetComponent<NPC>()) {
             NPC AI = GetComponent<NPC>();
             AI.m_currentAction = null;
@@ -498,7 +494,7 @@ public class Agent : MonoBehaviour {
     public void BeginTurn() {
 		m_turn = true;
         m_unitCanvas.SetActive(true);
-        m_currentActionPoints = m_actionPoints;
+        m_currentActionPoints = m_maxActionPoints;
         m_APNumber.text = m_currentActionPoints.ToString();
 		m_moveAmount = m_maxMove;
 

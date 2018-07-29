@@ -8,9 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a74250875873ea047a9b090dbba88fd9, type: 3}
-  m_Name: RangedAttack
+  m_Script: {fileID: 11500000, guid: 1b1e2d52fd99f2d40bf13b04bfb19c03, type: 3}
+  m_Name: GotoNode
   m_EditorClassIdentifier: 
-  cost: 1
-  target: {fileID: 0}
-  attackRange: 10
+  m_satisfiedWorldStates: 03000000
+  m_requiredWorldStates: 04000000
+  m_actionCost: 0

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Kill Enemy", menuName = "AI Goals/Kill Enemy")]
-public class KillEnemy : Goal {
+[CreateAssetMenu(fileName = "Patrolling", menuName = "AI Goals/Patrolling")]
+public class Patrolling : Goal {
 
 	public override int DetermineGoalPriority(NPC NPCAgent) {
 		int tempPriority = m_defualtPriority;

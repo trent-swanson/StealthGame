@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
-public class GotoNode : AIAction
+[CreateAssetMenu(fileName = "GetTargetNode", menuName = "AI Actions/GetTargetNode")]
+public class GetTargetNode : AIAction
 {
-    private List<NavNode> m_navPath = new List<NavNode>();
-    private bool m_isDone = false;
-
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
@@ -17,10 +14,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionInit(NPC NPCAgent)
     {
-        m_isDone = false;
-        RaycastHit hit;
-        if (Physics.Raycast(NPCAgent.transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
-            m_navPath = Navigation.Instance.GetNavPath(hit.collider.GetComponent<NavNode>(), NPCAgent.m_agentWorldState.m_targetNode);
+
     }
 
     //--------------------------------------------------------------------------------------
@@ -33,7 +27,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return m_isDone;
+        return NPCAgent.m_agentWorldState.m_targetNode != null;
     }
 
     //--------------------------------------------------------------------------------------
@@ -57,26 +51,15 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void Perform(NPC NPCAgent)
     {
-        if(m_navPath.Count == 0)
-        {
-            m_isDone = true;
-            return;
-        }
+        Goal goal = NPCAgent.m_agentWorldState.m_goal;
 
-        Vector3 velocityVector = m_navPath[0].transform.position - NPCAgent.transform.position;
-        float translateDis = velocityVector.magnitude;
-
-        velocityVector = velocityVector.normalized * Time.deltaTime * NPCAgent.m_moveSpeed;
-
-        if(velocityVector.magnitude > translateDis)//Arrived at node
+        switch (goal.m_desiredWorldState)
         {
-            NPCAgent.transform.position = m_navPath[0].transform.position;
-            m_navPath.RemoveAt(0);
-            m_isDone = true;
-        }
-        else
-        {
-            NPCAgent.transform.position += velocityVector;
+            case WorldState.WORLD_STATE.PATROLLING:
+                NPCAgent.m_agentWorldState.m_targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
+                break;
+            default:
+                break;
         }
     }
 }
