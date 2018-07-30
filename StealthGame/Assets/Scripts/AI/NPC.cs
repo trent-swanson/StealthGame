@@ -190,16 +190,16 @@ public class NPC : Agent
 
     private AIAction GetActionPlan(Goal currentGoal)
     {
-        AStarNode goalNode = new AStarNode(this, currentGoal);
+        ActionNode goalNode = new ActionNode(this, currentGoal);
         if (goalNode.m_invalidWorldStates.Count == 0) //In the case all world states are met already, then goal is already complete, get new goal?
             return null;
 
-        List<AStarNode> openNodes = new List<AStarNode>();
-        List<AStarNode> closedNodes = new List<AStarNode>();
+        List<ActionNode> openNodes = new List<ActionNode>();
+        List<ActionNode> closedNodes = new List<ActionNode>();
 
         NewOpenNodes(goalNode, openNodes, closedNodes);
 
-        AStarNode currentNode = null;
+        ActionNode currentNode = null;
         currentNode = NewCurrentNode(GetLowestFScore(openNodes));
 
         if (goalNode.m_invalidWorldStates.Count == 0) //Goal required just one action to be satified, current action will do this
@@ -218,14 +218,14 @@ public class NPC : Agent
         return null;
     }
 
-    private void NewOpenNodes(AStarNode currentNode, List<AStarNode> openNodes, List<AStarNode> closedNodes)
+    private void NewOpenNodes(ActionNode currentNode, List<ActionNode> openNodes, List<ActionNode> closedNodes)
     {
         foreach (WorldState.WORLD_STATE worldState in currentNode.m_invalidWorldStates)
         {
             foreach (AIAction action in m_possibleActions)
             {
                 if (action.m_satisfiedWorldStates.Contains(worldState))
-                    openNodes.Add(new AStarNode(this, action, currentNode));
+                    openNodes.Add(new ActionNode(this, action, currentNode));
             }
         }
 
@@ -233,18 +233,18 @@ public class NPC : Agent
         closedNodes.Add(currentNode);
     }
 
-    private AStarNode NewCurrentNode(AStarNode newNode)
+    private ActionNode NewCurrentNode(ActionNode newNode)
     {
         if (newNode.m_invalidWorldStates.Count == 0) //If this node is all valid, let parent know to update its validity
             newNode.m_previousNode.NewStateSatisfied(newNode);
         return newNode;
     }
 
-    private AStarNode GetLowestFScore(List<AStarNode> openNodes)
+    private ActionNode GetLowestFScore(List<ActionNode> openNodes)
     {
         float fScore = Mathf.Infinity;
-        AStarNode highestFNode = null;
-        foreach (AStarNode node in openNodes)
+        ActionNode highestFNode = null;
+        foreach (ActionNode node in openNodes)
         {
             if (node.m_fScore < fScore)
             {
@@ -255,16 +255,16 @@ public class NPC : Agent
         return highestFNode;
     }
 
-    public class AStarNode
+    public class ActionNode
     {
-        public List<AStarNode> m_nodes = new List<AStarNode>();
+        public List<ActionNode> m_nodes = new List<ActionNode>();
         public float m_fScore = 0.0f;
         private float m_gScore, m_hScore = 0.0f;
-        public AStarNode m_previousNode = null;
+        public ActionNode m_previousNode = null;
 
         public AIAction m_AIAction = null;
         public List<WorldState.WORLD_STATE> m_invalidWorldStates = new List<WorldState.WORLD_STATE>();
-        public List<AStarNode> m_satifyingNodes = new List<AStarNode>();
+        public List<ActionNode> m_satisfyingNodes = new List<ActionNode>();
 
         //--------------------------------------------------------------------------------------
         // Creation of a goal node, all this needs is to add a single invalid world state
@@ -273,7 +273,7 @@ public class NPC : Agent
         //		NPCScript: Script to determine the agents world state
         //		goal: Goal to be satisfied
         //--------------------------------------------------------------------------------------
-        public AStarNode(NPC NPCScript, Goal goal) //Designed for goal node
+        public ActionNode(NPC NPCScript, Goal goal) //Designed for goal node
         {
             if (!WorldState.CheckForValidState(NPCScript, goal.m_desiredWorldState))
             {
@@ -290,7 +290,7 @@ public class NPC : Agent
         //		action: Action to be added
         //		previousNode: parent node
         //--------------------------------------------------------------------------------------
-        public AStarNode(NPC NPCScript, AIAction action, AStarNode previousNode)//Action Nodes
+        public ActionNode(NPC NPCScript, AIAction action, ActionNode previousNode)//Action Nodes
         {
             m_previousNode = previousNode;
             m_AIAction = action;
@@ -327,14 +327,14 @@ public class NPC : Agent
         // Param
         //		satisfyingNode: Previous node which satisfies the world state, saved for later use
         //--------------------------------------------------------------------------------------
-        public void NewStateSatisfied(AStarNode satisfyingNode)
+        public void NewStateSatisfied(ActionNode satisfyingNode)
         {
             foreach (WorldState.WORLD_STATE worldState in satisfyingNode.m_AIAction.m_satisfiedWorldStates)
             {
                 m_invalidWorldStates.Remove(worldState);
             }
 
-            m_satifyingNodes.Add(satisfyingNode);
+            m_satisfyingNodes.Add(satisfyingNode);
 
             if (m_invalidWorldStates.Count == 0 && m_previousNode!=null)
                 m_previousNode.NewStateSatisfied(this);

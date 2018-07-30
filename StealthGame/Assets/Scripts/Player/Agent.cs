@@ -371,62 +371,6 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    //A* pathfinding - Movement
-    public void FindPath(Tile p_target, bool p_moveOntoTile) {
-        ComputeAdjacentcyLists(m_jumpHeight, p_target);
-        GetCurrentTile();
-
-        List<Tile> openList = new List<Tile>();
-        List<Tile> closeList = new List<Tile>();
-
-        openList.Add(m_currentTile);
-
-        m_currentTile.hCost = Vector3.SqrMagnitude(m_currentTile.transform.position - p_target.transform.position);
-        m_currentTile.fCost = m_currentTile.hCost;
-
-        while (openList.Count > 0) {
-            Tile t = FindLowestFCost(openList);
-            closeList.Add(t);
-
-            if (t == p_target) {
-                //found m_path
-                m_actualTargetTile = FindEndTile(t, p_moveOntoTile);
-                CheckMoveToTile(m_actualTargetTile, false);
-                return;
-            }
-
-            foreach (Tile tile in t.adjacencyList) {
-                if (closeList.Contains(tile)) {
-                    //Do nothing, already processed
-                }
-                else if (openList.Contains(tile)) {
-                    //check if m_path is faster
-                    float tempG = t.gCost + Vector3.Distance(tile.transform.position, t.transform.position);
-
-                    if (tempG < tile.gCost) {
-                        tile.parent = t;
-                        tile.gCost = tempG;
-                        tile.fCost = tile.gCost + tile.hCost;
-                    }
-                    //else is m_path not fast, do nothing
-                }
-                else {
-                    //new tile, calculate fCost and add to openList
-                    tile.parent = t;
-
-                    tile.gCost = t.gCost + Vector3.Distance(tile.transform.position, t.transform.position);
-                    tile.hCost = Vector3.Distance(tile.transform.position, p_target.transform.position);
-                    tile.fCost = tile.gCost + tile.hCost;
-
-                    openList.Add(tile);
-                }
-            }
-        }
-
-        //todo - what to do if no m_path to target tile
-        Debug.Log("Path not found");
-    }
-
     protected Tile FindEndTile(Tile p_t, bool p_moveOntoTile) {
         Stack<Tile> tempPath = new Stack<Tile>();
 
