@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Name: GotoNode
   m_EditorClassIdentifier: 
   m_satisfiedWorldStates: 03000000
-  m_requiredWorldStates: 04000000
+  m_requiredWorldStates:
+  - m_worldState: 4
+    m_priority: 1
   m_actionCost: 1

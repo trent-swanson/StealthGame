@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Name: Patrol
   m_EditorClassIdentifier: 
   m_satisfiedWorldStates: 01000000
-  m_requiredWorldStates: 03000000
+  m_requiredWorldStates:
+  - m_worldState: 3
+    m_priority: 0
   m_actionCost: 0

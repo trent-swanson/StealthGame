@@ -75,11 +75,18 @@ public class Agent : MonoBehaviour {
 
     protected TurnManager m_turnManager = null;
 
+    public NavNode m_currentNavNode = null;
+
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 
     protected virtual void Start()
     {
+        //New Stuff
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
+            m_currentNavNode = hit.collider.GetComponent<NavNode>();
+
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();

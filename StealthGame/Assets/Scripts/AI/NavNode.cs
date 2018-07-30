@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class NavNode : MonoBehaviour
 {
-    public Vector2Int m_gridPos = new Vector2Int(0, 0);
+    public Vector3Int m_gridPos = Vector3Int.zero;
 
     public List<NavNode> m_adjacentNodes = new List<NavNode>();
 
@@ -12,7 +12,7 @@ public class NavNode : MonoBehaviour
 
     public NavNode m_previousNode = null;
 
-    public NavNode(Vector2Int pos)
+    public NavNode(Vector3Int pos)
     {
         m_gridPos = pos;
     }

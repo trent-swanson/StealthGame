@@ -311,11 +311,11 @@ public class NPC : Agent
         //--------------------------------------------------------------------------------------
         private void GetInvalidStates(NPC NPCScript)
         {
-            foreach (WorldState.WORLD_STATE worldState in m_AIAction.m_requiredWorldStates)
+            foreach (AIAction.RequiredWorldState worldState in m_AIAction.m_requiredWorldStates)
             {
-                if (!WorldState.CheckForValidState(NPCScript, worldState))
+                if (!WorldState.CheckForValidState(NPCScript, worldState.m_worldState))
                 {
-                    m_invalidWorldStates.Add(worldState);
+                    m_invalidWorldStates.Add(worldState.m_worldState);
                 }
             }
         }

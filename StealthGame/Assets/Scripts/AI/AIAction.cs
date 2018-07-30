@@ -8,9 +8,18 @@ public abstract class AIAction : ScriptableObject {
     [SerializeField]
     public List<WorldState.WORLD_STATE> m_satisfiedWorldStates = new List<WorldState.WORLD_STATE>();
 
+    [System.Serializable]
+    public struct RequiredWorldState
+    {
+        public WorldState.WORLD_STATE m_worldState;
+
+        public enum PRIORITY {NONE, LOW, MEDIUM, HIGH, VERY_HIGH };
+        public PRIORITY m_priority;
+    }
+
     [Tooltip("States this action requires")]
     [SerializeField]
-    public List<WorldState.WORLD_STATE> m_requiredWorldStates = new List<WorldState.WORLD_STATE>();
+    public List<RequiredWorldState> m_requiredWorldStates = new List<RequiredWorldState>();
 
     [Tooltip("Cost of action")]
     [SerializeField]

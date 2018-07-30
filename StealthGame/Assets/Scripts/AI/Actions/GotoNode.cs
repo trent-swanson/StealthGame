@@ -18,9 +18,8 @@ public class GotoNode : AIAction
     public override void ActionInit(NPC NPCAgent)
     {
         m_isDone = false;
-        RaycastHit hit;
-        if (Physics.Raycast(NPCAgent.transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
-            m_navPath = Navigation.Instance.GetNavPath(hit.collider.GetComponent<NavNode>(), NPCAgent.m_agentWorldState.m_targetNode);
+        if (NPCAgent.m_currentNavNode != null)
+            m_navPath = Navigation.Instance.GetNavPath(NPCAgent.m_currentNavNode, NPCAgent.m_agentWorldState.m_targetNode);
     }
 
     //--------------------------------------------------------------------------------------
@@ -71,6 +70,7 @@ public class GotoNode : AIAction
         if(velocityVector.magnitude > translateDis)//Arrived at node
         {
             NPCAgent.transform.position = m_navPath[0].transform.position;
+            NPCAgent.m_currentNavNode = m_navPath[0];
             m_navPath.RemoveAt(0);
             m_isDone = true;
         }
