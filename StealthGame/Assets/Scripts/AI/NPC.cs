@@ -3,64 +3,56 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class NPC : Agent {
+public class NPC : Agent
+{
+    public enum State { AMBIENT, SUSPICIOUS, ALERT }
+    public State m_state;
 
-	[Space]
-	[Space]
-	[Header("Waypoints")]
-	public List<GameObject> m_waypoints = new List<GameObject>();
-	public int m_currentWaypoint = 0;
-
-	[Space]
-	[Space]
-	public GameObject m_playerTarget;
-	public GameObject m_workNodeTarget;
-	public GameObject m_guardTarget;
-	public GameObject m_target;
-
-	public enum State { AMBIENT, SUSPICIOUS, ALERT }
-	public State m_state;
-
-	//-----------------------
+    //-----------------------
     // Agent States
     //-----------------------
 
     [System.Serializable]
     public class AgentWorldState {
+
+        //Where agent is relative to node grid
+        public Vector2Int m_currentNodePos= new Vector2Int(0, 0); 
+
         //Items I'm holding
         public List<Item> m_currentItems = new List<Item>();
-        
+
         //Weapon information
-        public enum WEAPON_TYPE {MELEE, RANGED }; //Fixed
+        public enum WEAPON_TYPE { MELEE, RANGED }; //Fixed
         private WEAPON_TYPE m_weaponType = WEAPON_TYPE.MELEE; //Fixed
 
+        //CurrentGoal
+        public Goal m_goal = null;
 
         //Node this agent wants to go to
-        private GameObject m_targetNode = null; //Fixed
+        public NavNode m_targetNode = null; //Fixed
 
         //Seen targets
-        private List<GameObject> m_possibleTargets = new List<GameObject>(); //Realtime
+        public List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
 
         //Targets which have gone missing
-        private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+        public List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
 
         //Waypoints
         [SerializeField]
-        private List<GameObject> m_waypoints = new List<GameObject>();
-
-        private int m_waypointIndex = 0;
+        public List<NavNode> m_waypoints = new List<NavNode>();
+        public int m_waypointIndex = 0;
     }
 
     public struct InvestigationNode
     {
-        private GameObject m_target;
-        public GameObject Target
+        private Agent m_target;
+        public Agent Target
         {
             get { return m_target; }
             set { m_target = value; }
         }
-        private GameObject m_node;
-        public GameObject Node
+        private Agent m_node;
+        public Agent Node
         {
             get { return m_node; }
             set { m_node = value; }
@@ -74,259 +66,334 @@ public class NPC : Agent {
 
     [Space]
     public List<Goal> m_ambientGoals = new List<Goal>();
-	public List<Goal> m_suspiciousGoals = new List<Goal>();
-	public List<Goal> m_alertGoals = new List<Goal>();
+    public List<Goal> m_suspiciousGoals = new List<Goal>();
+    public List<Goal> m_alertGoals = new List<Goal>();
     public List<AIAction> m_possibleActions = new List<AIAction>();
 
-	[Space]
-	public AIAction m_currentAction;
+    [Space]
+    public AIAction m_currentAction;
 
-	[Space]
-	public int m_currentActionNum = 0;
-	public int m_maxActionNum = 3;
+    [Space]
+    public int m_currentActionNum = 0;
+    public int m_maxActionNum = 3;
 
-	[Space]
-    private List<GameObject> m_opposingTeam;
+    [Space]
+    private List<Agent> m_opposingTeam;
 
 
-	void Start() {
-		//todo: need to remove this agent from the unitList when it is killed
-		squadManager.unitList.Add(this);
-		m_state = State.AMBIENT;
+    protected override void Start()
+    {
+        base.Start();
 
-		//duck tape
-        List<Agent> opposingAgents = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>().m_playerTeam;
-        foreach (Agent agent in opposingAgents)
-        {
-            m_opposingTeam.Add(agent.gameObject);
-        }
+        m_agentWorldState.m_goal = m_ambientGoals[0];
 
-		Init();
+        m_opposingTeam = m_turnManager.GetOpposingTeam(m_team);
 
-		//temp - remove this - also duck tape
-		m_state = State.AMBIENT;
-	}
-
-	public override void DetermineGoal() {
-		StartCoroutine("ActionPlanning");
-		BeginTurn();
-	}
-
-	public override void StartUnitTurn() {
-		//should be here? - should not be here
-        if (m_currentActionNum > m_maxActionNum)
-            EndTurn();
-	}
-
-	public override void TurnUpdate() {
-		if(m_currentAction != null)
-			m_currentAction.Perform(this);
-	}
-
-	void Update() {
-		Debug.DrawRay(transform.position, transform.forward);
-
-		//Listen for inputs and change state
+        //todo: need to remove this agent from the unitList when it is killed
+        //squadManager.unitList.Add(this);
+        m_state = State.AMBIENT;
     }
 
-	IEnumerator ActionPlanning() {
-		//list of state goals
-		//foreach goal DetermineGoalPriority() and add to a queue in order of cheapest
-		//Find action plan for goal, if no plan found go to next goal
-		//Tell Squad Manager what my goal is
-		
-		List<Goal> possibleGoals = new List<Goal>();
+    private void Update()
+    {
+        foreach (Agent oppposingAgent in m_opposingTeam)
+        {
+            if(!m_agentWorldState.m_possibleTargets.Contains(oppposingAgent))
+            {
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, oppposingAgent.transform.position - transform.position, out hit))
+                {
+                    Agent hitAgent = hit.collider.GetComponent<Agent>();
+                    if (hitAgent!=null)
+                    {
+                        m_agentWorldState.m_possibleTargets.Add(hitAgent);
+                    }
+                }
+            }
+        }    
+    }
 
-		switch (m_state) {
-			case State.AMBIENT:
-				possibleGoals = m_ambientGoals;
-			break;
-			case State.SUSPICIOUS:
-				possibleGoals = m_suspiciousGoals;
-			break;
-			case State.ALERT:
-				possibleGoals = m_alertGoals;
-			break;
-		}
+    public void DetermineGoal() {
+        StartCoroutine("ActionPlanning");
+    }
 
-		Queue<Goal> goalQueue = new Queue<Goal>();
+    public override void StartUnitTurn()
+    {
+        BeginTurn();
+    }
 
-		foreach (Goal goal in possibleGoals) {
-			goal.DetermineGoalPriority(this);
-			goalQueue.Enqueue(goal);
-		}
+    public override void TurnUpdate()
+    {
+        if (m_currentAction == null)
+        {
+            DetermineGoal();
+            
+            if(m_currentAction == null)//No valid action found
+            {
+                m_turnManager.EndUnitTurn(this);
+                return;
+            }
 
-		goalQueue.OrderByDescending(goal => goal.m_goalPriority);
+            m_currentAction.ActionStart(this);
 
-		m_currentAction = null;
+            if (m_currentAction.m_actionCost > m_currentActionPoints)
+            {
+                m_turnManager.EndUnitTurn(this);
+                return;
+            }
+        }
 
-		while (m_currentAction == null) {
-			Goal currentGoal = goalQueue.Dequeue();
+        m_currentAction.Perform(this);
 
-			m_currentAction = GetActionPlan(currentGoal);
-			
-			if (m_currentAction != null) {
-				break;
-			}
-		}
+        if (m_currentAction.IsDone(this))
+        {
+            m_currentAction.EndAction(this);
+            m_currentActionPoints -= m_currentAction.m_actionCost;
+            m_currentAction = null;
+            EndAction();
+            return;
+        }
+    }
 
-		yield return null;
-	}
+    IEnumerator ActionPlanning() {
+        //list of state goals
+        //foreach goal DetermineGoalPriority() and add to a queue in order of cheapest
+        //Find action plan for goal, if no plan found go to next goal
+        //Tell Squad Manager what my goal is
 
-	//Plan what sequence of actions can fulfill the goal
-	//Returns null if a plan could not be found
-	public AIAction GetActionPlan(Goal p_goal) {
+        List<Goal> possibleGoals = new List<Goal>();
 
-		List<Node> openSet = new List<Node>();
-		HashSet<Node> closeSet = new HashSet<Node>();
+        switch (m_state)
+        {
+            case State.AMBIENT:
+                possibleGoals = m_ambientGoals;
+                break;
+            case State.SUSPICIOUS:
+                possibleGoals = m_suspiciousGoals;
+                break;
+            case State.ALERT:
+                possibleGoals = m_alertGoals;
+                break;
+        }
 
-		//Node startNode = new Node();
-		Node targetNode = new Node(p_goal);
-		openSet.Add(targetNode);
+        Queue<Goal> goalQueue = new Queue<Goal>();
 
-		//A* ===================
-		while (openSet.Count > 0) {
-			Node currentNode = openSet[0];
-			//get action Node with the smallest fcost (action cost + number of preconditions not yet met)
-			if (openSet.Count > 1) {
-				for (int i = 0; i < openSet.Count; i++) {
-					if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost) {
-						currentNode = openSet[i];
-					}
-				}
-			}
+        foreach (Goal goal in possibleGoals) {
+            goal.DetermineGoalPriority(this);
+            goalQueue.Enqueue(goal);
+        }
 
-			openSet.Remove(currentNode);
-			closeSet.Add(currentNode);
+        goalQueue.OrderByDescending(goal => goal.m_goalPriority);
 
-			//Found an action we can do now
-			if (currentNode.hCost == 0) {
-				Debug.Log("Got Action");
-				return currentNode.action;
-			}
-			
-			//TODO
-			//for current action
-			//CheckForValidState() //do this but make a TODO for saving this when we check it in subnodes
-			//if not valid check IsPotentiallyValid()
-			//Find all actions that can validate current action
+        m_currentAction = null;
 
-			//something to double check - that the order of Required World States is the priority order we check.
-			//TODO So if first Required World State can't be validated dont check the next Required World State - Failded IsPotentiallyValid()
+        while (m_currentAction == null && goalQueue.Count>0) {
+            Goal currentGoal = goalQueue.Dequeue();
 
-			//change this
-			foreach (Node subNode in GetActionsThatMeetPreconditions(currentNode)) {
-				if (!openSet.Contains(subNode)) {
-					openSet.Add(subNode);
-				}
-			}
-		}
+            m_currentAction = GetActionPlan(currentGoal);
 
-		//failed to find a plan for this goal
-		Debug.Log("Plan Failed");
-		return null;
-	}
+            if (m_currentAction != null) {
+                break;
+            }
+        }
 
-	//these 2 functions get a list of all the sub nodes that meet the preconditions of the current node
-	private List<Node> GetActionsThatMeetPreconditions(Node p_node) {
-		List<Node> subActionList = new List<Node>();
+        yield return null;
+    }
 
-		// go through each action available and see if we can use it here
-		foreach (AIAction action in m_possibleActions) {
+    public Agent GetClosestTarget()
+    {
+        Agent possibleTarget = null;
+        float targetDis = Mathf.Infinity;
 
-			//check if any of current nodes m_requiredWorldStates are met by action's m_satisfiedWorldStates
-			if (CheckPreconditionsAreMet(p_node.action, action)) {
-				subActionList.Add(new Node(this, action, p_node));
-			}
-		}
-		return subActionList;
-	}
+        foreach (Agent agent in m_agentWorldState.m_possibleTargets) //TODO might have to update for multiple floors
+        {
+            if (agent == null)
+                break;
 
-	private bool CheckPreconditionsAreMet(AIAction p_currentAction, AIAction p_action) {
-		foreach (WorldState.WORLD_STATE reqiredState in p_currentAction.m_requiredWorldStates) {
-			if (p_action.m_satisfiedWorldStates.Contains(reqiredState)) {
-				return true;
-			}
-		}
-		return false;
-	}
+            float sqrDis = Vector3.SqrMagnitude(agent.transform.position - transform.position);
+            if(sqrDis< targetDis)
+            {
+                targetDis = sqrDis;
+                possibleTarget = agent;
+            }
+        }
+        return possibleTarget;
+    }
 
 
-	//Apply the stateChange to the currentState
-	private HashSet<KeyValuePair<string,object>> PopulateWorldState(HashSet<KeyValuePair<string,object>> p_currentState, HashSet<KeyValuePair<string,object>> p_stateChange) {
-		HashSet<KeyValuePair<string,object>> state = new HashSet<KeyValuePair<string,object>> ();
-		// copy the KVPs over as new objects
-		foreach (KeyValuePair<string,object> s in p_currentState) {
-			state.Add(new KeyValuePair<string, object>(s.Key,s.Value));
-		}
+    //-----------------------------
+    //GOAP STUFF
+    //-----------------------------
 
-		foreach (KeyValuePair<string,object> change in p_stateChange) {
-			// if the key exists in the current state, update the Value
-			bool exists = false;
+    private AIAction GetActionPlan(Goal currentGoal)
+    {
+        ActionNode goalNode = new ActionNode(this, currentGoal);
+        if (goalNode.m_invalidWorldStates.Count == 0) //In the case all world states are met already, then goal is already complete, get new goal?
+            return null;
 
-			foreach (KeyValuePair<string,object> s in state) {
-				if (s.Equals(change)) {
-					exists = true;
-					break;
-				}
-			}
+        List<ActionNode> openNodes = new List<ActionNode>();
+        List<ActionNode> closedNodes = new List<ActionNode>();
 
-			if (exists) {
-				state.RemoveWhere( (KeyValuePair<string,object> kvp) => { return kvp.Key.Equals (change.Key); } );
-				KeyValuePair<string, object> updated = new KeyValuePair<string, object>(change.Key,change.Value);
-				state.Add(updated);
-			}
-			// if it does not exist in the current state, add it
-			else {
-				state.Add(new KeyValuePair<string, object>(change.Key,change.Value));
-			}
-		}
-		return state;
-	}
+        ActionNode currentNode = NewCurrentNode(goalNode); //Starting node
 
-	private class Node {
-		public Node parent;
-		public int gCost;
-		public int hCost;
-		public int fCost { get { return gCost + hCost; } }
-		public AIAction action;
-		public Goal goal;
+        NewOpenNodes(currentNode, openNodes, closedNodes); // open list setup
 
-		public Node (Agent p_agent, AIAction p_action) {
-			if (p_action != null) {
-				gCost = p_action.m_actionCost;
-				hCost = DetermineHCost(p_agent, p_action.m_requiredWorldStates);
-				action = p_action;
-			}
-			parent = null;
-		}
+        if (goalNode.m_invalidWorldStates.Count == 0) //Goal required just one action to be satified, current action will do this
+            return currentNode.m_AIAction;
 
-		public Node (Agent p_agent, AIAction p_action, Node p_parent) {
-			if (p_action != null) {
-				gCost = p_action.m_actionCost;
-				hCost = DetermineHCost(p_agent, p_action.m_requiredWorldStates);
-				action = p_action;
-			}
-			parent = p_parent;
-		}
+        while (openNodes.Count > 0)
+        {
+            NewOpenNodes(currentNode, openNodes, closedNodes);
 
-		public Node (Goal p_goal) {
-			gCost = p_goal.m_goalPriority;
-			hCost = 1;
-			action = null;
-			parent = null;
-		}
+            currentNode = NewCurrentNode(GetLowestFScore(openNodes));
 
-		//TODO - is wrong
-		private int DetermineHCost(Agent p_agent, List<WorldState.WORLD_STATE> p_requiredWorldStates) {
-			int tempHCost = 0;
-			foreach (WorldState.WORLD_STATE wState in p_requiredWorldStates) {
-				if (!WorldState.CheckForValidState(p_agent, wState)) {
-					tempHCost++;
-				}
-			}
-			return tempHCost;
-		}
+            if (goalNode.m_invalidWorldStates.Count == 0) //New current node just satisfied the goals final state
+                return currentNode.m_AIAction;
+        }
 
-	}
+        return null;
+    }
+
+    private void NewOpenNodes(ActionNode currentNode, List<ActionNode> openNodes, List<ActionNode> closedNodes)
+    {
+        foreach (WorldState.WORLD_STATE worldState in currentNode.m_invalidWorldStates)
+        {
+            foreach (AIAction action in m_possibleActions)
+            {
+                if (action.m_satisfiedWorldStates.Contains(worldState))
+                {
+
+                    ActionNode newActionNode = NewActionNode(this, action, currentNode);
+                    if(newActionNode!=null)
+                        openNodes.Add(newActionNode);
+                }
+            }
+        }
+
+        openNodes.Remove(currentNode);
+        closedNodes.Add(currentNode);
+    }
+
+    private ActionNode NewCurrentNode(ActionNode newNode)
+    {
+        if (newNode.m_invalidWorldStates.Count == 0) //If this node is all valid, let parent know to update its validity
+            newNode.m_previousNode.NewStateSatisfied(newNode);
+        return newNode;
+    }
+
+    private ActionNode NewActionNode(NPC NPCScript, AIAction action, ActionNode previousNode)
+    {
+        ActionNode newNavNode = null;
+        AIAction newAction = Instantiate(action);
+        if(newAction.ActionInit(NPCScript, previousNode.m_AIAction)) //New action has been initiliased successfully
+        {
+            newNavNode = new ActionNode(NPCScript, newAction, previousNode);
+        }
+        return newNavNode;
+    }
+
+    private ActionNode GetLowestFScore(List<ActionNode> openNodes)
+    {
+        float fScore = Mathf.Infinity;
+        ActionNode highestFNode = null;
+        foreach (ActionNode node in openNodes)
+        {
+            if (node.m_fScore < fScore)
+            {
+                highestFNode = node;
+                fScore = node.m_fScore;
+            }
+        }
+        return highestFNode;
+    }
+
+    public class ActionNode
+    {
+        public List<ActionNode> m_nodes = new List<ActionNode>();
+        public float m_fScore = 0.0f;
+        private float m_gScore, m_hScore = 0.0f;
+        public ActionNode m_previousNode = null;
+
+        public AIAction m_AIAction = null;
+        public List<WorldState.WORLD_STATE> m_invalidWorldStates = new List<WorldState.WORLD_STATE>();
+        public List<ActionNode> m_satisfyingNodes = new List<ActionNode>();
+
+        //--------------------------------------------------------------------------------------
+        // Creation of a goal node, all this needs is to add a single invalid world state
+        // 
+        // Param
+        //		NPCScript: Script to determine the agents world state
+        //		goal: Goal to be satisfied
+        //--------------------------------------------------------------------------------------
+        public ActionNode(NPC NPCScript, Goal goal) //Designed for goal node
+        {
+            if (!WorldState.CheckForValidState(NPCScript, goal.m_desiredWorldState))
+            {
+                m_invalidWorldStates.Add(goal.m_desiredWorldState);
+            }
+            m_fScore = 0.0f;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Creation of an action node, Gets all invalid states and determine F-Score for A*
+        // 
+        // Param
+        //		NPCScript: Script to determine the agents world state
+        //		action: Action to be added
+        //		previousNode: parent node
+        //--------------------------------------------------------------------------------------
+        public ActionNode(NPC NPCScript, AIAction action, ActionNode previousNode)//Action Nodes
+        {
+            m_previousNode = previousNode;
+            m_AIAction = action;
+
+            GetInvalidStates(NPCScript);
+
+            m_hScore = m_invalidWorldStates.Count();
+            m_gScore = m_previousNode.m_gScore + m_AIAction.m_actionCost;
+
+            m_fScore = m_hScore + m_gScore;
+        }
+
+        //--------------------------------------------------------------------------------------
+        // Get all invalid states for a given agents world
+        // 
+        // Param
+        //		NPCScript: Script to determine the agents world state
+        //--------------------------------------------------------------------------------------
+        private void GetInvalidStates(NPC NPCScript)
+        {
+            foreach (AIAction.RequiredWorldState worldState in m_AIAction.m_requiredWorldStates)
+            {
+                if (!WorldState.CheckForValidState(NPCScript, worldState.m_worldState))
+                {
+                    m_invalidWorldStates.Add(worldState.m_worldState);
+                }
+            }
+        }
+
+        //--------------------------------------------------------------------------------------
+        //  On full satisfactoin of a nodes states, let parent know, to run back up the tree
+        // This allows for knowledge of full tree validity
+        //
+        // Param
+        //		satisfyingNode: Previous node which satisfies the world state, saved for later use
+        //--------------------------------------------------------------------------------------
+        public void NewStateSatisfied(ActionNode satisfyingNode)
+        {
+            foreach (WorldState.WORLD_STATE worldState in satisfyingNode.m_AIAction.m_satisfiedWorldStates)
+            {
+                m_invalidWorldStates.Remove(worldState);
+            }
+
+            m_satisfyingNodes.Add(satisfyingNode);
+
+            if (m_invalidWorldStates.Count == 0 && m_previousNode!=null)
+                m_previousNode.NewStateSatisfied(this);
+        }  
+    }
+
+    //-----------------------------
+    //END GOAP STUFF
+    //-----------------------------
 }

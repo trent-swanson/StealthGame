@@ -8,9 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 165b14888ac53294e95d79dffe5afa2b, type: 3}
-  m_Name: GotoNode
+  m_Script: {fileID: 11500000, guid: d2a14ad5bf0823f4fa33d7632d4713ac, type: 3}
+  m_Name: Patrol
   m_EditorClassIdentifier: 
-  cost: 1
-  target: {fileID: 0}
-  attackRange: 10
+  m_satisfiedWorldStates: 01000000
+  m_requiredWorldStates:
+  - m_worldState: 3
+    m_priority: 0
+  m_actionCost: 0

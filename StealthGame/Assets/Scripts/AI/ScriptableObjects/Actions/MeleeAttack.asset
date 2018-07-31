@@ -8,9 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a68a012a7f6ae647a426cd1d0817fd3, type: 3}
-  m_Name: GotoTarget
+  m_Script: {fileID: 11500000, guid: 4354545df4627ea49acfd53d1d55e718, type: 3}
+  m_Name: MeleeAttack
   m_EditorClassIdentifier: 
-  cost: 1
-  target: {fileID: 0}
-  attackRange: 10
+  m_satisfiedWorldStates: 05000000
+  m_requiredWorldStates:
+  - m_worldState: 8
+    m_priority: 0
+  m_actionCost: 0

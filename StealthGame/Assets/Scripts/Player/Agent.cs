@@ -8,7 +8,7 @@ public class Agent : MonoBehaviour {
 
     protected SquadManager squadManager;
 
-    [Header("Debugging Only")]
+    [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
     public bool m_turn = false;
     [Tooltip("Do Not Assign")]
@@ -37,7 +37,8 @@ public class Agent : MonoBehaviour {
     public Sprite m_selectedAPDisplay;
     public TextMeshProUGUI m_APNumber;
     [Tooltip("# of actions unit can perform")]
-    public int m_actionPoints = 2;
+    public int m_maxActionPoints = 2;
+    public int m_currentActionPoints = 2;
     [Tooltip("# of tiles unit can move")]
     public int m_maxMove = 2;
     int m_moveAmount;
@@ -69,7 +70,6 @@ public class Agent : MonoBehaviour {
     float m_targetY;
     Vector3 m_jumpTarget;
 
-    protected int m_currentActionPoints;
     private bool m_hiding = false;
     private bool m_haveWallPos = false;
     private Vector3 m_wallTargetPos = new Vector3();
@@ -81,22 +81,27 @@ public class Agent : MonoBehaviour {
 
     protected TurnManager m_turnManager = null;
 
+    public NavNode m_currentNavNode = null;
+
+    public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
+
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 
+    protected virtual void Start()
+    {
+        //New Stuff
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
+            m_currentNavNode = hit.collider.GetComponent<NavNode>();
 
-    //Initialise agents
-    protected void Init() {
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();
-        m_currentActionPoints = m_actionPoints;
         m_halfHeight = GetComponent<Collider>().bounds.extents.y;
         m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
         //m_unitCanvas.SetActive(false);
     }
-
-    public virtual void DetermineGoal() {}
 
     public virtual void StartUnitTurn() {}
 
@@ -105,7 +110,7 @@ public class Agent : MonoBehaviour {
     public void TurnEnd()
     {
         EndTurn();
-        m_turnManager.EndUnitTurn();
+        m_turnManager.EndUnitTurn(this);
     }
 
     public void GetCurrentTile() {
@@ -443,62 +448,6 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    //A* pathfinding - Movement
-    public void FindPath(Tile p_target, bool p_moveOntoTile) {
-        ComputeAdjacentcyLists(m_jumpHeight, p_target);
-        GetCurrentTile();
-
-        List<Tile> openList = new List<Tile>();
-        List<Tile> closeList = new List<Tile>();
-
-        openList.Add(m_currentTile);
-
-        m_currentTile.hCost = Vector3.SqrMagnitude(m_currentTile.transform.position - p_target.transform.position);
-        m_currentTile.fCost = m_currentTile.hCost;
-
-        while (openList.Count > 0) {
-            Tile t = FindLowestFCost(openList);
-            closeList.Add(t);
-
-            if (t == p_target) {
-                //found m_path
-                m_actualTargetTile = FindEndTile(t, p_moveOntoTile);
-                CheckMoveToTile(m_actualTargetTile, false);
-                return;
-            }
-
-            foreach (Tile tile in t.adjacencyList) {
-                if (closeList.Contains(tile)) {
-                    //Do nothing, already processed
-                }
-                else if (openList.Contains(tile)) {
-                    //check if m_path is faster
-                    float tempG = t.gCost + Vector3.Distance(tile.transform.position, t.transform.position);
-
-                    if (tempG < tile.gCost) {
-                        tile.parent = t;
-                        tile.gCost = tempG;
-                        tile.fCost = tile.gCost + tile.hCost;
-                    }
-                    //else is m_path not fast, do nothing
-                }
-                else {
-                    //new tile, calculate fCost and add to openList
-                    tile.parent = t;
-
-                    tile.gCost = t.gCost + Vector3.Distance(tile.transform.position, t.transform.position);
-                    tile.hCost = Vector3.Distance(tile.transform.position, p_target.transform.position);
-                    tile.fCost = tile.gCost + tile.hCost;
-
-                    openList.Add(tile);
-                }
-            }
-        }
-
-        //todo - what to do if no m_path to target tile
-        Debug.Log("Path not found");
-    }
-
     protected Tile FindEndTile(Tile p_t, bool p_moveOntoTile) {
         Stack<Tile> tempPath = new Stack<Tile>();
 
@@ -547,7 +496,7 @@ public class Agent : MonoBehaviour {
         }
     }*/
 
-    void EndAction() {
+    public void EndAction() {
         if (GetComponent<NPC>()) {
             NPC AI = GetComponent<NPC>();
             AI.m_currentAction = null;
@@ -565,10 +514,8 @@ public class Agent : MonoBehaviour {
 
     public void BeginTurn() {
 		m_turn = true;
-        //m_unitCanvas.SetActive(true);
-        m_APDisplay.sprite = m_selectedAPDisplay;
-        m_APDisplay.rectTransform.sizeDelta = Vector2.zero;
-        m_currentActionPoints = m_actionPoints;
+        m_unitCanvas.SetActive(true);
+        m_currentActionPoints = m_maxActionPoints;
         m_APNumber.text = m_currentActionPoints.ToString();
 		m_moveAmount = m_maxMove;
 

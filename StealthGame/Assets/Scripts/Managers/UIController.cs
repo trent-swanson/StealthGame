@@ -46,9 +46,9 @@ public class UIController : MonoBehaviour {
 		}
 	}
 	
-	public void EndTurn() {
-		turnManager.EndUnitTurn();
-	}
+	//public void EndTurn() {
+	//	turnManager.EndUnitTurn();
+	//}
 
 	public void inventorySlotHover(int slotID) {
 		m_inventorySlotInfo.transform.GetChild(0).GetComponent<Text>().text = m_currentSelectedAgent.m_currentItems[slotID].description;

@@ -2,29 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AIAction : ScriptableObject {
-
-	[Tooltip("What states this acition will satisfy")]
-    [SerializeField]
-    public List<WorldState.WORLD_STATE> m_satisfiedWorldStates = new List<WorldState.WORLD_STATE>();
-
-    [System.Serializable]
-    public struct RequiredWorldState
-    {
-        public WorldState.WORLD_STATE m_worldState;
-
-        public enum PRIORITY {NONE, LOW, MEDIUM, HIGH, VERY_HIGH };
-        public PRIORITY m_priority;
-    }
-
-    [Tooltip("States this action requires")]
-    [SerializeField]
-    public List<RequiredWorldState> m_requiredWorldStates = new List<RequiredWorldState>();
-
-    [Tooltip("Cost of action")]
-    [SerializeField]
-    public int m_actionCost = 0;
-
+[CreateAssetMenu(fileName = "Patrol", menuName = "AI Actions/Patrol")]
+public class Patrol : AIAction
+{
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -34,8 +14,7 @@ public abstract class AIAction : ScriptableObject {
     // Return:
     //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
     //--------------------------------------------------------------------------------------
-    public abstract bool ActionInit(NPC NPCAgent, AIAction parentAction);
-
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction) { return true; }
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
@@ -43,17 +22,23 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void ActionStart(NPC NPCAgent);
+    public override void ActionStart(NPC NPCAgent)
+    {
+
+    }
 
     //--------------------------------------------------------------------------------------
     // Has the action been completed
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     // Return:
     //		Is all action moves have been completed
     //--------------------------------------------------------------------------------------
-    public abstract bool IsDone(NPC NPCAgent);
+    public override bool IsDone(NPC NPCAgent)
+    {
+        return (NPCAgent.transform.position == NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex].transform.position);
+    }
 
     //--------------------------------------------------------------------------------------
     // Agent Has been completed, clean up anything that needs to be
@@ -61,7 +46,15 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void EndAction(NPC NPCAgent);
+    public override void EndAction(NPC NPCAgent)
+    {
+        NPCAgent.m_agentWorldState.m_waypointIndex++;
+        if (NPCAgent.m_agentWorldState.m_waypointIndex >= NPCAgent.m_agentWorldState.m_waypoints.Count)
+            NPCAgent.m_agentWorldState.m_waypointIndex = 0;
+
+        NPCAgent.m_agentWorldState.m_targetNode = null;
+    }
+
 
     //--------------------------------------------------------------------------------------
     // Perform actions effects, e.g. Moving towards opposing agent
@@ -70,7 +63,10 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void Perform(NPC NPCAgent);
+    public override void Perform(NPC NPCAgent)
+    {
+
+    }
 
     //--------------------------------------------------------------------------------------
     // Setups agents varibles to perform a given action.
@@ -79,5 +75,8 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void SetUpChildVaribles(NPC NPCAgent);
+    public override void SetUpChildVaribles(NPC NPCAgent)
+    {
+        NPCAgent.m_agentWorldState.m_targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
+    }
 }

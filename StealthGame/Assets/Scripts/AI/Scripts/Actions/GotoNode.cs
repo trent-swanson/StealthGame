@@ -2,29 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class AIAction : ScriptableObject {
+[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/Go to Node")]
+public class GotoNode : AIAction
+{
+    private List<NavNode> m_navPath = new List<NavNode>();
+    private bool m_isDone = false;
 
-	[Tooltip("What states this acition will satisfy")]
-    [SerializeField]
-    public List<WorldState.WORLD_STATE> m_satisfiedWorldStates = new List<WorldState.WORLD_STATE>();
-
-    [System.Serializable]
-    public struct RequiredWorldState
-    {
-        public WorldState.WORLD_STATE m_worldState;
-
-        public enum PRIORITY {NONE, LOW, MEDIUM, HIGH, VERY_HIGH };
-        public PRIORITY m_priority;
-    }
-
-    [Tooltip("States this action requires")]
-    [SerializeField]
-    public List<RequiredWorldState> m_requiredWorldStates = new List<RequiredWorldState>();
-
-    [Tooltip("Cost of action")]
-    [SerializeField]
-    public int m_actionCost = 0;
-
+    private NavNode m_targetNode = null;
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -34,7 +18,17 @@ public abstract class AIAction : ScriptableObject {
     // Return:
     //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
     //--------------------------------------------------------------------------------------
-    public abstract bool ActionInit(NPC NPCAgent, AIAction parentAction);
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
+    {
+        if(parentAction!=null)
+        {
+            parentAction.SetUpChildVaribles(NPCAgent);
+            m_targetNode = NPCAgent.m_agentWorldState.m_targetNode;
+            if(m_targetNode!=null)
+                return true;
+        }
+        return false;
+    }
 
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
@@ -43,17 +37,25 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void ActionStart(NPC NPCAgent);
+    public override void ActionStart(NPC NPCAgent)
+    {
+        m_isDone = false;
+        if (NPCAgent.m_currentNavNode != null)
+            m_navPath = Navigation.Instance.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
+    }
 
     //--------------------------------------------------------------------------------------
     // Has the action been completed
     // 
     // Param
-    //		agent: Gameobject which script is used on
+    //		NPCAgent: Gameobject which script is used on
     // Return:
     //		Is all action moves have been completed
     //--------------------------------------------------------------------------------------
-    public abstract bool IsDone(NPC NPCAgent);
+    public override bool IsDone(NPC NPCAgent)
+    {
+        return m_isDone;
+    }
 
     //--------------------------------------------------------------------------------------
     // Agent Has been completed, clean up anything that needs to be
@@ -61,7 +63,11 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void EndAction(NPC NPCAgent);
+    public override void EndAction(NPC NPCAgent)
+    {
+
+    }
+
 
     //--------------------------------------------------------------------------------------
     // Perform actions effects, e.g. Moving towards opposing agent
@@ -70,7 +76,31 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void Perform(NPC NPCAgent);
+    public override void Perform(NPC NPCAgent)
+    {
+        if (m_navPath.Count == 0 || m_navPath[0].IsOccupied()) //Return true when at at end or is occupied
+        {
+            m_isDone = true;
+            return;
+        }
+
+        Vector3 velocityVector = m_navPath[0].transform.position - NPCAgent.transform.position;
+        float translateDis = velocityVector.magnitude;
+
+        velocityVector = velocityVector.normalized * Time.deltaTime * NPCAgent.m_moveSpeed;
+
+        if(velocityVector.magnitude > translateDis)//Arrived at node
+        {
+            NPCAgent.transform.position = m_navPath[0].transform.position;
+            NPCAgent.m_currentNavNode = m_navPath[0];
+            m_navPath.RemoveAt(0);
+            m_isDone = true;
+        }
+        else
+        {
+            NPCAgent.transform.position += velocityVector;
+        }
+    }
 
     //--------------------------------------------------------------------------------------
     // Setups agents varibles to perform a given action.
@@ -79,5 +109,5 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void SetUpChildVaribles(NPC NPCAgent);
+    public override void SetUpChildVaribles(NPC NPCAgent) { }
 }

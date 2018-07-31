@@ -12,12 +12,10 @@ public class PlayerController : Agent {
     static CameraController m_camPivot;
     static UIController m_uiController;
 
-    public LineRenderer pathRenderer;
-
-    void Awake() {
+    protected override void Start()
+    {
+        base.Start();
         m_camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
-        m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
-        Init();
     }
 
     public override void StartUnitTurn() {
