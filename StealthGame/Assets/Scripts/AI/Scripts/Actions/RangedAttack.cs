@@ -2,9 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GetTargetNode", menuName = "AI Actions/GetTargetNode")]
-public class GetTargetNode : AIAction
-{
+[CreateAssetMenu(fileName = "RangedAttack", menuName = "AI Actions/Ranged Attack")]
+public class RangedAttack : AIAction {
+
+	private bool attacked = false;
+ 
+    public float attackRange = 10;
+
+    //--------------------------------------------------------------------------------------
+    // Initialisation of an action at node creation 
+    // Setup any used varibles, can get varibles from parent
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
+    //--------------------------------------------------------------------------------------
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction) { return true; }
+
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
@@ -12,7 +27,7 @@ public class GetTargetNode : AIAction
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void ActionInit(NPC NPCAgent)
+    public override void ActionStart(NPC NPCAgent)
     {
 
     }
@@ -27,7 +42,7 @@ public class GetTargetNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return NPCAgent.m_agentWorldState.m_targetNode != null;
+        return false;
     }
 
     //--------------------------------------------------------------------------------------
@@ -51,15 +66,15 @@ public class GetTargetNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void Perform(NPC NPCAgent)
     {
-        Goal goal = NPCAgent.m_agentWorldState.m_goal;
 
-        switch (goal.m_desiredWorldState)
-        {
-            case WorldState.WORLD_STATE.PATROLLING:
-                NPCAgent.m_agentWorldState.m_targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
-                break;
-            default:
-                break;
-        }
     }
+
+    //--------------------------------------------------------------------------------------
+    // Setups agents varibles to perform a given action.
+    // e.g for got to patrol node, set the target node which goto node uses
+    //
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void SetUpChildVaribles(NPC NPCAgent) { }
 }

@@ -77,6 +77,8 @@ public class Agent : MonoBehaviour {
 
     public NavNode m_currentNavNode = null;
 
+    public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
+
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 

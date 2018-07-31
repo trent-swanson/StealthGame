@@ -32,7 +32,7 @@ public class NPC : Agent
         public NavNode m_targetNode = null; //Fixed
 
         //Seen targets
-        public List<GameObject> m_possibleTargets = new List<GameObject>(); //Realtime
+        public List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
 
         //Targets which have gone missing
         public List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
@@ -45,14 +45,14 @@ public class NPC : Agent
 
     public struct InvestigationNode
     {
-        private GameObject m_target;
-        public GameObject Target
+        private Agent m_target;
+        public Agent Target
         {
             get { return m_target; }
             set { m_target = value; }
         }
-        private GameObject m_node;
-        public GameObject Node
+        private Agent m_node;
+        public Agent Node
         {
             get { return m_node; }
             set { m_node = value; }
@@ -78,7 +78,7 @@ public class NPC : Agent
     public int m_maxActionNum = 3;
 
     [Space]
-    private List<GameObject> m_opposingTeam;
+    private List<Agent> m_opposingTeam;
 
 
     protected override void Start()
@@ -87,19 +87,30 @@ public class NPC : Agent
 
         m_agentWorldState.m_goal = m_ambientGoals[0];
 
+        m_opposingTeam = m_turnManager.GetOpposingTeam(m_team);
+
         //todo: need to remove this agent from the unitList when it is killed
         //squadManager.unitList.Add(this);
         m_state = State.AMBIENT;
+    }
 
-        //duck tape
-        //List<Agent> opposingAgents = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>().m_playerTeam;
-        //foreach (Agent agent in opposingAgents)
-        //{
-        //    m_opposingTeam.Add(agent.gameObject);
-        //}
-
-        //temp - remove this - also duck tape
-        m_state = State.AMBIENT;
+    private void Update()
+    {
+        foreach (Agent oppposingAgent in m_opposingTeam)
+        {
+            if(!m_agentWorldState.m_possibleTargets.Contains(oppposingAgent))
+            {
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, oppposingAgent.transform.position - transform.position, out hit))
+                {
+                    Agent hitAgent = hit.collider.GetComponent<Agent>();
+                    if (hitAgent!=null)
+                    {
+                        m_agentWorldState.m_possibleTargets.Add(hitAgent);
+                    }
+                }
+            }
+        }    
     }
 
     public void DetermineGoal() {
@@ -123,7 +134,7 @@ public class NPC : Agent
                 return;
             }
 
-            m_currentAction.ActionInit(this);
+            m_currentAction.ActionStart(this);
 
             if (m_currentAction.m_actionCost > m_currentActionPoints)
             {
@@ -131,6 +142,8 @@ public class NPC : Agent
                 return;
             }
         }
+
+        m_currentAction.Perform(this);
 
         if (m_currentAction.IsDone(this))
         {
@@ -140,8 +153,6 @@ public class NPC : Agent
             EndAction();
             return;
         }
-
-        m_currentAction.Perform(this);
     }
 
     IEnumerator ActionPlanning() {
@@ -152,7 +163,8 @@ public class NPC : Agent
 
         List<Goal> possibleGoals = new List<Goal>();
 
-        switch (m_state) {
+        switch (m_state)
+        {
             case State.AMBIENT:
                 possibleGoals = m_ambientGoals;
                 break;
@@ -175,7 +187,7 @@ public class NPC : Agent
 
         m_currentAction = null;
 
-        while (m_currentAction == null) {
+        while (m_currentAction == null && goalQueue.Count>0) {
             Goal currentGoal = goalQueue.Dequeue();
 
             m_currentAction = GetActionPlan(currentGoal);
@@ -188,6 +200,31 @@ public class NPC : Agent
         yield return null;
     }
 
+    public Agent GetClosestTarget()
+    {
+        Agent possibleTarget = null;
+        float targetDis = Mathf.Infinity;
+
+        foreach (Agent agent in m_agentWorldState.m_possibleTargets) //TODO might have to update for multiple floors
+        {
+            if (agent == null)
+                break;
+
+            float sqrDis = Vector3.SqrMagnitude(agent.transform.position - transform.position);
+            if(sqrDis< targetDis)
+            {
+                targetDis = sqrDis;
+                possibleTarget = agent;
+            }
+        }
+        return possibleTarget;
+    }
+
+
+    //-----------------------------
+    //GOAP STUFF
+    //-----------------------------
+
     private AIAction GetActionPlan(Goal currentGoal)
     {
         ActionNode goalNode = new ActionNode(this, currentGoal);
@@ -197,10 +234,9 @@ public class NPC : Agent
         List<ActionNode> openNodes = new List<ActionNode>();
         List<ActionNode> closedNodes = new List<ActionNode>();
 
-        NewOpenNodes(goalNode, openNodes, closedNodes);
+        ActionNode currentNode = NewCurrentNode(goalNode); //Starting node
 
-        ActionNode currentNode = null;
-        currentNode = NewCurrentNode(GetLowestFScore(openNodes));
+        NewOpenNodes(currentNode, openNodes, closedNodes); // open list setup
 
         if (goalNode.m_invalidWorldStates.Count == 0) //Goal required just one action to be satified, current action will do this
             return currentNode.m_AIAction;
@@ -225,7 +261,12 @@ public class NPC : Agent
             foreach (AIAction action in m_possibleActions)
             {
                 if (action.m_satisfiedWorldStates.Contains(worldState))
-                    openNodes.Add(new ActionNode(this, action, currentNode));
+                {
+
+                    ActionNode newActionNode = NewActionNode(this, action, currentNode);
+                    if(newActionNode!=null)
+                        openNodes.Add(newActionNode);
+                }
             }
         }
 
@@ -238,6 +279,17 @@ public class NPC : Agent
         if (newNode.m_invalidWorldStates.Count == 0) //If this node is all valid, let parent know to update its validity
             newNode.m_previousNode.NewStateSatisfied(newNode);
         return newNode;
+    }
+
+    private ActionNode NewActionNode(NPC NPCScript, AIAction action, ActionNode previousNode)
+    {
+        ActionNode newNavNode = null;
+        AIAction newAction = Instantiate(action);
+        if(newAction.ActionInit(NPCScript, previousNode.m_AIAction)) //New action has been initiliased successfully
+        {
+            newNavNode = new ActionNode(NPCScript, newAction, previousNode);
+        }
+        return newNavNode;
     }
 
     private ActionNode GetLowestFScore(List<ActionNode> openNodes)
@@ -340,4 +392,8 @@ public class NPC : Agent
                 m_previousNode.NewStateSatisfied(this);
         }  
     }
+
+    //-----------------------------
+    //END GOAP STUFF
+    //-----------------------------
 }

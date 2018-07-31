@@ -5,17 +5,14 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour {
 
 	public List<Agent> m_playerTeam = new List<Agent>();
-    public List<Agent> m_enemyTeam = new List<Agent>();
+    public List<Agent> m_AITeam = new List<Agent>();
 
     public List<Agent> m_turnTeam = new List<Agent>();
 
-    public enum TEAM {PLAYER,ENEMY };
+    public enum TEAM {PLAYER, AI };
     public TEAM m_currentTeam = TEAM.PLAYER;
 
     static SquadManager m_squadManager;
-
-    enum Team { AI, PLAYER }
-    Team team;
 
     /*
     * Important Note:
@@ -59,8 +56,8 @@ public class TurnManager : MonoBehaviour {
         Debug.Log("TeamSwap");
         if (m_currentTeam == TEAM.PLAYER)
         {
-            m_currentTeam = TEAM.ENEMY;
-            m_turnTeam = new List<Agent>(m_enemyTeam);
+            m_currentTeam = TEAM.AI;
+            m_turnTeam = new List<Agent>(m_AITeam);
         }
         else
         {
@@ -89,5 +86,12 @@ public class TurnManager : MonoBehaviour {
     public void EndUnitTurn(Agent agent)
     {
         m_turnTeam.Remove(agent);
+    }
+
+    public List<Agent> GetOpposingTeam(TEAM team)
+    {
+        if (team == TEAM.PLAYER)
+            return m_AITeam;
+        return m_playerTeam;
     }
 }

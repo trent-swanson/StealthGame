@@ -2,9 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoTarget", menuName = "AI Actions/GotoTarget")]
+[CreateAssetMenu(fileName = "GotoTarget", menuName = "AI Actions/Go to Target")]
 public class GotoTarget : AIAction
 {
+    //--------------------------------------------------------------------------------------
+    // Initialisation of an action at node creation 
+    // Setup any used varibles, can get varibles from parent
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
+    //--------------------------------------------------------------------------------------
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction) { return true; }
+
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
@@ -12,7 +23,7 @@ public class GotoTarget : AIAction
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void ActionInit(NPC NPCAgent)
+    public override void ActionStart(NPC NPCAgent)
     {
 
     }
@@ -53,4 +64,13 @@ public class GotoTarget : AIAction
     {
 
     }
+
+    //--------------------------------------------------------------------------------------
+    // Setups agents varibles to perform a given action.
+    // e.g for got to patrol node, set the target node which goto node uses
+    //
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void SetUpChildVaribles(NPC NPCAgent) { }
 }

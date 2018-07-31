@@ -38,4 +38,9 @@ public class NavNode : MonoBehaviour
 
         m_fScore = m_hScore + m_gScore;
     }
+
+    public bool IsOccupied()
+    {
+        return false;
+    }
 }

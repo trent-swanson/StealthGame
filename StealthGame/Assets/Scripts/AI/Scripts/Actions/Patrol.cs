@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Patrol", menuName = "AI Actions/Patrol")]
-public class Patrol : AIAction {
-
+public class Patrol : AIAction
+{
+    //--------------------------------------------------------------------------------------
+    // Initialisation of an action at node creation 
+    // Setup any used varibles, can get varibles from parent
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
+    //--------------------------------------------------------------------------------------
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction) { return true; }
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
     // Runs once when action starts from the list
@@ -12,7 +22,7 @@ public class Patrol : AIAction {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void ActionInit(NPC NPCAgent)
+    public override void ActionStart(NPC NPCAgent)
     {
 
     }
@@ -56,5 +66,17 @@ public class Patrol : AIAction {
     public override void Perform(NPC NPCAgent)
     {
 
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Setups agents varibles to perform a given action.
+    // e.g for got to patrol node, set the target node which goto node uses
+    //
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void SetUpChildVaribles(NPC NPCAgent)
+    {
+        NPCAgent.m_agentWorldState.m_targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
     }
 }

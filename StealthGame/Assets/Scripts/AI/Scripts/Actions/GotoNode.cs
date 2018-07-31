@@ -2,11 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/GotoNode")]
+[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/Go to Node")]
 public class GotoNode : AIAction
 {
     private List<NavNode> m_navPath = new List<NavNode>();
     private bool m_isDone = false;
+
+    private NavNode m_targetNode = null;
+    //--------------------------------------------------------------------------------------
+    // Initialisation of an action at node creation 
+    // Setup any used varibles, can get varibles from parent
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
+    //--------------------------------------------------------------------------------------
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
+    {
+        if(parentAction!=null)
+        {
+            parentAction.SetUpChildVaribles(NPCAgent);
+            m_targetNode = NPCAgent.m_agentWorldState.m_targetNode;
+            if(m_targetNode!=null)
+                return true;
+        }
+        return false;
+    }
 
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
@@ -15,11 +37,11 @@ public class GotoNode : AIAction
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void ActionInit(NPC NPCAgent)
+    public override void ActionStart(NPC NPCAgent)
     {
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
-            m_navPath = Navigation.Instance.GetNavPath(NPCAgent.m_currentNavNode, NPCAgent.m_agentWorldState.m_targetNode);
+            m_navPath = Navigation.Instance.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
     }
 
     //--------------------------------------------------------------------------------------
@@ -56,7 +78,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void Perform(NPC NPCAgent)
     {
-        if(m_navPath.Count == 0)
+        if (m_navPath.Count == 0 || m_navPath[0].IsOccupied()) //Return true when at at end or is occupied
         {
             m_isDone = true;
             return;
@@ -79,4 +101,13 @@ public class GotoNode : AIAction
             NPCAgent.transform.position += velocityVector;
         }
     }
+
+    //--------------------------------------------------------------------------------------
+    // Setups agents varibles to perform a given action.
+    // e.g for got to patrol node, set the target node which goto node uses
+    //
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void SetUpChildVaribles(NPC NPCAgent) { }
 }

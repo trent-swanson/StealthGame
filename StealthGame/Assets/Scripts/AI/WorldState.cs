@@ -14,7 +14,8 @@ public class WorldState : ScriptableObject
         //{WORLD_STATE.CLOSE_TO_TARGET, CloseToTarget},
         //{WORLD_STATE.HAS_TARGET, HasTarget},
         {WORLD_STATE.HAS_TARGET_NODE, HasTargetNode},
-        {WORLD_STATE.AT_NODE, AtNode}
+        {WORLD_STATE.AT_NODE, AtNode},
+        {WORLD_STATE.NEAR_TARGET, NearTarget}
     };
 
     public static bool CheckForValidState(NPC NPCAgent, WORLD_STATE p_state)
@@ -103,7 +104,34 @@ public class WorldState : ScriptableObject
     public static bool AtNode(NPC NPCAgent)
     {
         if(NPCAgent.m_agentWorldState.m_targetNode!=null)
-            return (NPCAgent.transform.position == NPCAgent.m_agentWorldState.m_targetNode.transform.position);
+            return (NPCAgent.m_agentWorldState.m_targetNode == NPCAgent.m_currentNavNode);
+        return false;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Determine if agent is near a target
+    // Check against current nav node is one node away or is targetnode
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //		true when the node below agent is equal to agents target node
+    //--------------------------------------------------------------------------------------
+    public static bool NearTarget(NPC NPCAgent)
+    {
+        if (NPCAgent.m_agentWorldState.m_targetNode != null)
+        {
+            if (NPCAgent.m_agentWorldState.m_targetNode == NPCAgent.m_currentNavNode)//Current Node
+                return true;
+            if (NPCAgent.m_agentWorldState.m_targetNode.m_gridPos + new Vector3Int(0,0,1)  == NPCAgent.m_currentNavNode.m_gridPos)//forwards Node
+                return true;
+            if (NPCAgent.m_agentWorldState.m_targetNode.m_gridPos + new Vector3Int(0, 0, -1) == NPCAgent.m_currentNavNode.m_gridPos)//Backwards Node
+                return true;
+            if (NPCAgent.m_agentWorldState.m_targetNode.m_gridPos + new Vector3Int(1, 0, 0) == NPCAgent.m_currentNavNode.m_gridPos)//Right Node
+                return true;
+            if (NPCAgent.m_agentWorldState.m_targetNode.m_gridPos + new Vector3Int(-1, 0, 0) == NPCAgent.m_currentNavNode.m_gridPos)//Left Node
+                return true;
+        }
         return false;
     }
 }
