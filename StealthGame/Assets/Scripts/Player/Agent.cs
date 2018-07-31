@@ -15,18 +15,18 @@ public class Agent : MonoBehaviour {
     public bool m_knockedout = false;
 
     [HideInInspector]
-    protected List<Tile> m_selectableTiles = new List<Tile>();
+    protected List<NavNode> m_selectableTiles = new List<NavNode>();
     protected List<Vector3> m_selectableOutline = new List<Vector3>();
-    Tile m_unreachableTile;
+    NavNode m_unreachableTile;
+    NavNode m_currentTile;
+    NavNode m_previousTile;
 
-    Stack<Tile> m_path = new Stack<Tile>();
-    [Tooltip("Do Not Assign")]
-    public Tile m_currentTile;
+    Stack<NavNode> m_path = new Stack<NavNode>();
 
     [Tooltip("Do Not Assign")]
     public bool m_moving = false;
     [Tooltip("Do Not Assign")]
-    public Tile m_actualTargetTile;
+    public NavNode m_actualTargetTile;
 
     [Space]
     [Space]
@@ -99,7 +99,9 @@ public class Agent : MonoBehaviour {
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         squadManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<SquadManager>();
         m_halfHeight = GetComponent<Collider>().bounds.extents.y;
-        m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
+        if (GetComponent<PlayerController>())
+            m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
+
         //m_unitCanvas.SetActive(false);
     }
 
@@ -113,11 +115,12 @@ public class Agent : MonoBehaviour {
         m_turnManager.EndUnitTurn(this);
     }
 
+    /*
     public void GetCurrentTile() {
         m_currentTile = GetTargetTile(gameObject);
         m_currentTile.current = true;
     }
-
+ 
     public Tile GetTargetTile(GameObject p_target) {
         RaycastHit hit;
         Tile tile = null;
@@ -126,7 +129,7 @@ public class Agent : MonoBehaviour {
         }
         return tile;
     }
-
+ 
     //get all adjacent tiles for each tile in grid and assign them to that tiles adjacentcy list
     public void ComputeAdjacentcyLists(float p_jumpHeight, Tile p_target) {
         foreach (GameObject tile in GameManager.tiles) {
@@ -134,6 +137,7 @@ public class Agent : MonoBehaviour {
             t.FindNeighbors(p_jumpHeight, p_target);
         }
     }
+    */
 
     //process the current tile and its adjacent tiles and their adjacent tiles if in move range to find selectable tiles
     public void FindSelectableTiles() {
@@ -145,23 +149,24 @@ public class Agent : MonoBehaviour {
             m_moveAmount = m_maxMove;
         }
 
-        ComputeAdjacentcyLists(m_jumpHeight, null);
-        GetCurrentTile();
+        // GetCurrentTile();
+        m_currentTile = m_currentNavNode;
+        m_currentTile.UpdateNavNodeState(NavNode.NodeState.CURRENT);
 
-        Queue<Tile> process = new Queue<Tile>();
+        Queue<NavNode> process = new Queue<NavNode>();
 
         process.Enqueue(m_currentTile);
         m_currentTile.visited = true;
 
         while (process.Count > 0) {
-            Tile t = process.Dequeue();
+            NavNode t = process.Dequeue();
             
             m_selectableTiles.Add(t);
-            t.selectable = true;
+            t.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
             t.selectableBy = this;
 
             if (t.distance < m_moveAmount) {
-                foreach (Tile tile in t.adjacencyList) {
+                foreach (NavNode tile in t.m_adjacentNodes) {
                     if (!tile.visited) {
                         tile.parent = t;
                         tile.visited = true;
@@ -188,13 +193,13 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    //Get m_path in reverse order
-    public Vector3[] CheckMoveToTile(Tile p_tile, bool hover) {
+    //Get m_path in reverse order - PLAYER STUFF
+    public Vector3[] CheckMoveToTile(NavNode p_tile, bool hover) {
         m_path.Clear();
         int pathCost = 0;
         List<Vector3> pathRenderList = new List<Vector3>();
 
-        Tile next = p_tile;
+        NavNode next = p_tile;
         while (next != null) {
             //get path
             pathCost++;
@@ -244,15 +249,22 @@ public class Agent : MonoBehaviour {
         //-1 from pathcost because while loop counts current Tile
         pathCost -= 1;
 
+        //TODO - hovering over not SELECTABLE tiles leaves tiles still SELECTED
         //displayer path AP cost
         if (hover) {
-            p_tile.target = true;
+            if (m_previousTile != null)
+                m_previousTile.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
+            p_tile.UpdateNavNodeState(NavNode.NodeState.SELECTED);
+            m_previousTile = p_tile;
             int tempAP = m_currentActionPoints - pathCost;
             m_APNumber.text = tempAP.ToString();
         }
         //Take path AP cost
         else {
-            p_tile.target = true;
+            if (m_previousTile != null)
+                m_previousTile.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
+            p_tile.UpdateNavNodeState(NavNode.NodeState.SELECTED);
+            m_previousTile = p_tile;
             m_moving = true;
             m_currentActionPoints -= pathCost;
         }
@@ -262,7 +274,7 @@ public class Agent : MonoBehaviour {
 
     public void Move(bool hide) {
         if (m_path.Count > 0) {
-            Tile t = m_path.Peek();
+            NavNode t = m_path.Peek();
             Vector3 targetPos = t.transform.position;
 
             //calculate the agents position on top of the target tile
@@ -336,10 +348,10 @@ public class Agent : MonoBehaviour {
 
     protected void RemoveSelectableTiles() {
         if (m_currentTile != null) {
-            m_currentTile.current = false;
+            m_currentTile.UpdateNavNodeState(NavNode.NodeState.UNSELECTED);
             m_currentTile = null;
         }
-        foreach (Tile tile in m_selectableTiles) {
+        foreach (NavNode tile in m_selectableTiles) {
             tile.Reset();
         }
         m_selectableTiles.Clear();
@@ -448,10 +460,10 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    protected Tile FindEndTile(Tile p_t, bool p_moveOntoTile) {
-        Stack<Tile> tempPath = new Stack<Tile>();
+    protected NavNode FindEndTile(NavNode p_t, bool p_moveOntoTile) {
+        Stack<NavNode> tempPath = new Stack<NavNode>();
 
-        Tile next = p_t.parent;
+        NavNode next = p_t.parent;
         //count back from target tile to current tile to get tempPath
         while (next != null) {
             tempPath.Push(next);
@@ -467,7 +479,7 @@ public class Agent : MonoBehaviour {
         }
 
         //if not in range return last tile in range
-        Tile endTile = null;
+        NavNode endTile = null;
         for (int i = 0; i <= m_moveAmount; i++) {
             endTile = tempPath.Pop();
         }
@@ -475,11 +487,11 @@ public class Agent : MonoBehaviour {
         return endTile;
     }
 
-    protected Tile FindLowestFCost(List<Tile> p_list) {
-        Tile lowest = p_list[0];
+    protected NavNode FindLowestFCost(List<NavNode> p_list) {
+        NavNode lowest = p_list[0];
 
-        foreach (Tile t in p_list) {
-            if (t.fCost < lowest.fCost) {
+        foreach (NavNode t in p_list) {
+            if (t.m_fScore < lowest.m_fScore) {
                 lowest = t;
             }
         }
@@ -516,8 +528,10 @@ public class Agent : MonoBehaviour {
 		m_turn = true;
         m_unitCanvas.SetActive(true);
         m_currentActionPoints = m_maxActionPoints;
-        m_APNumber.text = m_currentActionPoints.ToString();
 		m_moveAmount = m_maxMove;
+
+        if (GetComponent<PlayerController>())
+            m_APNumber.text = m_currentActionPoints.ToString();
 
         if (GetComponent<PlayerController>()) {
             FindInteractables();

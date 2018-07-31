@@ -12,10 +12,17 @@ public class PlayerController : Agent {
     static CameraController m_camPivot;
     static UIController m_uiController;
 
+    public LineRenderer pathRenderer;
+
+    private int m_navNodeLayer = 0;
+
     protected override void Start()
     {
         base.Start();
         m_camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
+        m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
+
+        m_navNodeLayer = LayerMask.GetMask("NavNode");
     }
 
     public override void StartUnitTurn() {
@@ -27,7 +34,7 @@ public class PlayerController : Agent {
     public override void TurnUpdate() {
         if (!m_moving && m_currentActionPoints > 0) {
             FindSelectableTiles();
-            MouseClick();
+            MouseBehaviour();
         }
         else {
             Move(false);
@@ -38,18 +45,14 @@ public class PlayerController : Agent {
         Debug.DrawRay(transform.position, transform.forward);
     }
 
-    void MouseClick() {
+    void MouseBehaviour() {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit)) {
-            if (hit.collider.tag == "Tile") {
-                Tile t = hit.collider.GetComponent<Tile>();
-                if (t.selectable) {
-                    CalculatePathRender(CheckMoveToTile(t, true));
-                } else {
-                    ClearPathRender();
-                }
-            } else {
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, m_navNodeLayer)) {
+            NavNode t = hit.collider.GetComponent<NavNode>();
+            if (t.nodeState == NavNode.NodeState.SELECTABLE) {
+                CalculatePathRender(CheckMoveToTile(t, true));
+            } else if (t.nodeState != NavNode.NodeState.SELECTED) {
                 ClearPathRender();
             }
         } else {
@@ -57,14 +60,12 @@ public class PlayerController : Agent {
         }
         if (Input.GetMouseButtonUp(0)) {
             if (!EventSystem.current.IsPointerOverGameObject()) { //check if are not clicking on a UI element
-                if (Physics.Raycast(ray, out hit)) {
-                    if (hit.collider.tag == "Tile") {
-                        Tile t = hit.collider.GetComponent<Tile>();
-                        if (t.selectable) {
-                            CheckMoveToTile(t, false);
-                            ClearPathRender();
-                            RemoveSelectableTiles();
-                        }
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity, m_navNodeLayer)) {
+                    NavNode t = hit.collider.GetComponent<NavNode>();
+                    if (t.nodeState == NavNode.NodeState.SELECTABLE) {
+                        CheckMoveToTile(t, false);
+                        ClearPathRender();
+                        RemoveSelectableTiles();
                     }
                 }
             }

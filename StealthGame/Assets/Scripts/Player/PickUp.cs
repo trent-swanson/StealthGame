@@ -9,7 +9,7 @@ public class PickUp : MonoBehaviour {
 	public GameObject canvas;
 	bool isInRange = false;
 	bool beingPickedUp = false;
-	Tile occupingTile;
+	NavNode occupingTile;
 
 	public Color highlightColour;
 
@@ -17,8 +17,8 @@ public class PickUp : MonoBehaviour {
 		canvas.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.icon;
 		RaycastHit hit;
 		if (Physics.Raycast(transform.position, Vector3.down, out hit, 5)) {
-			if (hit.transform.tag == "Tile") {
-				occupingTile = hit.transform.GetComponent<Tile>();
+			if (hit.transform.gameObject.layer == LayerMask.GetMask("NavNode")) {
+				occupingTile = hit.transform.GetComponent<NavNode>();
 			}
 		}
 	}
@@ -31,7 +31,7 @@ public class PickUp : MonoBehaviour {
 
 	void OnMouseOver() {
 		if (isInRange && Input.GetMouseButtonDown(0)) {
-			if (occupingTile.selectable) {
+			if (occupingTile.nodeState == NavNode.NodeState.UNSELECTED) {
 				occupingTile.selectableBy.CheckMoveToTile(occupingTile, false);
 				beingPickedUp = true;
 			}

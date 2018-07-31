@@ -245,6 +245,9 @@ public class NPC : Agent
         {
             NewOpenNodes(currentNode, openNodes, closedNodes);
 
+            if (openNodes.Count == 0)
+                return null;
+
             currentNode = NewCurrentNode(GetLowestFScore(openNodes));
 
             if (goalNode.m_invalidWorldStates.Count == 0) //New current node just satisfied the goals final state

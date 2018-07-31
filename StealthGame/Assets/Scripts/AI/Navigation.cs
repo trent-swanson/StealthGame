@@ -2,27 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Navigation : ScriptableObject
+public class Navigation : MonoBehaviour
 {
-    //SingletonSet
-    private static Navigation m_instance = null;
-    private Navigation()
-    {
-    }
-
-    public static Navigation Instance
-    {
-        get
-        {
-            if (m_instance == null)
-            {
-                m_instance = CreateInstance<Navigation>();
-                m_instance.Init();
-            }
-            return m_instance;
-        }
-    }
-
     private int m_maxLevelSize = 50;
     private int m_minYPos = -100;
 
@@ -51,7 +32,7 @@ public class Navigation : ScriptableObject
     public int m_navGridDepth;
     public int m_navGridHeight;
 
-    public void Init()
+    private void Awake()
     {
         //Setup stuff
         m_navNodeLayer = LayerMask.GetMask("NavNode");
@@ -110,7 +91,7 @@ public class Navigation : ScriptableObject
             }
         }
     }
-
+    
     private List<NavNode> GetNavNode(Vector3 pos, Vector3Int gridPos, NavNode[,,] navNodeGrid)
     {
         List<NavNode> newNodes = new List<NavNode>();

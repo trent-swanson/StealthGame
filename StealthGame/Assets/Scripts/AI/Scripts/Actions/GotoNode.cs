@@ -9,6 +9,9 @@ public class GotoNode : AIAction
     private bool m_isDone = false;
 
     private NavNode m_targetNode = null;
+
+    private Navigation m_navigation = null;
+
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -20,7 +23,9 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
-        if(parentAction!=null)
+        m_navigation = GameObject.FindGameObjectWithTag("GameController").GetComponent<Navigation>();//TODO fix this
+
+        if (parentAction!=null)
         {
             parentAction.SetUpChildVaribles(NPCAgent);
             m_targetNode = NPCAgent.m_agentWorldState.m_targetNode;
@@ -41,7 +46,7 @@ public class GotoNode : AIAction
     {
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
-            m_navPath = Navigation.Instance.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
+            m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
     }
 
     //--------------------------------------------------------------------------------------
