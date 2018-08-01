@@ -140,182 +140,182 @@ public class Agent : MonoBehaviour {
     */
 
     //process the current tile and its adjacent tiles and their adjacent tiles if in move range to find selectable tiles
-    public void FindSelectableTiles() {
-        m_hiding = true;
-        m_haveWallPos = false;
+    //public void FindSelectableTiles() {
+    //    m_hiding = true;
+    //    m_haveWallPos = false;
 
-        m_moveAmount = m_currentActionPoints;
-        if (m_moveAmount > m_maxMove) {
-            m_moveAmount = m_maxMove;
-        }
+    //    m_moveAmount = m_currentActionPoints;
+    //    if (m_moveAmount > m_maxMove) {
+    //        m_moveAmount = m_maxMove;
+    //    }
 
-        // GetCurrentTile();
-        m_currentTile = m_currentNavNode;
-        m_currentTile.UpdateNavNodeState(NavNode.NodeState.CURRENT);
+    //    // GetCurrentTile();
+    //    m_currentTile = m_currentNavNode;
+    //    m_currentTile.UpdateNavNodeState(NavNode.NodeState.CURRENT);
 
-        Queue<NavNode> process = new Queue<NavNode>();
+    //    Queue<NavNode> process = new Queue<NavNode>();
 
-        process.Enqueue(m_currentTile);
-        m_currentTile.visited = true;
+    //    process.Enqueue(m_currentTile);
+    //    m_currentTile.visited = true;
 
-        while (process.Count > 0) {
-            NavNode t = process.Dequeue();
+    //    while (process.Count > 0) {
+    //        NavNode t = process.Dequeue();
             
-            m_selectableTiles.Add(t);
-            t.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
-            t.selectableBy = this;
+    //        m_selectableTiles.Add(t);
+    //        t.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
+    //        t.selectableBy = this;
 
-            if (t.distance < m_moveAmount) {
-                foreach (NavNode tile in t.m_adjacentNodes) {
-                    if (!tile.visited) {
-                        tile.parent = t;
-                        tile.visited = true;
-                        tile.distance = 1 + t.distance;
+    //        if (t.distance < m_moveAmount) {
+    //            foreach (NavNode tile in t.m_adjacentNodes) {
+    //                if (!tile.visited) {
+    //                    tile.parent = t;
+    //                    tile.visited = true;
+    //                    tile.distance = 1 + t.distance;
 
-                        //fade out selectable tile color
-                        if (tile.distance == 2) {
-                            tile.spriteColor.a = 0.6f;
-                            tile.spriteRenderer.color = tile.spriteColor;
-                        }
-                        if (tile.distance == 3) {
-                            tile.spriteColor.a = 0.4f;
-                            tile.spriteRenderer.color = tile.spriteColor;
-                        }
+    //                    //fade out selectable tile color
+    //                    if (tile.distance == 2) {
+    //                        tile.spriteColor.a = 0.6f;
+    //                        tile.spriteRenderer.color = tile.spriteColor;
+    //                    }
+    //                    if (tile.distance == 3) {
+    //                        tile.spriteColor.a = 0.4f;
+    //                        tile.spriteRenderer.color = tile.spriteColor;
+    //                    }
 
-                        process.Enqueue(tile);
-                    }
-                }
-            }
+    //                    process.Enqueue(tile);
+    //                }
+    //            }
+    //        }
 
-            if (t.distance == m_moveAmount) {
-                m_selectableOutline.Add(t.transform.position);
-            }
-        }
-    }
+    //        if (t.distance == m_moveAmount) {
+    //            m_selectableOutline.Add(t.transform.position);
+    //        }
+    //    }
+    //}
 
-    //Get m_path in reverse order - PLAYER STUFF
-    public Vector3[] CheckMoveToTile(NavNode p_tile, bool hover) {
-        m_path.Clear();
-        int pathCost = 0;
-        List<Vector3> pathRenderList = new List<Vector3>();
+    ////Get m_path in reverse order - PLAYER STUFF
+    //public Vector3[] CheckMoveToTile(NavNode p_tile, bool hover) {
+    //    m_path.Clear();
+    //    int pathCost = 0;
+    //    List<Vector3> pathRenderList = new List<Vector3>();
 
-        NavNode next = p_tile;
-        while (next != null) {
-            //get path
-            pathCost++;
-            m_path.Push(next);
+    //    NavNode next = p_tile;
+    //    while (next != null) {
+    //        //get path
+    //        pathCost++;
+    //        m_path.Push(next);
 
-            //Calculate pathRenderList
-            pathRenderList.Add(new Vector3(next.transform.position.x, next.transform.position.y + 0.7f, next.transform.position.z));
-            if (next.parent != null) {
-                //going down
-                if (next.parent.transform.position.y > next.transform.position.y) {
-                    float offsetX = 0;
-                    float offsetZ = 0;
-                    if (next.parent.transform.position.x > next.transform.position.x) {
-                        offsetX += 0.8f;
-                    } else if (next.parent.transform.position.x < next.transform.position.x) {
-                        offsetX -= 0.8f;
-                    } else if (next.parent.transform.position.z > next.transform.position.z) {
-                        offsetZ += 0.8f;
-                    } else if (next.parent.transform.position.z < next.transform.position.z) {
-                        offsetZ -= 0.8f;
-                    }
-                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
-                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.parent.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
-                }
-                //going up
-                else if (next.parent.transform.position.y < next.transform.position.y) {
-                    float offsetX = 0;
-                    float offsetZ = 0;
-                    if (next.parent.transform.position.x > next.transform.position.x) {
-                        offsetX += 1.2f;
-                    } else if (next.parent.transform.position.x < next.transform.position.x) {
-                        offsetX -= 1.2f;
-                    } else if (next.parent.transform.position.z > next.transform.position.z) {
-                        offsetZ += 1.2f;
-                    } else if (next.parent.transform.position.z < next.transform.position.z) {
-                        offsetZ -= 1.2f;
-                    }
-                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
-                    pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.parent.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
-                }
-            }
+    //        //Calculate pathRenderList
+    //        pathRenderList.Add(new Vector3(next.transform.position.x, next.transform.position.y + 0.7f, next.transform.position.z));
+    //        if (next.parent != null) {
+    //            //going down
+    //            if (next.parent.transform.position.y > next.transform.position.y) {
+    //                float offsetX = 0;
+    //                float offsetZ = 0;
+    //                if (next.parent.transform.position.x > next.transform.position.x) {
+    //                    offsetX += 0.8f;
+    //                } else if (next.parent.transform.position.x < next.transform.position.x) {
+    //                    offsetX -= 0.8f;
+    //                } else if (next.parent.transform.position.z > next.transform.position.z) {
+    //                    offsetZ += 0.8f;
+    //                } else if (next.parent.transform.position.z < next.transform.position.z) {
+    //                    offsetZ -= 0.8f;
+    //                }
+    //                pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+    //                pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.parent.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+    //            }
+    //            //going up
+    //            else if (next.parent.transform.position.y < next.transform.position.y) {
+    //                float offsetX = 0;
+    //                float offsetZ = 0;
+    //                if (next.parent.transform.position.x > next.transform.position.x) {
+    //                    offsetX += 1.2f;
+    //                } else if (next.parent.transform.position.x < next.transform.position.x) {
+    //                    offsetX -= 1.2f;
+    //                } else if (next.parent.transform.position.z > next.transform.position.z) {
+    //                    offsetZ += 1.2f;
+    //                } else if (next.parent.transform.position.z < next.transform.position.z) {
+    //                    offsetZ -= 1.2f;
+    //                }
+    //                pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+    //                pathRenderList.Add(new Vector3(next.transform.position.x + offsetX, next.parent.transform.position.y + 0.7f, next.transform.position.z + offsetZ));
+    //            }
+    //        }
 
-            //get next tile
-            next = next.parent;
-        }
+    //        //get next tile
+    //        next = next.parent;
+    //    }
 
-        //-1 from pathcost because while loop counts current Tile
-        pathCost -= 1;
+    //    //-1 from pathcost because while loop counts current Tile
+    //    pathCost -= 1;
 
-        //TODO - hovering over not SELECTABLE tiles leaves tiles still SELECTED
-        //displayer path AP cost
-        if (hover) {
-            if (m_previousTile != null)
-                m_previousTile.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
-            p_tile.UpdateNavNodeState(NavNode.NodeState.SELECTED);
-            m_previousTile = p_tile;
-            int tempAP = m_currentActionPoints - pathCost;
-            m_APNumber.text = tempAP.ToString();
-        }
-        //Take path AP cost
-        else {
-            if (m_previousTile != null)
-                m_previousTile.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
-            p_tile.UpdateNavNodeState(NavNode.NodeState.SELECTED);
-            m_previousTile = p_tile;
-            m_moving = true;
-            m_currentActionPoints -= pathCost;
-        }
+    //    //TODO - hovering over not SELECTABLE tiles leaves tiles still SELECTED
+    //    //displayer path AP cost
+    //    if (hover) {
+    //        if (m_previousTile != null)
+    //            m_previousTile.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
+    //        p_tile.UpdateNavNodeState(NavNode.NodeState.SELECTED);
+    //        m_previousTile = p_tile;
+    //        int tempAP = m_currentActionPoints - pathCost;
+    //        m_APNumber.text = tempAP.ToString();
+    //    }
+    //    //Take path AP cost
+    //    else {
+    //        if (m_previousTile != null)
+    //            m_previousTile.UpdateNavNodeState(NavNode.NodeState.SELECTABLE);
+    //        p_tile.UpdateNavNodeState(NavNode.NodeState.SELECTED);
+    //        m_previousTile = p_tile;
+    //        m_moving = true;
+    //        m_currentActionPoints -= pathCost;
+    //    }
 
-        return pathRenderList.ToArray();
-    }
+    //    return pathRenderList.ToArray();
+    //}
 
     public void Move(bool hide) {
-        if (m_path.Count > 0) {
-            NavNode t = m_path.Peek();
-            Vector3 targetPos = t.transform.position;
+        //if (m_path.Count > 0) {
+        //    NavNode t = m_path.Peek();
+        //    Vector3 targetPos = t.transform.position;
 
-            //calculate the agents position on top of the target tile
-            targetPos.y += m_halfHeight + t.GetComponent<Collider>().bounds.extents.y;
+        //    //calculate the agents position on top of the target tile
+        //    targetPos.y += m_halfHeight + t.GetComponent<Collider>().bounds.extents.y;
 
-            if (Vector3.Distance(transform.position, targetPos) >= 0.15f) {
-                bool jump = transform.position.y != targetPos.y;
+        //    if (Vector3.Distance(transform.position, targetPos) >= 0.15f) {
+        //        bool jump = transform.position.y != targetPos.y;
 
-                if (jump) {
-                    Jump(targetPos);
-                } else {
-                    //calculate move forward
-                    CalculateHeading(targetPos);
-                    SetHorizontalVelocity();
-                }
+        //        if (jump) {
+        //            Jump(targetPos);
+        //        } else {
+        //            //calculate move forward
+        //            CalculateHeading(targetPos);
+        //            SetHorizontalVelocity();
+        //        }
 
-                //Locomotion (add animations here)
-                transform.forward = m_heading;
-                transform.position += m_velocity * Time.deltaTime;
-            }
-            else {
-                //tile center reached
-                transform.position = targetPos;
-                m_path.Pop();
-            }
-        }
-        else {
-            if (hide && m_hiding) {
-                WallHide();
-            } else {
-                RemoveSelectableTiles();
-                m_moving = false;
+        //        //Locomotion (add animations here)
+        //        transform.forward = m_heading;
+        //        transform.position += m_velocity * Time.deltaTime;
+        //    }
+        //    else {
+        //        //tile center reached
+        //        transform.position = targetPos;
+        //        m_path.Pop();
+        //    }
+        //}
+        //else {
+        //    if (hide && m_hiding) {
+        //        WallHide();
+        //    } else {
+        //        //RemoveSelectableTiles();
+        //        m_moving = false;
 
-                if (GetComponent<PlayerController>()) {
-                    FindInteractables();
-                }
+        //        if (GetComponent<PlayerController>()) {
+        //            FindInteractables();
+        //        }
 
-                //end of move action
-                EndAction();
-            }
-        }
+        //        //end of move action
+        //        EndAction();
+        //    }
+        //}
     }
 
     protected void WallHide() {
@@ -346,16 +346,16 @@ public class Agent : MonoBehaviour {
         }
     }
 
-    protected void RemoveSelectableTiles() {
-        if (m_currentTile != null) {
-            m_currentTile.UpdateNavNodeState(NavNode.NodeState.UNSELECTED);
-            m_currentTile = null;
-        }
-        foreach (NavNode tile in m_selectableTiles) {
-            tile.Reset();
-        }
-        m_selectableTiles.Clear();
-    }
+    //protected void RemoveSelectableTiles() {
+    //    if (m_currentTile != null) {
+    //        m_currentTile.UpdateNavNodeState(NavNode.NODE_STATE.UNSELECTED);
+    //        m_currentTile = null;
+    //    }
+    //    foreach (NavNode tile in m_selectableTiles) {
+    //        tile.Reset();
+    //    }
+    //    m_selectableTiles.Clear();
+    //}
 
     //calculate the direction we have to head to reach target
     void CalculateHeading(Vector3 p_target) {
@@ -368,138 +368,142 @@ public class Agent : MonoBehaviour {
         m_velocity = m_heading * m_moveSpeed;
     }
 
-    void Jump(Vector3 p_target) {
-        if (m_fallingDown)
-            FallDownward(p_target);
-        else if (m_jumpingUp)
-            JumpUpward(p_target);
-        else if (m_movingToEdge)
-            MoveToEdge();
-        else
-            PrepareJump(p_target);
-    }
+    //void Jump(Vector3 p_target) {
+    //    if (m_fallingDown)
+    //        FallDownward(p_target);
+    //    else if (m_jumpingUp)
+    //        JumpUpward(p_target);
+    //    else if (m_movingToEdge)
+    //        MoveToEdge();
+    //    else
+    //        PrepareJump(p_target);
+    //}
 
-    void PrepareJump(Vector3 p_target) {
-        m_isHigherThanJumpTarget = false;
-        m_isLowerThanJumpTarget = false;
-        m_targetY = p_target.y;
-        p_target.y = transform.position.y;
+    //void PrepareJump(Vector3 p_target) {
+    //    m_isHigherThanJumpTarget = false;
+    //    m_isLowerThanJumpTarget = false;
+    //    m_targetY = p_target.y;
+    //    p_target.y = transform.position.y;
 
-        CalculateHeading(p_target);
+    //    CalculateHeading(p_target);
 
-        //if heigher
-        if (transform.position.y > m_targetY) {
-            m_fallingDown = false;
-            m_jumpingUp = false;
-            m_movingToEdge = true;
+    //    //if heigher
+    //    if (transform.position.y > m_targetY) {
+    //        m_fallingDown = false;
+    //        m_jumpingUp = false;
+    //        m_movingToEdge = true;
 
-            m_jumpTarget = transform.position + (p_target - transform.position) / 2.0f;
+    //        m_jumpTarget = transform.position + (p_target - transform.position) / 2.0f;
 
-            m_isHigherThanJumpTarget = true;
-        }
-        //if lower
-        else {
-            m_fallingDown = false;
-            m_jumpingUp = false;
-            m_movingToEdge = true;
+    //        m_isHigherThanJumpTarget = true;
+    //    }
+    //    //if lower
+    //    else {
+    //        m_fallingDown = false;
+    //        m_jumpingUp = false;
+    //        m_movingToEdge = true;
 
-            m_jumpTarget = transform.position + (p_target - transform.position) / 4.5f;
+    //        m_jumpTarget = transform.position + (p_target - transform.position) / 4.5f;
 
-            m_isLowerThanJumpTarget = true;
-        }
-    }
+    //        m_isLowerThanJumpTarget = true;
+    //    }
+    //}
 
-    void FallDownward(Vector3 p_target) {
-        m_velocity += Physics.gravity * Time.deltaTime;
+    //void FallDownward(Vector3 p_target) {
+    //    m_velocity += Physics.gravity * Time.deltaTime;
 
-        if (transform.position.y <= p_target.y) {
-            m_fallingDown = false;
-            m_jumpingUp = false;
-            m_movingToEdge = false;
+    //    if (transform.position.y <= p_target.y) {
+    //        m_fallingDown = false;
+    //        m_jumpingUp = false;
+    //        m_movingToEdge = false;
 
-            Vector3 pos = transform.position;
-            pos.y = p_target.y;
-            transform.position = pos;
+    //        Vector3 pos = transform.position;
+    //        pos.y = p_target.y;
+    //        transform.position = pos;
 
-            m_velocity = new Vector3();
-        }
-    }
+    //        m_velocity = new Vector3();
+    //    }
+    //}
 
-    void JumpUpward(Vector3 p_target) {
-        m_velocity += Physics.gravity * Time.deltaTime;
+    //void JumpUpward(Vector3 p_target) {
+    //    m_velocity += Physics.gravity * Time.deltaTime;
 
-        if (transform.position.y > p_target.y) {
-            m_jumpingUp = false;
-            m_fallingDown = true;
-        }
-    }
+    //    if (transform.position.y > p_target.y) {
+    //        m_jumpingUp = false;
+    //        m_fallingDown = true;
+    //    }
+    //}
 
-    void MoveToEdge() {
-        if (Vector3.Distance(transform.position, m_jumpTarget) >= 0.15f) {
-            SetHorizontalVelocity();
-        }
-        else if (m_isHigherThanJumpTarget) {
-            m_movingToEdge = false;
-            m_fallingDown = true;
+    //void MoveToEdge()
+    //{
+    //    if (Vector3.Distance(transform.position, m_jumpTarget) >= 0.15f)
+    //    {
+    //        SetHorizontalVelocity();
+    //    }
+    //    else if (m_isHigherThanJumpTarget)
+    //    {
+    //        m_movingToEdge = false;
+    //        m_fallingDown = true;
 
-            //devide velocity to slow down movement while falling
-            m_velocity /= m_jumpDownVelSlow;
-            //add small vertical velocity for 'hop' off edge
-            m_velocity.y = m_jumpDownPop;
-        }
-        else if (m_isLowerThanJumpTarget) {
-            m_movingToEdge = false;
-            m_jumpingUp = true;
+    //        //devide velocity to slow down movement while falling
+    //        m_velocity /= m_jumpDownVelSlow;
+    //        //add small vertical velocity for 'hop' off edge
+    //        m_velocity.y = m_jumpDownPop;
+    //    }
+    //    else if (m_isLowerThanJumpTarget)
+    //    {
+    //        m_movingToEdge = false;
+    //        m_jumpingUp = true;
 
-            //devide velocity to slow down movement while jumping
-            m_velocity = m_heading * m_moveSpeed / m_jumpUpVelSlow;
+    //        //devide velocity to slow down movement while jumping
+    //        m_velocity = m_heading * m_moveSpeed / m_jumpUpVelSlow;
 
-            float difference = m_targetY - transform.position.y;
-            //jump velocity
-            m_velocity.y = m_jumpVelocity * (m_jumpUpPop + difference / 2.0f);
-        }
-    }
+    //        float difference = m_targetY - transform.position.y;
+    //        //jump velocity
+    //        m_velocity.y = m_jumpVelocity * (m_jumpUpPop + difference / 2.0f);
+    //    }
+    //}
 
-    protected NavNode FindEndTile(NavNode p_t, bool p_moveOntoTile) {
-        Stack<NavNode> tempPath = new Stack<NavNode>();
+    //protected NavNode FindEndTile(NavNode p_t, bool p_moveOntoTile) {
+    //    Stack<NavNode> tempPath = new Stack<NavNode>();
 
-        NavNode next = p_t.parent;
-        //count back from target tile to current tile to get tempPath
-        while (next != null) {
-            tempPath.Push(next);
-            next = next.parent;
-        }
+    //    NavNode next = p_t.parent;
+    //    //count back from target tile to current tile to get tempPath
+    //    while (next != null) {
+    //        tempPath.Push(next);
+    //        next = next.parent;
+    //    }
 
-        //if in move range return target tile
-        if (tempPath.Count <= m_moveAmount) {
-            if (p_moveOntoTile)
-                return p_t;
-            else
-                return p_t.parent;
-        }
+    //    //if in move range return target tile
+    //    if (tempPath.Count <= m_moveAmount) {
+    //        if (p_moveOntoTile)
+    //            return p_t;
+    //        else
+    //            return p_t.parent;
+    //    }
 
-        //if not in range return last tile in range
-        NavNode endTile = null;
-        for (int i = 0; i <= m_moveAmount; i++) {
-            endTile = tempPath.Pop();
-        }
+    //    //if not in range return last tile in range
+    //    NavNode endTile = null;
+    //    for (int i = 0; i <= m_moveAmount; i++) {
+    //        endTile = tempPath.Pop();
+    //    }
 
-        return endTile;
-    }
+    //    return endTile;
+    //}
 
-    protected NavNode FindLowestFCost(List<NavNode> p_list) {
-        NavNode lowest = p_list[0];
+    //protected NavNode FindLowestFCost(List<NavNode> p_list) {
+    //    NavNode lowest = p_list[0];
 
-        foreach (NavNode t in p_list) {
-            if (t.m_fScore < lowest.m_fScore) {
-                lowest = t;
-            }
-        }
+    //    foreach (NavNode t in p_list) {
+    //        if (t.m_fScore < lowest.m_fScore) {
+    //            lowest = t;
+    //        }
+    //    }
 
-        p_list.Remove(lowest);
+    //    p_list.Remove(lowest);
 
-        return lowest;
-    }
+    //    return lowest;
+    //}
 
     /*public void DoAction(Action p_action) {
         if (!m_moving && currentActionPoints > 0) {

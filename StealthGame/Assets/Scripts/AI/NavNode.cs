@@ -5,11 +5,11 @@ using UnityEngine;
 public class NavNode : MonoBehaviour
 {
     [Header("Tile UI")]
-    public GameObject selectableUI;
-    public GameObject selectedUI;
-    public Sprite selectedSprite;
-    public Sprite defualtSprite;
-    public SpriteRenderer spriteRenderer;
+    public GameObject m_selectableUI;
+    public GameObject m_selectedUI;
+    public Sprite m_selectedSprite;
+    public Sprite m_defaultSprite;
+    public SpriteRenderer m_spriteRenderer;
 
     [HideInInspector]
     public Color spriteColor;
@@ -20,18 +20,16 @@ public class NavNode : MonoBehaviour
     [Space]
 
     //BFS vars
-    public bool visited = false;
-    public NavNode parent = null;
-    public int distance = 0;
-    public Agent selectableBy;
+    public NavNode m_BFSPreviousNode = null;
+    public int m_BFSDistance = 0;
 
     Renderer myRenderer;
 
-    public enum NodeState {CURRENT, SELECTED, SELECTABLE, UNSELECTED}
-    public enum NodeType {WALKABLE, HIGH_OBSTICLE, LOW_OBSTICLE}
+    public enum NODE_STATE {CURRENT, SELECTED, SELECTABLE, UNSELECTED}
+    public enum NODE_TYPE {WALKABLE, HIGH_OBSTACLE, LOW_OBSTACLE}
 
-    public NodeState nodeState = NodeState.UNSELECTED;
-    public NodeType nodeType;
+    public NODE_STATE m_nodeState = NODE_STATE.UNSELECTED;
+    public NODE_TYPE m_nodeType = NODE_TYPE.WALKABLE;
 
     public Vector3Int m_gridPos = Vector3Int.zero;
 
@@ -43,8 +41,8 @@ public class NavNode : MonoBehaviour
 
     void Start() {
         myRenderer = GetComponent<Renderer>();
-        spriteRenderer = selectableUI.GetComponent<SpriteRenderer>();
-        spriteColor = spriteRenderer.color;
+        m_spriteRenderer = m_selectableUI.GetComponent<SpriteRenderer>();
+        spriteColor = m_spriteRenderer.color;
     }
 
     public NavNode(Vector3Int pos)
@@ -79,31 +77,28 @@ public class NavNode : MonoBehaviour
         return false;
     }
 
-    public void UpdateNavNodeState(NodeState p_nodeState) {
-        nodeState = p_nodeState;
+    public void UpdateNavNodeState(NODE_STATE nodeState) {
+        m_nodeState = nodeState;
         switch (nodeState) {
-            case NodeState.CURRENT:
-                selectableUI.SetActive(true);
+            case NODE_STATE.CURRENT:
+                m_selectableUI.SetActive(true);
             break;
-            case NodeState.SELECTABLE:
-                selectableUI.SetActive(true);
-                selectedUI.SetActive(false);
-                spriteRenderer.sprite = defualtSprite;
+            case NODE_STATE.SELECTABLE:
+                m_selectableUI.SetActive(true);
+                m_selectedUI.SetActive(false);
+                m_spriteRenderer.sprite = m_defaultSprite;
             break;
-            case NodeState.SELECTED:
-                selectedUI.SetActive(true);
-                spriteRenderer.sprite = selectedSprite;
+            case NODE_STATE.SELECTED:
+                m_selectedUI.SetActive(true);
+                m_spriteRenderer.sprite = m_selectedSprite;
             break;
-            case NodeState.UNSELECTED:
+
+            case NODE_STATE.UNSELECTED:
             default:
-                selectableUI.SetActive(false);
-                selectedUI.SetActive(false);
-                spriteRenderer.sprite = defualtSprite;
+                m_selectableUI.SetActive(false);
+                m_selectedUI.SetActive(false);
+                m_spriteRenderer.sprite = m_defaultSprite;
             break;
         }              
-    }
-
-    public void Reset() {
-        nodeState = NodeState.UNSELECTED;
     }
 }

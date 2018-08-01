@@ -79,7 +79,7 @@ public class ProceduralTileOutline : MonoBehaviour {
 
 		foreach (GameObject t in GameManager.tiles) {
 			NavNode tile = t.GetComponent<NavNode>();
-			if (tile.nodeState != NavNode.NodeState.SELECTABLE) {
+			if (tile.m_nodeState != NavNode.NODE_STATE.SELECTABLE) {
 				trisToDelete += 6;
 			}
 		}
@@ -89,7 +89,7 @@ public class ProceduralTileOutline : MonoBehaviour {
 		for (int x = 0; x < gridSize.x; x++) {
 			for (int y = 0; y < gridSize.y; y++) {
 				NavNode tile = GameManager.grid[x,y].GetComponent<NavNode>();
-				if (tile.nodeState == NavNode.NodeState.SELECTABLE) {
+				if (tile.m_nodeState == NavNode.NODE_STATE.SELECTABLE) {
 					triangles[i++] = gridTriangles[j++];
 					triangles[i++] = gridTriangles[j++];
 					triangles[i++] = gridTriangles[j++];

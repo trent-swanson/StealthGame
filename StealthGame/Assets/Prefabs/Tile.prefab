@@ -2657,7 +2657,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1570810654308378}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10, y: 0, z: 1}
+  m_LocalPosition: {x: -16.140532, y: 8.107998, z: 14.802423}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4650063332870192}
@@ -4225,18 +4225,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99afe3ff11e29b04a817fad3800791fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectableUI: {fileID: 1738068119172696}
-  selectedUI: {fileID: 1444117480308722}
-  selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
-  defualtSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
-  spriteRenderer: {fileID: 212453897692168706}
+  m_selectableUI: {fileID: 1738068119172696}
+  m_selectedUI: {fileID: 1444117480308722}
+  m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
+  m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
+  m_spriteRenderer: {fileID: 0}
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
-  visited: 0
-  parent: {fileID: 0}
-  distance: 0
-  selectableBy: {fileID: 0}
-  nodeState: 3
-  nodeType: 0
+  m_BFSPreviousNode: {fileID: 0}
+  m_BFSDistance: 0
+  m_nodeState: 0
+  m_nodeType: 0
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
   m_gScore: 0

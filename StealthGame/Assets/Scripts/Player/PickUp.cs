@@ -31,9 +31,9 @@ public class PickUp : MonoBehaviour {
 
 	void OnMouseOver() {
 		if (isInRange && Input.GetMouseButtonDown(0)) {
-			if (occupingTile.nodeState == NavNode.NodeState.UNSELECTED) {
-				occupingTile.selectableBy.CheckMoveToTile(occupingTile, false);
-				beingPickedUp = true;
+			if (occupingTile.m_nodeState == NavNode.NODE_STATE.UNSELECTED) {
+                //occupingTile.selectableBy.CheckMoveToTile(occupingTile, false);TODO
+                beingPickedUp = true;
 			}
 		}
 	}
@@ -44,7 +44,7 @@ public class PickUp : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (beingPickedUp && other.tag == "Player" || beingPickedUp && other.tag == "NPC") {
-			occupingTile.selectableBy.AddItem(item);
+			//occupingTile.selectableBy.AddItem(item); TODO
 			Destroy(this.gameObject);
 		}
 	}
