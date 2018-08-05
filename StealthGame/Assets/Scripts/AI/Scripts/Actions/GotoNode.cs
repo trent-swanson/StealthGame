@@ -23,7 +23,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
-        m_navigation = GameObject.FindGameObjectWithTag("GameController").GetComponent<Navigation>();//TODO fix this
+        m_navigation = GameObject.FindGameObjectWithTag("GameController").GetComponent<Navigation>();
 
         if (parentAction!=null)
         {
@@ -46,7 +46,10 @@ public class GotoNode : AIAction
     {
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
+        {
             m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
+            NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED;
+        }
     }
 
     //--------------------------------------------------------------------------------------
@@ -70,7 +73,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-
+        NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
     }
 
 
@@ -83,20 +86,21 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void Perform(NPC NPCAgent)
     {
-        if (m_navPath.Count == 0 || m_navPath[0].IsOccupied()) //Return true when at at end or is occupied
+        if (m_navPath.Count == 0 || m_navPath[0].m_nodeState == NavNode.NODE_STATE.OBSTRUCTED) //Return true when at at end or is occupied
         {
             m_isDone = true;
             return;
         }
 
-        Vector3 velocityVector = m_navPath[0].transform.position - NPCAgent.transform.position;
+        Vector3 targetPos = m_navPath[0].m_nodeTop;
+        Vector3 velocityVector = targetPos - NPCAgent.transform.position;
         float translateDis = velocityVector.magnitude;
 
         velocityVector = velocityVector.normalized * Time.deltaTime * NPCAgent.m_moveSpeed;
 
         if(velocityVector.magnitude > translateDis)//Arrived at node
         {
-            NPCAgent.transform.position = m_navPath[0].transform.position;
+            NPCAgent.transform.position = targetPos;
             NPCAgent.m_currentNavNode = m_navPath[0];
             m_navPath.RemoveAt(0);
             m_isDone = true;

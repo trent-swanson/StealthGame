@@ -10,76 +10,47 @@ public class PlayerController : Agent {
     public Sprite portrait;
 
     static CameraController m_camPivot;
-    static UIController m_uiController;
 
-    private PlayerMovementManager m_movementManager = null;
-
-    private int m_navNodeLayer = 0;
+    private PlayerUI m_playerUI = null;
+    private PlayerActions m_playerActions = null;
 
     protected override void Start()
     {
         base.Start();
         m_camPivot = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
-        m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
 
-        m_movementManager = GetComponent<PlayerMovementManager>();
-
-        m_navNodeLayer = LayerMask.GetMask("NavNode");
+        m_playerUI = GetComponent<PlayerUI>();
+        m_playerActions = GetComponent<PlayerActions>();
     }
 
-    public override void StartUnitTurn() {
+    //Start of turn, only runs once per turn
+    public override void AgentTurnInit()
+    {
+        base.AgentTurnInit();
+    }
+
+    //Runs every time a agent is selected, this can be at end of an action is completed
+    public override void AgentSelected()
+    {
+        m_playerActions.InitActions();
+        m_playerUI.InitUI();
         m_camPivot.Focus(transform);
-        m_uiController.UpdateUI(this);
-        m_movementManager.PlayerSelected();
-        BeginTurn();
     }
 
-    public override void TurnUpdate() {
-        if (!m_moving && m_currentActionPoints > 0) {
-            m_movementManager.MovementManage();
-        }
-        else {
-            Move(false);
+    //Constant update while agent is selected
+    public override void AgentTurnUpdate()
+    {
+        m_playerActions.UpdateActions();
+        m_playerUI.UpdateUI();
+        if(m_currentActionPoints <= 0)
+        {
+            m_turnManager.EndUnitTurn(this);
         }
     }
 
-    //void Update() {
-    //    Debug.DrawRay(transform.position, transform.forward);
-    //}
-
-    //void MouseBehaviour() {
-    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //    RaycastHit hit;
-    //    if (Physics.Raycast(ray, out hit, Mathf.Infinity, m_navNodeLayer)) {
-    //        NavNode t = hit.collider.GetComponent<NavNode>();
-    //        if (t.nodeState == NavNode.NodeState.SELECTABLE) {
-    //            CalculatePathRender(CheckMoveToTile(t, true));
-    //        } else if (t.nodeState != NavNode.NodeState.SELECTED) {
-    //            ClearPathRender();
-    //        }
-    //    } else {
-    //        ClearPathRender();
-    //    }
-    //    if (Input.GetMouseButtonUp(0)) {
-    //        if (!EventSystem.current.IsPointerOverGameObject()) { //check if are not clicking on a UI element
-    //            if (Physics.Raycast(ray, out hit, Mathf.Infinity, m_navNodeLayer)) {
-    //                NavNode t = hit.collider.GetComponent<NavNode>();
-    //                if (t.nodeState == NavNode.NodeState.SELECTABLE) {
-    //                    CheckMoveToTile(t, false);
-    //                    ClearPathRender();
-    //                    RemoveSelectableTiles();
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-
-    //void CalculatePathRender(Vector3[] p_path) {
-    //    pathRenderer.positionCount = p_path.Length;
-    //    pathRenderer.SetPositions(p_path);
-    //}
-
-    //public void ClearPathRender() {
-    //    pathRenderer.positionCount = 0;
-    //}
+    //Runs when agent is removed from team list, end of turn
+    public override void AgentTurnEnd()
+    {
+        base.AgentTurnEnd();
+    }
 }

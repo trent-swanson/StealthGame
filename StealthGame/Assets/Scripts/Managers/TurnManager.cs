@@ -5,6 +5,8 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour {
 
 	public List<Agent> m_playerTeam = new List<Agent>();
+    public Agent m_currentSelectedPlayer = null;
+
     public List<Agent> m_AITeam = new List<Agent>();
 
     public List<Agent> m_turnTeam = new List<Agent>();
@@ -23,37 +25,22 @@ public class TurnManager : MonoBehaviour {
     void Start()
     {
         //Find all tiles in level and add them to GameManager tile list
-        GameManager.tiles = GameObject.FindGameObjectsWithTag("Tile");
         m_squadManager = GetComponent<SquadManager>();
+
+        InitTeamTurnMove();
     }
 
     private void Update()
     {
         if (m_turnTeam.Count != 0)
-        {
-            if (m_currentTeam == TEAM.PLAYER)
-            {
-                m_turnTeam[0].TurnUpdate();
-            }
-            else // Enemy turn
-            {
-                List<Agent> tempTeam = new List<Agent>(m_turnTeam);
-                foreach (Agent agent in tempTeam)
-                {
-                    agent.TurnUpdate();
-                }
-            }
-        }
+            m_currentSelectedPlayer.AgentTurnUpdate();
         else
-        {
             InitTeamTurnMove();
-        }
     }
 
     //initilise unit team
     private void InitTeamTurnMove()
     {
-        Debug.Log("TeamSwap");
         if (m_currentTeam == TEAM.PLAYER)
         {
             m_currentTeam = TEAM.AI;
@@ -64,18 +51,23 @@ public class TurnManager : MonoBehaviour {
             m_currentTeam = TEAM.PLAYER;
             m_turnTeam = new List<Agent>(m_playerTeam);
         }
-        if (m_turnTeam.Count > 0)
+
+        foreach (Agent agent in m_turnTeam)
         {
-            
+            agent.AgentTurnInit();
+        }
+
+        if (m_turnTeam.Count != 0)
+        {
+            m_currentSelectedPlayer = m_turnTeam[0];
+            m_currentSelectedPlayer.AgentSelected();
+
             for (int i = 0; i < m_turnTeam.Count;)
             {
-                m_turnTeam[i].m_currentActionPoints = m_turnTeam[i].m_maxActionPoints;
-
                 if (m_turnTeam[i].m_knockedout)
                     m_turnTeam.RemoveAt(i);
                 else
                 {
-                    m_turnTeam[i].StartUnitTurn();
                     i++;
                 }
             }
@@ -86,6 +78,13 @@ public class TurnManager : MonoBehaviour {
     public void EndUnitTurn(Agent agent)
     {
         m_turnTeam.Remove(agent);
+        if (m_turnTeam.Count > 0)
+        {
+            m_currentSelectedPlayer = m_turnTeam[0];
+            m_currentSelectedPlayer.AgentSelected();
+        }
+        else
+            m_currentSelectedPlayer = null;
     }
 
     public List<Agent> GetOpposingTeam(TEAM team)

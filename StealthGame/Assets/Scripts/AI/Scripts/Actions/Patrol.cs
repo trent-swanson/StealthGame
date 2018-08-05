@@ -37,7 +37,7 @@ public class Patrol : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return (NPCAgent.transform.position == NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex].transform.position);
+        return true;
     }
 
     //--------------------------------------------------------------------------------------
@@ -77,6 +77,21 @@ public class Patrol : AIAction
     //--------------------------------------------------------------------------------------
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
-        NPCAgent.m_agentWorldState.m_targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
+        NavNode targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
+        if(targetNode.m_nodeState == NavNode.NODE_STATE.OBSTRUCTED)//Obstructed, try to find node close by
+        {
+            List<NavNode> adjacentNodes = targetNode.m_adjacentNodes;
+            targetNode = null;
+            foreach (NavNode adjacentNode in adjacentNodes)
+            {
+                if (adjacentNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED && adjacentNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
+                {
+                    targetNode = adjacentNode; //TODO is this desired behaviour?
+                    break;
+                }
+            }
+        }
+
+        NPCAgent.m_agentWorldState.m_targetNode = targetNode;
     }
 }

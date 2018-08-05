@@ -10,6 +10,10 @@ public class Navigation : MonoBehaviour
     [Tooltip("How big a tile is in world units")]
     public Vector3 m_tileSize = new Vector3(2.0f, 1.0f, 2.0f);
 
+    //Node type determination
+    public static float m_lowObstacleHeight = 1.0f;
+    public static float m_obstacleDetection = 1.0f;
+
     private int m_navNodeLayer = 0;
 
     //Caching of offsets for efficeincy
@@ -42,7 +46,7 @@ public class Navigation : MonoBehaviour
         m_rightOffset = new Vector3(m_tileSize.x, 0, 0);
         m_leftOffset = new Vector3(-m_tileSize.x, 0, 0);
 
-        Vector3 orginatingPos = new Vector3(0.0f, m_minYPos, 0.0f);
+        Vector3 orginatingPos = new Vector3(0.5f, m_minYPos, 0.5f);
 
         NavNode[,,] tempNavNodeGrid = new NavNode[m_maxLevelSize, m_maxLevelSize, m_maxLevelSize];
         Vector3Int gridCenter = new Vector3Int(m_maxLevelSize / 2, m_maxLevelSize / 2, m_maxLevelSize / 2);
@@ -53,7 +57,7 @@ public class Navigation : MonoBehaviour
 
 
         List<NavNode> newNodes = GetNavNode(orginatingPos, gridCenter, tempNavNodeGrid);
-
+        
         foreach (NavNode navNode in newNodes)
         {
             UpdateNeighbourNodes(navNode, tempNavNodeGrid);
@@ -79,14 +83,15 @@ public class Navigation : MonoBehaviour
             }
         }
 
-        //Setup Node neighbours
+        //Setup Node neighbours/Node type
         for (int i = 0; i < m_navGridWidth; i++)
         {
             for (int j = 0; j < m_navGridHeight; j++)
             {
                 for (int k = 0; k < m_navGridDepth; k++)
                 {
-                    BuildNodeBranches(new Vector3Int(i, j, k));
+                    BuildNodeBranches(m_navGrid[i, j, k]);
+                    SetupNodeType(m_navGrid[i, j, k]);
                 }
             }
         }
@@ -162,10 +167,10 @@ public class Navigation : MonoBehaviour
         newNodes.AddRange(GetNavNode(initialRaycastPos + m_backwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, -1), navNodeGrid));
 
         //Right
-        newNodes.AddRange(GetNavNode(initialRaycastPos + m_rightOffset, currentNode.m_gridPos + Vector3Int.right, navNodeGrid));
+        newNodes.AddRange(GetNavNode(initialRaycastPos + m_rightOffset, currentNode.m_gridPos + new Vector3Int(1, 0, 0), navNodeGrid));
 
         //Left
-        newNodes.AddRange(GetNavNode(initialRaycastPos + m_leftOffset, currentNode.m_gridPos + Vector3Int.left, navNodeGrid));
+        newNodes.AddRange(GetNavNode(initialRaycastPos + m_leftOffset, currentNode.m_gridPos + new Vector3Int(-1, 0, 0), navNodeGrid));
 
         foreach (NavNode navNode in newNodes)
         {
@@ -173,9 +178,9 @@ public class Navigation : MonoBehaviour
         }
     }
 
-    private void BuildNodeBranches(Vector3Int currentGridPos)
+    private void BuildNodeBranches(NavNode currentNode)
     {
-        NavNode currentNode = m_navGrid[currentGridPos.x, currentGridPos.y, currentGridPos.z];
+        Vector3Int currentGridPos = currentNode.m_gridPos;
 
         if(currentNode!=null)
         {
@@ -208,8 +213,6 @@ public class Navigation : MonoBehaviour
                     currentNode.m_adjacentNodes.Add(adjacentNode);
             }
         }
-
-        m_navGrid[currentGridPos.x, currentGridPos.y, currentGridPos.z] = currentNode;
     }
 
     private NavNode GetAdjacentNode(Vector3Int offsetGridPos)
@@ -227,6 +230,25 @@ public class Navigation : MonoBehaviour
         return null;
     }
 
+
+    private void SetupNodeType(NavNode currentNode)
+    {
+        if (currentNode!=null)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer))
+            {
+                float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
+                if (coliderHeight < m_lowObstacleHeight)
+                    currentNode.m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
+                else
+                    currentNode.m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
+            }
+            else
+                currentNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+        }
+    }
+
     //----------------
     //End of Nav Grid Creation
     //----------------
@@ -237,7 +259,7 @@ public class Navigation : MonoBehaviour
     public List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode)
     {
         if (startingNode == goalNode)//Already at position
-            return null;
+            return new List<NavNode>();
 
         List<NavNode> openNodes = new List<NavNode>();
         List<NavNode> closedNodes = new List<NavNode>();
@@ -259,7 +281,7 @@ public class Navigation : MonoBehaviour
 
             currentNode = GetLowestFScore(openNodes);
         }
-        return null;
+        return new List<NavNode>();
     }
 
     public List<NavNode> GetNavPath(Vector3Int startingIndexPos, NavNode goalNode)
@@ -275,7 +297,8 @@ public class Navigation : MonoBehaviour
 
         foreach (NavNode nextNode in currentNode.m_adjacentNodes)
         {
-            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode))
+            //Only add nodes which have not already been considered, are walkable and not already obstructed.
+            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE && nextNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
             {
                 openNodes.Add(nextNode);
                 nextNode.Setup(openNodes, closedNodes, goalNode);
