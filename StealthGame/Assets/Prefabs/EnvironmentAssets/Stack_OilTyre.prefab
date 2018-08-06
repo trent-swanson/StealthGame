@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 23791536995873360}
   m_Layer: 0
   m_Name: Oil_Barrel (1)
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 23450851468645932}
   m_Layer: 0
   m_Name: Oil_Barrel
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 23748254785606684}
   m_Layer: 0
   m_Name: Oil_Barrel (2)
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -70,10 +70,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4469982634476568}
-  - component: {fileID: 65197982554376680}
-  m_Layer: 0
+  - component: {fileID: 65211299984308874}
+  m_Layer: 10
   m_Name: Stack_OilTyre
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 23989767029694414}
   m_Layer: 0
   m_Name: Tyre_Stack (1)
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 23761676921198240}
   m_Layer: 0
   m_Name: Tyre_Stack
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -277,7 +277,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: c922671da5e5f5e4ba90f9676b1122c9, type: 3}
+  - {fileID: 2100000, guid: ef113e335abb7e24dbddc8bf646054ae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -345,7 +345,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: c922671da5e5f5e4ba90f9676b1122c9, type: 3}
+  - {fileID: 2100000, guid: ef113e335abb7e24dbddc8bf646054ae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -400,7 +400,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1746540934654746}
   m_Mesh: {fileID: 4300000, guid: c922671da5e5f5e4ba90f9676b1122c9, type: 3}
---- !u!65 &65197982554376680
+--- !u!65 &65211299984308874
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

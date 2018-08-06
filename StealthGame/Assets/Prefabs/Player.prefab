@@ -1017,9 +1017,10 @@ GameObject:
   - component: {fileID: 4300480862868962}
   - component: {fileID: 33142710473869142}
   - component: {fileID: 136827368022833812}
-  - component: {fileID: 23652921185777004}
-  - component: {fileID: 114832138151658074}
   - component: {fileID: 54766987088577690}
+  - component: {fileID: 114832138151658074}
+  - component: {fileID: 114059704258135860}
+  - component: {fileID: 114001018812812154}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3183,7 +3184,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1211746153130236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4179590199073090}
@@ -4082,40 +4083,6 @@ Transform:
   m_Father: {fileID: 4456997144171454}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23652921185777004
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1430622057034394}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 2100000, guid: afc3036d71fee6e4a94f1b479d247e75, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!33 &33142710473869142
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -4155,6 +4122,23 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114001018812812154
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1430622057034394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e296e7f310e11fc4da1d709786838bf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_unitCanvas: {fileID: 1526278153166904}
+  m_APDisplay: {fileID: 114826457661238770}
+  m_defualtAPDisplay: {fileID: 21300000, guid: 58b666ae51c2dae4ca628c2efb54db9a, type: 3}
+  m_selectedAPDisplay: {fileID: 21300000, guid: 253ad1455f68ff742b4ed809191ff8b1,
+    type: 3}
+  m_APNumber: {fileID: 114216472044019158}
 --- !u!114 &114026048085550826
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4268,6 +4252,19 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114059704258135860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1430622057034394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b91746e53874d34e85efb1e1a13e985, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentSelectedNode: {fileID: 0}
+  m_currentActionState: 0
 --- !u!114 &114216472044019158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4460,30 +4457,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_turn: 0
   m_knockedout: 0
-  m_moving: 0
-  m_actualTargetTile: {fileID: 0}
-  m_unitCanvas: {fileID: 1526278153166904}
-  m_APDisplay: {fileID: 114826457661238770}
-  m_defualtAPDisplay: {fileID: 21300000, guid: 58b666ae51c2dae4ca628c2efb54db9a, type: 3}
-  m_selectedAPDisplay: {fileID: 21300000, guid: 253ad1455f68ff742b4ed809191ff8b1,
-    type: 3}
-  m_APNumber: {fileID: 114216472044019158}
   m_maxActionPoints: 3
   m_currentActionPoints: 0
-  m_maxMove: 3
-  m_jumpHeight: 1
   m_moveSpeed: 5
-  m_jumpVelocity: 4.5
-  m_jumpUpPop: 0.7
-  m_jumpUpVelSlow: 3.5
-  m_jumpDownPop: 2.7
-  m_jumpDownVelSlow: 3.5
   m_highlightInteractablesRange: 6
   m_currentNavNode: {fileID: 0}
-  m_team: 1
+  m_team: 0
   m_currentItems: []
   portrait: {fileID: 21300000, guid: 3b0b64358afa369499afa5dc7f367992, type: 3}
-  pathRenderer: {fileID: 120818042412387686}
 --- !u!114 &114870478592781582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4619,7 +4600,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!137 &137645749976897306
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -4836,7 +4817,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.2}
+  m_AnchoredPosition: {x: 0, y: 2}
   m_SizeDelta: {x: 1.5, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224697384745417404
