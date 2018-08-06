@@ -188,47 +188,40 @@ public class Navigation : MonoBehaviour
             //Forward
             if (currentGridPos.z + 1 < m_navGridDepth)
             {
-                NavNode adjacentNode = GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, 1));
-                if(adjacentNode!= null)
-                    currentNode.m_adjacentNodes.Add(adjacentNode);
+                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, 1)));
             }
             //Backward
             if (currentGridPos.z - 1 >= 0)
             {
-                NavNode adjacentNode = GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, -1));
-                if (adjacentNode != null)
-                    currentNode.m_adjacentNodes.Add(adjacentNode);
+                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, -1)));
             }
             //Right
             if (currentGridPos.x + 1 < m_navGridWidth)
             {
-                NavNode adjacentNode = GetAdjacentNode(currentGridPos + new Vector3Int(1, 0, 0));
-                if (adjacentNode != null)
-                    currentNode.m_adjacentNodes.Add(adjacentNode);
+                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(1, 0, 0)));
             }
             //Left
             if (currentGridPos.x - 1 >= 0)
             {
-                NavNode adjacentNode = GetAdjacentNode(currentGridPos + new Vector3Int(-1, 0, 0));
-                if (adjacentNode != null)
-                    currentNode.m_adjacentNodes.Add(adjacentNode);
+                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(-1, 0, 0)));
             }
         }
     }
 
-    private NavNode GetAdjacentNode(Vector3Int offsetGridPos)
+    private List<NavNode> GetAdjacentNode(Vector3Int offsetGridPos)
     {
+        List<NavNode> nodes = new List<NavNode>();
         //Mid
         if (m_navGrid[offsetGridPos.x, offsetGridPos.y, offsetGridPos.z] != null)
-            return m_navGrid[offsetGridPos.x, offsetGridPos.y, offsetGridPos.z];
+            nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y, offsetGridPos.z]);
         //Top
         if (offsetGridPos.y + 1 < m_navGridHeight && m_navGrid[offsetGridPos.x, offsetGridPos.y+1, offsetGridPos.z] != null)
-            return m_navGrid[offsetGridPos.x, offsetGridPos.y+1, offsetGridPos.z];
+            nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y+1, offsetGridPos.z]);
         //Lower
         if (offsetGridPos.y - 1 >= 0 && m_navGrid[offsetGridPos.x, offsetGridPos.y - 1, offsetGridPos.z] != null)
-            return m_navGrid[offsetGridPos.x, offsetGridPos.y - 1, offsetGridPos.z];
+            nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y - 1, offsetGridPos.z]);
 
-        return null;
+        return nodes;
     }
 
 
