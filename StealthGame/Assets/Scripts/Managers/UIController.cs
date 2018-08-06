@@ -9,20 +9,34 @@ public class UIController : MonoBehaviour {
 
 	[Space]
 	public GameObject m_inventorySlotInfo;
-	public Image m_portraitImage;
-	Agent m_currentSelectedAgent;
+	public List<Image> m_portraitImages;
 
-	TurnManager turnManager;
+    Agent m_currentSelectedAgent;
 
-	void Start() {
-		turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
+	TurnManager m_turnManager;
+
+	void Start()
+    {
+		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 	}
+
+    public void InitUIPortraits(List<Agent> agents)
+    {
+        foreach (Image portraitImage in m_portraitImages)
+        {
+            portraitImage.enabled = false ;
+        }
+        for (int i = 0; i < agents.Count && i < m_portraitImages.Count; i++)
+        {
+            m_portraitImages[i].enabled = true;
+            m_portraitImages[i].sprite = agents[i].GetComponent<PlayerController>().portrait;
+        }
+    }
 
 	public void UpdateUI(Agent p_agent) {
 		m_currentSelectedAgent = p_agent;
 		ResetUI();
 		GetInventoryItems();
-		m_portraitImage.sprite = p_agent.GetComponent<PlayerController>().portrait;
 	}
 
 	public void ResetUI() {
@@ -45,10 +59,6 @@ public class UIController : MonoBehaviour {
 			m_inventorySlots[index].SetActive(true);
 		}
 	}
-	
-	//public void EndTurn() {
-	//	turnManager.EndUnitTurn();
-	//}
 
 	public void inventorySlotHover(int slotID) {
 		m_inventorySlotInfo.transform.GetChild(0).GetComponent<Text>().text = m_currentSelectedAgent.m_currentItems[slotID].description;
@@ -58,4 +68,10 @@ public class UIController : MonoBehaviour {
 	public void inventorySlotHoverExit() {
 		m_inventorySlotInfo.SetActive(false);
 	}
+
+    public void ChangeAgent(int index)
+    {
+        if (index != 0 && m_turnManager.m_currentTeam == TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
+            m_turnManager.SwapAgents(index);
+    }
 }

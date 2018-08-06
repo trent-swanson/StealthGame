@@ -1,0 +1,76 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "GotoTarget", menuName = "AI Actions/Go to Target")]
+public class GotoTarget : AIAction
+{
+    //--------------------------------------------------------------------------------------
+    // Initialisation of an action at node creation 
+    // Setup any used varibles, can get varibles from parent
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
+    //--------------------------------------------------------------------------------------
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction) { return true; }
+
+    //--------------------------------------------------------------------------------------
+    // Initialisation of an action 
+    // Runs once when action starts from the list
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void ActionStart(NPC NPCAgent)
+    {
+
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Has the action been completed
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //		Is all action moves have been completed
+    //--------------------------------------------------------------------------------------
+    public override bool IsDone(NPC NPCAgent)
+    {
+        return false;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Agent Has been completed, clean up anything that needs to be
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void EndAction(NPC NPCAgent)
+    {
+
+    }
+
+
+    //--------------------------------------------------------------------------------------
+    // Perform actions effects, e.g. Moving towards opposing agent
+    // Should happen on each update
+    //
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void Perform(NPC NPCAgent)
+    {
+
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Setups agents varibles to perform a given action.
+    // e.g for got to patrol node, set the target node which goto node uses
+    //
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    //--------------------------------------------------------------------------------------
+    public override void SetUpChildVaribles(NPC NPCAgent) { }
+}

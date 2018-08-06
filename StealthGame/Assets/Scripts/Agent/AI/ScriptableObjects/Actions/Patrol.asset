@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a14ad5bf0823f4fa33d7632d4713ac, type: 3}
+  m_Name: Patrol
+  m_EditorClassIdentifier: 
+  m_satisfiedWorldStates: 01000000
+  m_requiredWorldStates:
+  - m_worldState: 3
+    m_priority: 0
+  m_actionCost: 0

@@ -5,7 +5,6 @@ using UnityEngine;
 public class TurnManager : MonoBehaviour {
 
 	public List<Agent> m_playerTeam = new List<Agent>();
-    public Agent m_currentSelectedPlayer = null;
 
     public List<Agent> m_AITeam = new List<Agent>();
 
@@ -15,6 +14,7 @@ public class TurnManager : MonoBehaviour {
     public TEAM m_currentTeam = TEAM.PLAYER;
 
     static SquadManager m_squadManager;
+    private UIController m_UIController = null;
 
     /*
     * Important Note:
@@ -26,14 +26,14 @@ public class TurnManager : MonoBehaviour {
     {
         //Find all tiles in level and add them to GameManager tile list
         m_squadManager = GetComponent<SquadManager>();
-
+        m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         InitTeamTurnMove();
     }
 
     private void Update()
     {
-        if (m_turnTeam.Count != 0)
-            m_currentSelectedPlayer.AgentTurnUpdate();
+        if (m_turnTeam.Count > 0 && m_turnTeam[0] != null)
+            m_turnTeam[0].AgentTurnUpdate();
         else
             InitTeamTurnMove();
     }
@@ -50,6 +50,8 @@ public class TurnManager : MonoBehaviour {
         {
             m_currentTeam = TEAM.PLAYER;
             m_turnTeam = new List<Agent>(m_playerTeam);
+
+            m_UIController.InitUIPortraits(m_turnTeam);
         }
 
         foreach (Agent agent in m_turnTeam)
@@ -57,34 +59,41 @@ public class TurnManager : MonoBehaviour {
             agent.AgentTurnInit();
         }
 
-        if (m_turnTeam.Count != 0)
+        if (ValidTeam())
         {
-            m_currentSelectedPlayer = m_turnTeam[0];
-            m_currentSelectedPlayer.AgentSelected();
-
-            for (int i = 0; i < m_turnTeam.Count;)
-            {
-                if (m_turnTeam[i].m_knockedout)
-                    m_turnTeam.RemoveAt(i);
-                else
-                {
-                    i++;
-                }
-            }
+            m_turnTeam[0].AgentSelected();
+        }
+        else
+        {
+            InitTeamTurnMove();
         }
     }
 
     //end of unit turn
     public void EndUnitTurn(Agent agent)
     {
-        m_turnTeam.Remove(agent);
-        if (m_turnTeam.Count > 0)
+        if (ValidTeam())
         {
-            m_currentSelectedPlayer = m_turnTeam[0];
-            m_currentSelectedPlayer.AgentSelected();
+            SwapAgents(GetNextTeamAgentIndex());
         }
         else
-            m_currentSelectedPlayer = null;
+            InitTeamTurnMove();
+    }
+
+    public void SwapAgents(int agentIndex)
+    {
+        if (agentIndex < m_turnTeam.Count)
+        {
+            m_turnTeam[0].AgentTurnEnd();
+
+            Agent tempAgent = m_turnTeam[0];
+            m_turnTeam[0] = m_turnTeam[agentIndex];
+            m_turnTeam[agentIndex] = tempAgent;
+
+            m_turnTeam[0].AgentSelected();
+
+            m_UIController.InitUIPortraits(m_turnTeam);
+        }
     }
 
     public List<Agent> GetOpposingTeam(TEAM team)
@@ -92,5 +101,25 @@ public class TurnManager : MonoBehaviour {
         if (team == TEAM.PLAYER)
             return m_AITeam;
         return m_playerTeam;
+    }
+
+    private bool ValidTeam()
+    {
+        foreach (Agent agent in m_turnTeam)
+        {
+            if(!agent.m_knockedout && agent.m_currentActionPoints > 0)
+                return true;
+        }
+        return false;
+    }
+
+    private int GetNextTeamAgentIndex()
+    {
+        for (int i = 0; i < m_turnTeam.Count; i++)
+        {
+            if (!m_turnTeam[i].m_knockedout && m_turnTeam[i].m_currentActionPoints > 0)
+                return i;
+        }
+        return 0;
     }
 }
