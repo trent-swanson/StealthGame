@@ -13,6 +13,8 @@ public class PlayerActions : MonoBehaviour
     private List<NavNode> m_selectableNodes = new List<NavNode>();
     private List<NavNode> m_path = new List<NavNode>();
 
+    private List<AnimationManager.AT> m_transitionSteps = new List<AnimationManager.AT>();
+
     public enum ACTION_STATE{TURN_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, MOVING }
     public ACTION_STATE m_currentActionState = ACTION_STATE.TURN_START;
 
@@ -144,6 +146,12 @@ public class PlayerActions : MonoBehaviour
             m_path.RemoveAt(0); // dont need to move to starting pos
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
 
+            m_transitionSteps.Clear();
+            m_transitionSteps = AnimationManager.GetTransistionSteps(m_playerController.m_currentNavNode, m_path);
+
+            AnimationManager.SetupAnimator(m_playerController.m_animator, m_transitionSteps[0]);//Get initial aniamtion to play
+            m_transitionSteps.RemoveAt(0);
+
             m_initActionState = false;
         }
 
@@ -154,7 +162,14 @@ public class PlayerActions : MonoBehaviour
             {
                 m_playerController.m_currentNavNode = m_path[0];
                 m_path.RemoveAt(0);
-                if(m_path.Count == 0)//End of move
+
+                if(m_transitionSteps.Count > 0)
+                {
+                    AnimationManager.SetupAnimator(m_playerController.m_animator, m_transitionSteps[0]);
+                    m_transitionSteps.RemoveAt(0);
+                }
+
+                if (m_path.Count == 0)//End of move
                 {
                     m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
                     m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
@@ -163,6 +178,8 @@ public class PlayerActions : MonoBehaviour
             }
         }
     }
+
+    //Find what type of action is about to be take
 
     //Change current action, resets action init bool to true, TODO in proper finate state machine this will be managed by a manager so no bool is needed
     private void NewActionState(ACTION_STATE actionState)

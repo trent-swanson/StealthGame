@@ -31,6 +31,8 @@ public class Agent : MonoBehaviour {
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 
+    public Animator m_animator = null;
+
     protected virtual void Start()
     {
         //New Stuff
@@ -43,6 +45,7 @@ public class Agent : MonoBehaviour {
 
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
+        m_animator = GetComponentInChildren<Animator>();
     }
 
     //Start of turn, only runs once per turn
@@ -66,4 +69,6 @@ public class Agent : MonoBehaviour {
 		transform.position = new Vector3(0, 100, 0);
         m_turnManager.EndUnitTurn(this);
 	}
+
+    public virtual bool IsMoving() { return false; }
 }

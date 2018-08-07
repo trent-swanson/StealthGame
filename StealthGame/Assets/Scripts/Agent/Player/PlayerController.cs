@@ -55,4 +55,9 @@ public class PlayerController : Agent {
         base.AgentTurnEnd();
         m_playerActions.ActionEnd();
     }
+
+    public override bool IsMoving()
+    {
+        return (m_playerActions.m_currentActionState == PlayerActions.ACTION_STATE.MOVING);
+    }
 }
