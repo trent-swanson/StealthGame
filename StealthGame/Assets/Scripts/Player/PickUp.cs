@@ -12,6 +12,7 @@ public class PickUp : MonoBehaviour {
 	Tile occupingTile;
 
 	public Color highlightColour;
+    public float outlineWidth = 1.21f;
 
 	void Start() {
 		canvas.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = item.icon;
@@ -60,7 +61,8 @@ public class PickUp : MonoBehaviour {
 			Renderer renderer = GetComponent<Renderer>();
 			renderer.material.shader = outlineShader;
 			renderer.material.SetColor("_OutlineColor", highlightColour);
-		}
+            renderer.material.SetFloat("_OutlineWidth", outlineWidth);
+        }
 		isInRange = true;
 	}
 

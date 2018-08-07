@@ -595,11 +595,19 @@ public class Agent : MonoBehaviour {
         foreach (GameObject pickUp in GameObject.FindGameObjectsWithTag("PickUp")) {
             pickUp.GetComponent<PickUp>().TurnOffOutline();
         }
+        foreach (GameObject interactObject in GameObject.FindGameObjectsWithTag("Interactable"))
+        {
+            interactObject.GetComponent<Interactable>().TurnOffOutline();
+        }
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_highlightInteractablesRange);
         for (int i = 0; i < hitColliders.Length; i++) {
             if (hitColliders[i].tag == "PickUp") {
                 hitColliders[i].GetComponent<PickUp>().TurnOnOutline();
+            }
+            if (hitColliders[i].tag == "Interactable")
+            {
+                hitColliders[i].GetComponent<Interactable>().TurnOnOutline();
             }
         }
     }
