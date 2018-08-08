@@ -255,6 +255,7 @@ public class PlayerActions : MonoBehaviour
     {
         Vector3 targetPos = m_path[0].m_nodeTop;
         Vector3 velocityVector = targetPos - transform.position;
+        velocityVector.y = 0;
         float translateDis = velocityVector.magnitude;
 
         velocityVector = velocityVector.normalized * Time.deltaTime * m_playerController.m_moveSpeed;
