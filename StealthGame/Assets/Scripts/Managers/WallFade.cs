@@ -17,6 +17,7 @@ public class WallFade : MonoBehaviour {
 		for (int i = 0; i < transform.childCount; i++) {
 			wallList[i] = transform.GetChild(i).GetComponent<Material>();
 		}
+        FadeWall();
 	}
 
 	public void FadeWall() {
