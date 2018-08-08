@@ -50,10 +50,12 @@ public class CameraController : MonoBehaviour
         if (Input.GetKeyDown("q"))
         {
             transform.rotation *= Quaternion.Euler(0, -90, 0);
+            GameManager.CheckCamDirection(this.transform);
         }
         if (Input.GetKeyDown("e"))
         {
             transform.rotation *= Quaternion.Euler(0, 90, 0);
+            GameManager.CheckCamDirection(this.transform);
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");

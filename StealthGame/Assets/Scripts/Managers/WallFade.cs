@@ -5,9 +5,12 @@ using UnityEngine;
 public class WallFade : MonoBehaviour {
 
 	private Material standardMat;
-	
+	private Material[] wallList;
+
+	public GameManager.CamDirection camDirection;
+
+	[Space]
 	public Material fadeMat;
-	public Material[] wallList;
 
 	void Start () {
 		wallList = new Material[transform.childCount];
@@ -17,16 +20,25 @@ public class WallFade : MonoBehaviour {
 		for (int i = 0; i < transform.childCount; i++) {
 			wallList[i] = transform.GetChild(i).GetComponent<Material>();
 		}
-        FadeWall();
+
+		GameManager.walls.Add(this);
 	}
 
-	public void FadeWall() {
+	public void UpdateWallFade() {
+		if (GameManager.camDirection == camDirection) {
+			FadeWall();
+		} else {
+			UnfadeWall();
+		}
+	}
+
+	void FadeWall() {
 		for (int i = 0; i < wallList.Length; i++) {
 			wallList[i] = fadeMat;
 		}
 	}
 
-	public void UnFadeWall() {
+	void UnfadeWall() {
 		for (int i = 0; i < wallList.Length; i++) {
 			wallList[i] = standardMat;
 		}
