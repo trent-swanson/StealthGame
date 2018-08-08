@@ -146,6 +146,8 @@ public class PlayerActions : MonoBehaviour
             m_path.RemoveAt(0); // dont need to move to starting pos
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
 
+            FaceDir(m_path[0]);
+
             m_transitionSteps.Clear();
             m_transitionSteps = AnimationManager.GetTransistionSteps(m_playerController.m_currentNavNode, m_path);
 
@@ -163,7 +165,10 @@ public class PlayerActions : MonoBehaviour
                 m_playerController.m_currentNavNode = m_path[0];
                 m_path.RemoveAt(0);
 
-                if(m_transitionSteps.Count > 0)
+                if(m_path.Count>0)//TODO make better
+                    FaceDir(m_path[0]);
+
+                if (m_transitionSteps.Count > 0)
                 {
                     AnimationManager.SetupAnimator(m_playerController.m_animator, m_transitionSteps[0]);
                     m_transitionSteps.RemoveAt(0);
@@ -249,6 +254,13 @@ public class PlayerActions : MonoBehaviour
         }
 
         return path;
+    }
+    private void FaceDir(NavNode pathNode)
+    {
+        Vector3 velocityVector = pathNode.m_nodeTop - transform.position;
+        Vector3 dir = velocityVector.normalized;
+        dir.y = 0;
+        transform.LookAt(transform.position + dir);
     }
 
     private bool MoveTo(NavNode pathNode)
