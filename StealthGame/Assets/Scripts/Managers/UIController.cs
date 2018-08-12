@@ -82,7 +82,7 @@ public class UIController : MonoBehaviour {
 
     public void TurnStart(TurnManager.TEAM team)
     {
-        if(team == TurnManager.TEAM.PLAYER)
+        if(team == TurnManager.TEAM.PLAYER && m_playerTurnStart != null)
         {
             Color spriteColor = m_playerTurnStart.color;
             spriteColor.a = 1;
@@ -90,7 +90,7 @@ public class UIController : MonoBehaviour {
 
             StartCoroutine(FadeTurnStart(0.2f, m_playerTurnStart));
         }
-        else
+        else if(m_enemyTurnStart != null)
         {
             Color spriteColor = m_enemyTurnStart.color;
             spriteColor.a = 1;

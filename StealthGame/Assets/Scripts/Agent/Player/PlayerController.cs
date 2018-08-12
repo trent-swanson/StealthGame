@@ -58,6 +58,6 @@ public class PlayerController : Agent {
 
     public override bool IsMoving()
     {
-        return (m_playerActions.m_currentActionState == PlayerActions.ACTION_STATE.MOVING);
+        return (m_playerActions.m_currentActionState == PlayerActions.ACTION_STATE.ACTION_PERFORM);
     }
 }
