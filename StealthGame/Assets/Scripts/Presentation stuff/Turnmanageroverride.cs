@@ -7,7 +7,7 @@ public class Turnmanageroverride : MonoBehaviour
     TurnManager m_turnManager = null;
 
     public PlayerController m_playerController = null;
-    public NPC m_enemyController = null;
+    public Agent m_enemyController = null;
 
     // Use this for initialization
     void Start ()
@@ -22,7 +22,26 @@ public class Turnmanageroverride : MonoBehaviour
         {
             m_turnManager.enabled = false;
             m_playerController.GetComponent<Animator>().SetTrigger("Punch");
-            m_enemyController.GetComponent<Animator>().SetTrigger("Death");
+        
+            m_playerController.AgentTurnEnd();
+            m_playerController.m_currentActionPoints = 0;
+
+            if(m_enemyController!= null)
+                m_enemyController.GetComponent<Animator>().SetTrigger("Death");
+
+            Invoke("TimeSlow", 0.0f);
         }
 	}
+
+    private void TimeSlow()
+    {
+        Time.timeScale = 0.4f;
+        Invoke("TimeSpeed", 0.3f);
+
+    }
+    private void TimeSpeed()
+    {
+            Time.timeScale = 1.0f;
+    }
+
 }

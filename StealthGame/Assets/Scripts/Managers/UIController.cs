@@ -80,9 +80,14 @@ public class UIController : MonoBehaviour {
             m_turnManager.SwapAgents(index);
     }
 
+    public void TurnEnd()
+    {
+        m_turnManager.EndTeamTurn();
+    }
+
     public void TurnStart(TurnManager.TEAM team)
     {
-        if(team == TurnManager.TEAM.PLAYER && m_playerTurnStart != null)
+        if(team == TurnManager.TEAM.PLAYER)
         {
             Color spriteColor = m_playerTurnStart.color;
             spriteColor.a = 1;
@@ -90,7 +95,7 @@ public class UIController : MonoBehaviour {
 
             StartCoroutine(FadeTurnStart(0.2f, m_playerTurnStart));
         }
-        else if(m_enemyTurnStart != null)
+        else
         {
             Color spriteColor = m_enemyTurnStart.color;
             spriteColor.a = 1;

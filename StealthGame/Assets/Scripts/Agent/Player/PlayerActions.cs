@@ -11,18 +11,14 @@ public class PlayerActions : MonoBehaviour
     public NavNode m_currentSelectedNode = null;
 
     private List<NavNode> m_selectableNodes = new List<NavNode>();
-    [SerializeField]
     private List<NavNode> m_path = new List<NavNode>();
 
-    private List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
+    private List<AnimationManager.AT> m_transitionSteps = new List<AnimationManager.AT>();
 
-    public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
-    public ACTION_STATE m_currentActionState = ACTION_STATE.ACTION_START;
+    public enum ACTION_STATE{TURN_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, MOVING }
+    public ACTION_STATE m_currentActionState = ACTION_STATE.TURN_START;
 
     private bool m_initActionState = true;
-
-    private bool m_playNextAnimation = true;
-    private string m_currentAnimation = "Idle";
 
     private void Start()
     {
@@ -35,7 +31,7 @@ public class PlayerActions : MonoBehaviour
     public void InitActions()
     {
         GetAllSelectableNodes();
-        NewActionState(ACTION_STATE.ACTION_START);
+        NewActionState(ACTION_STATE.TURN_START);
     }
 
     //Basic Finate state machine setup
@@ -43,7 +39,7 @@ public class PlayerActions : MonoBehaviour
     {
         switch (m_currentActionState) //TODO make good finate state machine
         {
-            case ACTION_STATE.ACTION_START:
+            case ACTION_STATE.TURN_START:
                 ActionStart();
                 break;
 
@@ -55,8 +51,8 @@ public class PlayerActions : MonoBehaviour
                 InvalidSelection();
                 break;
 
-            case ACTION_STATE.ACTION_PERFORM:
-                ActionPerform();
+            case ACTION_STATE.MOVING:
+                Moving();
                 break;
 
             default:
@@ -106,8 +102,7 @@ public class PlayerActions : MonoBehaviour
 
                 if(Input.GetMouseButtonDown(0))
                 {
-                    //TODO get action from node e.g. use node, attack
-                    NewActionState(ACTION_STATE.ACTION_PERFORM);
+                    NewActionState(ACTION_STATE.MOVING);
                 }
             }
             else
@@ -141,40 +136,49 @@ public class PlayerActions : MonoBehaviour
 
     //Moving action, Remove all UI for navmesh/ pathing, and path over to new selected node
     //After action go back to action start
-    private void ActionPerform()
+    private void Moving()
     {
         if (m_initActionState)
         {
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes);
             m_path = GetPath(m_currentSelectedNode);
+            m_path.Reverse(); //Original path list goes from end to start
+            m_path.RemoveAt(0); // dont need to move to starting pos
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
 
-            m_animationSteps.Clear();
-            m_animationSteps = AnimationManager.GetAnimationSteps(m_path);
+            FaceDir(m_path[0]);
+
+            m_transitionSteps.Clear();
+            m_transitionSteps = AnimationManager.GetTransistionSteps(m_playerController.m_currentNavNode, m_path);
+
+            AnimationManager.SetupAnimator(m_playerController.m_animator, m_transitionSteps[0]);//Get initial aniamtion to play
+            m_transitionSteps.RemoveAt(0);
 
             m_initActionState = false;
         }
 
-        if(m_playNextAnimation)//End of animation
+        if (m_path.Count > 0)
         {
-            m_playerController.m_currentNavNode = m_path[0];
-            transform.position = m_path[0].m_nodeTop;
-            m_path.RemoveAt(0);
-
-            if (m_path.Count == 0)//End of move
+            bool atNextNode = MoveTo(m_path[0]);
+            if(atNextNode)
             {
-                m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
-                m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
-                InitActions();
-            }
-            else
-            {
-                FaceDir(m_path[0]);
-                PlayNextAnimation();
+                m_playerController.m_currentNavNode = m_path[0];
+                m_path.RemoveAt(0);
 
-                if (m_animationSteps.Count>0)
+                if(m_path.Count>0)//TODO make better
+                    FaceDir(m_path[0]);
+
+                if (m_transitionSteps.Count > 0)
                 {
-                    m_animationSteps.RemoveAt(0);
+                    AnimationManager.SetupAnimator(m_playerController.m_animator, m_transitionSteps[0]);
+                    m_transitionSteps.RemoveAt(0);
+                }
+
+                if (m_path.Count == 0)//End of move
+                {
+                    m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
+                    m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
+                    InitActions();
                 }
             }
         }
@@ -248,10 +252,9 @@ public class PlayerActions : MonoBehaviour
             path.Add(currentNode);
             currentNode = currentNode.m_BFSPreviousNode;
         }
-        path.Reverse();//Path is back to front when created
+
         return path;
     }
-
     private void FaceDir(NavNode pathNode)
     {
         Vector3 velocityVector = pathNode.m_nodeTop - transform.position;
@@ -260,48 +263,25 @@ public class PlayerActions : MonoBehaviour
         transform.LookAt(transform.position + dir);
     }
 
-    private void PlayNextAnimation()
+    private bool MoveTo(NavNode pathNode)
     {
-        if (m_animationSteps.Count > 0)
+        Vector3 targetPos = m_path[0].m_nodeTop;
+        Vector3 velocityVector = targetPos - transform.position;
+        velocityVector.y = 0;
+        float translateDis = velocityVector.magnitude;
+
+        velocityVector = velocityVector.normalized * Time.deltaTime * m_playerController.m_moveSpeed;
+
+        if (velocityVector.magnitude > translateDis)//Arrived at node
         {
-            switch (m_animationSteps[0])
-            {
-                case AnimationManager.ANIMATION_STEP.IDLE:
-                    m_currentAnimation = "Idle";
-                    break;
-                case AnimationManager.ANIMATION_STEP.RUN:
-                    m_currentAnimation = "Run";
-                    break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_UP_IDLE:
-                    m_currentAnimation = "ClimbUpIdle";
-                    break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_UP_RUN:
-                    m_currentAnimation = "ClimbUpRun";
-                    break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_IDLE:
-                    m_currentAnimation = "ClimbDownIdle";
-                    break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_RUN:
-                    m_currentAnimation = "ClimbDownRun";
-                    break;
-                case AnimationManager.ANIMATION_STEP.WALL_HIDE:
-                    m_currentAnimation = "WallHide";
-                    break;
-                case AnimationManager.ANIMATION_STEP.PERFORM_INTERACTION:
-                    break;
-                default:
-                    break;
-            }
-            m_playerController.m_animator.SetBool(m_currentAnimation, true);
-
-            m_playNextAnimation = false;
+            transform.position = targetPos;
+            m_playerController.m_currentNavNode = m_path[0];
+            return true;
         }
-        
-    }
-
-    public void AnimationFinished()
-    {
-        m_playerController.m_animator.SetBool(m_currentAnimation, false);
-        m_playNextAnimation = true;
+        else
+        {
+            transform.position += velocityVector;
+        }
+        return false;
     }
 }
