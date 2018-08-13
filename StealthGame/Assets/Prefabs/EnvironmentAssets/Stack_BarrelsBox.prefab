@@ -20,12 +20,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4780467491945350}
   - component: {fileID: 65772202128408782}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stack_BarrelsBox
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1085118293334374
 GameObject:
@@ -37,12 +37,12 @@ GameObject:
   - component: {fileID: 4508691770562018}
   - component: {fileID: 33571515382314110}
   - component: {fileID: 23351813678339632}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Oil_Barrel (1)
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1144307020592792
 GameObject:
@@ -54,12 +54,12 @@ GameObject:
   - component: {fileID: 4580138202361956}
   - component: {fileID: 33116657704123348}
   - component: {fileID: 23327489665780780}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Oil_Barrel (2)
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1180388993680654
 GameObject:
@@ -71,12 +71,12 @@ GameObject:
   - component: {fileID: 4523732169708106}
   - component: {fileID: 33137713846459466}
   - component: {fileID: 23510358012869266}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_big
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1466258410666342
 GameObject:
@@ -88,29 +88,12 @@ GameObject:
   - component: {fileID: 4615406734943584}
   - component: {fileID: 33286879031108920}
   - component: {fileID: 23601412959442682}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Oil_Barrel
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1533069828599132
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4697093426275530}
-  - component: {fileID: 33478784733081190}
-  - component: {fileID: 23027711356225126}
-  m_Layer: 0
-  m_Name: Flashlight
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1585324987136176
 GameObject:
@@ -122,12 +105,12 @@ GameObject:
   - component: {fileID: 4022026669369226}
   - component: {fileID: 33257525886301048}
   - component: {fileID: 23317022911008696}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_big (1)
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1758110857422966
 GameObject:
@@ -139,12 +122,12 @@ GameObject:
   - component: {fileID: 4779621945752278}
   - component: {fileID: 33551269741090398}
   - component: {fileID: 23087453119122484}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Oil_Barrel (3)
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4022026669369226
 Transform:
@@ -157,7 +140,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 175.539, z: 179.99998}
 --- !u!4 &4508691770562018
 Transform:
@@ -170,7 +153,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -54.177002, z: 0}
 --- !u!4 &4523732169708106
 Transform:
@@ -183,7 +166,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -4.4610004, z: 0}
 --- !u!4 &4580138202361956
 Transform:
@@ -196,7 +179,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -113.99799, y: 246.94601, z: 89.746994}
 --- !u!4 &4615406734943584
 Transform:
@@ -209,21 +192,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -167.149, z: 0}
---- !u!4 &4697093426275530
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1533069828599132}
-  m_LocalRotation: {x: -0.30182192, y: 0.30182305, z: -0.6394543, w: 0.6394565}
-  m_LocalPosition: {x: -0.75, y: 0.9971, z: 0.504}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 50.535004, z: -90.00001}
 --- !u!4 &4779621945752278
 Transform:
   m_ObjectHideFlags: 1
@@ -235,7 +205,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4780467491945350}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 98.896, z: 0}
 --- !u!4 &4780467491945350
 Transform:
@@ -247,7 +217,6 @@ Transform:
   m_LocalPosition: {x: 3, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4697093426275530}
   - {fileID: 4523732169708106}
   - {fileID: 4022026669369226}
   - {fileID: 4508691770562018}
@@ -257,40 +226,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!23 &23027711356225126
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1533069828599132}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 2100000, guid: d2e566807bb69b34faa7509f8d5a5ac7, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!23 &23087453119122484
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -523,13 +458,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1466258410666342}
   m_Mesh: {fileID: 4300000, guid: 518586fc05bed50419ef81f7d8f398fe, type: 3}
---- !u!33 &33478784733081190
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1533069828599132}
-  m_Mesh: {fileID: 4300000, guid: 6922736a346abb34497a73fed8b1d279, type: 3}
 --- !u!33 &33551269741090398
 MeshFilter:
   m_ObjectHideFlags: 1
