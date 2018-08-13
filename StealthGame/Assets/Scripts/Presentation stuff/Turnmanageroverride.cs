@@ -22,11 +22,25 @@ public class Turnmanageroverride : MonoBehaviour
         {
             m_turnManager.enabled = false;
             m_playerController.GetComponent<Animator>().SetTrigger("Punch");
-
+        
             m_playerController.AgentTurnEnd();
             m_playerController.m_currentActionPoints = 0;
 
             m_enemyController.GetComponent<Animator>().SetTrigger("Death");
+
+            Invoke("TimeSlow", 0.0f);
         }
 	}
+
+    private void TimeSlow()
+    {
+        Time.timeScale = 0.4f;
+        Invoke("TimeSpeed", 0.3f);
+
+    }
+    private void TimeSpeed()
+    {
+            Time.timeScale = 1.0f;
+    }
+
 }
