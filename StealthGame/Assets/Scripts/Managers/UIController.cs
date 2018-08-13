@@ -80,6 +80,11 @@ public class UIController : MonoBehaviour {
             m_turnManager.SwapAgents(index);
     }
 
+    public void TurnEnd()
+    {
+        m_turnManager.EndTeamTurn();
+    }
+
     public void TurnStart(TurnManager.TEAM team)
     {
         if(team == TurnManager.TEAM.PLAYER)

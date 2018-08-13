@@ -7,7 +7,7 @@ public class Turnmanageroverride : MonoBehaviour
     TurnManager m_turnManager = null;
 
     public PlayerController m_playerController = null;
-    public NPC m_enemyController = null;
+    public Agent m_enemyController = null;
 
     // Use this for initialization
     void Start ()
@@ -22,6 +22,10 @@ public class Turnmanageroverride : MonoBehaviour
         {
             m_turnManager.enabled = false;
             m_playerController.GetComponent<Animator>().SetTrigger("Punch");
+
+            m_playerController.AgentTurnEnd();
+            m_playerController.m_currentActionPoints = 0;
+
             m_enemyController.GetComponent<Animator>().SetTrigger("Death");
         }
 	}
