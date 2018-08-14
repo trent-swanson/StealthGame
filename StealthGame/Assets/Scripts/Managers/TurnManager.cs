@@ -54,6 +54,8 @@ public class TurnManager : MonoBehaviour {
             m_UIController.InitUIPortraits(m_turnTeam);
         }
 
+        m_UIController.TurnStart(m_currentTeam);
+
         foreach (Agent agent in m_turnTeam)
         {
             agent.AgentTurnInit();
@@ -92,7 +94,8 @@ public class TurnManager : MonoBehaviour {
 
             m_turnTeam[0].AgentSelected();
 
-            m_UIController.InitUIPortraits(m_turnTeam);
+            if(m_currentTeam == TEAM.PLAYER)
+                m_UIController.InitUIPortraits(m_turnTeam);
         }
     }
 
