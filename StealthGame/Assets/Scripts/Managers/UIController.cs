@@ -100,6 +100,11 @@ public class UIController : MonoBehaviour {
         }
     }
 
+    public void TurnEnd()
+    {
+        m_turnManager.EndTeamTurn();
+    }
+
     public IEnumerator FadeTurnStart(float time, Image imageToFade)
     {
         yield return new WaitForSeconds(time);

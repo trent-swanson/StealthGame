@@ -152,15 +152,17 @@ public class PlayerActions : MonoBehaviour
             m_animationSteps.Clear();
             m_animationSteps = AnimationManager.GetAnimationSteps(m_path);
 
+            transform.position = m_path[0].m_nodeTop;
+
+            if (m_path.Count >=2)
+                FaceDir(m_path[1]);
             m_initActionState = false;
         }
 
         if(m_playNextAnimation)//End of animation
         {
             m_playerController.m_currentNavNode = m_path[0];
-            transform.position = m_path[0].m_nodeTop;
             m_path.RemoveAt(0);
-
             if (m_path.Count == 0)//End of move
             {
                 m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
@@ -169,7 +171,8 @@ public class PlayerActions : MonoBehaviour
             }
             else
             {
-                FaceDir(m_path[0]);
+                if(m_path.Count >= 2)
+                    FaceDir(m_path[1]);
                 PlayNextAnimation();
 
                 if (m_animationSteps.Count>0)
@@ -269,6 +272,9 @@ public class PlayerActions : MonoBehaviour
                 case AnimationManager.ANIMATION_STEP.IDLE:
                     m_currentAnimation = "Idle";
                     break;
+                case AnimationManager.ANIMATION_STEP.STEP:
+                    m_currentAnimation = "Step";
+                    break;
                 case AnimationManager.ANIMATION_STEP.RUN:
                     m_currentAnimation = "Run";
                     break;
@@ -284,10 +290,10 @@ public class PlayerActions : MonoBehaviour
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_RUN:
                     m_currentAnimation = "ClimbDownRun";
                     break;
-                case AnimationManager.ANIMATION_STEP.WALL_HIDE:
+                case AnimationManager.ANIMATION_STEP.WALL_HIDE_LEFT:
                     m_currentAnimation = "WallHide";
                     break;
-                case AnimationManager.ANIMATION_STEP.PERFORM_INTERACTION:
+                case AnimationManager.ANIMATION_STEP.INTERACTION:
                     break;
                 default:
                     break;

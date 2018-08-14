@@ -82,6 +82,21 @@ public class TurnManager : MonoBehaviour {
             InitTeamTurnMove();
     }
 
+    //end of team turn
+    public void EndTeamTurn()
+    {
+        foreach (Agent agent in m_turnTeam)
+        {
+            PlayerController playerController = agent.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.m_currentActionPoints = 0;
+                playerController.AgentTurnEnd();
+            }
+        }
+        InitTeamTurnMove();
+    }
+
     public void SwapAgents(int agentIndex)
     {
         if (agentIndex < m_turnTeam.Count)
