@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    public enum ANIMATION_STEP {IDLE, RUN, CLIMB_UP_IDLE, CLIMB_UP_RUN, CLIMB_DOWN_IDLE, CLIMB_DOWN_RUN, WALL_HIDE, PERFORM_INTERACTION }//Animation states
+    public enum ANIMATION_STEP {IDLE, STEP, RUN, CLIMB_UP_IDLE, CLIMB_UP_RUN, CLIMB_DOWN_IDLE, CLIMB_DOWN_RUN, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION }//Animation states
 
-    public static List<ANIMATION_STEP> GetAnimationSteps(List<NavNode> pathNodes, Interactable interactable= null)
+    public static List<ANIMATION_STEP> GetAnimationSteps(List<NavNode> pathNodes, Interactable interactable = null)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
@@ -15,6 +15,16 @@ public class AnimationManager : MonoBehaviour
 
         if (pathCount < 2)
             return transitionSteps;
+
+        if (pathCount == 2)
+        {
+            ANIMATION_STEP step = GetActionSteps(pathNodes[0], pathNodes[1]);
+            if(step == ANIMATION_STEP.RUN)
+                transitionSteps.Add(ANIMATION_STEP.STEP);//On a single step on same level want to "walk"
+            else
+                transitionSteps.Add(step);
+            return transitionSteps;
+        }
 
         for (int i = 0; i < pathCount - 2; i++)
         {
@@ -26,14 +36,14 @@ public class AnimationManager : MonoBehaviour
             if(interactable.m_requiresIdle)
             {
                 transitionSteps.Add(ANIMATION_STEP.IDLE);
-                transitionSteps.Add(ANIMATION_STEP.PERFORM_INTERACTION);
+                transitionSteps.Add(ANIMATION_STEP.INTERACTION);
             }
             else
             {
                 if(interactable.m_interactableType == Interactable.INTERACTABLE_TYPE.WALL_HIDE)
-                    transitionSteps.Add(ANIMATION_STEP.WALL_HIDE);
+                    transitionSteps.Add(ANIMATION_STEP.WALL_HIDE_RIGHT);
                 else
-                    transitionSteps.Add(ANIMATION_STEP.PERFORM_INTERACTION);
+                    transitionSteps.Add(ANIMATION_STEP.INTERACTION);
             }
         }
         else //Always default to idle
