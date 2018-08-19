@@ -71,7 +71,6 @@ public class PlayerController : Agent {
 
     public void EndAnimationState()
     {
-        Debug.Log("End anim");
         m_playerActions.AnimationFinished();
     }
 }
