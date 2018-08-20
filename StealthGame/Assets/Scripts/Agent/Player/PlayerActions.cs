@@ -96,7 +96,8 @@ public class PlayerActions : MonoBehaviour
         NavNode newSelectedNavNode = GetMouseNode();
         if (newSelectedNavNode != null)
         {
-            if(m_selectableNodes.Contains(newSelectedNavNode) && newSelectedNavNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            newSelectedNavNode.UpdateWallIndicators();
+            if (m_selectableNodes.Contains(newSelectedNavNode) && newSelectedNavNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
             {
                 if(newSelectedNavNode != m_currentSelectedNode)
                 {
@@ -278,16 +279,16 @@ public class PlayerActions : MonoBehaviour
                     m_currentAnimation = "Run";
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_IDLE:
-                    m_currentAnimation = "ClimbUpIdle";
+                    m_currentAnimation = "JumpToIdle";
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_RUN:
-                    m_currentAnimation = "ClimbUpRun";
+                    m_currentAnimation = "JumpToRun";
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_IDLE:
-                    m_currentAnimation = "ClimbDownIdle";
+                    m_currentAnimation = "DropToIdle";
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_RUN:
-                    m_currentAnimation = "ClimbDownRun";
+                    m_currentAnimation = "DropToRun";
                     break;
                 case AnimationManager.ANIMATION_STEP.WALL_HIDE_LEFT:
                     m_currentAnimation = "WallHide";
@@ -307,7 +308,6 @@ public class PlayerActions : MonoBehaviour
     public void AnimationFinished()
     {
         m_playerController.m_animator.SetBool(m_currentAnimation, false);
-        Debug.Log(m_playerController.m_animator.GetBool("Run"));
         m_playNextAnimation = true;
     }
 }

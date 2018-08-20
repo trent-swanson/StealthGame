@@ -64,7 +64,9 @@ public class AnimationManager : MonoBehaviour
         int nodeHeightDiff = nextNode.m_gridPos.y - currentNode.m_gridPos.y;
 
         if (nodeHeightDiff == 0) //Stright path just run
+        {
             return ANIMATION_STEP.RUN;
+        }
         else if (nodeHeightDiff > 0)//positive height diff, running up
         {
             if(futureNode==null)
@@ -72,7 +74,7 @@ public class AnimationManager : MonoBehaviour
             else
             {
                 int futureNodeHeightDiff = futureNode.m_gridPos.y - nextNode.m_gridPos.y;
-                if (nodeHeightDiff == 0) //Stright path just run
+                if (futureNodeHeightDiff == 0) //Stright path just run
                     return ANIMATION_STEP.CLIMB_UP_RUN;
                 else //All other case momentum is lost so return to idle? TODO FIND OUT
                     return ANIMATION_STEP.CLIMB_UP_IDLE;
@@ -85,7 +87,7 @@ public class AnimationManager : MonoBehaviour
             else
             {
                 int futureNodeHeightDiff = futureNode.m_gridPos.y - nextNode.m_gridPos.y;
-                if (nodeHeightDiff == 0) //Stright path just run
+                if (futureNodeHeightDiff == 0) //Stright path just run
                     return ANIMATION_STEP.CLIMB_DOWN_RUN;
                 else //All other case momentum is lost so return to idle? TODO FIND OUT
                     return ANIMATION_STEP.CLIMB_DOWN_IDLE;
