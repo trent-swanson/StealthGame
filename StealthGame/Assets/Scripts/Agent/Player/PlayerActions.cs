@@ -154,15 +154,15 @@ public class PlayerActions : MonoBehaviour
 
             transform.position = m_path[0].m_nodeTop;
 
-            if (m_path.Count >=2)
-                FaceDir(m_path[1]);
             m_initActionState = false;
         }
 
         if(m_playNextAnimation)//End of animation
         {
             m_playerController.m_currentNavNode = m_path[0];
+            //transform.position = m_path[0].m_nodeTop;
             m_path.RemoveAt(0);
+
             if (m_path.Count == 0)//End of move
             {
                 m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
@@ -171,8 +171,7 @@ public class PlayerActions : MonoBehaviour
             }
             else
             {
-                if(m_path.Count >= 2)
-                    FaceDir(m_path[1]);
+                FaceDir(m_path[0]);
                 PlayNextAnimation();
 
                 if (m_animationSteps.Count>0)
@@ -308,6 +307,7 @@ public class PlayerActions : MonoBehaviour
     public void AnimationFinished()
     {
         m_playerController.m_animator.SetBool(m_currentAnimation, false);
+        Debug.Log(m_playerController.m_animator.GetBool("Run"));
         m_playNextAnimation = true;
     }
 }

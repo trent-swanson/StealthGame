@@ -63,8 +63,6 @@ public class AnimationManager : MonoBehaviour
     {
         int nodeHeightDiff = nextNode.m_gridPos.y - currentNode.m_gridPos.y;
 
-        Debug.Log(nodeHeightDiff);
-
         if (nodeHeightDiff == 0) //Stright path just run
             return ANIMATION_STEP.RUN;
         else if (nodeHeightDiff > 0)//positive height diff, running up
