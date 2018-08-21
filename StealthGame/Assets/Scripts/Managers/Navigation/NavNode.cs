@@ -18,6 +18,7 @@ public class NavNode : MonoBehaviour
     {
         public SpriteRenderer m_wallHideSprite;
         public NODE_TYPE m_wallHideType;
+        public bool m_selected;
     }
 
     [SerializeField]
@@ -91,21 +92,14 @@ public class NavNode : MonoBehaviour
                 m_selectedUI.SetActive(false);
                 m_spriteRenderer.sprite = m_defaultSprite;
 
-                for (int i = 0; i < 4; i++)//Remove wall hide icons
-                {
-                    m_wallHideIndicators[i].m_wallHideSprite.enabled = false;
-                }
+                ToggleWallHideIndicators(false);
 
                 break;
             case NODE_STATE.SELECTED:
                 m_selectedUI.SetActive(true);
                 m_spriteRenderer.sprite = m_selectedSprite;
 
-                for (int i = 0; i < 4; i++) //Add wall hide icons
-                {
-                    if (m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
-                        m_wallHideIndicators[i].m_wallHideSprite.enabled = true;
-                }
+                ToggleWallHideIndicators(true);
 
                 break;
             case NODE_STATE.UNSELECTED:
@@ -150,12 +144,18 @@ public class NavNode : MonoBehaviour
                 if(relativeMousePos.z > m_wallHideSelectionDeadZone)//North Indicator
                 {
                     if (m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                    {
                         m_wallHideIndicators[0].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[0].m_selected = true;
+                    }
                 }
                 else if(relativeMousePos.z < -m_wallHideSelectionDeadZone) //South indicator
                 {
                     if (m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                    {
                         m_wallHideIndicators[1].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[1].m_selected = true;
+                    }
                 }
             }
             else
@@ -163,14 +163,45 @@ public class NavNode : MonoBehaviour
                 if (relativeMousePos.x > m_wallHideSelectionDeadZone)//East Indicator
                 {
                     if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                    {
                         m_wallHideIndicators[2].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[2].m_selected = true;
+                    }
                 }
                 else if (relativeMousePos.x < -m_wallHideSelectionDeadZone) //West indicator
                 {
                     if (m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                    {
                         m_wallHideIndicators[3].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[3].m_selected = true;
+                    }
                 }
             }
         }
+    }
+
+    public void ToggleWallHideIndicators(bool toggleVal)
+    {
+        for (int i = 0; i < 4; i++) //Add wall hide icons
+        {
+            m_wallHideIndicators[i].m_selected = false;
+
+            if (m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                m_wallHideIndicators[i].m_wallHideSprite.enabled = toggleVal;
+            else
+                m_wallHideIndicators[i].m_wallHideSprite.enabled = false;
+        }
+    }
+
+    public Vector3 GetWallHideDir()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if(m_wallHideIndicators[i].m_selected == true)
+            {
+                return m_wallHideIndicators[i].m_wallHideSprite.transform.localPosition;
+            }
+        }
+        return new Vector3(0, 0, 0);
     }
 }

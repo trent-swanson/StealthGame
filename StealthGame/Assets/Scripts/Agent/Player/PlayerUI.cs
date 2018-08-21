@@ -96,7 +96,7 @@ public class PlayerUI : MonoBehaviour
         else if (state == MESH_STATE.REMOVE_NAVMESH) //remove all visualisation
         {
             SetNodeStates(selectableNodes, NavNode.NODE_STATE.UNSELECTED);
-
+            currentSelectedNode.ToggleWallHideIndicators(false);
             ClearPathRender();
         }
     }
