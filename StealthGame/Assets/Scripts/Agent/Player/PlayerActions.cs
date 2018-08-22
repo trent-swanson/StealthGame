@@ -179,7 +179,6 @@ public class PlayerActions : MonoBehaviour
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
             m_playerController.m_currentNavNode = m_path[m_path.Count -1];
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED; //Update new selected ndoe
-            m_playerController.m_currentActionPoints = m_playerController.m_currentNavNode.m_BFSDistance;//Set action points to node value
             m_initActionState = false;
         }
 
@@ -190,6 +189,7 @@ public class PlayerActions : MonoBehaviour
             if (m_animationSteps.Count == 0)//End of move
             {
                 InitActions();
+                m_playerController.m_currentActionPoints = m_playerController.m_currentNavNode.m_BFSDistance;//Set action points to node value
             }
         }
     }
@@ -275,6 +275,7 @@ public class PlayerActions : MonoBehaviour
                     m_currentAnimation = "Idle";
                     break;
                 case Interaction.ANIMATION_STEP.STEP:
+                    Debug.Log("step animation" + transform.rotation.eulerAngles);
                     m_currentAnimation = "Step";
                     break;
                 case Interaction.ANIMATION_STEP.RUN:
@@ -300,9 +301,11 @@ public class PlayerActions : MonoBehaviour
                     break;
                 case Interaction.ANIMATION_STEP.TURN_RIGHT:
                     m_currentAnimation = "TurnRight";
+                    StartCoroutine(m_playerController.Rotate(Agent.ROTATION_DIR.RIGHT));
                     break;
                 case Interaction.ANIMATION_STEP.TURN_LEFT:
                     m_currentAnimation = "TurnLeft";
+                    StartCoroutine(m_playerController.Rotate(Agent.ROTATION_DIR.LEFT));
                     break;
                 case Interaction.ANIMATION_STEP.INTERACTION:
                     m_currentAnimation = "Interact";
@@ -311,7 +314,6 @@ public class PlayerActions : MonoBehaviour
                     break;
             }
             m_playerController.m_animator.SetBool(m_currentAnimation, true);
-
             m_playNextAnimation = false;
         }
     }

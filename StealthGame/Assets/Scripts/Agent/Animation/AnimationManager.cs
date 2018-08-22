@@ -9,6 +9,7 @@ public class Interaction : MonoBehaviour
 
     public enum FACING_DIR {NORTH, EAST, SOUTH, WEST }
 
+
     public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, PlayerActions.INTERACTION_TYPE interactionType = PlayerActions.INTERACTION_TYPE.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
@@ -113,9 +114,7 @@ public class Interaction : MonoBehaviour
         if (currentDir != nextDir)
         {
             int dirAmount = (int)currentDir - (int)nextDir;
-            Debug.Log("current:" + currentDir + "next:" + nextDir);
 
-            Debug.Log(dirAmount);
             switch (dirAmount)
             {
                 case 1:
