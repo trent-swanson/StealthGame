@@ -39,10 +39,7 @@ public class Interaction : MonoBehaviour
 
         GetActionSteps(ref playerFacing, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
 
-        if (interactionType != PlayerActions.INTERACTION_TYPE.NONE)//End of path is an interactable
-        {
-            GetInteraction(transitionSteps, interactionType);
-        }
+        GetInteraction(transitionSteps, interactionType);
 
         return transitionSteps;
     }
@@ -138,6 +135,7 @@ public class Interaction : MonoBehaviour
 
     private static FACING_DIR GetFacingDir(Vector3 dir)
     {
+        dir.y = 0; //Dont need to use y 
         float angle = Vector3.SignedAngle(dir.normalized, new Vector3(0, 0, 1), Vector3.up);
 
         if (angle < 10.0f && angle > -10.0f) //allows for minor inaccuracies
