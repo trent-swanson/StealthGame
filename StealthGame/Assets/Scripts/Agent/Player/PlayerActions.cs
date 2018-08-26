@@ -14,10 +14,13 @@ public class PlayerActions : MonoBehaviour
     [SerializeField]
     private List<NavNode> m_path = new List<NavNode>();
 
-    private List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
+    private List<Interaction.ANIMATION_STEP> m_animationSteps = new List<Interaction.ANIMATION_STEP>();
 
     public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
     public ACTION_STATE m_currentActionState = ACTION_STATE.ACTION_START;
+
+    public enum INTERACTION_TYPE {NONE, WALL_HIDE, USE_OBJECT, ATTACK};
+    public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
 
     private bool m_initActionState = true;
 
@@ -96,7 +99,8 @@ public class PlayerActions : MonoBehaviour
         NavNode newSelectedNavNode = GetMouseNode();
         if (newSelectedNavNode != null)
         {
-            if(m_selectableNodes.Contains(newSelectedNavNode) && newSelectedNavNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            newSelectedNavNode.UpdateWallIndicators();
+            if (m_selectableNodes.Contains(newSelectedNavNode) && newSelectedNavNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
             {
                 if(newSelectedNavNode != m_currentSelectedNode)
                 {
@@ -145,39 +149,47 @@ public class PlayerActions : MonoBehaviour
     {
         if (m_initActionState)
         {
-            m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes);
             m_path = GetPath(m_currentSelectedNode);
-            m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
+            transform.position = m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
+            //Get animation steps
             m_animationSteps.Clear();
-            m_animationSteps = AnimationManager.GetAnimationSteps(m_path);
 
-            transform.position = m_path[0].m_nodeTop;
+            if (m_interaction == INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall
+                m_animationSteps.Add(Interaction.ANIMATION_STEP.IDLE);
 
+            //Getting wall hide detection
+            Vector3 wallHideDir = m_currentSelectedNode.GetWallHideDir();
+
+            if (wallHideDir != new Vector3(0,0,0))
+            {
+                m_interaction = INTERACTION_TYPE.WALL_HIDE;
+                m_animationSteps.AddRange(Interaction.GetAnimationSteps(this.m_playerController, m_path, m_interaction));
+            }
+            else
+            {
+                if (m_interaction == INTERACTION_TYPE.WALL_HIDE)//Reset interactoin type
+                    m_interaction = INTERACTION_TYPE.NONE;
+
+                m_animationSteps.AddRange(Interaction.GetAnimationSteps(this.m_playerController, m_path));
+            }
+
+            m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes, m_currentSelectedNode);//Remove UI
+
+            m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
+            m_playerController.m_currentNavNode = m_path[m_path.Count -1];
+            m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED; //Update new selected ndoe
             m_initActionState = false;
         }
 
         if(m_playNextAnimation)//End of animation
         {
-            m_playerController.m_currentNavNode = m_path[0];
-            //transform.position = m_path[0].m_nodeTop;
-            m_path.RemoveAt(0);
-
-            if (m_path.Count == 0)//End of move
+            PlayNextAnimation();
+            m_animationSteps.RemoveAt(0);
+            if (m_animationSteps.Count == 0)//End of move
             {
-                m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
-                m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
                 InitActions();
-            }
-            else
-            {
-                FaceDir(m_path[0]);
-                PlayNextAnimation();
-
-                if (m_animationSteps.Count>0)
-                {
-                    m_animationSteps.RemoveAt(0);
-                }
+                m_playerController.m_currentActionPoints = m_playerController.m_currentNavNode.m_BFSDistance;//Set action points to node value
             }
         }
     }
@@ -226,7 +238,6 @@ public class PlayerActions : MonoBehaviour
             {
                 if (!m_selectableNodes.Contains(nextBFSNode) && !BFSQueue.Contains(nextBFSNode) && nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) //TODO do we want to move through players, if not add nextBFSNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED
                 {
-                    // int distance = currentBFSNode.m_BFSDistance - 1 - (Mathf.Abs(nextBFSNode.m_gridPos.y - currentBFSNode.m_gridPos.y));
                     int distance = currentBFSNode.m_BFSDistance - 1;
 
                     nextBFSNode.m_BFSDistance = distance;
@@ -254,60 +265,62 @@ public class PlayerActions : MonoBehaviour
         return path;
     }
 
-    private void FaceDir(NavNode pathNode)
-    {
-        Vector3 velocityVector = pathNode.m_nodeTop - transform.position;
-        Vector3 dir = velocityVector.normalized;
-        dir.y = 0;
-        transform.LookAt(transform.position + dir);
-    }
-
     private void PlayNextAnimation()
     {
         if (m_animationSteps.Count > 0)
         {
             switch (m_animationSteps[0])
             {
-                case AnimationManager.ANIMATION_STEP.IDLE:
+                case Interaction.ANIMATION_STEP.IDLE:
                     m_currentAnimation = "Idle";
                     break;
-                case AnimationManager.ANIMATION_STEP.STEP:
+                case Interaction.ANIMATION_STEP.STEP:
+                    Debug.Log("step animation" + transform.rotation.eulerAngles);
                     m_currentAnimation = "Step";
                     break;
-                case AnimationManager.ANIMATION_STEP.RUN:
+                case Interaction.ANIMATION_STEP.RUN:
                     m_currentAnimation = "Run";
                     break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_UP_IDLE:
-                    m_currentAnimation = "ClimbUpIdle";
+                case Interaction.ANIMATION_STEP.CLIMB_UP_IDLE:
+                    m_currentAnimation = "JumpToIdle";
                     break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_UP_RUN:
-                    m_currentAnimation = "ClimbUpRun";
+                case Interaction.ANIMATION_STEP.CLIMB_UP_RUN:
+                    m_currentAnimation = "JumpToRun";
                     break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_IDLE:
-                    m_currentAnimation = "ClimbDownIdle";
+                case Interaction.ANIMATION_STEP.CLIMB_DOWN_IDLE:
+                    m_currentAnimation = "DropToIdle";
                     break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_RUN:
-                    m_currentAnimation = "ClimbDownRun";
+                case Interaction.ANIMATION_STEP.CLIMB_DOWN_RUN:
+                    m_currentAnimation = "DropToRun";
                     break;
-                case AnimationManager.ANIMATION_STEP.WALL_HIDE_LEFT:
-                    m_currentAnimation = "WallHide";
+                case Interaction.ANIMATION_STEP.WALL_HIDE_RIGHT:
+                    m_currentAnimation = "WallRight";
                     break;
-                case AnimationManager.ANIMATION_STEP.INTERACTION:
+                case Interaction.ANIMATION_STEP.WALL_HIDE_LEFT:
+                    m_currentAnimation = "WallLeft";
+                    break;
+                case Interaction.ANIMATION_STEP.TURN_RIGHT:
+                    m_currentAnimation = "TurnRight";
+                    StartCoroutine(m_playerController.Rotate(Agent.ROTATION_DIR.RIGHT));
+                    break;
+                case Interaction.ANIMATION_STEP.TURN_LEFT:
+                    m_currentAnimation = "TurnLeft";
+                    StartCoroutine(m_playerController.Rotate(Agent.ROTATION_DIR.LEFT));
+                    break;
+                case Interaction.ANIMATION_STEP.INTERACTION:
+                    m_currentAnimation = "Interact";
                     break;
                 default:
                     break;
             }
             m_playerController.m_animator.SetBool(m_currentAnimation, true);
-
             m_playNextAnimation = false;
         }
-        
     }
 
     public void AnimationFinished()
     {
         m_playerController.m_animator.SetBool(m_currentAnimation, false);
-        Debug.Log(m_playerController.m_animator.GetBool("Run"));
         m_playNextAnimation = true;
     }
 }

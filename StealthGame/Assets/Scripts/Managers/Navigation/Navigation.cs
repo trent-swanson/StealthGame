@@ -12,15 +12,15 @@ public class Navigation : MonoBehaviour
 
     //Node type determination
     public static float m_lowObstacleHeight = 1.0f;
-    public static float m_obstacleDetection = 1.0f;
+    public float m_obstacleDetection = 1.0f;
 
     private int m_navNodeLayer = 0;
 
     //Caching of offsets for efficeincy
-    private static Vector3 m_forwardOffset;
-    private static Vector3 m_backwardOffset;
-    private static Vector3 m_rightOffset;
-    private static Vector3 m_leftOffset;
+    public static Vector3 m_forwardOffset;
+    public static Vector3 m_backwardOffset;
+    public static Vector3 m_rightOffset;
+    public static Vector3 m_leftOffset;
 
     //Storage of grid extents
     private int m_maxX = 0;
@@ -92,6 +92,20 @@ public class Navigation : MonoBehaviour
                 {
                     BuildNodeBranches(m_navGrid[i, j, k]);
                     SetupNodeType(m_navGrid[i, j, k]);
+                }
+            }
+        }
+
+        //Setup Node wall hides TODO if dynamic enviroments move this into node on Node update
+        for (int i = 0; i < m_navGridWidth; i++)
+        {
+            for (int j = 0; j < m_navGridHeight; j++)
+            {
+                for (int k = 0; k < m_navGridDepth; k++)
+                {
+                    NavNode navNode = m_navGrid[i, j, k];
+                    if(navNode!=null)
+                        m_navGrid[i, j, k].SetupWallHideIndicators(this);
                 }
             }
         }
@@ -230,7 +244,7 @@ public class Navigation : MonoBehaviour
         if (currentNode!=null)
         {
             RaycastHit hit;
-            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer))
+            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer + LayerManager.m_navNodeLayer))
             {
                 float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
                 if (coliderHeight < m_lowObstacleHeight)
@@ -325,5 +339,25 @@ public class Navigation : MonoBehaviour
         }
         path.Add(currentNode);
         return path;
+    }
+
+    public NavNode.NODE_TYPE GetAdjacentNodeType(Vector3Int gridPos, Vector3Int gridOffset)
+    {
+        //Ensure offset is within range
+        if(gridPos.x + gridOffset.x < 0 || gridPos.x + gridOffset.x > m_navGridWidth -1 || gridPos.y + gridOffset.y < 0 || gridPos.y + gridOffset.y > m_navGridHeight - 1 || gridPos.z + gridOffset.z < 0 || gridPos.z + gridOffset.z > m_navGridDepth - 1)
+            return NavNode.NODE_TYPE.NONE;
+
+        NavNode navNode = m_navGrid[gridPos.x + gridOffset.x, gridPos.y + gridOffset.y, gridPos.z + gridOffset.z]; //Get normal offest
+        if(navNode != null)
+            return navNode.m_nodeType;
+        else
+        {
+            if (gridPos.y + gridOffset.y + 1 > m_navGridHeight - 1)//Check for step up
+                return NavNode.NODE_TYPE.NONE;
+            navNode = m_navGrid[gridPos.x + gridOffset.x, gridPos.y + gridOffset.y + 1, gridPos.z + gridOffset.z];//Get normal offset up one
+            if (navNode != null)
+                return NavNode.NODE_TYPE.LOW_OBSTACLE;
+        }
+        return NavNode.NODE_TYPE.NONE;
     }
 }

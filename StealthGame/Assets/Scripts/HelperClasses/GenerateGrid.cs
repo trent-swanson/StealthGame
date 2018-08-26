@@ -17,26 +17,26 @@ public class GenerateGrid : MonoBehaviour {
 
     [ContextMenu("GenerateGrid")]
 
-    void Awake() {
-        GameManager.gridSize = gridSize;
-        GameManager.tiles = new GameObject[(int)gridSize.x * (int)gridSize.y];
-        GameManager.grid = new GameObject[(int)gridSize.x, (int)gridSize.y];
-        Transform grid = transform.Find(holderName);
-        for (int i = 0; i < grid.childCount; i++) {
-            GameManager.tiles[i] = grid.GetChild(i).gameObject;
-        }
-        GetGrid();
-    }
+  //  void Awake() {
+  //      GameManager.gridSize = gridSize;
+  //      GameManager.tiles = new GameObject[(int)gridSize.x * (int)gridSize.y];
+  //      GameManager.grid = new GameObject[(int)gridSize.x, (int)gridSize.y];
+  //      Transform grid = transform.Find(holderName);
+  //      for (int i = 0; i < grid.childCount; i++) {
+  //          GameManager.tiles[i] = grid.GetChild(i).gameObject;
+  //      }
+  //      GetGrid();
+  //  }
 
-    void GetGrid() {
-        int i = 0;
-        for (int x = 0; x < gridSize.x; x++) {
-			for (int y = 0; y < gridSize.y; y++) {
-				GameManager.grid[x,y] = GameManager.tiles[i];
-                i++;
-			}
-		}
-    }
+  //  void GetGrid() {
+  //      int i = 0;
+  //      for (int x = 0; x < gridSize.x; x++) {
+		//	for (int y = 0; y < gridSize.y; y++) {
+		//		GameManager.grid[x,y] = GameManager.tiles[i];
+  //              i++;
+		//	}
+		//}
+  //  }
 
     public void Generate() {
         //Destroy grid if already exists
