@@ -5,13 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class KylesEndScene : MonoBehaviour {
 
+    public GameObject steamGauge;
+
     [Header("Triggers")]
     public GameObject entrance;
     public GameObject exit;
     public GameObject safe;
     [HideInInspector]
     public bool safeLooted = false;
-
     public bool triggerEntered = false;
 
     private List<GameObject> players = new List<GameObject>();
@@ -22,12 +23,13 @@ public class KylesEndScene : MonoBehaviour {
         {
             players.Add(player);
         }
-        Debug.Log("There are " + players.Count + " players.");
     }
 	
 	// Update is called once per frame
 	void Update () {
+
         CheckForGameEnd();
+
 	}
 
     void CheckForGameEnd()
@@ -41,6 +43,7 @@ public class KylesEndScene : MonoBehaviour {
                 RestartLevel();
             }
             triggerEntered = false;
+            SteamChange();
         }
     }
 
@@ -51,4 +54,13 @@ public class KylesEndScene : MonoBehaviour {
 
         Debug.Log("Restarted Level");
     }
+
+    void SteamChange()
+    {
+        if (!triggerEntered || !safeLooted)
+        {
+            steamGauge.GetComponent<KyleSteamGauge>().steamValue += 5f;
+        }
+    }
+
 }

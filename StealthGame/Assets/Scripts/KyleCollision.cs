@@ -32,14 +32,12 @@ public class KyleCollision : MonoBehaviour {
             {
                 InteractSafe(other);
                 //Enter Safe
-                Debug.Log("Entered Safe");
             }
             //Extrance & Exit
             else
             {
                 InteractDoor();
                 //Enter Door
-                Debug.Log("Entered Door");
             }
 
         }
