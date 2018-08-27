@@ -14,7 +14,6 @@ public class PlayerController : Agent {
     private PlayerUI m_playerUI = null;
     private PlayerActions m_playerActions = null;
 
-
     protected override void Start()
     {
         base.Start();
@@ -60,10 +59,5 @@ public class PlayerController : Agent {
     public override bool IsMoving()
     {
         return (m_playerActions.m_currentActionState == PlayerActions.ACTION_STATE.ACTION_PERFORM);
-    }
-
-    public void EndAnimationState()
-    {
-        m_playerActions.AnimationFinished();
     }
 }

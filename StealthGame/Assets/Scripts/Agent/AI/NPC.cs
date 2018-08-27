@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class NPC : Agent
 {
-    private GOAP m_GOAP = null;
-
+    public GOAP m_GOAP = null;
+    public AgentAnimationController m_agentAnimationController = null;
 
     //-----------------------
     // Agent States
@@ -63,6 +63,7 @@ public class NPC : Agent
     {
         base.Start();
 
+        m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_GOAP = GetComponent<GOAP>();
         m_opposingTeam = m_turnManager.GetOpposingTeam(m_team);
     }

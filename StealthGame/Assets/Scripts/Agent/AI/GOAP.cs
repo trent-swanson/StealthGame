@@ -46,8 +46,12 @@ public class GOAP : MonoBehaviour
     //Return : true when action is completed
     public bool GOAPUpdate()
     {
-        m_currentAction.Perform(m_NPC);
-        if(m_currentAction.IsDone(m_NPC))
+        bool validAction = m_currentAction.Perform(m_NPC);
+
+        if(!validAction)//Action was attempted but unable to complete
+            return true;
+
+        if (m_currentAction.IsDone(m_NPC))
         {
             m_currentAction.EndAction(m_NPC);
             return true;

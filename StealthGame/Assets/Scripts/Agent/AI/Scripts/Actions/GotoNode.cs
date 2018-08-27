@@ -49,6 +49,13 @@ public class GotoNode : AIAction
         {
             m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
             NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED;
+
+            List<NavNode> oneTurnSteps = new List<NavNode>();
+            oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
+            oneTurnSteps.Add(m_navPath[0]);
+            NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneTurnSteps);
+
+            NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }
     }
 
@@ -73,6 +80,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
+        NPCAgent.m_currentNavNode = m_navPath[0];
         NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
     }
 
@@ -83,32 +91,26 @@ public class GotoNode : AIAction
     //
     // Param
     //		NPCAgent: Gameobject which script is used on
+    // Return
+    //      If perform can no longer function return false
     //--------------------------------------------------------------------------------------
-    public override void Perform(NPC NPCAgent)
+    public override bool Perform(NPC NPCAgent)
     {
-        if (m_navPath.Count == 0 || m_navPath[0].m_nodeState == NavNode.NODE_STATE.OBSTRUCTED) //Return true when at at end or is occupied
+        if (m_navPath[0].m_nodeState == NavNode.NODE_STATE.OBSTRUCTED) //Return false when at at end or is occupied
         {
-            m_isDone = true;
-            return;
+            return false;
         }
 
-        Vector3 targetPos = m_navPath[0].m_nodeTop;
-        Vector3 velocityVector = targetPos - NPCAgent.transform.position;
-        float translateDis = velocityVector.magnitude;
-
-        velocityVector = velocityVector.normalized * Time.deltaTime * NPCAgent.m_moveSpeed;
-
-        if(velocityVector.magnitude > translateDis)//Arrived at node
+        if(NPCAgent.m_agentAnimationController.m_playNextAnimation)//Arrived at node
         {
-            NPCAgent.transform.position = targetPos;
-            NPCAgent.m_currentNavNode = m_navPath[0];
-            m_navPath.RemoveAt(0);
-            m_isDone = true;
+            NPCAgent.m_agentAnimationController.m_animationSteps.RemoveAt(0);
+            if (NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0)
+                m_isDone = true;
+            else
+                NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }
-        else
-        {
-            NPCAgent.transform.position += velocityVector;
-        }
+
+        return true;
     }
 
     //--------------------------------------------------------------------------------------

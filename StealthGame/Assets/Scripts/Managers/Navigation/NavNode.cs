@@ -118,8 +118,8 @@ public class NavNode : MonoBehaviour
     public void SetupWallHideIndicators(Navigation navigation)
     {
         m_wallHideIndicators[0].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(0, 0, 1));
-        m_wallHideIndicators[1].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(0, 0, -1));
-        m_wallHideIndicators[2].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(1, 0, 0));
+        m_wallHideIndicators[1].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(1, 0, 0));
+        m_wallHideIndicators[2].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(0, 0, -1));
         m_wallHideIndicators[3].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(-1, 0, 0));
     }
 
@@ -151,10 +151,10 @@ public class NavNode : MonoBehaviour
                 }
                 else if(relativeMousePos.z < -m_wallHideSelectionDeadZone) //South indicator
                 {
-                    if (m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                    if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
-                        m_wallHideIndicators[1].m_wallHideSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[1].m_selected = true;
+                        m_wallHideIndicators[2].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[2].m_selected = true;
                     }
                 }
             }
@@ -162,10 +162,10 @@ public class NavNode : MonoBehaviour
             {
                 if (relativeMousePos.x > m_wallHideSelectionDeadZone)//East Indicator
                 {
-                    if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+                    if (m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
-                        m_wallHideIndicators[2].m_wallHideSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[2].m_selected = true;
+                        m_wallHideIndicators[1].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[1].m_selected = true;
                     }
                 }
                 else if (relativeMousePos.x < -m_wallHideSelectionDeadZone) //West indicator
@@ -193,15 +193,15 @@ public class NavNode : MonoBehaviour
         }
     }
 
-    public Vector3 GetWallHideDir()
+    public AnimationManager.FACING_DIR GetWallHideDir()
     {
         for (int i = 0; i < 4; i++)
         {
             if(m_wallHideIndicators[i].m_selected == true)
             {
-                return m_wallHideIndicators[i].m_wallHideSprite.transform.localPosition;
+                return (AnimationManager.FACING_DIR)i;//Casting 'i' to direction
             }
         }
-        return new Vector3(0, 0, 0);
+        return AnimationManager.FACING_DIR.NONE;
     }
 }

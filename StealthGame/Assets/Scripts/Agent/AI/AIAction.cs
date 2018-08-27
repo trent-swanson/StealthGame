@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AIAction : ScriptableObject {
@@ -16,6 +15,8 @@ public abstract class AIAction : ScriptableObject {
         public enum PRIORITY {NONE, LOW, MEDIUM, HIGH, VERY_HIGH };
         public PRIORITY m_priority;
     }
+
+    public enum ACTION_VALIDITY { }
 
     [Tooltip("States this action requires")]
     [SerializeField]
@@ -70,7 +71,7 @@ public abstract class AIAction : ScriptableObject {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public abstract void Perform(NPC NPCAgent);
+    public abstract bool Perform(NPC NPCAgent);
 
     //--------------------------------------------------------------------------------------
     // Setups agents varibles to perform a given action.

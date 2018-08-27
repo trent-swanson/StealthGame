@@ -2421,7 +2421,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1820686087039842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.6411934, y: 9.316859, z: -15.948422}
+  m_LocalPosition: {x: 3.353611, y: 7.088438, z: -14.742544}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4560502023093840}
@@ -3007,7 +3007,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4560502023093840}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4318791355441794
 Transform:
@@ -3571,8 +3571,8 @@ Transform:
   - {fileID: 4407332706101652}
   - {fileID: 4072477637255906}
   - {fileID: 4036333187507480}
-  - {fileID: 4317037097545242}
   - {fileID: 4937841732339078}
+  - {fileID: 4317037097545242}
   - {fileID: 4055059863100428}
   m_Father: {fileID: 4039481999543518}
   m_RootOrder: 0
@@ -4171,7 +4171,7 @@ Transform:
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4560502023093840}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4940680134326458
 Transform:
@@ -4353,12 +4353,16 @@ MonoBehaviour:
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 212944209950567200}
     m_wallHideType: 0
-  - m_wallHideSprite: {fileID: 212658500849552126}
-    m_wallHideType: 0
+    m_selected: 0
   - m_wallHideSprite: {fileID: 212876940029438014}
     m_wallHideType: 0
+    m_selected: 0
+  - m_wallHideSprite: {fileID: 212658500849552126}
+    m_wallHideType: 0
+    m_selected: 0
   - m_wallHideSprite: {fileID: 212642329443893786}
     m_wallHideType: 0
+    m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0

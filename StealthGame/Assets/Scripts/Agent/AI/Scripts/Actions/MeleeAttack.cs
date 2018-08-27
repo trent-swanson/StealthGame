@@ -65,9 +65,10 @@ public class MeleeAttack : AIAction
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void Perform(NPC NPCAgent)
+    public override bool Perform(NPC NPCAgent)
     {
         Destroy(m_target.gameObject);
+        return true;
     }
 
     //--------------------------------------------------------------------------------------
