@@ -5,6 +5,7 @@ using System.Linq;
 
 public class GOAP : MonoBehaviour
 {
+    public enum GOAP_UPDATE_STATE {PERFORMING, INVALID, COMPLETED}
     private NPC m_NPC = null;
 
     [Space]
@@ -15,7 +16,7 @@ public class GOAP : MonoBehaviour
     public List<AIAction> m_possibleActions = new List<AIAction>();
 
     [Space]
-    public AIAction m_currentAction;
+    public AIAction m_currentAction = null;
 
     public enum GOAL_STATE { AMBIENT, SUSPICIOUS, ALERT }
     public GOAL_STATE m_goalState;
@@ -44,19 +45,19 @@ public class GOAP : MonoBehaviour
 
     //GOAP frame by frame update
     //Return : true when action is completed
-    public bool GOAPUpdate()
+    public GOAP_UPDATE_STATE GOAPUpdate()
     {
         bool validAction = m_currentAction.Perform(m_NPC);
 
         if(!validAction)//Action was attempted but unable to complete
-            return true;
+            return GOAP_UPDATE_STATE.INVALID;
 
         if (m_currentAction.IsDone(m_NPC))
         {
             m_currentAction.EndAction(m_NPC);
-            return true;
+            return GOAP_UPDATE_STATE.COMPLETED;
         }
-        return false;
+        return GOAP_UPDATE_STATE.PERFORMING;
     }
 
     public void GetGoalPriority()

@@ -48,7 +48,7 @@ public class GotoNode : AIAction
         if (NPCAgent.m_currentNavNode != null)
         {
             m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
-            NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED;
+            NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
 
             List<NavNode> oneTurnSteps = new List<NavNode>();
             oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
@@ -82,7 +82,7 @@ public class GotoNode : AIAction
     {
         NPCAgent.m_currentNavNode = m_navPath[0];
         NPCAgent.m_currentNavNode.m_obstructingAgent = NPCAgent;
-        NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
+        NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
     }
 
 
@@ -97,7 +97,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
-        if (m_navPath[0].m_nodeState == NavNode.NODE_STATE.OBSTRUCTED) //Return false when at at end or is occupied
+        if (m_navPath[0].m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED) //Return false when at at end or is occupied
         {
             return false;
         }

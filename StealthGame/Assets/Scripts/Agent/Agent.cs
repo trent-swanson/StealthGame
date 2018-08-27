@@ -41,8 +41,11 @@ public class Agent : MonoBehaviour
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
             m_currentNavNode = hit.collider.GetComponent<NavNode>();
 
-        if (m_currentNavNode != null) // Current node isobstructed, that is taken up by player
-            m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
+        if (m_currentNavNode != null) // Current node isobstructed, that is taken up by agent
+        {
+            m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+            m_currentNavNode.m_obstructingAgent = this;
+        }
 
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
     }

@@ -67,12 +67,12 @@ public class PlayerUI : MonoBehaviour
         {
             SetNodeStates(selectableNodes, NavNode.NODE_STATE.SELECTABLE);
         }
-        else if (state == MESH_STATE.DRAW_PATH) //draw path to selected node
+        else if (state == MESH_STATE.DRAW_PATH) //draw path to selected node TODO tidy up
         {
-            if (currentSelectedNode != null && currentSelectedNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            if (currentSelectedNode != null)
                 currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE, m_playerController);
 
-            if (newSelectedNode != null && newSelectedNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            if (newSelectedNode != null)
                 newSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTED, m_playerController);
 
             //Redraw path
@@ -85,7 +85,7 @@ public class PlayerUI : MonoBehaviour
         }
         else if (state == MESH_STATE.REMOVE_PATH) //remove path to selected node
         {
-            if (currentSelectedNode != null && currentSelectedNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            if (currentSelectedNode != null)
                 currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE, m_playerController);
 
             ClearPathRender();
@@ -106,16 +106,16 @@ public class PlayerUI : MonoBehaviour
     {
         foreach (NavNode navNode in navNodes)
         {
-            if(navNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)//Dont need to change obstructed states
-                navNode.UpdateNavNodeState(state, m_playerController);
+            navNode.UpdateNavNodeState(state, m_playerController);
 
-            if (navNode.m_nodeState == NavNode.NODE_STATE.SELECTABLE)
-            {
-                SpriteRenderer spriteRenderer = navNode.m_selectableUI.GetComponent<SpriteRenderer>();
-                Color newColor = spriteRenderer.color;
+            SpriteRenderer spriteRenderer = navNode.m_selectableUI.GetComponent<SpriteRenderer>();
+            Color newColor = spriteRenderer.color;
+
+            if (navNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Full view for obstructed tiles
+                newColor.a = 1;
+            else
                 newColor.a = (float)(navNode.m_BFSDistance + 1) / m_playerController.m_currentActionPoints;//min val of 1/current action points
-                spriteRenderer.color = newColor;
-            }
+            spriteRenderer.color = newColor;
         }
     }
 

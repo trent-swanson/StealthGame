@@ -80,6 +80,12 @@ public class AgentAnimationController : MonoBehaviour
                 case AnimationManager.ANIMATION_STEP.INTERACTION:
                     m_currentAnimation = "Interact";
                     break;
+                case AnimationManager.ANIMATION_STEP.ATTACK:
+                    m_currentAnimation = "Attack";
+                    break;
+                case AnimationManager.ANIMATION_STEP.DEATH:
+                    m_currentAnimation = "Death";
+                    break;
                 default:
                     break;
             }

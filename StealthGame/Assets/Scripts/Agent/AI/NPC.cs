@@ -78,17 +78,38 @@ public class NPC : Agent
     //Runs every time a agent is selected, this can be at end of an action is completed
     public override void AgentSelected()
     {
-        if(!m_GOAP.GOAPInit())//Found an action to perform
+        bool possibleAction = m_GOAP.GOAPInit();
+        if (!possibleAction)//No action possible, end turn, have no points left
+        {
+            m_currentActionPoints = 0;
             m_turnManager.EndUnitTurn(this);
+        }
+
+        //if (!m_GOAP.GOAPInit())//TODO why no work ADAM!!!!
+        //{
+        //    m_currentActionPoints = 0;
+        //    m_turnManager.EndUnitTurn(this);
+        //}
     }
 
     //Constant update while agent is selected
     public override void AgentTurnUpdate()
     {
-        if (m_GOAP.GOAPUpdate())
+        GOAP.GOAP_UPDATE_STATE actionState = m_GOAP.GOAPUpdate();
+
+        switch (actionState)
         {
-            m_currentActionPoints -= m_GOAP.m_currentAction.m_actionCost;
-            AgentSelected();
+            case GOAP.GOAP_UPDATE_STATE.INVALID://Remove one as it attempted to occur
+                m_currentActionPoints -= 1;
+                AgentSelected();
+                break;
+            case GOAP.GOAP_UPDATE_STATE.COMPLETED:
+                m_currentActionPoints -= m_GOAP.m_currentAction.m_actionCost;
+                AgentSelected();
+                break;
+            case GOAP.GOAP_UPDATE_STATE.PERFORMING:
+            default:
+                break;
         }
     }
 

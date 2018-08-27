@@ -88,9 +88,9 @@ public class UIController : MonoBehaviour {
             spriteColor.a = 1;
             m_playerTurnStart.color = spriteColor;
 
-            StartCoroutine(FadeTurnStart(0.2f, m_playerTurnStart));
+            StartCoroutine(FadeTurnStart(Time.deltaTime / m_turnStartFadeTime, m_playerTurnStart));
         }
-        else if(m_enemyTurnStart != null)
+        else if(team == TurnManager.TEAM.AI && m_enemyTurnStart != null)
         {
             Color spriteColor = m_enemyTurnStart.color;
             spriteColor.a = 1;
