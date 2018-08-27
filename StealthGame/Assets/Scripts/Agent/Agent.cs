@@ -68,6 +68,4 @@ public class Agent : MonoBehaviour
 		transform.position = new Vector3(0, 100, 0);
         m_turnManager.EndUnitTurn(this);
 	}
-
-    public virtual bool IsMoving() { return false; }
 }

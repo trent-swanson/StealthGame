@@ -174,6 +174,7 @@ public class PlayerActions : MonoBehaviour
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
             m_playerController.m_currentNavNode = m_path[m_path.Count -1];
             m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED; //Update new selected ndoe
+            m_playerController.m_currentNavNode.m_obstructingAgent = m_playerController;
             m_initActionState = false;
         }
 

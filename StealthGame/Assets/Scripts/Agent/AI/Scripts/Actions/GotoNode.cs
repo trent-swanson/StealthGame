@@ -81,6 +81,7 @@ public class GotoNode : AIAction
     public override void EndAction(NPC NPCAgent)
     {
         NPCAgent.m_currentNavNode = m_navPath[0];
+        NPCAgent.m_currentNavNode.m_obstructingAgent = NPCAgent;
         NPCAgent.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
     }
 

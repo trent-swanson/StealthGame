@@ -8,6 +8,7 @@ public class NavNode : MonoBehaviour
     public GameObject m_selectableUI;
     public GameObject m_selectedUI;
     public Sprite m_selectedSprite;
+    public Sprite m_attackSprite;
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
@@ -38,6 +39,8 @@ public class NavNode : MonoBehaviour
 
     public enum NODE_STATE {SELECTED, SELECTABLE, UNSELECTED, OBSTRUCTED}
     public enum NODE_TYPE {NONE, WALKABLE, HIGH_OBSTACLE, LOW_OBSTACLE}
+
+    public Agent m_obstructingAgent = null;
 
     public NODE_STATE m_nodeState = NODE_STATE.UNSELECTED;
     public NODE_TYPE m_nodeType = NODE_TYPE.NONE;
@@ -82,7 +85,7 @@ public class NavNode : MonoBehaviour
         m_fScore = m_hScore + m_gScore;
     }
 
-    public void UpdateNavNodeState(NODE_STATE nodeState)
+    public void UpdateNavNodeState(NODE_STATE nodeState, Agent agent)
     {
         m_nodeState = nodeState;
 
@@ -107,10 +110,19 @@ public class NavNode : MonoBehaviour
                 m_selectedUI.SetActive(false);
                 m_spriteRenderer.sprite = m_defaultSprite;
                 break;
-            case NODE_STATE.OBSTRUCTED: //TODO set to red/blank
-                m_selectableUI.SetActive(false);
-                m_selectedUI.SetActive(false);
-                m_spriteRenderer.sprite = m_defaultSprite;
+            case NODE_STATE.OBSTRUCTED:
+                if(m_obstructingAgent!=null && m_obstructingAgent.m_team != agent.m_team)//Enemy tile
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(false);
+                    m_spriteRenderer.sprite = m_attackSprite;
+                }
+                else
+                {
+                    m_selectableUI.SetActive(false);
+                    m_selectedUI.SetActive(false);
+                    m_spriteRenderer.sprite = m_defaultSprite;
+                }
                 break;
         }              
     }

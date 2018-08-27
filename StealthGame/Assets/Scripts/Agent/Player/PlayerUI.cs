@@ -70,10 +70,10 @@ public class PlayerUI : MonoBehaviour
         else if (state == MESH_STATE.DRAW_PATH) //draw path to selected node
         {
             if (currentSelectedNode != null && currentSelectedNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
-                currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE);
+                currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE, m_playerController);
 
             if (newSelectedNode != null && newSelectedNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
-                newSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTED);
+                newSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTED, m_playerController);
 
             //Redraw path
             ClearPathRender();
@@ -86,7 +86,7 @@ public class PlayerUI : MonoBehaviour
         else if (state == MESH_STATE.REMOVE_PATH) //remove path to selected node
         {
             if (currentSelectedNode != null && currentSelectedNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
-                currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE);
+                currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE, m_playerController);
 
             ClearPathRender();
 
@@ -107,7 +107,7 @@ public class PlayerUI : MonoBehaviour
         foreach (NavNode navNode in navNodes)
         {
             if(navNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)//Dont need to change obstructed states
-                navNode.UpdateNavNodeState(state);
+                navNode.UpdateNavNodeState(state, m_playerController);
 
             if (navNode.m_nodeState == NavNode.NODE_STATE.SELECTABLE)
             {

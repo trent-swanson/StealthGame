@@ -2421,7 +2421,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1820686087039842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.353611, y: 7.088438, z: -14.742544}
+  m_LocalPosition: {x: -12.995126, y: 6.8898373, z: -1.8770545}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4560502023093840}
@@ -4348,6 +4348,7 @@ MonoBehaviour:
   m_selectableUI: {fileID: 1427520831244808}
   m_selectedUI: {fileID: 1095003275815088}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
+  m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
@@ -4366,6 +4367,7 @@ MonoBehaviour:
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
+  m_obstructingAgent: {fileID: 0}
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
