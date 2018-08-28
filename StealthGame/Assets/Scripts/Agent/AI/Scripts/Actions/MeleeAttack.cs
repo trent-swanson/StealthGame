@@ -17,7 +17,11 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
-        return true;
+        m_target = NPCAgent.GetClosestTarget();
+        NPCAgent.m_attackingTarget = m_target;
+
+        return (m_target != null);
+        
     }
 
     //--------------------------------------------------------------------------------------
@@ -29,8 +33,11 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionStart(NPC NPCAgent)
     {
-        if(m_target == null)
-            m_target = NPCAgent.GetClosestTarget();
+        List<NavNode> oneStep = new List<NavNode>();
+        oneStep.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
+        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneStep, Agent.INTERACTION_TYPE.ATTACK);
+
+        NPCAgent.m_agentAnimationController.PlayNextAnimation();
     }
 
     //--------------------------------------------------------------------------------------
@@ -43,7 +50,7 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return true;
+        return NPCAgent.m_agentAnimationController.m_playNextAnimation;
     }
 
     //--------------------------------------------------------------------------------------
@@ -54,6 +61,7 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
+        NPCAgent.m_currentNavNode = m_target.m_currentNavNode;
         m_target = null;
     }
 
@@ -67,7 +75,6 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
-        Destroy(m_target.gameObject);
         return true;
     }
 
@@ -80,8 +87,6 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
-        m_target = NPCAgent.GetClosestTarget();
-
         if (m_target != null)
             NPCAgent.m_agentWorldState.m_targetNode = m_target.m_currentNavNode;
     }

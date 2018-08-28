@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Kill Enemy", menuName = "AI Goals/Kill Enemy")]
 public class KillEnemy : Goal {
 
-	public override int DetermineGoalPriority(NPC NPCAgent) {
-		int tempPriority = m_defualtPriority;
-		return tempPriority;
-	}
+	public override void DetermineGoalPriority(NPC NPCAgent)
+    {
+        m_goalPriority = m_defualtPriority;
+    }
 }

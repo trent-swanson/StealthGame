@@ -11,6 +11,8 @@ public class Agent : MonoBehaviour
 
     protected SquadManager squadManager;
 
+    public Animator m_animator = null;
+
     [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
     public bool m_turn = false;
@@ -31,6 +33,10 @@ public class Agent : MonoBehaviour
 
     public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
 
+    public Agent m_attackingTarget = null;
+
+    public Vector3 m_colliderExtents;
+
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 
@@ -47,7 +53,10 @@ public class Agent : MonoBehaviour
             m_currentNavNode.m_obstructingAgent = this;
         }
 
+        m_animator = GetComponent<Animator>();
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
+
+        m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
     }
 
     //Start of turn, only runs once per turn
@@ -68,7 +77,8 @@ public class Agent : MonoBehaviour
 	public void Knockout()
     {
 		m_knockedout = true;
-		transform.position = new Vector3(0, 100, 0);
+        m_animator.SetBool("Death", true);
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
         m_turnManager.EndUnitTurn(this);
 	}
 }

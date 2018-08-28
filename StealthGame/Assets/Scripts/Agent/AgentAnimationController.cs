@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AgentAnimationController : MonoBehaviour
 {
-
+    private Agent m_agent = null;
     private Animator m_animator = null;
     public Animation m_rotateAnimation;
     private static float m_rotateAnimationTime;
@@ -16,6 +16,7 @@ public class AgentAnimationController : MonoBehaviour
 
     private void Start()
     {
+        m_agent = GetComponent<Agent>();
         m_animator = GetComponentInChildren<Animator>();
 
         //https://answers.unity.com/questions/692593/get-animation-clip-length-using-animator.html 
@@ -81,6 +82,8 @@ public class AgentAnimationController : MonoBehaviour
                     m_currentAnimation = "Interact";
                     break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
+                    if (m_agent.m_attackingTarget != null)
+                        m_agent.m_attackingTarget.Knockout();
                     m_currentAnimation = "Attack";
                     break;
                 case AnimationManager.ANIMATION_STEP.DEATH:

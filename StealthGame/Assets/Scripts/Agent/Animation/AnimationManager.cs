@@ -14,6 +14,8 @@ public class AnimationManager : MonoBehaviour
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
         FACING_DIR playerDir = GetFacingDir(agent.transform.forward);
+        if(interactionType == Agent.INTERACTION_TYPE.ATTACK)
+            interactionDir = GetFacingDir((agent.m_attackingTarget.transform.position - agent.transform.position).normalized);
 
         int pathCount = pathNodes.Count;
 

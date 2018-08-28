@@ -163,7 +163,6 @@ public class PlayerActions : MonoBehaviour
                 m_playerController.m_interaction = Agent.INTERACTION_TYPE.NONE;
             }
 
-
             //Getting wall hide detection
             AnimationManager.FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
 
@@ -174,6 +173,7 @@ public class PlayerActions : MonoBehaviour
             else if(m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
                 m_playerController.m_interaction = Agent.INTERACTION_TYPE.ATTACK;
+                m_playerController.m_attackingTarget = m_currentSelectedNode.m_obstructingAgent;
                 m_path.RemoveAt(m_path.Count - 1); //As were attackig no need to move to last tile
             }
 

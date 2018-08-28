@@ -21,7 +21,7 @@ public class GOAP : MonoBehaviour
     public enum GOAL_STATE { AMBIENT, SUSPICIOUS, ALERT }
     public GOAL_STATE m_goalState;
 
-    private Queue<Goal> m_goalQueue = new Queue<Goal>();
+    private List<Goal> m_goalList = new List<Goal>();
 
     private void Start()
     {
@@ -40,6 +40,7 @@ public class GOAP : MonoBehaviour
             m_currentAction.ActionStart(m_NPC);
             return true;
         }
+
         return false;
     }
 
@@ -69,38 +70,43 @@ public class GOAP : MonoBehaviour
 
         List<Goal> possibleGoals = new List<Goal>();
 
-        switch (m_goalState)
-        {
-            case GOAL_STATE.AMBIENT:
-                possibleGoals = m_ambientGoals;
-                break;
-            case GOAL_STATE.SUSPICIOUS:
-                possibleGoals = m_suspiciousGoals;
-                break;
-            case GOAL_STATE.ALERT:
-                possibleGoals = m_alertGoals;
-                break;
-        }
+        //switch (m_goalState) //TODO add back
+        //{
+        //    case GOAL_STATE.AMBIENT:
+        //        possibleGoals = m_ambientGoals;
+        //        break;
+        //    case GOAL_STATE.SUSPICIOUS:
+        //        possibleGoals = m_suspiciousGoals;
+        //        break;
+        //    case GOAL_STATE.ALERT:
+        //        possibleGoals = m_alertGoals;
+        //        break;
+        //}
 
-        m_goalQueue.Clear();
+        possibleGoals.AddRange(m_ambientGoals);
+        possibleGoals.AddRange(m_suspiciousGoals);
+        possibleGoals.AddRange(m_alertGoals);
+
+        m_goalList.Clear();
 
         foreach (Goal goal in possibleGoals)
         {
             goal.DetermineGoalPriority(m_NPC);
-            m_goalQueue.Enqueue(goal);
+            m_goalList.Add(goal);
         }
+        IOrderedEnumerable<Goal> orderedList = m_goalList.OrderByDescending(goal => goal.m_goalPriority); //
 
-        m_goalQueue.OrderByDescending(goal => goal.m_goalPriority);
+        m_goalList = orderedList.ToList<Goal>();
     }
 
     IEnumerator ActionPlanning()
     {
         m_currentAction = null;
 
-        while (m_currentAction == null && m_goalQueue.Count > 0)
+        while (m_currentAction == null && m_goalList.Count > 0)
         {
-            Goal currentGoal = m_goalQueue.Dequeue();
-
+            Goal currentGoal = m_goalList[0];
+            m_goalList.RemoveAt(0);
             m_currentAction = GetActionPlan(currentGoal);
         }
 
@@ -151,7 +157,6 @@ public class GOAP : MonoBehaviour
             {
                 if (action.m_satisfiedWorldStates.Contains(worldState))
                 {
-
                     ActionNode newActionNode = NewActionNode(m_NPC, action, currentNode);
                     if (newActionNode != null)
                         openNodes.Add(newActionNode);

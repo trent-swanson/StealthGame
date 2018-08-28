@@ -244,7 +244,7 @@ public class Navigation : MonoBehaviour
         if (currentNode!=null)
         {
             RaycastHit hit;
-            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer + LayerManager.m_navNodeLayer))
+            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
             {
                 float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
                 if (coliderHeight < m_lowObstacleHeight)

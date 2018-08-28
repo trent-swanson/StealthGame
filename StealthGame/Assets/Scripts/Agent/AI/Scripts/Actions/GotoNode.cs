@@ -44,10 +44,22 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionStart(NPC NPCAgent)
     {
+        m_navPath = new List<NavNode>();
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
         {
             m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
+
+            if(m_navPath.Count == 0)//Unable to reach navnode, attempt to get to adjacent node
+            {
+                m_navPath = GetShortestPath(NPCAgent.m_currentNavNode, ref m_targetNode);
+            }
+
+            if (m_navPath.Count == 0)//unable to find any path, return
+            {
+                return;
+            }
+
             NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
 
             List<NavNode> oneTurnSteps = new List<NavNode>();
@@ -57,6 +69,37 @@ public class GotoNode : AIAction
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Get shortest path to adjacent nodes
+    // 
+    // Param
+    //		startingNode: the agents current node
+    //		targetNode: new target node
+    // Return:
+    //      New shortest path to closest adjacent node
+    //--------------------------------------------------------------------------------------
+    private List<NavNode> GetShortestPath(NavNode startingNode, ref NavNode targetNode)
+    {
+        NavNode newTargetNode = null;
+        List<NavNode> shortestPath = new List<NavNode>();
+        float distance = Mathf.Infinity;
+
+        foreach (NavNode adjacentNode in targetNode.m_adjacentNodes)
+        {
+            List<NavNode> tempPath = m_navigation.GetNavPath(startingNode, adjacentNode);
+            if(tempPath.Count!=0 && tempPath.Count < distance)
+            {
+                distance = tempPath.Count;
+                shortestPath = tempPath;
+                newTargetNode = adjacentNode;
+            }
+        }
+
+        if(newTargetNode!= null)
+            targetNode = newTargetNode;
+        return shortestPath;
     }
 
     //--------------------------------------------------------------------------------------
@@ -85,7 +128,6 @@ public class GotoNode : AIAction
         NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
     }
 
-
     //--------------------------------------------------------------------------------------
     // Perform actions effects, e.g. Moving towards opposing agent
     // Should happen on each update
@@ -97,7 +139,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
-        if (m_navPath[0].m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED) //Return false when at at end or is occupied
+        if (m_navPath.Count <= 0 || m_navPath[0].m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED) //Return false when at at end or is occupied
         {
             return false;
         }
