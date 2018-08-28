@@ -64,9 +64,9 @@ public class RangedAttack : AIAction {
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void Perform(NPC NPCAgent)
+    public override bool Perform(NPC NPCAgent)
     {
-
+        return true;
     }
 
     //--------------------------------------------------------------------------------------

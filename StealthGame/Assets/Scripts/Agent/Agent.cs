@@ -4,9 +4,14 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class Agent : MonoBehaviour {
+public class Agent : MonoBehaviour
+{
+    public enum INTERACTION_TYPE { NONE, WALL_HIDE, USE_OBJECT, ATTACK };
+    public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
 
     protected SquadManager squadManager;
+
+    public Animator m_animator = null;
 
     [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
@@ -28,13 +33,12 @@ public class Agent : MonoBehaviour {
 
     public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
 
+    public Agent m_attackingTarget = null;
+
+    public Vector3 m_colliderExtents;
+
     [Space]
     public List<Item> m_currentItems = new List<Item>();
-
-
-    public Animator m_animator = null;
-    public Animation m_rotateAnimation;
-    private static float m_rotateAnimationTime;
 
     protected virtual void Start()
     {
@@ -43,30 +47,16 @@ public class Agent : MonoBehaviour {
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
             m_currentNavNode = hit.collider.GetComponent<NavNode>();
 
-        if (m_currentNavNode != null) // Current node isobstructed, that is taken up by player
-            m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED;
+        if (m_currentNavNode != null) // Current node isobstructed, that is taken up by agent
+        {
+            m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+            m_currentNavNode.m_obstructingAgent = this;
+        }
 
+        m_animator = GetComponent<Animator>();
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
-        m_animator = GetComponentInChildren<Animator>();
-
-
-        //https://answers.unity.com/questions/692593/get-animation-clip-length-using-animator.html 
-        //Getting animation clip length from animator
-        AnimationClip[] animatorClips= m_animator.runtimeAnimatorController.animationClips;
-        for (int i = 0; i < animatorClips.Length; i++)   
-        {
-            if (animatorClips[i].name == "idleToTurnLeftToIdleNoRoot")   
-            {
-                m_rotateAnimationTime = animatorClips[i].length * 0.8f;//reduction on turning to allow for minor float inacuracies 
-            }
-        }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            Rotate(Agent.ROTATION_DIR.LEFT);
+        m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
     }
 
     //Start of turn, only runs once per turn
@@ -87,37 +77,8 @@ public class Agent : MonoBehaviour {
 	public void Knockout()
     {
 		m_knockedout = true;
-		transform.position = new Vector3(0, 100, 0);
+        m_animator.SetBool("Death", true);
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
         m_turnManager.EndUnitTurn(this);
 	}
-
-    public virtual bool IsMoving() { return false; }
-
-
-    public enum ROTATION_DIR {LEFT = -1, RIGHT = 1 }
-
-    public IEnumerator Rotate(ROTATION_DIR rotationDir)
-    {
-        float totalRotateAmount = 90 * (int)rotationDir;
-
-        int steps = (int)(m_rotateAnimationTime / Time.fixedDeltaTime);
-        float steptime = m_rotateAnimationTime / steps;
-        float stepAmount = totalRotateAmount / steps;
-
-        Quaternion finalRotation = transform.rotation * Quaternion.Euler(0, 90 * (int)rotationDir, 0);
-
-        for (int i = 0; i < steps; i++)
-        {
-            StartCoroutine(RotateOverTime(i * steptime, stepAmount));
-        }
-
-        yield return new WaitForSeconds(m_rotateAnimationTime);
-        transform.rotation = finalRotation;
-    }
-
-    public IEnumerator RotateOverTime(float delay, float rotateAmount)
-    {
-        yield return new WaitForSeconds(delay);
-        transform.RotateAround(transform.position, Vector3.up, rotateAmount);
-    }
 }

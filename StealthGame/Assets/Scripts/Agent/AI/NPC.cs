@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class NPC : Agent
 {
-    private GOAP m_GOAP = null;
-
+    public GOAP m_GOAP = null;
+    public AgentAnimationController m_agentAnimationController = null;
 
     //-----------------------
     // Agent States
@@ -63,6 +63,7 @@ public class NPC : Agent
     {
         base.Start();
 
+        m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_GOAP = GetComponent<GOAP>();
         m_opposingTeam = m_turnManager.GetOpposingTeam(m_team);
     }
@@ -77,17 +78,39 @@ public class NPC : Agent
     //Runs every time a agent is selected, this can be at end of an action is completed
     public override void AgentSelected()
     {
-        if(!m_GOAP.GOAPInit())//Found an action to perform
-            m_turnManager.EndUnitTurn(this);
+        
     }
 
     //Constant update while agent is selected
     public override void AgentTurnUpdate()
     {
-        if (m_GOAP.GOAPUpdate())
+        if(m_GOAP.m_currentAction == null)
         {
-            m_currentActionPoints -= m_GOAP.m_currentAction.m_actionCost;
-            AgentSelected();
+            bool newAction = m_GOAP.GOAPInit();
+
+            if(!newAction)//Unable to get a new action
+            {
+                m_currentActionPoints = 0;
+                m_turnManager.EndUnitTurn(this);
+                return;
+            }
+        }
+
+        GOAP.GOAP_UPDATE_STATE actionState = m_GOAP.GOAPUpdate();
+
+        switch (actionState)
+        {
+            case GOAP.GOAP_UPDATE_STATE.INVALID://Remove one as it attempted to occur
+                m_currentActionPoints -= 1;
+                m_GOAP.m_currentAction = null;
+                break;
+            case GOAP.GOAP_UPDATE_STATE.COMPLETED:
+                m_currentActionPoints -= m_GOAP.m_currentAction.m_actionCost;
+                m_GOAP.m_currentAction = null;
+                break;
+            case GOAP.GOAP_UPDATE_STATE.PERFORMING:
+            default:
+                break;
         }
     }
 
@@ -100,17 +123,30 @@ public class NPC : Agent
     //Always updating view as this changes in real time TODO as it is turn based could move to check only when players move
     private void Update()
     {
+        //Setup agents vals
+        Vector3 transformForward = transform.forward;
+        Vector3 checkOrigin = transform.position + transformForward * m_colliderExtents.z + transform.up * m_colliderExtents.y;
+
         foreach (Agent oppposingAgent in m_opposingTeam)
         {
             if(!m_agentWorldState.m_possibleTargets.Contains(oppposingAgent))
             {
-                RaycastHit hit;
-                if(Physics.Raycast(transform.position, oppposingAgent.transform.position - transform.position, out hit))
+                //See if opposing agent is in vision cone
+                Vector3 targetPos = oppposingAgent.transform.position;
+
+                Vector3 targetDir = targetPos - checkOrigin;
+
+                float dot = Vector3.Dot(targetDir.normalized, transform.forward);
+                if (dot > 0.1f) //a bit ledss than 180 degrees of vision
                 {
-                    Agent hitAgent = hit.collider.GetComponent<Agent>();
-                    if (hitAgent!=null)
+                    RaycastHit hit;
+                    if (Physics.Raycast(checkOrigin, targetDir, out hit))
                     {
-                        m_agentWorldState.m_possibleTargets.Add(hitAgent);
+                        Agent hitAgent = hit.collider.GetComponent<Agent>();
+                        if (hitAgent != null && hitAgent.m_team != m_team)
+                        {
+                            m_agentWorldState.m_possibleTargets.Add(hitAgent);
+                        }
                     }
                 }
             }
@@ -124,8 +160,8 @@ public class NPC : Agent
 
         foreach (Agent agent in m_agentWorldState.m_possibleTargets) //TODO might have to update for multiple floors
         {
-            if (agent == null)
-                break;
+            if (agent == null || agent.m_knockedout)
+                continue;
 
             float sqrDis = Vector3.SqrMagnitude(agent.transform.position - transform.position);
             if(sqrDis< targetDis)

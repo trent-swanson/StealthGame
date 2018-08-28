@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerActions : MonoBehaviour
 {
+    private AgentAnimationController m_agentAnimationController = null;
     private PlayerController m_playerController = null;
     private PlayerUI m_playerUI = null;
     private TurnManager m_turnManager = null;
@@ -14,21 +16,14 @@ public class PlayerActions : MonoBehaviour
     [SerializeField]
     private List<NavNode> m_path = new List<NavNode>();
 
-    private List<Interaction.ANIMATION_STEP> m_animationSteps = new List<Interaction.ANIMATION_STEP>();
-
     public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
     public ACTION_STATE m_currentActionState = ACTION_STATE.ACTION_START;
 
-    public enum INTERACTION_TYPE {NONE, WALL_HIDE, USE_OBJECT, ATTACK};
-    public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
-
     private bool m_initActionState = true;
-
-    private bool m_playNextAnimation = true;
-    private string m_currentAnimation = "Idle";
 
     private void Start()
     {
+        m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_playerController = GetComponent<PlayerController>();
         m_playerUI = GetComponent<PlayerUI>();
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
@@ -99,8 +94,15 @@ public class PlayerActions : MonoBehaviour
         NavNode newSelectedNavNode = GetMouseNode();
         if (newSelectedNavNode != null)
         {
-            newSelectedNavNode.UpdateWallIndicators();
-            if (m_selectableNodes.Contains(newSelectedNavNode) && newSelectedNavNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            if(newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
+                newSelectedNavNode.UpdateWallIndicators();
+
+            bool nextNodeUsable = newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || 
+                (newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED &&
+                newSelectedNavNode.m_obstructingAgent != null && 
+                newSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team);
+
+            if (m_selectableNodes.Contains(newSelectedNavNode) && nextNodeUsable)
             {
                 if(newSelectedNavNode != m_currentSelectedNode)
                 {
@@ -153,43 +155,48 @@ public class PlayerActions : MonoBehaviour
             transform.position = m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
             //Get animation steps
-            m_animationSteps.Clear();
+            m_agentAnimationController.m_animationSteps.Clear();
 
-            if (m_interaction == INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall
-                m_animationSteps.Add(Interaction.ANIMATION_STEP.IDLE);
+            if (m_playerController.m_interaction == Agent.INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall, so defualt by adding idle
+            {
+                m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.IDLE);
+                m_playerController.m_interaction = Agent.INTERACTION_TYPE.NONE;
+            }
 
             //Getting wall hide detection
-            Vector3 wallHideDir = m_currentSelectedNode.GetWallHideDir();
+            AnimationManager.FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
 
-            if (wallHideDir != new Vector3(0,0,0))
+            if (wallHideDir != AnimationManager.FACING_DIR.NONE)//Wall hiding animation calling
             {
-                m_interaction = INTERACTION_TYPE.WALL_HIDE;
-                m_animationSteps.AddRange(Interaction.GetAnimationSteps(this.m_playerController, m_path, m_interaction));
+                m_playerController.m_interaction = Agent.INTERACTION_TYPE.WALL_HIDE;
             }
-            else
+            else if(m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
-                if (m_interaction == INTERACTION_TYPE.WALL_HIDE)//Reset interactoin type
-                    m_interaction = INTERACTION_TYPE.NONE;
+                m_playerController.m_interaction = Agent.INTERACTION_TYPE.ATTACK;
+                m_playerController.m_attackingTarget = m_currentSelectedNode.m_obstructingAgent;
+                m_path.RemoveAt(m_path.Count - 1); //As were attackig no need to move to last tile
+            }
 
-                m_animationSteps.AddRange(Interaction.GetAnimationSteps(this.m_playerController, m_path));
-            }
+            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetAnimationSteps(this.m_playerController, m_path, m_playerController.m_interaction, wallHideDir));
 
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes, m_currentSelectedNode);//Remove UI
 
-            m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.UNSELECTED; //Remove nodes obstructed status
+            m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE; //Remove nodes obstructed status
             m_playerController.m_currentNavNode = m_path[m_path.Count -1];
-            m_playerController.m_currentNavNode.m_nodeState = NavNode.NODE_STATE.OBSTRUCTED; //Update new selected ndoe
+            m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED; //Update new selected ndoe
+            m_playerController.m_currentNavNode.m_obstructingAgent = m_playerController;
             m_initActionState = false;
         }
 
-        if(m_playNextAnimation)//End of animation
+        if(m_agentAnimationController.m_playNextAnimation)//End of animation
         {
-            PlayNextAnimation();
-            m_animationSteps.RemoveAt(0);
-            if (m_animationSteps.Count == 0)//End of move
+            m_agentAnimationController.PlayNextAnimation();
+            m_agentAnimationController.m_animationSteps.RemoveAt(0);
+
+            if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
             {
-                InitActions();
                 m_playerController.m_currentActionPoints = m_playerController.m_currentNavNode.m_BFSDistance;//Set action points to node value
+                InitActions();
             }
         }
     }
@@ -208,9 +215,9 @@ public class PlayerActions : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
+        if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))//Dont raycast when over UI
         {
-            return(hit.collider.GetComponent<NavNode>());
+            return (hit.collider.GetComponent<NavNode>());
         }
 
         return null;
@@ -236,7 +243,7 @@ public class PlayerActions : MonoBehaviour
 
             foreach (NavNode nextBFSNode in currentBFSNode.m_adjacentNodes)
             {
-                if (!m_selectableNodes.Contains(nextBFSNode) && !BFSQueue.Contains(nextBFSNode) && nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) //TODO do we want to move through players, if not add nextBFSNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED
+                if (!m_selectableNodes.Contains(nextBFSNode) && !BFSQueue.Contains(nextBFSNode) && (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)) //TODO do we want to move through players, if not add nextBFSNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED
                 {
                     int distance = currentBFSNode.m_BFSDistance - 1;
 
@@ -263,64 +270,5 @@ public class PlayerActions : MonoBehaviour
         }
         path.Reverse();//Path is back to front when created
         return path;
-    }
-
-    private void PlayNextAnimation()
-    {
-        if (m_animationSteps.Count > 0)
-        {
-            switch (m_animationSteps[0])
-            {
-                case Interaction.ANIMATION_STEP.IDLE:
-                    m_currentAnimation = "Idle";
-                    break;
-                case Interaction.ANIMATION_STEP.STEP:
-                    Debug.Log("step animation" + transform.rotation.eulerAngles);
-                    m_currentAnimation = "Step";
-                    break;
-                case Interaction.ANIMATION_STEP.RUN:
-                    m_currentAnimation = "Run";
-                    break;
-                case Interaction.ANIMATION_STEP.CLIMB_UP_IDLE:
-                    m_currentAnimation = "JumpToIdle";
-                    break;
-                case Interaction.ANIMATION_STEP.CLIMB_UP_RUN:
-                    m_currentAnimation = "JumpToRun";
-                    break;
-                case Interaction.ANIMATION_STEP.CLIMB_DOWN_IDLE:
-                    m_currentAnimation = "DropToIdle";
-                    break;
-                case Interaction.ANIMATION_STEP.CLIMB_DOWN_RUN:
-                    m_currentAnimation = "DropToRun";
-                    break;
-                case Interaction.ANIMATION_STEP.WALL_HIDE_RIGHT:
-                    m_currentAnimation = "WallRight";
-                    break;
-                case Interaction.ANIMATION_STEP.WALL_HIDE_LEFT:
-                    m_currentAnimation = "WallLeft";
-                    break;
-                case Interaction.ANIMATION_STEP.TURN_RIGHT:
-                    m_currentAnimation = "TurnRight";
-                    StartCoroutine(m_playerController.Rotate(Agent.ROTATION_DIR.RIGHT));
-                    break;
-                case Interaction.ANIMATION_STEP.TURN_LEFT:
-                    m_currentAnimation = "TurnLeft";
-                    StartCoroutine(m_playerController.Rotate(Agent.ROTATION_DIR.LEFT));
-                    break;
-                case Interaction.ANIMATION_STEP.INTERACTION:
-                    m_currentAnimation = "Interact";
-                    break;
-                default:
-                    break;
-            }
-            m_playerController.m_animator.SetBool(m_currentAnimation, true);
-            m_playNextAnimation = false;
-        }
-    }
-
-    public void AnimationFinished()
-    {
-        m_playerController.m_animator.SetBool(m_currentAnimation, false);
-        m_playNextAnimation = true;
     }
 }

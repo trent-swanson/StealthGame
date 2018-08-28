@@ -19,9 +19,6 @@ public abstract class Goal : ScriptableObject
     // 
     // Param
     //		agent: Gameobject which script is used on
-    // Return:
-    //		realtive priority based off agents's states and information from the squad manager
-    //      In future this is where squad manager can "buff" desiered goals
     //--------------------------------------------------------------------------------------
-    public abstract int DetermineGoalPriority(NPC NPCAgent); 
+    public abstract void DetermineGoalPriority(NPC NPCAgent); 
 }

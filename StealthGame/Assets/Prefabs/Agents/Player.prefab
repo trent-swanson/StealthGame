@@ -495,7 +495,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1206991434689392
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -772,7 +772,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1353395813763116
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -1082,7 +1082,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1494376604310432
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -1245,18 +1245,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1554104200997322
+--- !u!1 &1543370792042610
 GameObject:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224209248933364960}
-  - component: {fileID: 222270880057888372}
-  - component: {fileID: 114504128298573438}
+  - component: {fileID: 4217747470758502}
   m_Layer: 0
-  m_Name: ActionPoints
+  m_Name: JNT_RightHandIndex2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1837,7 +1835,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1768977830654896
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -2144,7 +2142,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4658697821116228}
   m_Layer: 0
-  m_Name: JNT_LeftHandPinky1
+  m_Name: JNT_RightEye
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2189,7 +2187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4358196182559902}
   m_Layer: 0
-  m_Name: JNT_ZygoLeft
+  m_Name: JNT_Hips
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4113,6 +4111,19 @@ Transform:
     w: 1}
   m_LocalPosition: {x: 0.105928436, y: -0.04555469, z: -0.022320988}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4517920050807536}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4800248047333264
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084792319865456}
+  m_LocalRotation: {x: 0.021797765, y: -0.0067355465, z: 0.019456215, w: 0.9995504}
+  m_LocalPosition: {x: 0.105928436, y: -0.04555469, z: -0.022320988}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4550983559517040}
   m_Father: {fileID: 4122226932198886}
@@ -4577,6 +4588,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7433ad7ed7cf124ab07bcbaad4a8529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_interaction: 0
   m_turn: 0
   m_knockedout: 0
   m_maxActionPoints: 8
@@ -4717,6 +4729,22 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114491175536203134
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1479763021456846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fa12ab7f7e230f43ae6ed52153189db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animator: {fileID: 0}
+  m_rotateAnimation: {fileID: 0}
+  m_playNextAnimation: 1
+  m_currentAnimation: Idle
+  m_animationSteps: 
 --- !u!114 &114504128298573438
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5065,7 +5093,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a4a5aa2aa31168f46b9cacaffea7c719, type: 2}
+  - {fileID: 2100000, guid: 2ce5d88229a1e3242aaa0f144b914f20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5089,7 +5117,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300004, guid: 532e8bcf3636c2e4f85b3b0e4f8942ec, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 532e8bcf3636c2e4f85b3b0e4f8942ec, type: 3}
   m_Bones:
   - {fileID: 4772124839664270}
   - {fileID: 4203963134848984}
@@ -5140,8 +5168,8 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 4691043780308440}
   m_AABB:
-    m_Center: {x: 0.29862747, y: 0.3733722, z: 0.00046774745}
-    m_Extent: {x: 0.37914166, y: 0.2010436, z: 0.12878631}
+    m_Center: {x: -0.026472528, y: 0.2146162, z: 0.024009243}
+    m_Extent: {x: 0.13335237, y: 0.15771942, z: 0.171285}
   m_DirtyAABB: 0
 --- !u!137 &137302326711674276
 SkinnedMeshRenderer:

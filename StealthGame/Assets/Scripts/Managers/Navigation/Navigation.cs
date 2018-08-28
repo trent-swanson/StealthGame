@@ -244,7 +244,7 @@ public class Navigation : MonoBehaviour
         if (currentNode!=null)
         {
             RaycastHit hit;
-            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer + LayerManager.m_navNodeLayer))
+            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
             {
                 float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
                 if (coliderHeight < m_lowObstacleHeight)
@@ -306,7 +306,7 @@ public class Navigation : MonoBehaviour
         foreach (NavNode nextNode in currentNode.m_adjacentNodes)
         {
             //Only add nodes which have not already been considered, are walkable and not already obstructed.
-            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE && nextNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED)
+            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
             {
                 openNodes.Add(nextNode);
                 nextNode.Setup(openNodes, closedNodes, goalNode);

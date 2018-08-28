@@ -35,7 +35,7 @@ public class NPCControls : Agent
     //Runs every time a agent is selected, this can be at end of an action is completed
     public override void AgentSelected()
     {
-        m_animator.SetTrigger(m_animtionToString[m_moveOrders[m_moveOrdersIndex].animationTrigger]);
+        //m_animator.SetTrigger(m_animtionToString[m_moveOrders[m_moveOrdersIndex].animationTrigger]);
         FaceDir(m_moveOrders[m_moveOrdersIndex].navNode);
     }
 
@@ -62,8 +62,8 @@ public class NPCControls : Agent
                     if (m_moveOrders[m_moveOrdersIndex].navNode != null)
                         FaceDir(m_moveOrders[m_moveOrdersIndex].navNode);
 
-                    if (m_animtionToString[m_moveOrders[m_moveOrdersIndex].animationTrigger] != "")
-                        m_animator.SetTrigger(m_animtionToString[m_moveOrders[m_moveOrdersIndex].animationTrigger]);
+                    //if (m_animtionToString[m_moveOrders[m_moveOrdersIndex].animationTrigger] != "")
+                        //m_animator.SetTrigger(m_animtionToString[m_moveOrders[m_moveOrdersIndex].animationTrigger]);
                 }
             }
         }
