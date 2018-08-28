@@ -20,12 +20,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4979388041087444}
   - component: {fileID: 65818486124267664}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stack_OilTyre
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1382321096718968
 GameObject:
@@ -37,12 +37,12 @@ GameObject:
   - component: {fileID: 4597758678260686}
   - component: {fileID: 33973669164301682}
   - component: {fileID: 23846507773312304}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre_Stack
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1772589476405548
 GameObject:
@@ -54,12 +54,12 @@ GameObject:
   - component: {fileID: 4687779825490094}
   - component: {fileID: 33949757210954286}
   - component: {fileID: 23904006196740956}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Oil_Barrel (1)
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1944864764717846
 GameObject:
@@ -71,12 +71,12 @@ GameObject:
   - component: {fileID: 4128426668748542}
   - component: {fileID: 33721541309472816}
   - component: {fileID: 23137856573461356}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre_Stack (1)
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1971233990547468
 GameObject:
@@ -88,12 +88,12 @@ GameObject:
   - component: {fileID: 4489374247591684}
   - component: {fileID: 33193631989318516}
   - component: {fileID: 23530170694491080}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Oil_Barrel
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4128426668748542
 Transform:
@@ -178,7 +178,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -246,7 +246,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

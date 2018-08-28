@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4501258508267808}
   - component: {fileID: 33423651703668974}
   - component: {fileID: 23048170747048826}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre_Stack (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1069770891047568
 GameObject:
@@ -38,12 +38,12 @@ GameObject:
   - component: {fileID: 4591519368784860}
   - component: {fileID: 33248224783946014}
   - component: {fileID: 23040358256713172}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre_Stack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1294957099836256
 GameObject:
@@ -55,12 +55,12 @@ GameObject:
   - component: {fileID: 4530553233371902}
   - component: {fileID: 33479630342959632}
   - component: {fileID: 23765780747400376}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1377953338160272
 GameObject:
@@ -72,12 +72,12 @@ GameObject:
   - component: {fileID: 4888498203386112}
   - component: {fileID: 33123039228610242}
   - component: {fileID: 23014317616012702}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre_Stack (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1963457568453838
 GameObject:
@@ -88,12 +88,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4619837050735966}
   - component: {fileID: 65656608734682536}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stack_Tyres (1)
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1972643494245190
 GameObject:
@@ -105,12 +105,12 @@ GameObject:
   - component: {fileID: 4535881629492652}
   - component: {fileID: 33527276451639542}
   - component: {fileID: 23622710690739198}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre_Stack (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4501258508267808
 Transform:
@@ -209,7 +209,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -243,7 +243,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -277,7 +277,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -311,7 +311,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -345,7 +345,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

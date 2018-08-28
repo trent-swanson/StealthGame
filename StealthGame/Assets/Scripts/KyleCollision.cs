@@ -30,7 +30,7 @@ public class KyleCollision : MonoBehaviour {
             //Safe
             if (safe)
             {
-                InteractSafe(other);
+                InteractSafe();
                 //Enter Safe
             }
             //Extrance & Exit
@@ -43,17 +43,22 @@ public class KyleCollision : MonoBehaviour {
         }
     }
 
-    private void InteractSafe(Collider other)
+    private void InteractSafe()
     {
         //Turns off particle
-        other.transform.GetChild(1).gameObject.SetActive(false);
+        safeOBJ.transform.GetChild(0).gameObject.SetActive(false);
+
         //Change mesh to open door
-        safeOBJ.GetComponent<MeshRenderer>().enabled = false;
-        //^^^REPLACE^^^
+        GameObject safeDoor = safeOBJ.transform.GetChild(1).gameObject;
+        Animator anim = safeDoor.GetComponent<Animator>();
+        anim.SetTrigger("Safe_Open");
 
         //Completed that collider
         completed = true;
         transform.parent.GetComponent<KylesEndScene>().safeLooted = true;
+
+        //Turns off collider
+        GetComponent<Collider>().enabled = false;
     }
 
     private void InteractDoor()

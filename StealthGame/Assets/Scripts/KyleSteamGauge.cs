@@ -22,6 +22,9 @@ public class KyleSteamGauge : MonoBehaviour {
 
         oldTargetZRot = targetZRot;
         oldSteamValue = steamValue;
+
+        //Ticks up steam over time
+        InvokeRepeating("IncreaseSteam", 10, 30);
 	}
 	
 	// Update is called once per frame
@@ -30,16 +33,12 @@ public class KyleSteamGauge : MonoBehaviour {
         {
             //Constant Shaking of Valve
             ConstantShake();
-            Debug.Log("Shaking");
         }
         else
         {
             //Debug Test
             TargetValveRot(steamValue);
-            Debug.Log("Moving");
         }
-
-        //TestMove();
 
     }
 
@@ -72,7 +71,7 @@ public class KyleSteamGauge : MonoBehaviour {
         //Min Valve Value
         if (steamValue < 5)
         {
-            steamValue = 0;
+            steamValue = 5;
         }
         //Max Valve Value
         else if (steamValue > 35)
@@ -106,8 +105,13 @@ public class KyleSteamGauge : MonoBehaviour {
     {
         if (steamValue > 5)
         {
-            dial.transform.rotation = Quaternion.Euler(0, 0, targetZRot - shakeMag * Mathf.Sin(shakeSpeed * Time.timeSinceLevelLoad));
+            dial.transform.rotation = Quaternion.Euler(0, 0, targetZRot - shakeMag * Mathf.Pow(steamValue/3, 0.5f) * Mathf.Sin(shakeSpeed * Time.timeSinceLevelLoad));
         }
+    }
+
+    public void IncreaseSteam()
+    {
+        steamValue += 3f;
     }
 
     IEnumerator ExecuteAfterTime(float time)
