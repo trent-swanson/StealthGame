@@ -64,7 +64,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4289983916812754}
-  - component: {fileID: 95960578548361084}
   m_Layer: 0
   m_Name: basemodelGuard
   m_TagString: Untagged
@@ -1733,6 +1732,7 @@ GameObject:
   - component: {fileID: 95435171381614824}
   - component: {fileID: 114707595758177410}
   - component: {fileID: 114096561343684466}
+  - component: {fileID: 114855349787061024}
   m_Layer: 0
   m_Name: NPC Base
   m_TagString: Untagged
@@ -3297,7 +3297,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1923274230271608}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 10, y: 0, z: 13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4289983916812754}
@@ -3637,23 +3637,6 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!95 &95960578548361084
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1021369314768938}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 0d1ce2b064451464da05936a031f1e63, type: 3}
-  m_Controller: {fileID: 9100000, guid: 81f802961be2d9a4a9dd71e9ec2ae503, type: 2}
-  m_CullingMode: 1
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 1
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114096561343684466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3820,6 +3803,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c67438cd41b6b9149a339253bbc8b92e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_interaction: 0
+  m_animator: {fileID: 0}
   m_turn: 0
   m_knockedout: 0
   m_maxActionPoints: 50
@@ -3828,9 +3813,11 @@ MonoBehaviour:
   m_highlightInteractablesRange: 6
   m_currentNavNode: {fileID: 0}
   m_team: 1
+  m_attackingTarget: {fileID: 0}
+  m_colliderExtents: {x: 0, y: 0, z: 0}
   m_currentItems: []
-  m_animator: {fileID: 0}
-  m_rotateAnimation: {fileID: 0}
+  m_GOAP: {fileID: 0}
+  m_agentAnimationController: {fileID: 0}
   m_agentWorldState:
     m_currentNodePos: {x: 0, y: 0}
     m_targetNode: {fileID: 0}
@@ -3982,6 +3969,21 @@ MonoBehaviour:
   m_canvasRenderer: {fileID: 222523290874421664}
   m_TextComponent: {fileID: 114802086106278878}
   m_materialReferenceIndex: 1
+--- !u!114 &114855349787061024
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1923274230271608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fa12ab7f7e230f43ae6ed52153189db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_rotateAnimation: {fileID: 0}
+  m_playNextAnimation: 1
+  m_currentAnimation: Idle
+  m_animationSteps: 
 --- !u!114 &114934272605933102
 MonoBehaviour:
   m_ObjectHideFlags: 1

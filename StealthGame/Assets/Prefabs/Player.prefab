@@ -506,6 +506,7 @@ GameObject:
   - component: {fileID: 114563112806178036}
   - component: {fileID: 114747388290050114}
   - component: {fileID: 95675678552105234}
+  - component: {fileID: 114225565733383380}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2097,7 +2098,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4855617461289836}
-  - component: {fileID: 136923042348135494}
   m_Layer: 0
   m_Name: JNT_Root
   m_TagString: Untagged
@@ -4637,6 +4637,21 @@ MonoBehaviour:
   m_canvasRenderer: {fileID: 222658450932177640}
   m_TextComponent: {fileID: 114226434605978544}
   m_materialReferenceIndex: 1
+--- !u!114 &114225565733383380
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1261249592991502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fa12ab7f7e230f43ae6ed52153189db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_rotateAnimation: {fileID: 0}
+  m_playNextAnimation: 1
+  m_currentAnimation: Idle
+  m_animationSteps: 
 --- !u!114 &114226434605978544
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4761,6 +4776,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7433ad7ed7cf124ab07bcbaad4a8529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_interaction: 0
+  m_animator: {fileID: 95675678552105234}
   m_turn: 0
   m_knockedout: 0
   m_maxActionPoints: 6
@@ -4769,9 +4786,9 @@ MonoBehaviour:
   m_highlightInteractablesRange: 6
   m_currentNavNode: {fileID: 0}
   m_team: 0
+  m_attackingTarget: {fileID: 0}
+  m_colliderExtents: {x: 0, y: 0, z: 0}
   m_currentItems: []
-  m_animator: {fileID: 95675678552105234}
-  m_rotateAnimation: {fileID: 0}
   portrait: {fileID: 21300000, guid: da1299cda8879bb4bb05d7e7b2be19dd, type: 3}
 --- !u!114 &114563112806178036
 MonoBehaviour:
@@ -4787,7 +4804,6 @@ MonoBehaviour:
   m_currentSelectedNode: {fileID: 0}
   m_path: []
   m_currentActionState: 0
-  m_interaction: 0
 --- !u!114 &114747388290050114
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5025,19 +5041,6 @@ LineRenderer:
     generateLightingData: 1
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!136 &136923042348135494
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1849762201069212}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!136 &136927561452842654
 CapsuleCollider:
   m_ObjectHideFlags: 1
