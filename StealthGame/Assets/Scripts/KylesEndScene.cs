@@ -43,7 +43,6 @@ public class KylesEndScene : MonoBehaviour {
                 RestartLevel();
             }
             triggerEntered = false;
-            SteamChange();
         }
     }
 
@@ -54,13 +53,4 @@ public class KylesEndScene : MonoBehaviour {
 
         Debug.Log("Restarted Level");
     }
-
-    void SteamChange()
-    {
-        if (!triggerEntered || !safeLooted)
-        {
-            steamGauge.GetComponent<KyleSteamGauge>().steamValue += 5f;
-        }
-    }
-
 }
