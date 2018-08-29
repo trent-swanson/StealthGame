@@ -160,8 +160,9 @@ public class PlayerActions : MonoBehaviour
             if (m_playerController.m_interaction == Agent.INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall, so defualt by adding idle
             {
                 m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.IDLE);
-                m_playerController.m_interaction = Agent.INTERACTION_TYPE.NONE;
             }
+
+            m_playerController.m_interaction = Agent.INTERACTION_TYPE.NONE;//Reset interaction
 
             //Getting wall hide detection
             AnimationManager.FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();

@@ -7,6 +7,7 @@ public class NavNode : MonoBehaviour
     [Header("Tile UI")]
     public GameObject m_selectableUI;
     public GameObject m_selectedUI;
+    public GameObject m_NPCVisionUI;
     public Sprite m_selectedSprite;
     public Sprite m_attackSprite;
     public Sprite m_defaultSprite;
@@ -53,6 +54,8 @@ public class NavNode : MonoBehaviour
     public float m_gScore, m_hScore, m_fScore = 0;
 
     public NavNode m_previousNode = null;
+
+    public List<Agent> m_tileVisibleToNPCs = new List<Agent>();
 
     void Start()
     {
@@ -221,5 +224,27 @@ public class NavNode : MonoBehaviour
             }
         }
         return AnimationManager.FACING_DIR.NONE;
+    }
+
+    public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }
+    public void NPCVision(NPC npc, ADD_REMOVE_FUNCTION functionType )
+    {
+        switch (functionType)
+        {
+            case ADD_REMOVE_FUNCTION.ADD:
+                if (!m_tileVisibleToNPCs.Contains(npc))
+                    m_tileVisibleToNPCs.Add(npc);
+                break;
+            case ADD_REMOVE_FUNCTION.REMOVE:
+                m_tileVisibleToNPCs.Remove(npc);
+                break;
+            default:
+                break;
+        }
+
+        if (m_tileVisibleToNPCs.Count > 0)
+            m_NPCVisionUI.SetActive(true);
+        else
+            m_NPCVisionUI.SetActive(false);
     }
 }

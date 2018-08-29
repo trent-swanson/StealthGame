@@ -11,8 +11,8 @@ public class NPC : Agent
     // Agent States
     //-----------------------
     [System.Serializable]
-    public class AgentWorldState {
-
+    public class AgentWorldState
+    {
         //Where agent is relative to node grid
         public Vector2Int m_currentNodePos= new Vector2Int(0, 0); 
 
@@ -59,8 +59,13 @@ public class NPC : Agent
     [Space]
     private List<Agent> m_opposingTeam;
 
+    [Header("NPC details")]
+    public int m_visionDistance = 10;
+    public float m_visionAngle = 60;
+
     protected override void Start()
     {
+
         base.Start();
 
         m_agentAnimationController = GetComponent<AgentAnimationController>();
