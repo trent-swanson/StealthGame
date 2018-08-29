@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, RUN, CLIMB_UP_IDLE, CLIMB_UP_RUN, CLIMB_DOWN_IDLE, CLIMB_DOWN_RUN, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, DEATH }//Animation states
+    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, DEATH }//Animation states
 
     public enum FACING_DIR {NORTH, EAST, SOUTH, WEST, NONE }
 
@@ -58,7 +58,7 @@ public class AnimationManager : MonoBehaviour
             if (futureNode == null)
                 transitionSteps.Add(ANIMATION_STEP.IDLE);
             else
-                transitionSteps.Add(ANIMATION_STEP.RUN);
+                transitionSteps.Add(ANIMATION_STEP.WALK);
         }
         else if (nodeHeightDiff > 0)//positive height diff, running up
         {
@@ -68,7 +68,7 @@ public class AnimationManager : MonoBehaviour
             {
                 int futureNodeHeightDiff = futureNode.m_gridPos.y - nextNode.m_gridPos.y;
                 if (futureNodeHeightDiff == 0) //Stright path just run
-                    transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_RUN);
+                    transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_WALK);
                 else //All other case momentum is lost so return to idle? TODO FIND OUT
                     transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_IDLE);
             }
@@ -81,7 +81,7 @@ public class AnimationManager : MonoBehaviour
             {
                 int futureNodeHeightDiff = futureNode.m_gridPos.y - nextNode.m_gridPos.y;
                 if (futureNodeHeightDiff == 0) //Stright path just run
-                    transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_RUN);
+                    transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_WALK);
                 else //All other case momentum is lost so return to idle? TODO FIND OUT
                     transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_IDLE);
             }

@@ -49,20 +49,20 @@ public class AgentAnimationController : MonoBehaviour
                 case AnimationManager.ANIMATION_STEP.STEP:
                     m_currentAnimation = "Step";
                     break;
-                case AnimationManager.ANIMATION_STEP.RUN:
-                    m_currentAnimation = "Run";
+                case AnimationManager.ANIMATION_STEP.WALK:
+                    m_currentAnimation = "Walk";
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_IDLE:
                     m_currentAnimation = "JumpToIdle";
                     break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_UP_RUN:
-                    m_currentAnimation = "JumpToRun";
+                case AnimationManager.ANIMATION_STEP.CLIMB_UP_WALK:
+                    m_currentAnimation = "JumpToWalk";
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_IDLE:
                     m_currentAnimation = "DropToIdle";
                     break;
-                case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_RUN:
-                    m_currentAnimation = "DropToRun";
+                case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_WALK:
+                    m_currentAnimation = "DropToWalk";
                     break;
                 case AnimationManager.ANIMATION_STEP.WALL_HIDE_RIGHT:
                     m_currentAnimation = "WallRight";
