@@ -174,19 +174,25 @@ public class Navigation : MonoBehaviour
         Vector3 initialRaycastPos = currentNode.transform.position;
         initialRaycastPos.y = m_minYPos;
 
-        //Forward
-        List<NavNode> newNodes = GetNavNode(initialRaycastPos + m_forwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, 1), navNodeGrid);
+        //North
+        currentNode.m_northNodes = GetNavNode(initialRaycastPos + m_forwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, 1), navNodeGrid);
 
-        //Backward
-        newNodes.AddRange(GetNavNode(initialRaycastPos + m_backwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, -1), navNodeGrid));
+        //East
+        currentNode.m_eastNodes = GetNavNode(initialRaycastPos + m_rightOffset, currentNode.m_gridPos + new Vector3Int(1, 0, 0), navNodeGrid);
 
-        //Right
-        newNodes.AddRange(GetNavNode(initialRaycastPos + m_rightOffset, currentNode.m_gridPos + new Vector3Int(1, 0, 0), navNodeGrid));
+        //South
+        currentNode.m_southNodes = GetNavNode(initialRaycastPos + m_backwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, -1), navNodeGrid);
 
-        //Left
-        newNodes.AddRange(GetNavNode(initialRaycastPos + m_leftOffset, currentNode.m_gridPos + new Vector3Int(-1, 0, 0), navNodeGrid));
+        //West
+        currentNode.m_westNodes = GetNavNode(initialRaycastPos + m_leftOffset, currentNode.m_gridPos + new Vector3Int(-1, 0, 0), navNodeGrid);
 
-        foreach (NavNode navNode in newNodes)
+        //Store all nodes in a single list for later usage
+        currentNode.m_adjacentNodes.AddRange(currentNode.m_northNodes);
+        currentNode.m_adjacentNodes.AddRange(currentNode.m_eastNodes);
+        currentNode.m_adjacentNodes.AddRange(currentNode.m_southNodes);
+        currentNode.m_adjacentNodes.AddRange(currentNode.m_westNodes);
+
+        foreach (NavNode navNode in currentNode.m_adjacentNodes)
         {
             UpdateNeighbourNodes(navNode, navNodeGrid);
         }

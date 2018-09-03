@@ -51,6 +51,12 @@ public class NavNode : MonoBehaviour
 
     public List<NavNode> m_adjacentNodes = new List<NavNode>();
 
+    //Division of navnodes into directions
+    public List<NavNode> m_northNodes = new List<NavNode>();
+    public List<NavNode> m_eastNodes = new List<NavNode>();
+    public List<NavNode> m_southNodes = new List<NavNode>();
+    public List<NavNode> m_westNodes = new List<NavNode>();
+
     public float m_gScore, m_hScore, m_fScore = 0;
 
     public NavNode m_previousNode = null;
@@ -214,16 +220,16 @@ public class NavNode : MonoBehaviour
         }
     }
 
-    public AnimationManager.FACING_DIR GetWallHideDir()
+    public Agent.FACING_DIR GetWallHideDir()
     {
         for (int i = 0; i < 4; i++)
         {
             if(m_wallHideIndicators[i].m_selected == true)
             {
-                return (AnimationManager.FACING_DIR)i;//Casting 'i' to direction
+                return (Agent.FACING_DIR)i;//Casting 'i' to direction
             }
         }
-        return AnimationManager.FACING_DIR.NONE;
+        return Agent.FACING_DIR.NONE;
     }
 
     public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }

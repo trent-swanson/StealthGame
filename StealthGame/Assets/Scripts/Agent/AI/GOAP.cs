@@ -16,8 +16,8 @@ public class GOAP : MonoBehaviour
     public List<AIAction> m_possibleActions = new List<AIAction>();
 
     [Space]
-    public AIAction m_currentAction = null;
-
+    public List<AIAction> m_actionList = new List<AIAction>();
+    
     public enum GOAL_STATE { AMBIENT, SUSPICIOUS, ALERT }
     public GOAL_STATE m_goalState;
 
@@ -35,7 +35,8 @@ public class GOAP : MonoBehaviour
     {
         GetGoalPriority();
         StartCoroutine("ActionPlanning");
-        if(m_currentAction != null && m_currentAction.m_actionCost <= m_NPC.m_currentActionPoints)
+
+        if(m_actionList[0] != null && m_actionList[0].m_actionCost <= m_NPC.m_currentActionPoints)
         {
             m_currentAction.ActionStart(m_NPC);
             return true;

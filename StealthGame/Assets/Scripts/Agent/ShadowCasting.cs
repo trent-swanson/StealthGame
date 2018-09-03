@@ -15,7 +15,6 @@ public class ShadowCasting : MonoBehaviour
 
         //Updated final nodes with the guards who can see them
 
-        T
 
     }
 }

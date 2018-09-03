@@ -165,9 +165,9 @@ public class PlayerActions : MonoBehaviour
             m_playerController.m_interaction = Agent.INTERACTION_TYPE.NONE;//Reset interaction
 
             //Getting wall hide detection
-            AnimationManager.FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
+            Agent.FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
 
-            if (wallHideDir != AnimationManager.FACING_DIR.NONE)//Wall hiding animation calling
+            if (wallHideDir != Agent.FACING_DIR.NONE)//Wall hiding animation calling
             {
                 m_playerController.m_interaction = Agent.INTERACTION_TYPE.WALL_HIDE;
             }
