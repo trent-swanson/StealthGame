@@ -178,8 +178,6 @@ public class PlayerActions : MonoBehaviour
                     {
                         Vector3 collisionPoint = hit.point;
 
-                        Debug.Log(Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop));
-
                         if (Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop) > m_wallHidingDistance)
                             NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
                     }

@@ -88,6 +88,6 @@ public class MeleeAttack : AIAction
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
         if (m_target != null)
-            NPCAgent.m_agentWorldState.SetTargetNode(m_target.m_currentNavNode);
+            NPCAgent.m_targetNode = m_target.m_currentNavNode;
     }
 }

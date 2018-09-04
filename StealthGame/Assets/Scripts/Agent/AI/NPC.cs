@@ -21,11 +21,6 @@ public class NPC : Agent
         public void SetWeapon(WEAPON_TYPE weapon) { m_weaponType = weapon; m_modifiedFlag = true; }
         public WEAPON_TYPE GetWeapon() { return m_weaponType; }
 
-        //Node this agent wants to go to
-        private NavNode m_targetNode = null; //Fixed
-        public void SetTargetNode(NavNode targetNode) { m_targetNode = targetNode; m_modifiedFlag = true; }
-        public NavNode GetTargetNode() { return m_targetNode; }
-
         //Seen targets
         private List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
         public void SetPossibleTargets(List<Agent> possibleTargets) { m_possibleTargets = possibleTargets; m_modifiedFlag = true; }
@@ -57,6 +52,9 @@ public class NPC : Agent
             set { m_node = value; }
         }
     }
+
+    //Node this agent wants to go to
+    public NavNode m_targetNode = null; //Fixed
 
     [Space]
     [Space]
@@ -92,8 +90,11 @@ public class NPC : Agent
     public override void AgentTurnUpdate()
     {
         //Check for update in world state
-
-
+        if(m_agentWorldState.m_modifiedFlag)
+        {
+            Debug.Log("FlagMod");
+            m_agentWorldState.m_modifiedFlag = false;
+        }
 
 
         if(m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list

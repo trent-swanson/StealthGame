@@ -158,6 +158,7 @@ public class NavNode : MonoBehaviour
         {
             m_wallHideIndicators[i].m_wallHideSprite.color = halfAlpha;
             m_wallHideIndicators[i].m_wallHideGroundSprite.color = halfAlpha;
+            m_wallHideIndicators[0].m_selected = false;
         }
 
         Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);

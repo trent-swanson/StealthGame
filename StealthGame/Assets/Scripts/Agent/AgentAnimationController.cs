@@ -31,11 +31,11 @@ public class AgentAnimationController : MonoBehaviour
         {
             if (animatorClips[i].name == m_rotateLeftRightName)
             {
-                m_rotateLeftRightTime = animatorClips[i].length * 0.7f;//reduction on turning to allow for minor float inacuracies '
+                m_rotateLeftRightTime = animatorClips[i].length * 0.9f;//reduction on turning to allow for minor float inacuracies '
             }
             else if(animatorClips[i].name == m_rotateTurnAroundName)
             {
-                m_rotateTurnAroundTime = animatorClips[i].length * 0.7f;//reduction on turning to allow for minor float inacuracies '
+                m_rotateTurnAroundTime = animatorClips[i].length * 0.9f;//reduction on turning to allow for minor float inacuracies '
             }
         }
     }
