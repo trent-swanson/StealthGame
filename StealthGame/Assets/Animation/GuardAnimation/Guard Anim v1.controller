@@ -271,7 +271,7 @@ AnimatorState:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: GuardWalk
-  m_Speed: 1.8
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101564142845899876}
@@ -297,7 +297,7 @@ AnimatorState:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: idleToTurnRightToIdle
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101790164046933294}
@@ -404,7 +404,7 @@ AnimatorState:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: idleToTurnLeftToIdleNoRoot
-  m_Speed: 2
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 1101433251939112230}
@@ -448,7 +448,7 @@ AnimatorStateMachine:
     m_Position: {x: 144, y: 264, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102082233659449714}
-    m_Position: {x: 360, y: 264, z: 0}
+    m_Position: {x: 348, y: 264, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

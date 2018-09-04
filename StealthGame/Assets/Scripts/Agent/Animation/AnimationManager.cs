@@ -5,15 +5,13 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, DEATH }//Animation states
+    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, DEATH }//Animation states
 
     public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, Agent.INTERACTION_TYPE interactionType = Agent.INTERACTION_TYPE.NONE, Agent.FACING_DIR interactionDir = Agent.FACING_DIR.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
         Agent.FACING_DIR playerDir = agent.m_facingDir;
-        if(interactionType == Agent.INTERACTION_TYPE.ATTACK)
-            interactionDir = Agent.GetFacingDir((agent.m_attackingTarget.transform.position - agent.transform.position).normalized);
 
         int pathCount = pathNodes.Count;
 
@@ -30,6 +28,9 @@ public class AnimationManager : MonoBehaviour
 
             GetActionSteps(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
         }
+
+        if (interactionType == Agent.INTERACTION_TYPE.ATTACK)
+            interactionDir = Agent.GetFacingDir((agent.m_attackingTarget.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
 
         GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
         agent.m_facingDir = playerDir;

@@ -157,38 +157,37 @@ public class PlayerActions : MonoBehaviour
 
     private void WallHideSelection()
     {
-        if (m_initActionState)
+        if(m_currentSelectedNode == null)
+            NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+        else
         {
-            m_initActionState = false;
-        }
+            m_currentSelectedNode.UpdateWallIndicators();
 
-        m_currentSelectedNode.UpdateWallIndicators();
-
-        NavNode newSelectedNavNode = GetMouseNode();
-        if (newSelectedNavNode != null)
-        {
-            if (m_selectableNodes.Contains(newSelectedNavNode)) //Moving back to hovering over valid tile
-                NewActionState(ACTION_STATE.VALID_NODE_SELECTION);
-            else if (Input.GetMouseButtonDown(0)) //Selecting wall hide
-                NewActionState(ACTION_STATE.ACTION_PERFORM);
-            else
+            NavNode newSelectedNavNode = GetMouseNode();
+            if (newSelectedNavNode != null)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))//Dont raycast when over UI
+                if (m_selectableNodes.Contains(newSelectedNavNode)) //Moving back to hovering over valid tile
+                    NewActionState(ACTION_STATE.VALID_NODE_SELECTION);
+                else if (Input.GetMouseButtonDown(0)) //Selecting wall hide
+                    NewActionState(ACTION_STATE.ACTION_PERFORM);
+                else
                 {
-                    Vector3 collisionPoint = hit.point;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))//Dont raycast when over UI
+                    {
+                        Vector3 collisionPoint = hit.point;
 
-                    Debug.Log(Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop));
+                        Debug.Log(Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop));
 
-                    if (Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop) > m_wallHidingDistance)
-                        NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+                        if (Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop) > m_wallHidingDistance)
+                            NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+                    }
                 }
             }
+            else
+                NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
         }
-        else
-            NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
-
     }
 
     //Moving action, Remove all UI for navmesh/ pathing, and path over to new selected node
@@ -229,6 +228,7 @@ public class PlayerActions : MonoBehaviour
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes, m_currentSelectedNode);//Remove UI
 
             m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE; //Remove nodes obstructed status
+            m_playerController.m_currentNavNode.m_obstructingAgent = null;
             m_playerController.m_currentNavNode = m_path[m_path.Count -1];
             m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED; //Update new selected ndoe
             m_playerController.m_currentNavNode.m_obstructingAgent = m_playerController;
