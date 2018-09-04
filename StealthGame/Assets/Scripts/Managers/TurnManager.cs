@@ -63,7 +63,7 @@ public class TurnManager : MonoBehaviour {
 
         if (ValidTeam())
         {
-            m_turnTeam[0].AgentSelected();
+            SwapAgents(GetNextTeamAgentIndex());
         }
         else
         {

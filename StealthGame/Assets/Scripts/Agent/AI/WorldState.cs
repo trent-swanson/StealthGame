@@ -90,7 +90,7 @@ public class WorldState : ScriptableObject
     //--------------------------------------------------------------------------------------
     public static bool HasTargetNode(NPC NPCAgent)
     {
-        return NPCAgent.m_agentWorldState.m_targetNode != null;
+        return NPCAgent.m_agentWorldState.GetTargetNode() != null;
     }
 
     //--------------------------------------------------------------------------------------
@@ -103,8 +103,8 @@ public class WorldState : ScriptableObject
     //--------------------------------------------------------------------------------------
     public static bool AtNode(NPC NPCAgent)
     {
-        if(NPCAgent.m_agentWorldState.m_targetNode!=null)
-            return (NPCAgent.m_agentWorldState.m_targetNode == NPCAgent.m_currentNavNode);
+        if(NPCAgent.m_agentWorldState.GetTargetNode() != null)
+            return (NPCAgent.m_agentWorldState.GetTargetNode() == NPCAgent.m_currentNavNode);
         return false;
     }
 

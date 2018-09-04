@@ -9,6 +9,9 @@ public class Agent : MonoBehaviour
     public enum INTERACTION_TYPE { NONE, WALL_HIDE, USE_OBJECT, ATTACK };
     public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
 
+    public enum FACING_DIR { NORTH, EAST, SOUTH, WEST, NONE }
+    public FACING_DIR m_facingDir = FACING_DIR.NONE;
+
     protected SquadManager squadManager;
 
     public Animator m_animator = null;
@@ -40,6 +43,11 @@ public class Agent : MonoBehaviour
     [Space]
     public List<Item> m_currentItems = new List<Item>();
 
+    [Header("Vision details")]
+    public int m_visionDistance = 10;
+    [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
+    public float m_visionAngle = 60;
+
     protected virtual void Start()
     {
         //New Stuff
@@ -57,6 +65,8 @@ public class Agent : MonoBehaviour
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
+
+        m_facingDir = GetFacingDir(transform.forward);
     }
 
     //Start of turn, only runs once per turn
@@ -81,4 +91,20 @@ public class Agent : MonoBehaviour
         m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
         m_turnManager.EndUnitTurn(this);
 	}
+
+    public static FACING_DIR GetFacingDir(Vector3 dir)
+    {
+        dir.y = 0; //Dont need to use y 
+        float angle = Vector3.SignedAngle(dir.normalized, new Vector3(0, 0, 1), Vector3.up);
+
+        if (angle < 10.0f && angle > -10.0f) //allows for minor inaccuracies
+            return FACING_DIR.NORTH;
+        if (angle > 170.0f || angle < -170.0f)
+            return FACING_DIR.SOUTH;
+        if (angle < 100 && angle > 70)
+            return FACING_DIR.WEST;
+        if (angle < -70 && angle > -100)
+            return FACING_DIR.EAST;
+        return FACING_DIR.NONE;
+    }
 }
