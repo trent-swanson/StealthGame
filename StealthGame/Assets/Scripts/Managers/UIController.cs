@@ -29,7 +29,7 @@ public class UIController : MonoBehaviour {
     {
         foreach (Image portraitImage in m_portraitImages)
         {
-            portraitImage.enabled = false ;
+            portraitImage.enabled = false;
         }
         for (int i = 0; i < agents.Count && i < m_portraitImages.Count; i++)
         {

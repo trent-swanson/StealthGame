@@ -8,6 +8,8 @@ public class AgentAnimationController : MonoBehaviour
     private Animator m_animator = null;
     public Animation m_rotateAnimation;
     private static float m_rotateAnimationTime;
+    [Tooltip("The number of 'frames' to rotate")]
+    public static int m_rotationSteps = 16;
 
     public bool m_playNextAnimation = true;
     public string m_currentAnimation = "Idle";
@@ -103,13 +105,12 @@ public class AgentAnimationController : MonoBehaviour
     {
         float totalRotateAmount = 90 * (int)rotationDir;
 
-        int steps = (int)(m_rotateAnimationTime / Time.fixedDeltaTime);
-        float steptime = m_rotateAnimationTime / steps;
-        float stepAmount = totalRotateAmount / steps;
+        float steptime = m_rotateAnimationTime / m_rotationSteps;
+        float stepAmount = totalRotateAmount / m_rotationSteps;
 
         Quaternion finalRotation = transform.rotation * Quaternion.Euler(0, 90 * (int)rotationDir, 0);
 
-        for (int i = 0; i < steps; i++)
+        for (int i = 0; i < m_rotationSteps; i++)
         {
             StartCoroutine(RotateOverTime(i * steptime, stepAmount));
         }

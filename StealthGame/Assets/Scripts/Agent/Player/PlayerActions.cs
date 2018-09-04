@@ -16,10 +16,13 @@ public class PlayerActions : MonoBehaviour
     [SerializeField]
     private List<NavNode> m_path = new List<NavNode>();
 
-    public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
+    public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, WALL_HIDE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
     public ACTION_STATE m_currentActionState = ACTION_STATE.ACTION_START;
 
     private bool m_initActionState = true;
+    
+    [Tooltip("How far the mouse will go off a node while keeping the wall hide icons")]
+    public static float m_wallHidingDistance = 2.5f;
 
     private void Start()
     {
@@ -51,6 +54,10 @@ public class PlayerActions : MonoBehaviour
 
             case ACTION_STATE.INVALID_NODE_SELECTION:
                 InvalidSelection();
+                break;
+
+            case ACTION_STATE.WALL_HIDE_SELECTION:
+                WallHideSelection();
                 break;
 
             case ACTION_STATE.ACTION_PERFORM:
@@ -92,7 +99,7 @@ public class PlayerActions : MonoBehaviour
     private void ValidSelection()
     {
         NavNode newSelectedNavNode = GetMouseNode();
-        if (newSelectedNavNode != null)
+        if (newSelectedNavNode != null) // Hovering over empty space
         {
             if(newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
                 newSelectedNavNode.UpdateWallIndicators();
@@ -116,9 +123,12 @@ public class PlayerActions : MonoBehaviour
                     NewActionState(ACTION_STATE.ACTION_PERFORM);
                 }
             }
-            else
+            else // hovering over unreachable nav node
             {
-                NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+                if(newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.LOW_OBSTACLE || newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.HIGH_OBSTACLE)
+                    NewActionState(ACTION_STATE.WALL_HIDE_SELECTION);
+                else
+                    NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
             }
         }
         else
@@ -143,6 +153,42 @@ public class PlayerActions : MonoBehaviour
         {
             NewActionState(ACTION_STATE.VALID_NODE_SELECTION);
         }
+    }
+
+    private void WallHideSelection()
+    {
+        if (m_initActionState)
+        {
+            m_initActionState = false;
+        }
+
+        m_currentSelectedNode.UpdateWallIndicators();
+
+        NavNode newSelectedNavNode = GetMouseNode();
+        if (newSelectedNavNode != null)
+        {
+            if (m_selectableNodes.Contains(newSelectedNavNode)) //Moving back to hovering over valid tile
+                NewActionState(ACTION_STATE.VALID_NODE_SELECTION);
+            else if (Input.GetMouseButtonDown(0)) //Selecting wall hide
+                NewActionState(ACTION_STATE.ACTION_PERFORM);
+            else
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))//Dont raycast when over UI
+                {
+                    Vector3 collisionPoint = hit.point;
+
+                    Debug.Log(Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop));
+
+                    if (Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop) > m_wallHidingDistance)
+                        NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+                }
+            }
+        }
+        else
+            NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+
     }
 
     //Moving action, Remove all UI for navmesh/ pathing, and path over to new selected node

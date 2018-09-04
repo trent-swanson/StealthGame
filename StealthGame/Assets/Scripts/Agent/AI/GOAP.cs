@@ -36,9 +36,9 @@ public class GOAP : MonoBehaviour
         GetGoalPriority();
         StartCoroutine("ActionPlanning");
 
-        if(m_actionList[0] != null && m_actionList[0].m_actionCost <= m_NPC.m_currentActionPoints)
+        if(m_actionList.Count > 0 && m_actionList[0].m_actionCost <= m_NPC.m_currentActionPoints)
         {
-            m_currentAction.ActionStart(m_NPC);
+            m_actionList[0].ActionStart(m_NPC);
             return true;
         }
 
@@ -49,14 +49,14 @@ public class GOAP : MonoBehaviour
     //Return : true when action is completed
     public GOAP_UPDATE_STATE GOAPUpdate()
     {
-        bool validAction = m_currentAction.Perform(m_NPC);
+        bool validAction = m_actionList[0].Perform(m_NPC);
 
         if(!validAction)//Action was attempted but unable to complete
             return GOAP_UPDATE_STATE.INVALID;
 
-        if (m_currentAction.IsDone(m_NPC))
+        if (m_actionList[0].IsDone(m_NPC))
         {
-            m_currentAction.EndAction(m_NPC);
+            m_actionList[0].EndAction(m_NPC);
             return GOAP_UPDATE_STATE.COMPLETED;
         }
         return GOAP_UPDATE_STATE.PERFORMING;
@@ -102,13 +102,13 @@ public class GOAP : MonoBehaviour
 
     IEnumerator ActionPlanning()
     {
-        m_currentAction = null;
+        m_actionList.Clear();
 
-        while (m_currentAction == null && m_goalList.Count > 0)
+        while (m_actionList.Count == 0 && m_goalList.Count > 0)
         {
             Goal currentGoal = m_goalList[0];
             m_goalList.RemoveAt(0);
-            m_currentAction = GetActionPlan(currentGoal);
+            m_actionList = GetActionPlan(currentGoal);
         }
 
         yield return null;
@@ -118,11 +118,11 @@ public class GOAP : MonoBehaviour
     //GOAP STUFF
     //-----------------------------
 
-    private AIAction GetActionPlan(Goal currentGoal)
+    private List<AIAction> GetActionPlan(Goal currentGoal)
     {
         ActionNode goalNode = new ActionNode(m_NPC, currentGoal);
         if (goalNode.m_invalidWorldStates.Count == 0) //In the case all world states are met already, then goal is already complete, get new goal?
-            return null;
+            return new List<AIAction>();
 
         List<ActionNode> openNodes = new List<ActionNode>();
         List<ActionNode> closedNodes = new List<ActionNode>();
@@ -132,22 +132,33 @@ public class GOAP : MonoBehaviour
         NewOpenNodes(currentNode, openNodes, closedNodes); // open list setup
 
         if (goalNode.m_invalidWorldStates.Count == 0) //Goal required just one action to be satified, current action will do this
-            return currentNode.m_AIAction;
+            return BuildActionList(currentNode);
 
         while (openNodes.Count > 0)
         {
             NewOpenNodes(currentNode, openNodes, closedNodes);
 
             if (openNodes.Count == 0)
-                return null;
+                return new List<AIAction>();
 
             currentNode = NewCurrentNode(GetLowestFScore(openNodes));
 
             if (goalNode.m_invalidWorldStates.Count == 0) //New current node just satisfied the goals final state
-                return currentNode.m_AIAction;
+                return BuildActionList(currentNode);
         }
 
-        return null;
+        return new List<AIAction>();
+    }
+
+    private List<AIAction> BuildActionList(ActionNode finalActionNode)
+    {
+        //TODO actiona add all to the list in order of priority
+        List<AIAction> actionList = new List<AIAction>();
+
+        actionList.Add(finalActionNode.m_AIAction);
+
+        return actionList;
+
     }
 
     private void NewOpenNodes(ActionNode currentNode, List<ActionNode> openNodes, List<ActionNode> closedNodes)

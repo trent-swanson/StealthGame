@@ -13,12 +13,13 @@ public class NavNode : MonoBehaviour
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
-    public static float m_wallHideSelectionDeadZone = 0.5f;
+    public static float m_wallHideSelectionDeadZone = 0.8f;
 
     [System.Serializable]
     public struct WallHideIndicators
     {
         public SpriteRenderer m_wallHideSprite;
+        public SpriteRenderer m_wallHideGroundSprite;
         public NODE_TYPE m_wallHideType;
         public bool m_selected;
     }
@@ -156,6 +157,7 @@ public class NavNode : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             m_wallHideIndicators[i].m_wallHideSprite.color = halfAlpha;
+            m_wallHideIndicators[i].m_wallHideGroundSprite.color = halfAlpha;
         }
 
         Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -173,6 +175,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[0].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[0].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[0].m_selected = true;
                     }
                 }
@@ -181,6 +184,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[2].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[2].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[2].m_selected = true;
                     }
                 }
@@ -192,6 +196,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[1].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[1].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[1].m_selected = true;
                     }
                 }
@@ -200,6 +205,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[3].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[3].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[3].m_selected = true;
                     }
                 }
@@ -214,9 +220,15 @@ public class NavNode : MonoBehaviour
             m_wallHideIndicators[i].m_selected = false;
 
             if (m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+            {
                 m_wallHideIndicators[i].m_wallHideSprite.enabled = toggleVal;
+                m_wallHideIndicators[i].m_wallHideGroundSprite.enabled = toggleVal;
+            }
             else
+            {
                 m_wallHideIndicators[i].m_wallHideSprite.enabled = false;
+                m_wallHideIndicators[i].m_wallHideGroundSprite.enabled = false;
+            }
         }
     }
 

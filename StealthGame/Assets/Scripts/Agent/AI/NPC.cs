@@ -84,7 +84,12 @@ public class NPC : Agent
     //Constant update while agent is selected
     public override void AgentTurnUpdate()
     {
-        if(m_GOAP.m_currentAction == null)
+        //Check for update in world state
+
+
+
+
+        if(m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list
         {
             bool newAction = m_GOAP.GOAPInit();
 
@@ -102,11 +107,11 @@ public class NPC : Agent
         {
             case GOAP.GOAP_UPDATE_STATE.INVALID://Remove one as it attempted to occur
                 m_currentActionPoints -= 1;
-                m_GOAP.m_currentAction = null;
+                m_GOAP.m_actionList.Clear();
                 break;
             case GOAP.GOAP_UPDATE_STATE.COMPLETED:
-                m_currentActionPoints -= m_GOAP.m_currentAction.m_actionCost;
-                m_GOAP.m_currentAction = null;
+                m_currentActionPoints -= m_GOAP.m_actionList[0].m_actionCost;
+                m_GOAP.m_actionList.RemoveAt(0);
                 break;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
             default:
@@ -124,31 +129,34 @@ public class NPC : Agent
     private void Update()
     {
         //Setup agents vals
-        Vector3 transformForward = transform.forward;
-        Vector3 checkOrigin = transform.position + transformForward * m_colliderExtents.z + transform.up * m_colliderExtents.y;
+        Vector3 checkOrigin = transform.position + transform.forward * m_colliderExtents.z + transform.up * m_colliderExtents.y;
 
         foreach (Agent oppposingAgent in m_opposingTeam)
         {
             if(!m_agentWorldState.m_possibleTargets.Contains(oppposingAgent))
             {
-                //See if opposing agent is in vision cone
-                Vector3 targetPos = oppposingAgent.transform.position;
+                //TODO sometimes can see players through walls, ray cast not working quite right
 
-                Vector3 targetDir = targetPos - checkOrigin;
+                //See if opposing agent is in vision cone
+                Vector3 targetDir = oppposingAgent.transform.position - checkOrigin;
+
+                Debug.DrawLine(checkOrigin, checkOrigin + targetDir * m_visionDistance);
 
                 float dot = Vector3.Dot(targetDir.normalized, transform.forward);
-                if (dot > 0.1f) //a bit ledss than 180 degrees of vision
+                if (dot > 0.1f) //a bit less than 180 degrees of vision
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(checkOrigin, targetDir, out hit))
+
+                    if (Physics.Raycast(checkOrigin, targetDir, out hit, m_visionDistance) && hit.collider.tag == "Player")
                     {
-                        Agent hitAgent = hit.collider.GetComponent<Agent>();
-                        if (hitAgent != null && hitAgent.m_team != m_team)
-                        {
-                            m_agentWorldState.m_possibleTargets.Add(hitAgent);
-                        }
+                        m_agentWorldState.m_possibleTargets.Add(oppposingAgent);
                     }
                 }
+            }
+            else
+            {
+                Vector3 targetDir = oppposingAgent.transform.position - checkOrigin;
+                Debug.DrawLine(checkOrigin, checkOrigin + targetDir * m_visionDistance, Color.red);
             }
         }    
     }
