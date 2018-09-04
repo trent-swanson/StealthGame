@@ -61,7 +61,7 @@ public class GotoNode : AIAction
             }
 
             NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-
+            NPCAgent.m_currentNavNode.m_obstructingAgent = null;
             List<NavNode> oneTurnSteps = new List<NavNode>();
             oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
             oneTurnSteps.Add(m_navPath[0]);

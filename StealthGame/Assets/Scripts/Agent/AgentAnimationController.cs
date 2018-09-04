@@ -8,9 +8,9 @@ public class AgentAnimationController : MonoBehaviour
     private Animator m_animator = null;
     private Animation m_rotateAnimation;
     public string m_rotateLeftRightName = "TurnRight";
-    private static float m_rotateLeftRightTime;
+    public  float m_rotateLeftRightTime;
     public string m_rotateTurnAroundName = "TurnAround";
-    private static float m_rotateTurnAroundTime;
+    public float m_rotateTurnAroundTime;
     [Tooltip("The number of 'frames' to rotate")]
     public static int m_rotationSteps = 16;
 
@@ -31,11 +31,11 @@ public class AgentAnimationController : MonoBehaviour
         {
             if (animatorClips[i].name == m_rotateLeftRightName)
             {
-                m_rotateLeftRightTime = animatorClips[i].length * 0.8f;//reduction on turning to allow for minor float inacuracies '
+                m_rotateLeftRightTime = animatorClips[i].length * 0.7f;//reduction on turning to allow for minor float inacuracies '
             }
             else if(animatorClips[i].name == m_rotateTurnAroundName)
             {
-                m_rotateTurnAroundTime = animatorClips[i].length * 0.8f;//reduction on turning to allow for minor float inacuracies '
+                m_rotateTurnAroundTime = animatorClips[i].length * 0.7f;//reduction on turning to allow for minor float inacuracies '
             }
         }
     }
