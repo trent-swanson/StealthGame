@@ -13,21 +13,28 @@ public class NPC : Agent
     [System.Serializable]
     public class AgentWorldState
     {
-        //Where agent is relative to node grid
-        public Vector2Int m_currentNodePos= new Vector2Int(0, 0); 
+        public bool m_modifiedFlag = false;
 
         //Weapon information
         public enum WEAPON_TYPE { MELEE, RANGED }; //Fixed
         private WEAPON_TYPE m_weaponType = WEAPON_TYPE.MELEE; //Fixed
+        public void SetWeapon(WEAPON_TYPE weapon) { m_weaponType = weapon; m_modifiedFlag = true; }
+        public WEAPON_TYPE GetWeapon() { return m_weaponType; }
 
         //Node this agent wants to go to
-        public NavNode m_targetNode = null; //Fixed
+        private NavNode m_targetNode = null; //Fixed
+        public void SetTargetNode(NavNode targetNode) { m_targetNode = targetNode; m_modifiedFlag = true; }
+        public NavNode GetTargetNode() { return m_targetNode; }
 
         //Seen targets
-        public List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
+        private List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
+        public void SetPossibleTargets(List<Agent> possibleTargets) { m_possibleTargets = possibleTargets; m_modifiedFlag = true; }
+        public List<Agent> GetPossibleTargets() { return m_possibleTargets; }
 
         //Targets which have gone missing
-        public List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+        private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+        public void SetInvestigatoinNode(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
+        public List<InvestigationNode> GetInvestigationNodes() { return m_investigationNodes; }
 
         //Waypoints
         [SerializeField]
@@ -133,7 +140,8 @@ public class NPC : Agent
 
         foreach (Agent oppposingAgent in m_opposingTeam)
         {
-            if(!m_agentWorldState.m_possibleTargets.Contains(oppposingAgent))
+            List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
+            if (!possibleTargets.Contains(oppposingAgent))
             {
                 //TODO sometimes can see players through walls, ray cast not working quite right
 
@@ -149,7 +157,8 @@ public class NPC : Agent
 
                     if (Physics.Raycast(checkOrigin, targetDir, out hit, m_visionDistance) && hit.collider.tag == "Player")
                     {
-                        m_agentWorldState.m_possibleTargets.Add(oppposingAgent);
+                        possibleTargets.Add(oppposingAgent);
+                        m_agentWorldState.SetPossibleTargets(possibleTargets);
                     }
                 }
             }
@@ -166,7 +175,7 @@ public class NPC : Agent
         Agent possibleTarget = null;
         float targetDis = Mathf.Infinity;
 
-        foreach (Agent agent in m_agentWorldState.m_possibleTargets) //TODO might have to update for multiple floors
+        foreach (Agent agent in m_agentWorldState.GetPossibleTargets()) //TODO might have to update for multiple floors
         {
             if (agent == null || agent.m_knockedout)
                 continue;

@@ -28,7 +28,7 @@ public class GotoNode : AIAction
         if (parentAction!=null)
         {
             parentAction.SetUpChildVaribles(NPCAgent);
-            m_targetNode = NPCAgent.m_agentWorldState.m_targetNode;
+            m_targetNode = NPCAgent.m_agentWorldState.GetTargetNode();
             if(m_targetNode!=null)
                 return true;
         }

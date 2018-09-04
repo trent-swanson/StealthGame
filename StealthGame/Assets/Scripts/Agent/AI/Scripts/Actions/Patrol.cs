@@ -59,7 +59,7 @@ public class Patrol : AIAction
         if (NPCAgent.m_agentWorldState.m_waypointIndex >= NPCAgent.m_agentWorldState.m_waypoints.Count)
             NPCAgent.m_agentWorldState.m_waypointIndex = 0;
 
-        NPCAgent.m_agentWorldState.m_targetNode = null;
+        NPCAgent.m_agentWorldState.SetTargetNode(null);
     }
 
 
@@ -99,6 +99,6 @@ public class Patrol : AIAction
             }
         }
 
-        NPCAgent.m_agentWorldState.m_targetNode = targetNode;
+        NPCAgent.m_agentWorldState.SetTargetNode(targetNode);
     }
 }
