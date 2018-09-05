@@ -194,6 +194,8 @@ public class PlayerActions : MonoBehaviour
     {
         if (m_initActionState)
         {
+            m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
+
             m_path = GetPath(m_currentSelectedNode);
             transform.position = m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
@@ -227,7 +229,7 @@ public class PlayerActions : MonoBehaviour
 
             m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE; //Remove nodes obstructed status
             m_playerController.m_currentNavNode.m_obstructingAgent = null;
-            m_playerController.m_currentNavNode = m_path[m_path.Count -1];
+            m_playerController.m_currentNavNode = m_path[m_path.Count - 1];
             m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED; //Update new selected ndoe
             m_playerController.m_currentNavNode.m_obstructingAgent = m_playerController;
             m_initActionState = false;
@@ -240,7 +242,6 @@ public class PlayerActions : MonoBehaviour
 
             if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
             {
-                m_playerController.m_currentActionPoints = m_playerController.m_currentNavNode.m_BFSDistance;//Set action points to node value
                 InitActions();
             }
         }
@@ -288,7 +289,7 @@ public class PlayerActions : MonoBehaviour
 
             foreach (NavNode nextBFSNode in currentBFSNode.m_adjacentNodes)
             {
-                if (!m_selectableNodes.Contains(nextBFSNode) && !BFSQueue.Contains(nextBFSNode) && (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)) //TODO do we want to move through players, if not add nextBFSNode.m_nodeState != NavNode.NODE_STATE.OBSTRUCTED
+                if (!m_selectableNodes.Contains(nextBFSNode) && !BFSQueue.Contains(nextBFSNode))
                 {
                     int distance = currentBFSNode.m_BFSDistance - 1;
 
@@ -296,7 +297,13 @@ public class PlayerActions : MonoBehaviour
                     nextBFSNode.m_BFSPreviousNode = currentBFSNode;
 
                     if (distance >= 0)
-                        BFSQueue.Enqueue(nextBFSNode);
+                    {
+                        if(nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)//TODO if we want to move through team mates just compare team values
+                            BFSQueue.Enqueue(nextBFSNode);
+                        else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)
+                            m_selectableNodes.Add(nextBFSNode);
+
+                    }
                 }
             }
         }

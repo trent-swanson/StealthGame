@@ -153,6 +153,9 @@ public class NavNode : MonoBehaviour
 
     public void UpdateWallIndicators()
     {
+        if (m_nodeType == NODE_TYPE.OBSTRUCTED &&  m_obstructingAgent.m_team == TurnManager.TEAM.AI)//No need to update wall hide indicators on nodes with enemy on them
+            return;
+
         Color halfAlpha = new Color(1, 1, 1, 0.2f);
         for (int i = 0; i < 4; i++)
         {
