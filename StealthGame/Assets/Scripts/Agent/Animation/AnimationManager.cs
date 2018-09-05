@@ -17,16 +17,16 @@ public class AnimationManager : MonoBehaviour
 
         if (pathCount == 2)//Moving one square
         {
-            GetActionSteps(ref playerDir, transitionSteps, pathNodes[0], pathNodes[1]);
+            GetActionStepsForSingleStep(ref playerDir, transitionSteps, pathNodes[0], pathNodes[1]);
         }
         else if(pathCount > 2)            //Normal movement
         {
             for (int i = 0; i < pathCount - 2; i++)//Create all steps between, only will be movement
             {
-                GetActionSteps(ref playerDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
+                GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
             }
 
-            GetActionSteps(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
+            GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
         }
 
         if (interactionType == Agent.INTERACTION_TYPE.ATTACK)
@@ -38,7 +38,31 @@ public class AnimationManager : MonoBehaviour
         return transitionSteps;
     }
 
-    private static void GetActionSteps(ref Agent.FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode, NavNode futureNode = null)
+    private static void GetActionStepsForSingleStep(ref Agent.FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode)
+    {
+        Agent.FACING_DIR nextDir = Agent.GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
+        GetRotation(ref playerDir, nextDir, ref transitionSteps);
+        playerDir = nextDir;
+
+        int nodeHeightDiff = nextNode.m_gridPos.y - currentNode.m_gridPos.y;
+
+        if (nodeHeightDiff == 0) //Stright path just run
+        {
+            transitionSteps.Add(ANIMATION_STEP.STEP);
+        }
+        else if (nodeHeightDiff > 0)//positive height diff, running up
+        {
+            transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_IDLE);
+        }
+        else if (nodeHeightDiff < 0)//negitive height diff, running down
+        {
+            
+            transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_IDLE);
+           
+        }
+    }
+
+    private static void GetActionStepsForRunning(ref Agent.FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode, NavNode futureNode = null)
     {
         Agent.FACING_DIR nextDir = Agent.GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
         GetRotation(ref playerDir, nextDir, ref transitionSteps);

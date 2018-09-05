@@ -502,10 +502,10 @@ GameObject:
   - component: {fileID: 4696864402472868}
   - component: {fileID: 136927561452842654}
   - component: {fileID: 54863144028272940}
+  - component: {fileID: 95675678552105234}
   - component: {fileID: 114488288044303868}
   - component: {fileID: 114563112806178036}
   - component: {fileID: 114747388290050114}
-  - component: {fileID: 95675678552105234}
   - component: {fileID: 114225565733383380}
   m_Layer: 0
   m_Name: Player
@@ -3798,8 +3798,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1261249592991502}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: -6}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 5, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224925064330406088}
@@ -3807,7 +3807,7 @@ Transform:
   - {fileID: 4741051591138934}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!4 &4707919396098420
 Transform:
   m_ObjectHideFlags: 1
@@ -4648,7 +4648,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fa12ab7f7e230f43ae6ed52153189db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_rotateAnimation: {fileID: 0}
+  m_rotateLeftRightName: PlayerTinkerer_IdleToTurnRightToIdle
+  m_rotateLeftRightTime: 0
+  m_rotateTurnAroundName: PlayerTinkerer_IdleToWallRight180
+  m_rotateTurnAroundTime: 0
   m_playNextAnimation: 1
   m_currentAnimation: Idle
   m_animationSteps: 
@@ -4777,10 +4780,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_interaction: 0
+  m_facingDir: 4
   m_animator: {fileID: 95675678552105234}
   m_turn: 0
   m_knockedout: 0
-  m_maxActionPoints: 6
+  m_maxActionPoints: 50
   m_currentActionPoints: 0
   m_moveSpeed: 2
   m_highlightInteractablesRange: 6
@@ -4789,6 +4793,8 @@ MonoBehaviour:
   m_attackingTarget: {fileID: 0}
   m_colliderExtents: {x: 0, y: 0, z: 0}
   m_currentItems: []
+  m_visionDistance: 10
+  m_visionAngle: 60
   portrait: {fileID: 21300000, guid: da1299cda8879bb4bb05d7e7b2be19dd, type: 3}
 --- !u!114 &114563112806178036
 MonoBehaviour:
