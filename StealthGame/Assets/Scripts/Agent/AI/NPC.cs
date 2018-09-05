@@ -133,8 +133,8 @@ public class NPC : Agent
         base.AgentTurnEnd();
     }
 
-    //Always updating view as this changes in real time TODO as it is turn based could move to check only when players move
-    private void Update()
+    //Update the NPCs world stae, this will be called after every animation played, NPC or Player.
+    public void UpdateWorldState()
     {
         //Setup agents vals
         Vector3 checkOrigin = transform.position + transform.forward * m_colliderExtents.z + transform.up * m_colliderExtents.y;

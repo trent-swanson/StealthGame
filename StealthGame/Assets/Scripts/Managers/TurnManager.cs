@@ -140,4 +140,13 @@ public class TurnManager : MonoBehaviour {
         }
         return 0;
     }
+
+    public void UpdateNPCWorldStates()
+    {
+        for (int i = 0; i < m_AITeam.Count; i++)
+        {
+            if (!m_AITeam[i].m_knockedout)
+                m_AITeam[i].GetComponent<NPC>().UpdateWorldState();
+        }
+    }
 }

@@ -8,7 +8,6 @@ public class PlayerActions : MonoBehaviour
     private AgentAnimationController m_agentAnimationController = null;
     private PlayerController m_playerController = null;
     private PlayerUI m_playerUI = null;
-    private TurnManager m_turnManager = null;
 
     public NavNode m_currentSelectedNode = null;
 
@@ -29,7 +28,6 @@ public class PlayerActions : MonoBehaviour
         m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_playerController = GetComponent<PlayerController>();
         m_playerUI = GetComponent<PlayerUI>();
-        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
     }
 
     //To run at the start of a players action

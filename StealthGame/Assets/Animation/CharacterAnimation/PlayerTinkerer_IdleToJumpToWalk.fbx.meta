@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 89d1c08f82961bc4388c16337431e1fa
-timeCreated: 1536033560
+guid: 8c23991ecb166504681406ba3e5b786e
+timeCreated: 1536106184
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -271,7 +271,7 @@ ModelImporter:
     400260: Ring_Con_Left
     400262: Ring_Con_Right
     400264: JNT_Root
-    7400000: PlayerTinkerer_WalkToIdle
+    7400000: PlayerTinkerer_IdleToJumpToWalk
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -288,10 +288,10 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'PlayerTinkerer_WalkToIdle' has import animation
-      warnings that might lower retargeting quality:\nNote: Activate translation DOF
-      on avatar to improve retargeting quality.\n\t'JNT_Spine0' has translation animation
-      that will be discarded.\n"
+    animationImportWarnings: "\nClip 'PlayerTinkerer_IdleToJumpToWalk' has import
+      animation warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'JNT_Spine0' has translation
+      animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -304,10 +304,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PlayerTinkerer_WalkToIdle
-      takeName: PlayerTinkerer_WalkToIdle
+      name: PlayerTinkerer_IdleToJumpToWalk
+      takeName: PlayerTinkerer_IdleToJumpToWalk
       firstFrame: 1
-      lastFrame: 34
+      lastFrame: 35
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -327,7 +327,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9866944
+      - time: 0.98451144
         functionName: EndAnimationState
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -337,7 +337,7 @@ ModelImporter:
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0.9
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

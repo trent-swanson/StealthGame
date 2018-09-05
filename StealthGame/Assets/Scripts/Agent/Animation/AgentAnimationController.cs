@@ -19,6 +19,8 @@ public class AgentAnimationController : MonoBehaviour
 
     public List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
 
+    private TurnManager m_turnManager = null;
+
     private void Start()
     {
         m_agent = GetComponent<Agent>();
@@ -38,6 +40,8 @@ public class AgentAnimationController : MonoBehaviour
                 m_rotateTurnAroundTime = animatorClips[i].length * 0.9f;//reduction on turning to allow for minor float inacuracies '
             }
         }
+
+        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
     }
 
     public void EndAnimationState()
@@ -48,6 +52,7 @@ public class AgentAnimationController : MonoBehaviour
 
     public void PlayNextAnimation()
     {
+        m_turnManager.UpdateNPCWorldStates();
         if (m_animationSteps.Count > 0)
         {
             switch (m_animationSteps[0])
