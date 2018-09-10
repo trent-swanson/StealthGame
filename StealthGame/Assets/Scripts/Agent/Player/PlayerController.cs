@@ -48,7 +48,6 @@ public class PlayerController : Agent {
 
         if (m_currentActionPoints <= 0 && m_agentAnimationController.m_animationSteps.Count == 0)
         {
-            m_playerActions.ActionEnd();
             m_turnManager.EndUnitTurn(this);
             AgentTurnEnd();
             return;
@@ -59,5 +58,6 @@ public class PlayerController : Agent {
     public override void AgentTurnEnd()
     {
         base.AgentTurnEnd();
+        m_playerActions.ActionEnd();
     }
 }

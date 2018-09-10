@@ -60,8 +60,6 @@ public class GotoNode : AIAction
                 return;
             }
 
-            NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-            NPCAgent.m_currentNavNode.m_obstructingAgent = null;
             List<NavNode> oneTurnSteps = new List<NavNode>();
             oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
             oneTurnSteps.Add(m_navPath[0]);
@@ -123,9 +121,6 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        NPCAgent.m_currentNavNode = m_navPath[0];
-        NPCAgent.m_currentNavNode.m_obstructingAgent = NPCAgent;
-        NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
     }
 
     //--------------------------------------------------------------------------------------

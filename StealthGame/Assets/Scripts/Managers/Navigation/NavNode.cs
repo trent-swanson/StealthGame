@@ -30,7 +30,7 @@ public class NavNode : MonoBehaviour
 
     [HideInInspector]
     public Color spriteColor;
-    
+
     //auto assigned
     [Space]
     [Space]
@@ -40,11 +40,11 @@ public class NavNode : MonoBehaviour
 
     Renderer myRenderer;
 
-    public enum NODE_STATE {SELECTED, SELECTABLE, UNSELECTED}
-    public enum NODE_TYPE {NONE, WALKABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE}
+    public enum NODE_STATE { SELECTED, SELECTABLE, UNSELECTED }
+    public enum NODE_TYPE { NONE, WALKABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE }
 
     public Agent m_obstructingAgent = null;
-    public Agent m_downedAgent = null;
+    public List<Agent> m_downedAgents = null;
 
     public NODE_STATE m_nodeState = NODE_STATE.UNSELECTED;
     public NODE_TYPE m_nodeType = NODE_TYPE.NONE;
@@ -82,7 +82,7 @@ public class NavNode : MonoBehaviour
 
         foreach (NavNode navNode in m_adjacentNodes)
         {
-            if(navNode.m_gScore < previousNodeCost && (openNodes.Contains(navNode) || closedNodes.Contains(navNode)))
+            if (navNode.m_gScore < previousNodeCost && (openNodes.Contains(navNode) || closedNodes.Contains(navNode)))
             {
                 previousNode = navNode;
                 previousNodeCost = navNode.m_gScore;
@@ -111,7 +111,9 @@ public class NavNode : MonoBehaviour
                 }
                 else if (m_nodeType == NODE_TYPE.WALKABLE)
                 {
-                    if (m_downedAgent != null && m_downedAgent.m_team == agent.m_team)
+                    Agent downAgent = GetDownedAgent(agent.m_team);
+
+                    if (downAgent != null)
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
@@ -137,7 +139,9 @@ public class NavNode : MonoBehaviour
                 }
                 else if (m_nodeType == NODE_TYPE.WALKABLE)
                 {
-                    if (m_downedAgent != null && m_downedAgent.m_team == agent.m_team)
+                    Agent downAgent = GetDownedAgent(agent.m_team);
+
+                    if (downAgent != null)
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
@@ -158,7 +162,7 @@ public class NavNode : MonoBehaviour
                 m_selectedUI.SetActive(false);
                 m_spriteRenderer.sprite = m_defaultSprite;
                 break;
-        }              
+        }
     }
 
     public void SetupWallHideIndicators(Navigation navigation)
@@ -171,7 +175,7 @@ public class NavNode : MonoBehaviour
 
     public void UpdateWallIndicators()
     {
-        if (m_nodeType == NODE_TYPE.OBSTRUCTED &&  m_obstructingAgent.m_team == TurnManager.TEAM.AI)//No need to update wall hide indicators on nodes with enemy on them
+        if (m_nodeType == NODE_TYPE.OBSTRUCTED && m_obstructingAgent.m_team == TurnManager.TEAM.AI)//No need to update wall hide indicators on nodes with enemy on them
             return;
 
         Color halfAlpha = new Color(1, 1, 1, 0.2f);
@@ -184,15 +188,15 @@ public class NavNode : MonoBehaviour
 
         Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
-        RaycastHit hit; 
+        RaycastHit hit;
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
         {
             Vector3 relativeMousePos = hit.point - transform.position;
 
-            if(Mathf.Abs(relativeMousePos.z) > Mathf.Abs(relativeMousePos.x))//North south Indicator
+            if (Mathf.Abs(relativeMousePos.z) > Mathf.Abs(relativeMousePos.x))//North south Indicator
             {
-                if(relativeMousePos.z > m_wallHideSelectionDeadZone)//North Indicator
+                if (relativeMousePos.z > m_wallHideSelectionDeadZone)//North Indicator
                 {
                     if (m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
@@ -201,7 +205,7 @@ public class NavNode : MonoBehaviour
                         m_wallHideIndicators[0].m_selected = true;
                     }
                 }
-                else if(relativeMousePos.z < -m_wallHideSelectionDeadZone) //South indicator
+                else if (relativeMousePos.z < -m_wallHideSelectionDeadZone) //South indicator
                 {
                     if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
@@ -258,7 +262,7 @@ public class NavNode : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            if(m_wallHideIndicators[i].m_selected == true)
+            if (m_wallHideIndicators[i].m_selected == true)
             {
                 return (Agent.FACING_DIR)i;//Casting 'i' to direction
             }
@@ -266,8 +270,24 @@ public class NavNode : MonoBehaviour
         return Agent.FACING_DIR.NONE;
     }
 
+    public Agent GetDownedAgent(TurnManager.TEAM team)
+    {
+        foreach (Agent agent in m_downedAgents)
+        {
+            if (agent.m_team == team)
+                return agent;
+        }
+        return null;
+    }
+
+    public void AddDownedAgent(Agent agent)
+    {
+        if (!m_downedAgents.Contains(agent))
+            m_downedAgents.Add(agent);
+    }
+
     public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }
-    public void NPCVision(NPC npc, ADD_REMOVE_FUNCTION functionType )
+    public void NPCVision(Agent npc, ADD_REMOVE_FUNCTION functionType )
     {
         switch (functionType)
         {

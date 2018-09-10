@@ -17,18 +17,22 @@ public class NPC : Agent
 
         //Weapon information
         public enum WEAPON_TYPE { MELEE, RANGED }; //Fixed
+
+        [SerializeField]
         private WEAPON_TYPE m_weaponType = WEAPON_TYPE.MELEE; //Fixed
         public void SetWeapon(WEAPON_TYPE weapon) { m_weaponType = weapon; m_modifiedFlag = true; }
         public WEAPON_TYPE GetWeapon() { return m_weaponType; }
 
         //Seen targets
+        [SerializeField]
         private List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
         public void SetPossibleTargets(List<Agent> possibleTargets) { m_possibleTargets = possibleTargets; m_modifiedFlag = true; }
         public List<Agent> GetPossibleTargets() { return m_possibleTargets; }
 
         //Targets which have gone missing
+        [SerializeField]
         private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
-        public void SetInvestigatoinNode(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
+        public void SetInvestigationNode(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
         public List<InvestigationNode> GetInvestigationNodes() { return m_investigationNodes; }
 
         //Waypoints
@@ -55,6 +59,8 @@ public class NPC : Agent
 
     //Node this agent wants to go to
     public NavNode m_targetNode = null; //Fixed
+
+    public List<NavNode> m_visionNodes = new List<NavNode>();
 
     [Space]
     [Space]
@@ -104,6 +110,7 @@ public class NPC : Agent
             if(!newAction)//Unable to get a new action
             {
                 m_currentActionPoints = 0;
+                AgentTurnEnd();
                 m_turnManager.EndUnitTurn(this);
                 return;
             }
@@ -130,45 +137,55 @@ public class NPC : Agent
     //Runs when agent is removed from team list, end of turn
     public override void AgentTurnEnd()
     {
+        BuildVision();
         base.AgentTurnEnd();
     }
 
     //Update the NPCs world stae, this will be called after every animation played, NPC or Player.
     public void UpdateWorldState()
     {
-        //Setup agents vals
-        Vector3 checkOrigin = transform.position + transform.forward * m_colliderExtents.z + transform.up * m_colliderExtents.y;
+        BuildVision();//Build vision
 
-        foreach (Agent oppposingAgent in m_opposingTeam)
+        foreach (NavNode navNode in m_visionNodes)//Check for player in vision
         {
-            List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
-            if (!possibleTargets.Contains(oppposingAgent))
+            Agent obstructingAgent = navNode.m_obstructingAgent;
+            if (obstructingAgent != null && obstructingAgent.m_team != m_team)//Vision node has enemy agent on it
             {
-                //TODO sometimes can see players through walls, ray cast not working quite right
-
-                //See if opposing agent is in vision cone
-                Vector3 targetDir = oppposingAgent.transform.position - checkOrigin;
-
-                Debug.DrawLine(checkOrigin, checkOrigin + targetDir * m_visionDistance);
-
-                float dot = Vector3.Dot(targetDir.normalized, transform.forward);
-                if (dot > 0.1f) //a bit less than 180 degrees of vision
+                List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
+                if (!possibleTargets.Contains(obstructingAgent))
                 {
-                    RaycastHit hit;
-
-                    if (Physics.Raycast(checkOrigin, targetDir, out hit, m_visionDistance) && hit.collider.tag == "Player")
-                    {
-                        possibleTargets.Add(oppposingAgent);
-                        m_agentWorldState.SetPossibleTargets(possibleTargets);
-                    }
+                    possibleTargets.Add(obstructingAgent);
+                    m_agentWorldState.SetPossibleTargets(possibleTargets);
                 }
             }
-            else
+        }
+    }
+
+    private void BuildVision()
+    {
+        foreach (NavNode navNode in m_visionNodes) //Remove old vision
+        {
+            navNode.NPCVision(this, NavNode.ADD_REMOVE_FUNCTION.REMOVE);
+        }
+
+        m_visionNodes.Clear();
+
+        List<NavNode> visibleNavNode = Vision.BuildVisionList(this);
+
+        //Build vision cone, dont add duplicates to list
+        foreach (NavNode navNode in visibleNavNode)
+        {
+            if(!m_visionNodes.Contains(navNode))
             {
-                Vector3 targetDir = oppposingAgent.transform.position - checkOrigin;
-                Debug.DrawLine(checkOrigin, checkOrigin + targetDir * m_visionDistance, Color.red);
+                m_visionNodes.Add(navNode);
             }
-        }    
+        }
+
+        //Build guard vision range
+        foreach (NavNode navNode in m_visionNodes)
+        {
+            navNode.NPCVision(this, NavNode.ADD_REMOVE_FUNCTION.ADD);
+        }
     }
 
     public Agent GetClosestTarget()
