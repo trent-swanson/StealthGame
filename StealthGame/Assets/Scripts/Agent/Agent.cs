@@ -88,6 +88,8 @@ public class Agent : MonoBehaviour
     {
 		m_knockedout = true;
         m_animator.SetBool("Death", true);
+        m_currentNavNode.m_obstructingAgent = null;
+        m_currentNavNode.m_downedAgent = this;
         m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
         m_turnManager.EndUnitTurn(this);
 	}

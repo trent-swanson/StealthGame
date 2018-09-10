@@ -10,6 +10,7 @@ public class NavNode : MonoBehaviour
     public GameObject m_NPCVisionUI;
     public Sprite m_selectedSprite;
     public Sprite m_attackSprite;
+    public Sprite m_reviveSprite;
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
@@ -43,6 +44,7 @@ public class NavNode : MonoBehaviour
     public enum NODE_TYPE {NONE, WALKABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE}
 
     public Agent m_obstructingAgent = null;
+    public Agent m_downedAgent = null;
 
     public NODE_STATE m_nodeState = NODE_STATE.UNSELECTED;
     public NODE_TYPE m_nodeType = NODE_TYPE.NONE;
@@ -101,40 +103,56 @@ public class NavNode : MonoBehaviour
 
         switch (nodeState) {
             case NODE_STATE.SELECTABLE:
-
-                if(m_nodeType == NODE_TYPE.WALKABLE)
-                {
-                    m_selectableUI.SetActive(true);
-                    m_selectedUI.SetActive(false);
-                    m_spriteRenderer.sprite = m_defaultSprite;
-
-                    ToggleWallHideIndicators(false);
-                }
-                else if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
+                if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
                 {
                     m_selectableUI.SetActive(true);
                     m_selectedUI.SetActive(false);
                     m_spriteRenderer.sprite = m_attackSprite;
                 }
+                else if (m_nodeType == NODE_TYPE.WALKABLE)
+                {
+                    if (m_downedAgent != null && m_downedAgent.m_team == agent.m_team)
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(false);
+                        m_spriteRenderer.sprite = m_reviveSprite;
+                    }
+                    else
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(false);
+                        m_spriteRenderer.sprite = m_defaultSprite;
 
+                        ToggleWallHideIndicators(false);
+                    }
+                }
                 break;
+
             case NODE_STATE.SELECTED:
-
-                if (m_nodeType == NODE_TYPE.WALKABLE)
-                {
-                    m_selectedUI.SetActive(true);
-                    m_spriteRenderer.sprite = m_selectedSprite;
-
-                    ToggleWallHideIndicators(true);
-                }
-                else if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
+                if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
                 {
                     m_selectableUI.SetActive(true);
                     m_selectedUI.SetActive(false);
                     m_spriteRenderer.sprite = m_attackSprite;
                 }
+                else if (m_nodeType == NODE_TYPE.WALKABLE)
+                {
+                    if (m_downedAgent != null && m_downedAgent.m_team == agent.m_team)
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(false);
+                        m_spriteRenderer.sprite = m_reviveSprite;
+                    }
+                    else
+                    {
+                        m_selectedUI.SetActive(true);
+                        m_spriteRenderer.sprite = m_selectedSprite;
 
+                        ToggleWallHideIndicators(true);
+                    }
+                }
                 break;
+
             case NODE_STATE.UNSELECTED:
                 m_selectableUI.SetActive(false);
                 m_selectedUI.SetActive(false);

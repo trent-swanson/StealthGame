@@ -105,7 +105,8 @@ public class PlayerActions : MonoBehaviour
             bool nextNodeUsable = newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || 
                 (newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED &&
                 newSelectedNavNode.m_obstructingAgent != null && 
-                newSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team);
+                newSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team) ||
+                newSelectedNavNode.m_downedAgent != null && newSelectedNavNode.m_downedAgent.m_turn != m_playerController.m_turn;
 
             if (m_selectableNodes.Contains(newSelectedNavNode) && nextNodeUsable)
             {
