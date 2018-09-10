@@ -48,6 +48,9 @@ public class Agent : MonoBehaviour
     [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
     public float m_visionAngle = 60;
 
+    [SerializeField]
+    public List<NavNode> m_path = new List<NavNode>();
+
     protected virtual void Start()
     {
         //New Stuff
@@ -88,6 +91,8 @@ public class Agent : MonoBehaviour
     {
 		m_knockedout = true;
         m_animator.SetBool("Death", true);
+        m_currentNavNode.m_obstructingAgent = null;
+        m_currentNavNode.AddDownedAgent(this);
         m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
         m_turnManager.EndUnitTurn(this);
 	}
@@ -106,5 +111,16 @@ public class Agent : MonoBehaviour
         if (angle < -70 && angle > -100)
             return FACING_DIR.EAST;
         return FACING_DIR.NONE;
+    }
+
+    public void ChangeCurrentNavNode(NavNode navNode)
+    {
+        m_currentNavNode.m_obstructingAgent = null;
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+
+        m_currentNavNode = navNode;
+
+        m_currentNavNode.m_obstructingAgent = this;
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
     }
 }

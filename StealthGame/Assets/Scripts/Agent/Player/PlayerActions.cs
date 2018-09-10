@@ -12,8 +12,6 @@ public class PlayerActions : MonoBehaviour
     public NavNode m_currentSelectedNode = null;
 
     private List<NavNode> m_selectableNodes = new List<NavNode>();
-    [SerializeField]
-    private List<NavNode> m_path = new List<NavNode>();
 
     public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, WALL_HIDE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
     public ACTION_STATE m_currentActionState = ACTION_STATE.ACTION_START;
@@ -102,10 +100,13 @@ public class PlayerActions : MonoBehaviour
             if(newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
                 newSelectedNavNode.UpdateWallIndicators();
 
-            bool nextNodeUsable = newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || 
+            Agent downedAgent = newSelectedNavNode.GetDownedAgent(m_playerController.m_team);
+
+            bool nextNodeUsable = newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || //Node is walkable
                 (newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED &&
                 newSelectedNavNode.m_obstructingAgent != null && 
-                newSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team);
+                newSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team) || //Node contains an enemy 
+                downedAgent != null;//Node contains downed ally
 
             if (m_selectableNodes.Contains(newSelectedNavNode) && nextNodeUsable)
             {
@@ -194,8 +195,8 @@ public class PlayerActions : MonoBehaviour
         {
             m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
 
-            m_path = GetPath(m_currentSelectedNode);
-            transform.position = m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
+            m_playerController.m_path = GetPath(m_currentSelectedNode);
+            transform.position = m_playerController.m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
             //Get animation steps
             m_agentAnimationController.m_animationSteps.Clear();
@@ -218,18 +219,13 @@ public class PlayerActions : MonoBehaviour
             {
                 m_playerController.m_interaction = Agent.INTERACTION_TYPE.ATTACK;
                 m_playerController.m_attackingTarget = m_currentSelectedNode.m_obstructingAgent;
-                m_path.RemoveAt(m_path.Count - 1); //As were attackig no need to move to last tile
+                m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
             }
 
-            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetAnimationSteps(this.m_playerController, m_path, m_playerController.m_interaction, wallHideDir));
+            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction, wallHideDir));
 
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes, m_currentSelectedNode);//Remove UI
 
-            m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE; //Remove nodes obstructed status
-            m_playerController.m_currentNavNode.m_obstructingAgent = null;
-            m_playerController.m_currentNavNode = m_path[m_path.Count - 1];
-            m_playerController.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED; //Update new selected ndoe
-            m_playerController.m_currentNavNode.m_obstructingAgent = m_playerController;
             m_initActionState = false;
         }
 
@@ -240,6 +236,8 @@ public class PlayerActions : MonoBehaviour
 
             if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
             {
+                m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
+
                 InitActions();
             }
         }

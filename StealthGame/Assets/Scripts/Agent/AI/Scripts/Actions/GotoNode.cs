@@ -48,11 +48,11 @@ public class GotoNode : AIAction
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
         {
-            m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode);
+            m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent);
 
             if(m_navPath.Count == 0)//Unable to reach navnode, attempt to get to adjacent node
             {
-                m_navPath = GetShortestPath(NPCAgent.m_currentNavNode, ref m_targetNode);
+                m_navPath = GetShortestPath(NPCAgent.m_currentNavNode, ref m_targetNode, NPCAgent);
             }
 
             if (m_navPath.Count == 0)//unable to find any path, return
@@ -60,8 +60,6 @@ public class GotoNode : AIAction
                 return;
             }
 
-            NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-            NPCAgent.m_currentNavNode.m_obstructingAgent = null;
             List<NavNode> oneTurnSteps = new List<NavNode>();
             oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
             oneTurnSteps.Add(m_navPath[0]);
@@ -80,7 +78,7 @@ public class GotoNode : AIAction
     // Return:
     //      New shortest path to closest adjacent node
     //--------------------------------------------------------------------------------------
-    private List<NavNode> GetShortestPath(NavNode startingNode, ref NavNode targetNode)
+    private List<NavNode> GetShortestPath(NavNode startingNode, ref NavNode targetNode, Agent agent)
     {
         NavNode newTargetNode = null;
         List<NavNode> shortestPath = new List<NavNode>();
@@ -88,7 +86,7 @@ public class GotoNode : AIAction
 
         foreach (NavNode adjacentNode in targetNode.m_adjacentNodes)
         {
-            List<NavNode> tempPath = m_navigation.GetNavPath(startingNode, adjacentNode);
+            List<NavNode> tempPath = m_navigation.GetNavPath(startingNode, adjacentNode, agent);
             if(tempPath.Count!=0 && tempPath.Count < distance)
             {
                 distance = tempPath.Count;
@@ -123,9 +121,6 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        NPCAgent.m_currentNavNode = m_navPath[0];
-        NPCAgent.m_currentNavNode.m_obstructingAgent = NPCAgent;
-        NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
     }
 
     //--------------------------------------------------------------------------------------

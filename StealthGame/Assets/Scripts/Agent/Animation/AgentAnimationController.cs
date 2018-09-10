@@ -6,7 +6,6 @@ public class AgentAnimationController : MonoBehaviour
 {
     private Agent m_agent = null;
     private Animator m_animator = null;
-    private Animation m_rotateAnimation;
     public string m_rotateLeftRightName = "TurnRight";
     public  float m_rotateLeftRightTime;
     public string m_rotateTurnAroundName = "TurnAround";
@@ -62,9 +61,11 @@ public class AgentAnimationController : MonoBehaviour
                     break;
                 case AnimationManager.ANIMATION_STEP.STEP:
                     m_currentAnimation = "Step";
+                    UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.WALK:
                     m_currentAnimation = "Walk";
+                    UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_IDLE:
                     m_currentAnimation = "JumpToIdle";
@@ -112,6 +113,19 @@ public class AgentAnimationController : MonoBehaviour
             }
             m_animator.SetBool(m_currentAnimation, true);
             m_playNextAnimation = false;
+        }
+    }
+
+    public void UpdateGridPos()
+    {
+        List<NavNode> path = m_agent.m_path;
+        if (path.Count > 0)
+        {
+            path.RemoveAt(0);
+
+            m_agent.ChangeCurrentNavNode(path[0]);
+
+            m_agent.m_path = path;
         }
     }
 

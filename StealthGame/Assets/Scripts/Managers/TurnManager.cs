@@ -6,7 +6,7 @@ public class TurnManager : MonoBehaviour {
 
 	public List<Agent> m_playerTeam = new List<Agent>();
 
-    public List<Agent> m_AITeam = new List<Agent>();
+    public List<Agent> m_NPCTeam = new List<Agent>();
 
     public List<Agent> m_turnTeam = new List<Agent>();
 
@@ -44,7 +44,7 @@ public class TurnManager : MonoBehaviour {
         if (m_currentTeam == TEAM.PLAYER)
         {
             m_currentTeam = TEAM.AI;
-            m_turnTeam = new List<Agent>(m_AITeam);
+            m_turnTeam = new List<Agent>(m_NPCTeam);
         }
         else
         {
@@ -117,7 +117,7 @@ public class TurnManager : MonoBehaviour {
     public List<Agent> GetOpposingTeam(TEAM team)
     {
         if (team == TEAM.PLAYER)
-            return m_AITeam;
+            return m_NPCTeam;
         return m_playerTeam;
     }
 
@@ -143,10 +143,10 @@ public class TurnManager : MonoBehaviour {
 
     public void UpdateNPCWorldStates()
     {
-        for (int i = 0; i < m_AITeam.Count; i++)
+        for (int i = 0; i < m_NPCTeam.Count; i++)
         {
-            if (!m_AITeam[i].m_knockedout)
-                m_AITeam[i].GetComponent<NPC>().UpdateWorldState();
+            if (!m_NPCTeam[i].m_knockedout)
+                m_NPCTeam[i].GetComponent<NPC>().UpdateWorldState();
         }
     }
 }

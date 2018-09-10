@@ -174,25 +174,23 @@ public class Navigation : MonoBehaviour
         Vector3 initialRaycastPos = currentNode.transform.position;
         initialRaycastPos.y = m_minYPos;
 
+        List<NavNode> neightbourNodes = new List<NavNode>();
+
         //North
-        currentNode.m_northNodes = GetNavNode(initialRaycastPos + m_forwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, 1), navNodeGrid);
+        neightbourNodes.AddRange(GetNavNode(initialRaycastPos + m_forwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, 1), navNodeGrid));
 
         //East
-        currentNode.m_eastNodes = GetNavNode(initialRaycastPos + m_rightOffset, currentNode.m_gridPos + new Vector3Int(1, 0, 0), navNodeGrid);
+        neightbourNodes.AddRange(GetNavNode(initialRaycastPos + m_rightOffset, currentNode.m_gridPos + new Vector3Int(1, 0, 0), navNodeGrid));
 
         //South
-        currentNode.m_southNodes = GetNavNode(initialRaycastPos + m_backwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, -1), navNodeGrid);
+        neightbourNodes.AddRange(GetNavNode(initialRaycastPos + m_backwardOffset, currentNode.m_gridPos + new Vector3Int(0, 0, -1), navNodeGrid));
 
         //West
-        currentNode.m_westNodes = GetNavNode(initialRaycastPos + m_leftOffset, currentNode.m_gridPos + new Vector3Int(-1, 0, 0), navNodeGrid);
+        neightbourNodes.AddRange(GetNavNode(initialRaycastPos + m_leftOffset, currentNode.m_gridPos + new Vector3Int(-1, 0, 0), navNodeGrid));
 
         //Store all nodes in a single list for later usage
-        currentNode.m_adjacentNodes.AddRange(currentNode.m_northNodes);
-        currentNode.m_adjacentNodes.AddRange(currentNode.m_eastNodes);
-        currentNode.m_adjacentNodes.AddRange(currentNode.m_southNodes);
-        currentNode.m_adjacentNodes.AddRange(currentNode.m_westNodes);
 
-        foreach (NavNode navNode in currentNode.m_adjacentNodes)
+        foreach (NavNode navNode in neightbourNodes)
         {
             UpdateNeighbourNodes(navNode, navNodeGrid);
         }
@@ -208,23 +206,28 @@ public class Navigation : MonoBehaviour
             //Forward
             if (currentGridPos.z + 1 < m_navGridDepth)
             {
-                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, 1)));
+                currentNode.m_northNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, 1)));
             }
             //Backward
             if (currentGridPos.z - 1 >= 0)
             {
-                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, -1)));
+                currentNode.m_southNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(0, 0, -1)));
             }
             //Right
             if (currentGridPos.x + 1 < m_navGridWidth)
             {
-                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(1, 0, 0)));
+                currentNode.m_eastNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(1, 0, 0)));
             }
             //Left
             if (currentGridPos.x - 1 >= 0)
             {
-                currentNode.m_adjacentNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(-1, 0, 0)));
+                currentNode.m_westNodes.AddRange(GetAdjacentNode(currentGridPos + new Vector3Int(-1, 0, 0)));
             }
+
+            currentNode.m_adjacentNodes.AddRange(currentNode.m_northNodes);
+            currentNode.m_adjacentNodes.AddRange(currentNode.m_eastNodes);
+            currentNode.m_adjacentNodes.AddRange(currentNode.m_southNodes);
+            currentNode.m_adjacentNodes.AddRange(currentNode.m_westNodes);
         }
     }
 
@@ -270,7 +273,7 @@ public class Navigation : MonoBehaviour
     //----------------
     //A* stuff
     //----------------
-    public List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode)
+    public List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent)
     {
         if (startingNode == goalNode)//Already at position
             return new List<NavNode>();
@@ -291,28 +294,24 @@ public class Navigation : MonoBehaviour
             if (currentNode == goalNode)
                 return GetPath(currentNode, startingNode);
 
-            AddNextNodes(currentNode, goalNode, openNodes, closedNodes);
+            AddNextNodes(currentNode, goalNode, openNodes, closedNodes, agent);
 
             currentNode = GetLowestFScore(openNodes);
         }
         return new List<NavNode>();
     }
 
-    public List<NavNode> GetNavPath(Vector3Int startingIndexPos, NavNode goalNode)
-    {
-        NavNode startingNode = m_navGrid[startingIndexPos.x, startingIndexPos.y, startingIndexPos.z];
-        return GetNavPath(startingNode, goalNode);
-    }
-
-    private void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes)
+    private void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent)
     {
         openNodes.Remove(currentNode);
         closedNodes.Add(currentNode);
 
         foreach (NavNode nextNode in currentNode.m_adjacentNodes)
         {
-            //Only add nodes which have not already been considered, are walkable and not already obstructed.
-            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
+            //Only add nodes which have not already been considered, are walkable and not already obstructed, unless it is obstructed by an enemy as attacking should take place.
+            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && 
+                nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || 
+                (nextNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED && nextNode.m_obstructingAgent != null && nextNode.m_obstructingAgent.m_team != agent.m_team))
             {
                 openNodes.Add(nextNode);
                 nextNode.Setup(openNodes, closedNodes, goalNode);
