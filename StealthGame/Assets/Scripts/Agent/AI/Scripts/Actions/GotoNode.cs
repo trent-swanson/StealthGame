@@ -28,7 +28,7 @@ public class GotoNode : AIAction
         if (parentAction!=null)
         {
             parentAction.SetUpChildVaribles(NPCAgent);
-            m_targetNode = NPCAgent.m_agentWorldState.m_targetNode;
+            m_targetNode = NPCAgent.m_targetNode;
             if(m_targetNode!=null)
                 return true;
         }
@@ -61,7 +61,7 @@ public class GotoNode : AIAction
             }
 
             NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-
+            NPCAgent.m_currentNavNode.m_obstructingAgent = null;
             List<NavNode> oneTurnSteps = new List<NavNode>();
             oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
             oneTurnSteps.Add(m_navPath[0]);

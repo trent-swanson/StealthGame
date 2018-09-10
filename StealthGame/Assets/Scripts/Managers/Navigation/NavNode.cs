@@ -7,17 +7,19 @@ public class NavNode : MonoBehaviour
     [Header("Tile UI")]
     public GameObject m_selectableUI;
     public GameObject m_selectedUI;
+    public GameObject m_NPCVisionUI;
     public Sprite m_selectedSprite;
     public Sprite m_attackSprite;
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
-    public static float m_wallHideSelectionDeadZone = 0.5f;
+    public static float m_wallHideSelectionDeadZone = 0.8f;
 
     [System.Serializable]
     public struct WallHideIndicators
     {
         public SpriteRenderer m_wallHideSprite;
+        public SpriteRenderer m_wallHideGroundSprite;
         public NODE_TYPE m_wallHideType;
         public bool m_selected;
     }
@@ -50,9 +52,17 @@ public class NavNode : MonoBehaviour
 
     public List<NavNode> m_adjacentNodes = new List<NavNode>();
 
+    //Division of navnodes into directions
+    public List<NavNode> m_northNodes = new List<NavNode>();
+    public List<NavNode> m_eastNodes = new List<NavNode>();
+    public List<NavNode> m_southNodes = new List<NavNode>();
+    public List<NavNode> m_westNodes = new List<NavNode>();
+
     public float m_gScore, m_hScore, m_fScore = 0;
 
     public NavNode m_previousNode = null;
+
+    public List<Agent> m_tileVisibleToNPCs = new List<Agent>();
 
     void Start()
     {
@@ -143,10 +153,15 @@ public class NavNode : MonoBehaviour
 
     public void UpdateWallIndicators()
     {
+        if (m_nodeType == NODE_TYPE.OBSTRUCTED &&  m_obstructingAgent.m_team == TurnManager.TEAM.AI)//No need to update wall hide indicators on nodes with enemy on them
+            return;
+
         Color halfAlpha = new Color(1, 1, 1, 0.2f);
         for (int i = 0; i < 4; i++)
         {
             m_wallHideIndicators[i].m_wallHideSprite.color = halfAlpha;
+            m_wallHideIndicators[i].m_wallHideGroundSprite.color = halfAlpha;
+            m_wallHideIndicators[0].m_selected = false;
         }
 
         Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -164,6 +179,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[0].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[0].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[0].m_selected = true;
                     }
                 }
@@ -172,6 +188,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[2].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[2].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[2].m_selected = true;
                     }
                 }
@@ -183,6 +200,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[1].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[1].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[1].m_selected = true;
                     }
                 }
@@ -191,6 +209,7 @@ public class NavNode : MonoBehaviour
                     if (m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
                     {
                         m_wallHideIndicators[3].m_wallHideSprite.color = new Color(1, 1, 1, 1);
+                        m_wallHideIndicators[3].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
                         m_wallHideIndicators[3].m_selected = true;
                     }
                 }
@@ -205,21 +224,49 @@ public class NavNode : MonoBehaviour
             m_wallHideIndicators[i].m_selected = false;
 
             if (m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
+            {
                 m_wallHideIndicators[i].m_wallHideSprite.enabled = toggleVal;
+                m_wallHideIndicators[i].m_wallHideGroundSprite.enabled = toggleVal;
+            }
             else
+            {
                 m_wallHideIndicators[i].m_wallHideSprite.enabled = false;
+                m_wallHideIndicators[i].m_wallHideGroundSprite.enabled = false;
+            }
         }
     }
 
-    public AnimationManager.FACING_DIR GetWallHideDir()
+    public Agent.FACING_DIR GetWallHideDir()
     {
         for (int i = 0; i < 4; i++)
         {
             if(m_wallHideIndicators[i].m_selected == true)
             {
-                return (AnimationManager.FACING_DIR)i;//Casting 'i' to direction
+                return (Agent.FACING_DIR)i;//Casting 'i' to direction
             }
         }
-        return AnimationManager.FACING_DIR.NONE;
+        return Agent.FACING_DIR.NONE;
+    }
+
+    public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }
+    public void NPCVision(NPC npc, ADD_REMOVE_FUNCTION functionType )
+    {
+        switch (functionType)
+        {
+            case ADD_REMOVE_FUNCTION.ADD:
+                if (!m_tileVisibleToNPCs.Contains(npc))
+                    m_tileVisibleToNPCs.Add(npc);
+                break;
+            case ADD_REMOVE_FUNCTION.REMOVE:
+                m_tileVisibleToNPCs.Remove(npc);
+                break;
+            default:
+                break;
+        }
+
+        if (m_tileVisibleToNPCs.Count > 0)
+            m_NPCVisionUI.SetActive(true);
+        else
+            m_NPCVisionUI.SetActive(false);
     }
 }

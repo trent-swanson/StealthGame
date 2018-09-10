@@ -11,23 +11,25 @@ public class NPC : Agent
     // Agent States
     //-----------------------
     [System.Serializable]
-    public class AgentWorldState {
-
-        //Where agent is relative to node grid
-        public Vector2Int m_currentNodePos= new Vector2Int(0, 0); 
+    public class AgentWorldState
+    {
+        public bool m_modifiedFlag = false;
 
         //Weapon information
         public enum WEAPON_TYPE { MELEE, RANGED }; //Fixed
         private WEAPON_TYPE m_weaponType = WEAPON_TYPE.MELEE; //Fixed
-
-        //Node this agent wants to go to
-        public NavNode m_targetNode = null; //Fixed
+        public void SetWeapon(WEAPON_TYPE weapon) { m_weaponType = weapon; m_modifiedFlag = true; }
+        public WEAPON_TYPE GetWeapon() { return m_weaponType; }
 
         //Seen targets
-        public List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
+        private List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
+        public void SetPossibleTargets(List<Agent> possibleTargets) { m_possibleTargets = possibleTargets; m_modifiedFlag = true; }
+        public List<Agent> GetPossibleTargets() { return m_possibleTargets; }
 
         //Targets which have gone missing
-        public List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+        private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
+        public void SetInvestigatoinNode(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
+        public List<InvestigationNode> GetInvestigationNodes() { return m_investigationNodes; }
 
         //Waypoints
         [SerializeField]
@@ -50,6 +52,9 @@ public class NPC : Agent
             set { m_node = value; }
         }
     }
+
+    //Node this agent wants to go to
+    public NavNode m_targetNode = null; //Fixed
 
     [Space]
     [Space]
@@ -84,7 +89,15 @@ public class NPC : Agent
     //Constant update while agent is selected
     public override void AgentTurnUpdate()
     {
-        if(m_GOAP.m_currentAction == null)
+        //Check for update in world state
+        if(m_agentWorldState.m_modifiedFlag)
+        {
+            Debug.Log("FlagMod");
+            m_agentWorldState.m_modifiedFlag = false;
+        }
+
+
+        if(m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list
         {
             bool newAction = m_GOAP.GOAPInit();
 
@@ -102,11 +115,11 @@ public class NPC : Agent
         {
             case GOAP.GOAP_UPDATE_STATE.INVALID://Remove one as it attempted to occur
                 m_currentActionPoints -= 1;
-                m_GOAP.m_currentAction = null;
+                m_GOAP.m_actionList.Clear();
                 break;
             case GOAP.GOAP_UPDATE_STATE.COMPLETED:
-                m_currentActionPoints -= m_GOAP.m_currentAction.m_actionCost;
-                m_GOAP.m_currentAction = null;
+                m_currentActionPoints -= m_GOAP.m_actionList[0].m_actionCost;
+                m_GOAP.m_actionList.RemoveAt(0);
                 break;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
             default:
@@ -120,35 +133,40 @@ public class NPC : Agent
         base.AgentTurnEnd();
     }
 
-    //Always updating view as this changes in real time TODO as it is turn based could move to check only when players move
-    private void Update()
+    //Update the NPCs world stae, this will be called after every animation played, NPC or Player.
+    public void UpdateWorldState()
     {
         //Setup agents vals
-        Vector3 transformForward = transform.forward;
-        Vector3 checkOrigin = transform.position + transformForward * m_colliderExtents.z + transform.up * m_colliderExtents.y;
+        Vector3 checkOrigin = transform.position + transform.forward * m_colliderExtents.z + transform.up * m_colliderExtents.y;
 
         foreach (Agent oppposingAgent in m_opposingTeam)
         {
-            if(!m_agentWorldState.m_possibleTargets.Contains(oppposingAgent))
+            List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
+            if (!possibleTargets.Contains(oppposingAgent))
             {
-                //See if opposing agent is in vision cone
-                Vector3 targetPos = oppposingAgent.transform.position;
+                //TODO sometimes can see players through walls, ray cast not working quite right
 
-                Vector3 targetDir = targetPos - checkOrigin;
+                //See if opposing agent is in vision cone
+                Vector3 targetDir = oppposingAgent.transform.position - checkOrigin;
+
+                Debug.DrawLine(checkOrigin, checkOrigin + targetDir * m_visionDistance);
 
                 float dot = Vector3.Dot(targetDir.normalized, transform.forward);
-                if (dot > 0.1f) //a bit ledss than 180 degrees of vision
+                if (dot > 0.1f) //a bit less than 180 degrees of vision
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(checkOrigin, targetDir, out hit))
+
+                    if (Physics.Raycast(checkOrigin, targetDir, out hit, m_visionDistance) && hit.collider.tag == "Player")
                     {
-                        Agent hitAgent = hit.collider.GetComponent<Agent>();
-                        if (hitAgent != null && hitAgent.m_team != m_team)
-                        {
-                            m_agentWorldState.m_possibleTargets.Add(hitAgent);
-                        }
+                        possibleTargets.Add(oppposingAgent);
+                        m_agentWorldState.SetPossibleTargets(possibleTargets);
                     }
                 }
+            }
+            else
+            {
+                Vector3 targetDir = oppposingAgent.transform.position - checkOrigin;
+                Debug.DrawLine(checkOrigin, checkOrigin + targetDir * m_visionDistance, Color.red);
             }
         }    
     }
@@ -158,7 +176,7 @@ public class NPC : Agent
         Agent possibleTarget = null;
         float targetDis = Mathf.Infinity;
 
-        foreach (Agent agent in m_agentWorldState.m_possibleTargets) //TODO might have to update for multiple floors
+        foreach (Agent agent in m_agentWorldState.GetPossibleTargets()) //TODO might have to update for multiple floors
         {
             if (agent == null || agent.m_knockedout)
                 continue;

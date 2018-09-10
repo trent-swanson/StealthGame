@@ -5,49 +5,66 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, RUN, CLIMB_UP_IDLE, CLIMB_UP_RUN, CLIMB_DOWN_IDLE, CLIMB_DOWN_RUN, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, DEATH }//Animation states
+    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, DEATH }//Animation states
 
-    public enum FACING_DIR {NORTH, EAST, SOUTH, WEST, NONE }
-
-    public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, Agent.INTERACTION_TYPE interactionType = Agent.INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
+    public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, Agent.INTERACTION_TYPE interactionType = Agent.INTERACTION_TYPE.NONE, Agent.FACING_DIR interactionDir = Agent.FACING_DIR.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
-        FACING_DIR playerDir = GetFacingDir(agent.transform.forward);
-        if(interactionType == Agent.INTERACTION_TYPE.ATTACK)
-            interactionDir = GetFacingDir((agent.m_attackingTarget.transform.position - agent.transform.position).normalized);
+        Agent.FACING_DIR playerDir = agent.m_facingDir;
 
         int pathCount = pathNodes.Count;
 
-        if (pathCount < 2)//Not moving, still needs to interact
+        if (pathCount == 2)//Moving one square
         {
-            GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
-            return transitionSteps;
+            GetActionStepsForSingleStep(ref playerDir, transitionSteps, pathNodes[0], pathNodes[1]);
         }
-        else if (pathCount == 2)//Moving one square
+        else if(pathCount > 2)            //Normal movement
         {
-            GetActionSteps(ref playerDir, transitionSteps, pathNodes[0], pathNodes[1]);
+            for (int i = 0; i < pathCount - 2; i++)//Create all steps between, only will be movement
+            {
+                GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
+            }
 
-            GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
-            return transitionSteps;
-        }
-
-        //Normal movement
-        for (int i = 0; i < pathCount - 2; i++)//Create all steps between, only will be movement
-        {
-            GetActionSteps(ref playerDir, transitionSteps,  pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
+            GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
         }
 
-        GetActionSteps(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
+        if (interactionType == Agent.INTERACTION_TYPE.ATTACK)
+            interactionDir = Agent.GetFacingDir((agent.m_attackingTarget.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
 
         GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
+        agent.m_facingDir = playerDir;
 
         return transitionSteps;
     }
 
-    private static void GetActionSteps(ref FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode, NavNode futureNode = null)
+    private static void GetActionStepsForSingleStep(ref Agent.FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode)
     {
-        FACING_DIR nextDir = GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
+        Agent.FACING_DIR nextDir = Agent.GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
+        GetRotation(ref playerDir, nextDir, ref transitionSteps);
+        playerDir = nextDir;
+
+        int nodeHeightDiff = nextNode.m_gridPos.y - currentNode.m_gridPos.y;
+
+        if (nodeHeightDiff == 0) //Stright path just run
+        {
+            transitionSteps.Add(ANIMATION_STEP.STEP);
+        }
+        else if (nodeHeightDiff > 0)//positive height diff, running up
+        {
+            transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_IDLE);
+        }
+        else if (nodeHeightDiff < 0)//negitive height diff, running down
+        {
+            
+            transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_IDLE);
+           
+        }
+    }
+
+    private static void GetActionStepsForRunning(ref Agent.FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode, NavNode futureNode = null)
+    {
+        Agent.FACING_DIR nextDir = Agent.GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
         GetRotation(ref playerDir, nextDir, ref transitionSteps);
         playerDir = nextDir;
 
@@ -58,7 +75,7 @@ public class AnimationManager : MonoBehaviour
             if (futureNode == null)
                 transitionSteps.Add(ANIMATION_STEP.IDLE);
             else
-                transitionSteps.Add(ANIMATION_STEP.RUN);
+                transitionSteps.Add(ANIMATION_STEP.WALK);
         }
         else if (nodeHeightDiff > 0)//positive height diff, running up
         {
@@ -68,7 +85,7 @@ public class AnimationManager : MonoBehaviour
             {
                 int futureNodeHeightDiff = futureNode.m_gridPos.y - nextNode.m_gridPos.y;
                 if (futureNodeHeightDiff == 0) //Stright path just run
-                    transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_RUN);
+                    transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_WALK);
                 else //All other case momentum is lost so return to idle? TODO FIND OUT
                     transitionSteps.Add(ANIMATION_STEP.CLIMB_UP_IDLE);
             }
@@ -81,14 +98,14 @@ public class AnimationManager : MonoBehaviour
             {
                 int futureNodeHeightDiff = futureNode.m_gridPos.y - nextNode.m_gridPos.y;
                 if (futureNodeHeightDiff == 0) //Stright path just run
-                    transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_RUN);
+                    transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_WALK);
                 else //All other case momentum is lost so return to idle? TODO FIND OUT
                     transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_IDLE);
             }
         }
     }
 
-    private static void GetInteraction(ref FACING_DIR playerDir, FACING_DIR interactionDir, List<ANIMATION_STEP> transitionSteps, Agent.INTERACTION_TYPE interactionType = Agent.INTERACTION_TYPE.NONE)
+    private static void GetInteraction(ref Agent.FACING_DIR playerDir, Agent.FACING_DIR interactionDir, List<ANIMATION_STEP> transitionSteps, Agent.INTERACTION_TYPE interactionType = Agent.INTERACTION_TYPE.NONE)
     {
         GetRotation(ref playerDir, interactionDir, ref transitionSteps);
 
@@ -109,9 +126,9 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
-    private static void GetRotation(ref FACING_DIR currentDir, FACING_DIR nextDir, ref List<ANIMATION_STEP> transitionSteps)
+    private static void GetRotation(ref Agent.FACING_DIR currentDir, Agent.FACING_DIR nextDir, ref List<ANIMATION_STEP> transitionSteps)
     {
-        if (currentDir != nextDir && nextDir != FACING_DIR.NONE)
+        if (currentDir != nextDir && nextDir != Agent.FACING_DIR.NONE)
         {
             int dirAmount = (int)nextDir - (int)currentDir;
 
@@ -133,23 +150,10 @@ public class AnimationManager : MonoBehaviour
                 default:
                     break;
             }
+
+            currentDir = nextDir;
         }
-        currentDir = nextDir;
     }
 
-    private static FACING_DIR GetFacingDir(Vector3 dir)
-    {
-        dir.y = 0; //Dont need to use y 
-        float angle = Vector3.SignedAngle(dir.normalized, new Vector3(0, 0, 1), Vector3.up);
 
-        if (angle < 10.0f && angle > -10.0f) //allows for minor inaccuracies
-            return FACING_DIR.NORTH;
-        if (angle > 170.0f || angle < -170.0f)
-            return FACING_DIR.SOUTH;
-        if(angle < 100 && angle > 70)
-            return FACING_DIR.WEST;
-        if (angle < -70 && angle > -100)
-            return FACING_DIR.EAST;
-        return FACING_DIR.NONE;
-    }
 }

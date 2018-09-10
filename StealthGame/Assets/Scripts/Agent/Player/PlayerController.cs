@@ -13,6 +13,7 @@ public class PlayerController : Agent {
 
     private PlayerUI m_playerUI = null;
     private PlayerActions m_playerActions = null;
+    private AgentAnimationController m_agentAnimationController = null;
 
     protected override void Start()
     {
@@ -21,6 +22,7 @@ public class PlayerController : Agent {
 
         m_playerUI = GetComponent<PlayerUI>();
         m_playerActions = GetComponent<PlayerActions>();
+        m_agentAnimationController = GetComponent<AgentAnimationController>();
     }
 
     //Start of turn, only runs once per turn
@@ -43,9 +45,13 @@ public class PlayerController : Agent {
     {
         m_playerActions.UpdateActions();
         m_playerUI.UpdateUI();
-        if(m_currentActionPoints <= 0)
+
+        if (m_currentActionPoints <= 0 && m_agentAnimationController.m_animationSteps.Count == 0)
         {
+            m_playerActions.ActionEnd();
             m_turnManager.EndUnitTurn(this);
+            AgentTurnEnd();
+            return;
         }
     }
 
@@ -53,6 +59,5 @@ public class PlayerController : Agent {
     public override void AgentTurnEnd()
     {
         base.AgentTurnEnd();
-        m_playerActions.ActionEnd();
     }
 }

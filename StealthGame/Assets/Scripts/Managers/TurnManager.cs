@@ -63,7 +63,7 @@ public class TurnManager : MonoBehaviour {
 
         if (ValidTeam())
         {
-            m_turnTeam[0].AgentSelected();
+            SwapAgents(GetNextTeamAgentIndex());
         }
         else
         {
@@ -139,5 +139,14 @@ public class TurnManager : MonoBehaviour {
                 return i;
         }
         return 0;
+    }
+
+    public void UpdateNPCWorldStates()
+    {
+        for (int i = 0; i < m_AITeam.Count; i++)
+        {
+            if (!m_AITeam[i].m_knockedout)
+                m_AITeam[i].GetComponent<NPC>().UpdateWorldState();
+        }
     }
 }
