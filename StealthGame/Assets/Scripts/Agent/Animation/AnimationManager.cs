@@ -30,7 +30,9 @@ public class AnimationManager : MonoBehaviour
         }
 
         if (interactionType == Agent.INTERACTION_TYPE.ATTACK)
-            interactionDir = Agent.GetFacingDir((agent.m_attackingTarget.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
+            interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
+        else if (interactionType == Agent.INTERACTION_TYPE.REVIVE)
+            interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
 
         GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
         agent.m_facingDir = playerDir;
@@ -119,6 +121,9 @@ public class AnimationManager : MonoBehaviour
                 break;
             case Agent.INTERACTION_TYPE.ATTACK:
                 transitionSteps.Add(ANIMATION_STEP.ATTACK);
+                break;
+            case Agent.INTERACTION_TYPE.REVIVE:
+                transitionSteps.Add(ANIMATION_STEP.REVIVE);
                 break;
             case Agent.INTERACTION_TYPE.NONE:
             default:

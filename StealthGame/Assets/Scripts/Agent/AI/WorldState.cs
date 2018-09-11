@@ -119,17 +119,17 @@ public class WorldState : ScriptableObject
     //--------------------------------------------------------------------------------------
     public static bool NearTarget(NPC NPCAgent)
     {
-        if (NPCAgent.m_attackingTarget != null)
+        if (NPCAgent.m_targetAgent != null)
         {
-            if (NPCAgent.m_attackingTarget.m_currentNavNode == NPCAgent.m_currentNavNode)//Current Node
+            if (NPCAgent.m_targetAgent.m_currentNavNode == NPCAgent.m_currentNavNode)//Current Node
                 return true;
-            if (NPCAgent.m_attackingTarget.m_currentNavNode.m_gridPos + new Vector3Int(0,0,1)  == NPCAgent.m_currentNavNode.m_gridPos)//forwards Node
+            if (NPCAgent.m_targetAgent.m_currentNavNode.m_gridPos + new Vector3Int(0,0,1)  == NPCAgent.m_currentNavNode.m_gridPos)//forwards Node
                 return true;
-            if (NPCAgent.m_attackingTarget.m_currentNavNode.m_gridPos + new Vector3Int(0, 0, -1) == NPCAgent.m_currentNavNode.m_gridPos)//Backwards Node
+            if (NPCAgent.m_targetAgent.m_currentNavNode.m_gridPos + new Vector3Int(0, 0, -1) == NPCAgent.m_currentNavNode.m_gridPos)//Backwards Node
                 return true;
-            if (NPCAgent.m_attackingTarget.m_currentNavNode.m_gridPos + new Vector3Int(1, 0, 0) == NPCAgent.m_currentNavNode.m_gridPos)//Right Node
+            if (NPCAgent.m_targetAgent.m_currentNavNode.m_gridPos + new Vector3Int(1, 0, 0) == NPCAgent.m_currentNavNode.m_gridPos)//Right Node
                 return true;
-            if (NPCAgent.m_attackingTarget.m_currentNavNode.m_gridPos + new Vector3Int(-1, 0, 0) == NPCAgent.m_currentNavNode.m_gridPos)//Left Node
+            if (NPCAgent.m_targetAgent.m_currentNavNode.m_gridPos + new Vector3Int(-1, 0, 0) == NPCAgent.m_currentNavNode.m_gridPos)//Left Node
                 return true;
         }
         return false;

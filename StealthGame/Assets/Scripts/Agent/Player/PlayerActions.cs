@@ -218,7 +218,13 @@ public class PlayerActions : MonoBehaviour
             else if(m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
                 m_playerController.m_interaction = Agent.INTERACTION_TYPE.ATTACK;
-                m_playerController.m_attackingTarget = m_currentSelectedNode.m_obstructingAgent;
+                m_playerController.m_targetAgent = m_currentSelectedNode.m_obstructingAgent;
+                m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
+            }
+            else if (m_currentSelectedNode.GetDownedAgent(m_playerController.m_team) != null)//Reviving team mate
+            {
+                m_playerController.m_interaction = Agent.INTERACTION_TYPE.REVIVE;
+                m_playerController.m_targetAgent = m_currentSelectedNode.GetDownedAgent(m_playerController.m_team);
                 m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
             }
 

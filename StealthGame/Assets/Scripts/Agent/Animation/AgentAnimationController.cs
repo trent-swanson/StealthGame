@@ -104,14 +104,16 @@ public class AgentAnimationController : MonoBehaviour
                     m_currentAnimation = "Interact";
                     break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
-                    if (m_agent.m_attackingTarget != null)
-                        m_agent.m_attackingTarget.Knockout();
+                    if (m_agent.m_targetAgent != null)
+                        m_agent.m_targetAgent.Knockout();
                     m_currentAnimation = "Attack";
                     break;
                 case AnimationManager.ANIMATION_STEP.DEATH:
                     m_currentAnimation = "Death";
                     break;
                 case AnimationManager.ANIMATION_STEP.REVIVE:
+                    if (m_agent.m_targetAgent != null)
+                        m_agent.m_targetAgent.Revive();
                     m_currentAnimation = "Revive";
                     break;
                 default:

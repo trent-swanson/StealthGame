@@ -18,7 +18,7 @@ public class MeleeAttack : AIAction
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
         m_target = NPCAgent.GetClosestTarget();
-        NPCAgent.m_attackingTarget = m_target;
+        NPCAgent.m_targetAgent = m_target;
 
         return (m_target != null);
         

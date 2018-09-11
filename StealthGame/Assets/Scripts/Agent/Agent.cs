@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Agent : MonoBehaviour
 {
-    public enum INTERACTION_TYPE { NONE, WALL_HIDE, USE_OBJECT, ATTACK };
+    public enum INTERACTION_TYPE { NONE, WALL_HIDE, USE_OBJECT, ATTACK, REVIVE};
     public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
 
     public enum FACING_DIR { NORTH, EAST, SOUTH, WEST, NONE }
@@ -37,7 +37,7 @@ public class Agent : MonoBehaviour
 
     public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
 
-    public Agent m_attackingTarget = null;
+    public Agent m_targetAgent = null;
 
     public Vector3 m_colliderExtents;
 
