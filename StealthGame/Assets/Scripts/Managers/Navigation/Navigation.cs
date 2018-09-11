@@ -337,12 +337,13 @@ public class Navigation : MonoBehaviour
     private List<NavNode> GetPath(NavNode currentNode, NavNode startingNode)
     {
         List<NavNode> path = new List<NavNode>();
-        while(currentNode != startingNode)
+
+        while (currentNode != startingNode)
         {
             path.Insert(0, currentNode);
             currentNode = currentNode.m_previousNode;
         }
-        path.Add(currentNode);
+        path.Insert(0, currentNode);
         return path;
     }
 

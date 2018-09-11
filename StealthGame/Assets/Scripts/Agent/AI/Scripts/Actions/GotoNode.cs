@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/Go to Node")]
 public class GotoNode : AIAction
 {
-    private List<NavNode> m_navPath = new List<NavNode>();
     private bool m_isDone = false;
 
     private NavNode m_targetNode = null;
@@ -44,25 +43,29 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionStart(NPC NPCAgent)
     {
-        m_navPath = new List<NavNode>();
+        List<NavNode> navPath = new List<NavNode>();
+        
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
         {
-            m_navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent);
+            navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent);
 
-            if(m_navPath.Count == 0)//Unable to reach navnode, attempt to get to adjacent node
+            if(navPath.Count == 0)//Unable to reach navnode, attempt to get to adjacent node
             {
-                m_navPath = GetShortestPath(NPCAgent.m_currentNavNode, ref m_targetNode, NPCAgent);
+                navPath = GetShortestPath(NPCAgent.m_currentNavNode, ref m_targetNode, NPCAgent);
+
+                if (navPath.Count == 0)//unable to find any path, return
+                {
+                    return;
+                }
             }
 
-            if (m_navPath.Count == 0)//unable to find any path, return
-            {
-                return;
-            }
+            NPCAgent.m_path.Clear();
+            NPCAgent.m_path = navPath;
 
             List<NavNode> oneTurnSteps = new List<NavNode>();
-            oneTurnSteps.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
-            oneTurnSteps.Add(m_navPath[0]);
+            oneTurnSteps.Add(navPath[0]);//Only need one step at a time
+            oneTurnSteps.Add(navPath[1]);
             NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneTurnSteps);
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
@@ -87,7 +90,7 @@ public class GotoNode : AIAction
         foreach (NavNode adjacentNode in targetNode.m_adjacentNodes)
         {
             List<NavNode> tempPath = m_navigation.GetNavPath(startingNode, adjacentNode, agent);
-            if(tempPath.Count!=0 && tempPath.Count < distance)
+            if(tempPath.Count != 0 && tempPath.Count < distance)
             {
                 distance = tempPath.Count;
                 shortestPath = tempPath;
@@ -121,6 +124,7 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
+
     }
 
     //--------------------------------------------------------------------------------------
@@ -134,11 +138,6 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
-        if (m_navPath.Count <= 0 || m_navPath[0].m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED) //Return false when at at end or is occupied
-        {
-            return false;
-        }
-
         if(NPCAgent.m_agentAnimationController.m_playNextAnimation)//Arrived at node
         {
             NPCAgent.m_agentAnimationController.m_animationSteps.RemoveAt(0);
