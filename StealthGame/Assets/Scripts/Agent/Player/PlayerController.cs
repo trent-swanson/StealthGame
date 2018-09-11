@@ -13,7 +13,6 @@ public class PlayerController : Agent {
 
     private PlayerUI m_playerUI = null;
     private PlayerActions m_playerActions = null;
-    private AgentAnimationController m_agentAnimationController = null;
 
     protected override void Start()
     {
@@ -22,7 +21,6 @@ public class PlayerController : Agent {
 
         m_playerUI = GetComponent<PlayerUI>();
         m_playerActions = GetComponent<PlayerActions>();
-        m_agentAnimationController = GetComponent<AgentAnimationController>();
     }
 
     //Start of turn, only runs once per turn

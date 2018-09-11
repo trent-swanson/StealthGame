@@ -142,10 +142,6 @@ public class GotoNode : AIAction
         {
             //Precheck for aniomation step count
             if (NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0)
-                return false;
-
-            NPCAgent.m_agentAnimationController.m_animationSteps.RemoveAt(0);
-            if (NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0)
                 m_isDone = true;
             else
                 NPCAgent.m_agentAnimationController.PlayNextAnimation();

@@ -5,7 +5,6 @@ using UnityEngine;
 public class NPC : Agent
 {
     public GOAP m_GOAP = null;
-    public AgentAnimationController m_agentAnimationController = null;
 
     //-----------------------
     // Agent States
@@ -74,7 +73,6 @@ public class NPC : Agent
     {
         base.Start();
 
-        m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_GOAP = GetComponent<GOAP>();
         m_opposingTeam = m_turnManager.GetOpposingTeam(m_team);
     }
@@ -84,6 +82,15 @@ public class NPC : Agent
     public override void AgentTurnInit()
     {
         base.AgentTurnInit();
+
+        if(m_knockedout)
+        {
+            m_autoStandupTimer--;
+            if(m_autoStandupTimer<=0)
+            {
+                Revive();
+            }
+        }
     }
 
     //Runs every time a agent is selected, this can be at end of an action is completed

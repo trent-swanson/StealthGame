@@ -232,7 +232,6 @@ public class PlayerActions : MonoBehaviour
         if(m_agentAnimationController.m_playNextAnimation)//End of animation
         {
             m_agentAnimationController.PlayNextAnimation();
-            m_agentAnimationController.m_animationSteps.RemoveAt(0);
 
             if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
             {

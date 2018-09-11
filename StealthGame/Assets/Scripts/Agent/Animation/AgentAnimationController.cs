@@ -45,6 +45,8 @@ public class AgentAnimationController : MonoBehaviour
 
     public void EndAnimationState()
     {
+        if(m_animationSteps.Count > 0)
+            m_animationSteps.RemoveAt(0);
         m_animator.SetBool(m_currentAnimation, false);
         m_playNextAnimation = true;
     }
@@ -58,6 +60,7 @@ public class AgentAnimationController : MonoBehaviour
             {
                 case AnimationManager.ANIMATION_STEP.IDLE:
                     m_currentAnimation = "Idle";
+                    UpdateGridPos();//Has to check on idle, as some moves end in idle e.g. run to idle => idle
                     break;
                 case AnimationManager.ANIMATION_STEP.STEP:
                     m_currentAnimation = "Step";
@@ -107,6 +110,9 @@ public class AgentAnimationController : MonoBehaviour
                     break;
                 case AnimationManager.ANIMATION_STEP.DEATH:
                     m_currentAnimation = "Death";
+                    break;
+                case AnimationManager.ANIMATION_STEP.REVIVE:
+                    m_currentAnimation = "Revive";
                     break;
                 default:
                     break;

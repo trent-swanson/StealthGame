@@ -15,6 +15,7 @@ public class Agent : MonoBehaviour
     protected SquadManager squadManager;
 
     public Animator m_animator = null;
+    public AgentAnimationController m_agentAnimationController = null;
 
     [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
@@ -51,6 +52,8 @@ public class Agent : MonoBehaviour
     [SerializeField]
     public List<NavNode> m_path = new List<NavNode>();
 
+    public int m_autoStandupTimer = 0;
+
     protected virtual void Start()
     {
         //New Stuff
@@ -65,6 +68,7 @@ public class Agent : MonoBehaviour
         }
 
         m_animator = GetComponent<Animator>();
+        m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
@@ -90,12 +94,34 @@ public class Agent : MonoBehaviour
 	public void Knockout()
     {
 		m_knockedout = true;
-        m_animator.SetBool("Death", true);
+
+        //Fix node interactablility
         m_currentNavNode.m_obstructingAgent = null;
         m_currentNavNode.AddDownedAgent(this);
         m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+
+        //Setup animation
+        m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.DEATH);
+        m_agentAnimationController.PlayNextAnimation();
+
         m_turnManager.EndUnitTurn(this);
+
+        m_autoStandupTimer = m_turnManager.m_autoStandupTime;
 	}
+
+    public void Revive()
+    {
+        m_knockedout = false;
+
+        //Fix node interactablility
+        m_currentNavNode.m_obstructingAgent = this;
+        m_currentNavNode.RemoveDownedAgent(this);
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+
+        //Setup animation
+        m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.REVIVE);
+        m_agentAnimationController.PlayNextAnimation();
+    }
 
     public static FACING_DIR GetFacingDir(Vector3 dir)
     {

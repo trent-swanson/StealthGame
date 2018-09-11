@@ -286,6 +286,11 @@ public class NavNode : MonoBehaviour
             m_downedAgents.Add(agent);
     }
 
+    public void RemoveDownedAgent(Agent agent)
+    {
+        m_downedAgents.Remove(agent);
+    }
+
     public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }
     public void NPCVision(Agent npc, ADD_REMOVE_FUNCTION functionType )
     {

@@ -33,9 +33,6 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionStart(NPC NPCAgent)
     {
-        NPCAgent.m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-        NPCAgent.m_currentNavNode.m_obstructingAgent = null;
-
         List<NavNode> oneStep = new List<NavNode>();
         oneStep.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
         NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneStep, Agent.INTERACTION_TYPE.ATTACK);
@@ -64,7 +61,6 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        NPCAgent.m_currentNavNode = m_target.m_currentNavNode;
         m_target = null;
     }
 

@@ -16,6 +16,8 @@ public class TurnManager : MonoBehaviour {
     static SquadManager m_squadManager;
     private UIController m_UIController = null;
 
+    public int m_autoStandupTime = 2;
+
     /*
     * Important Note:
     * Check any code relating to agents being dead and removing them from turn manager
