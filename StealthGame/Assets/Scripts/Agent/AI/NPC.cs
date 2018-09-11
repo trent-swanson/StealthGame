@@ -184,13 +184,13 @@ public class NPC : Agent
         foreach (NavNode navNode in fullVisibleNavNode)
         {
             fadeVisibleNavNode.Remove(navNode);
-            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, m_visionMaxOpacity);
+            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, m_visionFullOpacity);
         }
 
         foreach (NavNode navNode in fadeVisibleNavNode)
         {
             float navNodeDistance = Vector3.Distance(navNode.m_nodeTop, m_currentNavNode.m_nodeTop);
-            float opacticy = m_visionMinOpacity + ((m_visionMaxOpacity - m_visionMinOpacity) * ((m_visionFadeDistance - navNodeDistance) / (m_visionFadeDistance - m_visionFullDistance)));
+            float opacticy = m_visionFadeMinOpacity + ((m_visionFadeMaxOpacity - m_visionFadeMinOpacity) * ((m_visionFadeDistance - navNodeDistance) / (m_visionFadeDistance - m_visionFullDistance)));
             navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, opacticy);
         }
 

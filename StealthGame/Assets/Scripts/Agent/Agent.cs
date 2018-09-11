@@ -45,8 +45,9 @@ public class Agent : MonoBehaviour
     public List<Item> m_currentItems = new List<Item>();
 
     [Header("Vision details")]
-    public float m_visionMaxOpacity = 100;
-    public float m_visionMinOpacity = 70;
+    public float m_visionFullOpacity = 1;
+    public float m_visionFadeMaxOpacity = 0.5f;
+    public float m_visionFadeMinOpacity = 0.3f;
 
     [Header("Full alertness")]
     [Tooltip("Distance in units, remember a tile is 2 metres's")]
