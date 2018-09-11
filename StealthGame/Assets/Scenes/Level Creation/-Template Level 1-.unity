@@ -13419,7 +13419,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4465398375186704, guid: 62ef8d2e2a6693a41bfc9fbdd603655d, type: 2}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1722970989300046, guid: 62ef8d2e2a6693a41bfc9fbdd603655d, type: 2}
       propertyPath: m_StaticEditorFlags
@@ -20102,36 +20102,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 853305764}
   m_selectedUI: {fileID: 1675413297}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 997901281}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1986202640}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 676358899}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 545449339}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &282563990
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -20512,36 +20524,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 225396132}
   m_selectedUI: {fileID: 162712151}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1102212275}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1319552632}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1657052392}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1121389766}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &289782370
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26877,7 +26901,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4465398375186704, guid: 62ef8d2e2a6693a41bfc9fbdd603655d, type: 2}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1722970989300046, guid: 62ef8d2e2a6693a41bfc9fbdd603655d, type: 2}
       propertyPath: m_Name
@@ -27611,7 +27635,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4224381687615932, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 1181393431002430, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_StaticEditorFlags
@@ -35289,36 +35313,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1783954899}
   m_selectedUI: {fileID: 718000402}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1725116336}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1539438500}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 86436748}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 404298298}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &515556664
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -36403,36 +36439,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 702850359}
   m_selectedUI: {fileID: 701716862}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1322199852}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2046939107}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1456907175}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 127302588}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &530122531
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -46527,36 +46575,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 210803017}
   m_selectedUI: {fileID: 861377754}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 2144392861}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 805067650}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 238131343}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1548535836}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &685688430
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -54599,7 +54659,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4724602257581510, guid: f596cd3319127004e8c2f6b477dc5f79, type: 2}
       propertyPath: m_RootOrder
-      value: 22
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 1052889631642220, guid: f596cd3319127004e8c2f6b477dc5f79, type: 2}
       propertyPath: m_TagString
@@ -56267,7 +56327,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4224381687615932, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1181393431002430, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_Name
@@ -58327,6 +58387,16 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 200.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 49dbeb11ce440ed4ca006b7d6e372327, type: 2}
   m_IsPrefabParent: 0
@@ -58852,36 +58922,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1667669253}
   m_selectedUI: {fileID: 1232172866}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1826984668}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1194890865}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 266561997}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1108655681}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &865252475
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -64310,36 +64392,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1567941863}
   m_selectedUI: {fileID: 532626272}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 363882652}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1843404469}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1366961083}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 781577465}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &947668067
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -65830,6 +65924,10 @@ Prefab:
       propertyPath: m_Name
       value: Particle_WaterLeek (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4938005797367094, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
   m_IsPrefabParent: 0
@@ -65994,6 +66092,10 @@ Prefab:
     - target: {fileID: 1841804213375678, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
       propertyPath: m_Name
       value: Particle_WaterLeek (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938005797367094, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
+      propertyPath: m_RootOrder
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
@@ -68591,36 +68693,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 367551379}
   m_selectedUI: {fileID: 452931965}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 870839932}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 750885919}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 419321898}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 973800031}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1020667229
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71178,7 +71292,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4224381687615932, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_RootOrder
-      value: 21
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 1181393431002430, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_Name
@@ -74954,36 +75068,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1842570507}
   m_selectedUI: {fileID: 995136843}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1702620112}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2078507241}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2059950857}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 583324122}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1121228362
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -76323,36 +76449,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 899936163}
   m_selectedUI: {fileID: 1092980121}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1514968264}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2070829629}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 571485524}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2116229081}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1151354672
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -80963,7 +81101,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4086005985522080, guid: d50df0c9c4ce7ee4393c71d967aef569, type: 2}
       propertyPath: m_RootOrder
-      value: 28
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 1961734401090804, guid: d50df0c9c4ce7ee4393c71d967aef569, type: 2}
       propertyPath: m_TagString
@@ -83230,7 +83368,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4457953909590742, guid: 1b3175759b2e0dd42b50050dbf3147e0, type: 2}
       propertyPath: m_RootOrder
-      value: 23
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 1571610923266366, guid: 1b3175759b2e0dd42b50050dbf3147e0, type: 2}
       propertyPath: m_TagString
@@ -85742,36 +85880,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1772692291}
   m_selectedUI: {fileID: 953210104}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1224202013}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2042704879}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2003694208}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1880161971}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1275861075
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -86200,66 +86350,6 @@ Prefab:
     - target: {fileID: 4695601581350284, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
       propertyPath: m_RootOrder
       value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 1726306270691624, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1711857479293190, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1942101134485324, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1713242973669390, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1460439409385876, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1725373283613862, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201981556059516, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1726306270691624, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1711857479293190, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1942101134485324, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1713242973669390, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1460439409385876, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1725373283613862, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201981556059516, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4695601581350284, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -179.99998
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 81b6f7afb94aeb6438ea73c19215d5b2, type: 2}
@@ -98256,6 +98346,46 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
       value: 1.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 922fc568e06f996439cdef6c3678c86f, type: 2}
   m_IsPrefabParent: 0
@@ -98590,6 +98720,10 @@ Prefab:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4830510796214194, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4938005797367094, guid: a2ff0b283c6375a4fab65c0a5c64c6ad, type: 2}
       propertyPath: m_RootOrder
       value: 8
       objectReference: {fileID: 0}
@@ -100491,36 +100625,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 2046808245}
   m_selectedUI: {fileID: 1104603853}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1944776018}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1294980566}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1798872513}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1021419925}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1493890326
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -101266,36 +101412,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1544256763}
   m_selectedUI: {fileID: 581602424}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1576081197}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 528569197}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 453676389}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1112406551}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1507185016
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -103453,36 +103611,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1427253534}
   m_selectedUI: {fileID: 2118067207}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 693289351}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 680112396}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 8389044}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1876008942}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1541091663
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -103934,36 +104104,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 620696075}
   m_selectedUI: {fileID: 819471332}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1385624083}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 528898413}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1030479114}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 543118796}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1547746546
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -105228,36 +105410,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 929388769}
   m_selectedUI: {fileID: 189425817}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1809518875}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 722486269}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1555660642}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1532111959}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1565556028
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -105319,36 +105513,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 319304954}
   m_selectedUI: {fileID: 1568063920}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1681980960}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 688352291}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 363637643}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1645838349}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1566541416
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -106976,123 +107182,6 @@ Prefab:
     - target: {fileID: 4366633441071584, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
       propertyPath: m_RootOrder
       value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 23050906356276084, guid: 1a4bb06bbb3349246b1806b5aee5ea3d,
-        type: 2}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: d2e566807bb69b34faa7509f8d5a5ac7, type: 2}
-    - target: {fileID: 1829168977235520, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626031309816918, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714318141308016, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417641116967626, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1029765686675870, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1369432515062036, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1873866262167278, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1533483872660174, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1647673308416794, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1411463674392102, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1753020424611682, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1990525598022486, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1651013798758276, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1853055755244848, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1829168977235520, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1626031309816918, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1714318141308016, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1417641116967626, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1029765686675870, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1369432515062036, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1873866262167278, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1533483872660174, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1647673308416794, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1411463674392102, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1753020424611682, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1990525598022486, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1651013798758276, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1853055755244848, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1a4bb06bbb3349246b1806b5aee5ea3d, type: 2}
@@ -111936,36 +112025,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1241952990}
   m_selectedUI: {fileID: 1470553235}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1928053436}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 937133147}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 375013170}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2011809278}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1676405167
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -115757,36 +115858,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1833345613}
   m_selectedUI: {fileID: 346211947}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 719632645}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 868937441}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1972721265}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1600222425}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1729943258
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -116742,22 +116855,6 @@ Prefab:
     - target: {fileID: 4947301012922058, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
       propertyPath: m_RootOrder
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 1195356076563908, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1622401483868718, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1195356076563908, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1622401483868718, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
-      propertyPath: m_Layer
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
@@ -119604,36 +119701,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 2014508441}
   m_selectedUI: {fileID: 1945142975}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 2008257538}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1159095670}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1099528855}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1883110539}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1793612092
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -119953,36 +120062,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1965202967}
   m_selectedUI: {fileID: 973981087}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 465054911}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 517189018}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1227096989}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1164299039}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1797865790
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -124912,36 +125033,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1491938566}
   m_selectedUI: {fileID: 826066579}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1190783460}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1395358157}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1591376833}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 142112218}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1878883535
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -128630,36 +128763,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 897772206}
   m_selectedUI: {fileID: 437216696}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1881320778}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 370397482}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1880295365}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 102678840}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1944644729
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -129193,36 +129338,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 1494225374}
   m_selectedUI: {fileID: 1997977659}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 1670705317}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1050793023}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1014158256}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 2020368230}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &1952324142
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -134505,7 +134662,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4208668520527920, guid: d58d0a57850a7ae4c98c6f19d347dcb3, type: 2}
       propertyPath: m_RootOrder
-      value: 27
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 4208668520527920, guid: d58d0a57850a7ae4c98c6f19d347dcb3, type: 2}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -137476,36 +137633,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectableUI: {fileID: 797328876}
   m_selectedUI: {fileID: 193909712}
+  m_NPCVisionUI: {fileID: 0}
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
+  m_reviveSprite: {fileID: 0}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 2142457561}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 116114373}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 504062895}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   - m_wallHideSprite: {fileID: 1928901892}
+    m_wallHideGroundSprite: {fileID: 0}
     m_wallHideType: 0
     m_selected: 0
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 0
   m_obstructingAgent: {fileID: 0}
+  m_downedAgents: []
   m_nodeState: 0
   m_nodeType: 0
   m_nodeTop: {x: 0, y: 0, z: 0}
   m_gridPos: {x: 0, y: 0, z: 0}
   m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
+  m_southNodes: []
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0
   m_previousNode: {fileID: 0}
+  m_tileVisibleToNPCs: []
 --- !u!65 &2091633813
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -140344,7 +140513,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4311682243921896, guid: 022b94faa0ce5af4da2bee81c234ee12, type: 2}
       propertyPath: m_RootOrder
-      value: 25
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 1843856446833254, guid: 022b94faa0ce5af4da2bee81c234ee12, type: 2}
       propertyPath: m_TagString
@@ -140838,7 +141007,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4224381687615932, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_RootOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 1181393431002430, guid: d8e4c54a05563c1498767dcbcc09f021, type: 2}
       propertyPath: m_Name

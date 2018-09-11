@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4947301012922058}
   - component: {fileID: 33899915416942532}
   - component: {fileID: 23823985100531806}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GarageDoorFrame
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1622401483868718
 GameObject:
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4762762639416076}
   - component: {fileID: 33256950227971444}
   - component: {fileID: 23940857904659868}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Garage_door
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: d9994e49ee6ce884b9184e50746d9145, type: 2}
+  - {fileID: 2100000, guid: c1173397b8bd33a4eaa8ce71dc208e80, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,7 +146,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1622401483868718}
-  m_Mesh: {fileID: 4300000, guid: 0ce0af33845735d44a6042315972a90d, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 0ce0af33845735d44a6042315972a90d, type: 3}
 --- !u!33 &33899915416942532
 MeshFilter:
   m_ObjectHideFlags: 1
