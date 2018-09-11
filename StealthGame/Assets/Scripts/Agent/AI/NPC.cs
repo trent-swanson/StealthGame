@@ -35,7 +35,7 @@ public class NPC : Agent
         public void SetInvestigationNode(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
         public List<InvestigationNode> GetInvestigationNodes() { return m_investigationNodes; }
 
-        //Waypoints
+        //Waypoints for patrolling
         [SerializeField]
         public List<NavNode> m_waypoints = new List<NavNode>();
         public int m_waypointIndex = 0;
