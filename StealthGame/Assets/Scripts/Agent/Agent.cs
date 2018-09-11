@@ -45,9 +45,20 @@ public class Agent : MonoBehaviour
     public List<Item> m_currentItems = new List<Item>();
 
     [Header("Vision details")]
-    public int m_visionDistance = 10;
+    public float m_visionMaxOpacity = 100;
+    public float m_visionMinOpacity = 70;
+
+    [Header("Full alertness")]
+    [Tooltip("Distance in units, remember a tile is 2 metres's")]
+    public int m_visionFullDistance = 5;
     [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
-    public float m_visionAngle = 60;
+    public float m_visionFullAngle = 30;
+
+    [Header("Investigation alertness")]
+    [Tooltip("Distance in units, remember a tile is 2 metres's")]
+    public int m_visionFadeDistance = 10;
+    [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
+    public float m_visionFadeAngle = 60;
 
     [SerializeField]
     public List<NavNode> m_path = new List<NavNode>();
@@ -148,5 +159,23 @@ public class Agent : MonoBehaviour
 
         m_currentNavNode.m_obstructingAgent = this;
         m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+    }
+
+    public static Vector3 FacingDirEnumToVector3(FACING_DIR facingDir)
+    {
+        switch (facingDir)
+        {
+            case FACING_DIR.NORTH:
+                return Vector3.forward;
+            case FACING_DIR.EAST:
+                return Vector3.right;
+            case FACING_DIR.SOUTH:
+                return -Vector3.forward;
+            case FACING_DIR.WEST:
+                return -Vector3.right;
+            case FACING_DIR.NONE:
+            default:
+                return Vector3.zero;
+        }
     }
 }

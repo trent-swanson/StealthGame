@@ -177,16 +177,25 @@ public class NPC : Agent
 
         m_visionNodes.Clear();
 
-        List<NavNode> visibleNavNode = Vision.BuildVisionList(this);
+        List<NavNode> fullVisibleNavNode = Vision.BuildVisionList(this, m_visionFullDistance, m_visionFullAngle);
+        List<NavNode> fadeVisibleNavNode = Vision.BuildVisionList(this, m_visionFadeDistance, m_visionFadeAngle);
 
         //Build vision cone, dont add duplicates to list
-        foreach (NavNode navNode in visibleNavNode)
+        foreach (NavNode navNode in fullVisibleNavNode)
         {
-            if(!m_visionNodes.Contains(navNode))
-            {
-                m_visionNodes.Add(navNode);
-            }
+            fadeVisibleNavNode.Remove(navNode);
+            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, m_visionMaxOpacity);
         }
+
+        foreach (NavNode navNode in fadeVisibleNavNode)
+        {
+            float navNodeDistance = Vector3.Distance(navNode.m_nodeTop, m_currentNavNode.m_nodeTop);
+            float opacticy = m_visionMinOpacity + ((m_visionMaxOpacity - m_visionMinOpacity) * ((m_visionFadeDistance - navNodeDistance) / (m_visionFadeDistance - m_visionFullDistance)));
+            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, opacticy);
+        }
+
+        m_visionNodes.AddRange(fullVisibleNavNode);
+        m_visionNodes.AddRange(fadeVisibleNavNode);
 
         //Build guard vision range
         foreach (NavNode navNode in m_visionNodes)
