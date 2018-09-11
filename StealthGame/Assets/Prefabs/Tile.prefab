@@ -392,7 +392,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1820686087039842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: -0.5, z: -11}
+  m_LocalPosition: {x: 1, y: -0.5, z: 5}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4560502023093840}
@@ -945,17 +945,11 @@ MonoBehaviour:
   m_nodeType: 1
   m_nodeTop: {x: -3, y: 0, z: -11}
   m_gridPos: {x: 5, y: 0, z: 0}
-  m_adjacentNodes:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_northNodes:
-  - {fileID: 0}
-  m_eastNodes:
-  - {fileID: 0}
+  m_adjacentNodes: []
+  m_northNodes: []
+  m_eastNodes: []
   m_southNodes: []
-  m_westNodes:
-  - {fileID: 0}
+  m_westNodes: []
   m_gScore: 0
   m_hScore: 0
   m_fScore: 0

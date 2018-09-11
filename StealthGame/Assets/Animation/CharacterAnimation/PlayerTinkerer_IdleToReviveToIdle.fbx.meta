@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 8aa7f9f9aa95d5d46bcda817f7c08375
-timeCreated: 1533088980
+guid: d6ab4af2b0e524548b253759063b063c
+timeCreated: 1536642869
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -132,11 +132,11 @@ ModelImporter:
     100248: Middle_Con_Right
     100250: Pinke_Con_Left
     100252: Pinkie_Con_Right
-    100254: Right_Arm
-    100256: Right_ForeArm
-    100258: Ring_Con_Left
-    100260: Ring_Con_Right
-    100262: //RootNode
+    100254: //RootNode
+    100256: Right_Arm
+    100258: Right_ForeArm
+    100260: Ring_Con_Left
+    100262: Ring_Con_Right
     100264: JNT_Root
     400000: _control
     400002: _control1
@@ -265,20 +265,20 @@ ModelImporter:
     400248: Middle_Con_Right
     400250: Pinke_Con_Left
     400252: Pinkie_Con_Right
-    400254: Right_Arm
-    400256: Right_ForeArm
-    400258: Ring_Con_Left
-    400260: Ring_Con_Right
-    400262: //RootNode
+    400254: //RootNode
+    400256: Right_Arm
+    400258: Right_ForeArm
+    400260: Ring_Con_Left
+    400262: Ring_Con_Right
     400264: JNT_Root
-    7400000: PlayerTinkerer_WallRightIdle
+    7400000: PlayerTinkerer_IdleToReviveToIdle
     9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -288,26 +288,26 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'wallidle' has import animation warnings that
+    animationImportWarnings: "\nClip 'ReviveOther' has import animation warnings that
       might lower retargeting quality:\nNote: Activate translation DOF on avatar to
       improve retargeting quality.\n\t'JNT_Spine0' has translation animation that
       will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 1
-    animationRotationError: 0
-    animationPositionError: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PlayerTinkerer_WallRightIdle
-      takeName: wallidle
+      name: PlayerTinkerer_IdleToReviveToIdle
+      takeName: ReviveOther
       firstFrame: 1
-      lastFrame: 72
+      lastFrame: 54
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -327,7 +327,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.92444444
+      - time: 1.0128899
         functionName: EndAnimationState
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -355,7 +355,7 @@ ModelImporter:
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
-    indexFormat: 1
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
