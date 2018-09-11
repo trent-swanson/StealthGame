@@ -172,13 +172,13 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4753025643166552}
-  - component: {fileID: 65904017480470270}
+  - component: {fileID: 65168203020631700}
   m_Layer: 10
   m_Name: Stack_Double
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1431046603857366
 GameObject:
@@ -983,7 +983,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b9a0e90b315fe554daf06c9bfeafe1cc, type: 2}
+  - {fileID: 2100000, guid: cafdcecfe1f86f042afd04707d28a88f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1408,7 +1408,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1274676568108134}
   m_Mesh: {fileID: 4300000, guid: 3d696bdef4024624bafaf8d1cacf9f5e, type: 3}
---- !u!65 &65904017480470270
+--- !u!65 &65168203020631700
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
