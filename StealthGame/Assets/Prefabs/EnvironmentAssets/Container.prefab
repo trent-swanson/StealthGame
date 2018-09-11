@@ -22,12 +22,12 @@ GameObject:
   - component: {fileID: 33093402318162912}
   - component: {fileID: 23603289672996394}
   - component: {fileID: 65128389265995882}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Container
   m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4465398375186704
 Transform:
@@ -56,7 +56,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b19d316f507694b40b2077062336d9c8, type: 2}
+  - {fileID: 2100000, guid: cafdcecfe1f86f042afd04707d28a88f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
