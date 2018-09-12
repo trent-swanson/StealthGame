@@ -100,15 +100,13 @@ public class NPC : Agent
     }
 
     //Constant update while agent is selected
-    public override void AgentTurnUpdate()
+    public override AGENT_UPDATE_STATE AgentTurnUpdate()
     {
         //Check for update in world state
         if(m_agentWorldState.m_modifiedFlag)
         {
-            Debug.Log("FlagMod");
             m_agentWorldState.m_modifiedFlag = false;
         }
-
 
         if(m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list
         {
@@ -117,9 +115,7 @@ public class NPC : Agent
             if(!newAction)//Unable to get a new action
             {
                 m_currentActionPoints = 0;
-                AgentTurnEnd();
-                m_turnManager.EndUnitTurn(this);
-                return;
+                return AGENT_UPDATE_STATE.END_TURN;
             }
         }
 
@@ -136,9 +132,12 @@ public class NPC : Agent
                 m_GOAP.m_actionList.RemoveAt(0);
                 break;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
+                return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
             default:
                 break;
         }
+
+        return AGENT_UPDATE_STATE.AWAITING_INPUT;
     }
 
     //Runs when agent is removed from team list, end of turn

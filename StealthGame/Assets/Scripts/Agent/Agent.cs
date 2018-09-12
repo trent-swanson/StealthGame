@@ -97,8 +97,9 @@ public class Agent : MonoBehaviour
     //Runs every time a agent is selected, this can be at end of an action is completed
     public virtual void AgentSelected() { }
 
+    public enum AGENT_UPDATE_STATE {AWAITING_INPUT, PERFORMING_ACTIONS, END_TURN}
     //Constant update while agent is selected
-    public virtual void AgentTurnUpdate() { }
+    public virtual AGENT_UPDATE_STATE AgentTurnUpdate() { return AGENT_UPDATE_STATE.END_TURN; }
 
     //Runs when agent is removed from team list, end of turn
     public virtual void AgentTurnEnd(){}

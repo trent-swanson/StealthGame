@@ -39,17 +39,24 @@ public class PlayerController : Agent {
     }
 
     //Constant update while agent is selected
-    public override void AgentTurnUpdate()
+    public override AGENT_UPDATE_STATE AgentTurnUpdate()
     {
         m_playerActions.UpdateActions();
         m_playerUI.UpdateUI();
 
-        if (m_currentActionPoints <= 0 && m_agentAnimationController.m_animationSteps.Count == 0)
+        if(m_agentAnimationController.m_animationSteps.Count > 0)
         {
-            m_turnManager.EndUnitTurn(this);
-            AgentTurnEnd();
-            return;
+            return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
         }
+        else
+        {
+            if (m_currentActionPoints <= 0)
+            {
+                return AGENT_UPDATE_STATE.END_TURN;
+            }
+        }
+
+        return AGENT_UPDATE_STATE.AWAITING_INPUT;
     }
 
     //Runs when agent is removed from team list, end of turn

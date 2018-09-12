@@ -20,10 +20,21 @@ public class UIController : MonoBehaviour {
     public Image m_playerTurnStart = null;
     public Image m_enemyTurnStart = null;
 
+    public Button m_endTurnBtn = null;
+    public Button m_nextPlayerBtn = null;
+
+    private bool m_UIInteractivity = true;
+
     void Start()
     {
 		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
-	}
+
+        if (m_endTurnBtn == null)
+            Debug.Log("End turn button has not been set in the UI controller");
+        if (m_nextPlayerBtn == null)
+            Debug.Log("Next player button has not been set in the UI controller");
+
+    }
 
     public void InitUIPortraits(List<Agent> agents)
     {
@@ -44,7 +55,18 @@ public class UIController : MonoBehaviour {
 		GetInventoryItems();
 	}
 
-	public void ResetUI() {
+    public void SetUIInteractivity(bool togleVal)
+    {
+        if (togleVal != m_UIInteractivity)
+        {
+            m_UIInteractivity = togleVal;
+
+            m_endTurnBtn.interactable = togleVal;
+            m_nextPlayerBtn.interactable = togleVal;
+        }
+    }
+
+    public void ResetUI() {
 		foreach (GameObject slot in m_inventorySlots) {
 			slot.SetActive(false);
 		}
@@ -57,7 +79,8 @@ public class UIController : MonoBehaviour {
 		}
 	}
 
-	public void AddItem(Agent p_agent) {
+	public void AddItem(Agent p_agent)
+    {
 		if (p_agent == m_currentSelectedAgent) {
 			int index = p_agent.m_currentItems.Count - 1;
 			m_inventorySlots[index].transform.GetChild(0).GetComponent<Image>().sprite = p_agent.m_currentItems[index].icon;
@@ -65,18 +88,26 @@ public class UIController : MonoBehaviour {
 		}
 	}
 
-	public void inventorySlotHover(int slotID) {
+	public void inventorySlotHover(int slotID)
+    {
 		m_inventorySlotInfo.transform.GetChild(0).GetComponent<Text>().text = m_currentSelectedAgent.m_currentItems[slotID].description;
 		m_inventorySlotInfo.SetActive(true);
 	}
 
-	public void inventorySlotHoverExit() {
+	public void inventorySlotHoverExit()
+    {
 		m_inventorySlotInfo.SetActive(false);
 	}
 
+    public void NextPlayer()
+    {
+        m_turnManager.NextPlayer();
+    }
+
+
     public void ChangeAgent(int index)
     {
-        if (index != 0 && m_turnManager.m_currentTeam == TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
+        if (m_UIInteractivity && index != 0 && m_turnManager.m_currentTeam == TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
             m_turnManager.SwapAgents(index);
     }
 
