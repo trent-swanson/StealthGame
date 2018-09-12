@@ -9,6 +9,7 @@ public class TurnManager : MonoBehaviour {
     public List<Agent> m_NPCTeam = new List<Agent>();
 
     public List<Agent> m_turnTeam = new List<Agent>();
+    public Agent.AGENT_UPDATE_STATE m_currentAgentState = Agent.AGENT_UPDATE_STATE.END_TURN;
 
     public enum TEAM {PLAYER, AI };
     public TEAM m_currentTeam = TEAM.PLAYER;
@@ -34,10 +35,28 @@ public class TurnManager : MonoBehaviour {
 
     private void Update()
     {
-        if (m_turnTeam.Count > 0 && m_turnTeam[0] != null)
-            m_turnTeam[0].AgentTurnUpdate();
-        else
-            InitTeamTurnMove();
+        m_currentAgentState = m_turnTeam[0].AgentTurnUpdate();
+
+        //Super basic state machine for turn management
+        switch (m_currentAgentState)
+        {
+            case Agent.AGENT_UPDATE_STATE.AWAITING_INPUT:
+                m_UIController.SetUIInteractivity(true);
+                break;
+            case Agent.AGENT_UPDATE_STATE.PERFORMING_ACTIONS:
+                m_UIController.SetUIInteractivity(false);
+                break;
+            case Agent.AGENT_UPDATE_STATE.END_TURN:
+                EndUnitTurn(m_turnTeam[0]);
+
+                if(!ValidTeam())
+                    InitTeamTurnMove();
+
+                m_UIController.SetUIInteractivity(true);
+                break;
+            default:
+                break;
+        }
     }
 
     //initilise unit team
@@ -76,15 +95,18 @@ public class TurnManager : MonoBehaviour {
     //end of unit turn
     public void EndUnitTurn(Agent agent)
     {
+        agent.AgentTurnEnd();
+
         if (ValidTeam())
         {
-            SwapAgents(GetNextTeamAgentIndex());
+            NextPlayer();
         }
         else
             InitTeamTurnMove();
     }
 
-    //end of team turn
+    //Ends the current teams turn
+    //Called by UI button
     public void EndTeamTurn()
     {
         foreach (Agent agent in m_turnTeam)
@@ -97,6 +119,11 @@ public class TurnManager : MonoBehaviour {
             }
         }
         InitTeamTurnMove();
+    }
+
+    public void NextPlayer()
+    {
+        SwapAgents(GetNextTeamAgentIndex());
     }
 
     public void SwapAgents(int agentIndex)
@@ -135,7 +162,7 @@ public class TurnManager : MonoBehaviour {
 
     private int GetNextTeamAgentIndex()
     {
-        for (int i = 0; i < m_turnTeam.Count; i++)
+        for (int i = 1; i < m_turnTeam.Count; i++)
         {
             if (!m_turnTeam[i].m_knockedout && m_turnTeam[i].m_currentActionPoints > 0)
                 return i;

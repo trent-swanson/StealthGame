@@ -100,15 +100,13 @@ public class NPC : Agent
     }
 
     //Constant update while agent is selected
-    public override void AgentTurnUpdate()
+    public override AGENT_UPDATE_STATE AgentTurnUpdate()
     {
         //Check for update in world state
         if(m_agentWorldState.m_modifiedFlag)
         {
-            Debug.Log("FlagMod");
             m_agentWorldState.m_modifiedFlag = false;
         }
-
 
         if(m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list
         {
@@ -117,9 +115,7 @@ public class NPC : Agent
             if(!newAction)//Unable to get a new action
             {
                 m_currentActionPoints = 0;
-                AgentTurnEnd();
-                m_turnManager.EndUnitTurn(this);
-                return;
+                return AGENT_UPDATE_STATE.END_TURN;
             }
         }
 
@@ -136,9 +132,12 @@ public class NPC : Agent
                 m_GOAP.m_actionList.RemoveAt(0);
                 break;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
+                return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
             default:
                 break;
         }
+
+        return AGENT_UPDATE_STATE.AWAITING_INPUT;
     }
 
     //Runs when agent is removed from team list, end of turn
@@ -177,16 +176,25 @@ public class NPC : Agent
 
         m_visionNodes.Clear();
 
-        List<NavNode> visibleNavNode = Vision.BuildVisionList(this);
+        List<NavNode> fullVisibleNavNode = Vision.BuildVisionList(this, m_visionFullDistance, m_visionFullAngle);
+        List<NavNode> fadeVisibleNavNode = Vision.BuildVisionList(this, m_visionFadeDistance, m_visionFadeAngle);
 
         //Build vision cone, dont add duplicates to list
-        foreach (NavNode navNode in visibleNavNode)
+        foreach (NavNode navNode in fullVisibleNavNode)
         {
-            if(!m_visionNodes.Contains(navNode))
-            {
-                m_visionNodes.Add(navNode);
-            }
+            fadeVisibleNavNode.Remove(navNode);
+            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, m_visionFullOpacity);
         }
+
+        foreach (NavNode navNode in fadeVisibleNavNode)
+        {
+            float navNodeDistance = Vector3.Distance(navNode.m_nodeTop, m_currentNavNode.m_nodeTop);
+            float opacticy = m_visionFadeMinOpacity + ((m_visionFadeMaxOpacity - m_visionFadeMinOpacity) * ((m_visionFadeDistance - navNodeDistance) / (m_visionFadeDistance - m_visionFullDistance)));
+            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, opacticy);
+        }
+
+        m_visionNodes.AddRange(fullVisibleNavNode);
+        m_visionNodes.AddRange(fadeVisibleNavNode);
 
         //Build guard vision range
         foreach (NavNode navNode in m_visionNodes)
