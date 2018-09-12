@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4931158957622560}
   - component: {fileID: 33906011536154688}
   - component: {fileID: 23573605498286812}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Beer_Barrel_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1135999283241132
 GameObject:
@@ -38,12 +38,12 @@ GameObject:
   - component: {fileID: 4227651321578716}
   - component: {fileID: 33759424314783552}
   - component: {fileID: 23951537151703742}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fire_Sprinkler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1162060166138362
 GameObject:
@@ -55,12 +55,12 @@ GameObject:
   - component: {fileID: 4935091878160390}
   - component: {fileID: 33618388024331166}
   - component: {fileID: 23005276712950492}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1242643526918526
 GameObject:
@@ -72,12 +72,12 @@ GameObject:
   - component: {fileID: 4202050826793302}
   - component: {fileID: 33414206688284554}
   - component: {fileID: 23652820746884244}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Circle_Table
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1285809808352878
 GameObject:
@@ -88,12 +88,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4161541891951482}
   - component: {fileID: 65323851316709330}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stack_BeerBarrel
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1341087163873758
 GameObject:
@@ -105,12 +105,12 @@ GameObject:
   - component: {fileID: 4173655560134002}
   - component: {fileID: 33592400578692160}
   - component: {fileID: 23444968235434568}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Screwdriver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1647481111209734
 GameObject:
@@ -122,12 +122,12 @@ GameObject:
   - component: {fileID: 4898154880719498}
   - component: {fileID: 33325970922864794}
   - component: {fileID: 23155249298832222}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tyre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1676795016028944
 GameObject:
@@ -139,12 +139,12 @@ GameObject:
   - component: {fileID: 4621193121404532}
   - component: {fileID: 33471282148553258}
   - component: {fileID: 23139940015165646}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Fire_Sprinkler (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4161541891951482
 Transform:
@@ -152,8 +152,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1285809808352878}
-  m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.70710784}
-  m_LocalPosition: {x: 7, y: 0, z: 10}
+  m_LocalRotation: {x: -0, y: -0.000000014901161, z: -0, w: 1}
+  m_LocalPosition: {x: 15, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4202050826793302}
@@ -165,7 +165,7 @@ Transform:
   - {fileID: 4935091878160390}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4173655560134002
 Transform:
   m_ObjectHideFlags: 1
@@ -271,7 +271,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -305,7 +305,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9987c89bf49ecea49baf655ac1db616f, type: 2}
+  - {fileID: 2100000, guid: 9f174676dba6ec84092941228afd13f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -339,7 +339,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4d651155d918e3a4fb50d74b2eceba67, type: 2}
+  - {fileID: 2100000, guid: 509e44a03c5db4d41af7298c7ace66ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -475,7 +475,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9987c89bf49ecea49baf655ac1db616f, type: 2}
+  - {fileID: 2100000, guid: 9f174676dba6ec84092941228afd13f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -515,7 +515,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1676795016028944}
-  m_Mesh: {fileID: 4300000, guid: 5d5d832b44cac1e4cae5262143d095c5, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 5d5d832b44cac1e4cae5262143d095c5, type: 3}
 --- !u!33 &33592400578692160
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -536,7 +536,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1135999283241132}
-  m_Mesh: {fileID: 4300000, guid: 5d5d832b44cac1e4cae5262143d095c5, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 5d5d832b44cac1e4cae5262143d095c5, type: 3}
 --- !u!33 &33906011536154688
 MeshFilter:
   m_ObjectHideFlags: 1
