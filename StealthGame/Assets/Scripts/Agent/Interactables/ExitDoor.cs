@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExitDoor : Interactable
 {
@@ -16,8 +17,11 @@ public class ExitDoor : Interactable
 
     public override void PerformAction(Agent agent)
     {
-        if(agent.m_agentInventory.AgentHasItem(m_requiredItem))
+        if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
+        {
             Debug.Log("OpeningDoor");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
         else
             Debug.Log("Player has no gold :(");
     }
