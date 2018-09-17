@@ -171,7 +171,7 @@ public class NPC : Agent
     {
         foreach (NavNode navNode in m_visionNodes) //Remove old vision
         {
-            navNode.NPCVision(this, NavNode.ADD_REMOVE_FUNCTION.REMOVE);
+            navNode.NPCVision(ADD_REMOVE_FUNCTION.REMOVE, this);
         }
 
         m_visionNodes.Clear();
@@ -199,7 +199,7 @@ public class NPC : Agent
         //Build guard vision range
         foreach (NavNode navNode in m_visionNodes)
         {
-            navNode.NPCVision(this, NavNode.ADD_REMOVE_FUNCTION.ADD);
+            navNode.NPCVision(ADD_REMOVE_FUNCTION.ADD, this);
         }
     }
 

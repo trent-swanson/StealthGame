@@ -11,10 +11,13 @@ public class NavNode : MonoBehaviour
     public Sprite m_selectedSprite;
     public Sprite m_attackSprite;
     public Sprite m_reviveSprite;
+    public Sprite m_pickupSprite;
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
     public static float m_wallHideSelectionDeadZone = 0.8f;
+
+    public Item m_item = null;
 
     [System.Serializable]
     public struct WallHideIndicators
@@ -119,14 +122,20 @@ public class NavNode : MonoBehaviour
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_reviveSprite;
                     }
+                    else if (m_item != null)
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(false);
+                        m_spriteRenderer.sprite = m_pickupSprite;
+                    }
                     else
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_defaultSprite;
-
-                        ToggleWallHideIndicators(false);
                     }
+
+                    ToggleWallHideIndicators(false);
                 }
                 break;
 
@@ -146,6 +155,14 @@ public class NavNode : MonoBehaviour
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_reviveSprite;
+                    }
+                    else if(m_item!= null)
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(true);
+                        m_spriteRenderer.sprite = m_pickupSprite;
+
+                        ToggleWallHideIndicators(true);
                     }
                     else
                     {
@@ -258,16 +275,16 @@ public class NavNode : MonoBehaviour
         }
     }
 
-    public Agent.FACING_DIR GetWallHideDir()
+    public FACING_DIR GetWallHideDir()
     {
         for (int i = 0; i < 4; i++)
         {
             if (m_wallHideIndicators[i].m_selected == true)
             {
-                return (Agent.FACING_DIR)i;//Casting 'i' to direction
+                return (FACING_DIR)i;//Casting 'i' to direction
             }
         }
-        return Agent.FACING_DIR.NONE;
+        return FACING_DIR.NONE;
     }
 
     public Agent GetDownedAgent(TurnManager.TEAM team)
@@ -291,8 +308,7 @@ public class NavNode : MonoBehaviour
         m_downedAgents.Remove(agent);
     }
 
-    public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }
-    public void NPCVision(Agent npc, ADD_REMOVE_FUNCTION functionType )
+    public void NPCVision(ADD_REMOVE_FUNCTION functionType, Agent npc)
     {
         switch (functionType)
         {
@@ -302,6 +318,27 @@ public class NavNode : MonoBehaviour
                 break;
             case ADD_REMOVE_FUNCTION.REMOVE:
                 m_tileVisibleToNPCs.Remove(npc);
+                break;
+            default:
+                break;
+        }
+
+        if (m_tileVisibleToNPCs.Count > 0)
+            m_NPCVisionUI.SetActive(true);
+        else
+            m_NPCVisionUI.SetActive(false);
+    }
+
+    public void NavNodeItem(ADD_REMOVE_FUNCTION functionType, Item item = null)
+    {
+        switch (functionType)
+        {
+            case ADD_REMOVE_FUNCTION.ADD:
+                if (m_item == null)
+                    m_item = item;
+                break;
+            case ADD_REMOVE_FUNCTION.REMOVE:
+                m_item = null;
                 break;
             default:
                 break;

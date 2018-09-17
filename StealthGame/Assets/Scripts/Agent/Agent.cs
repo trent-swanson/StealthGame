@@ -6,16 +6,15 @@ using UnityEngine.UI;
 
 public class Agent : MonoBehaviour
 {
-    public enum INTERACTION_TYPE { NONE, WALL_HIDE, USE_OBJECT, ATTACK, REVIVE};
     public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
 
-    public enum FACING_DIR { NORTH, EAST, SOUTH, WEST, NONE }
     public FACING_DIR m_facingDir = FACING_DIR.NONE;
 
     protected SquadManager squadManager;
 
     public Animator m_animator = null;
     public AgentAnimationController m_agentAnimationController = null;
+    public AgentInventory m_agentInventory = null;
 
     [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
@@ -38,11 +37,9 @@ public class Agent : MonoBehaviour
     public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
 
     public Agent m_targetAgent = null;
+    public Item m_targetItem = null;
 
     public Vector3 m_colliderExtents;
-
-    [Space]
-    public List<Item> m_currentItems = new List<Item>();
 
     [Header("Vision details")]
     public float m_visionFullOpacity = 1;
@@ -81,6 +78,8 @@ public class Agent : MonoBehaviour
 
         m_animator = GetComponent<Animator>();
         m_agentAnimationController = GetComponent<AgentAnimationController>();
+        m_agentInventory = GetComponent<AgentInventory>();
+
         m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
@@ -136,6 +135,17 @@ public class Agent : MonoBehaviour
         m_agentAnimationController.PlayNextAnimation();
     }
 
+    public void ChangeCurrentNavNode(NavNode navNode)
+    {
+        m_currentNavNode.m_obstructingAgent = null;
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+
+        m_currentNavNode = navNode;
+
+        m_currentNavNode.m_obstructingAgent = this;
+        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+    }
+
     public static FACING_DIR GetFacingDir(Vector3 dir)
     {
         dir.y = 0; //Dont need to use y 
@@ -150,17 +160,6 @@ public class Agent : MonoBehaviour
         if (angle < -70 && angle > -100)
             return FACING_DIR.EAST;
         return FACING_DIR.NONE;
-    }
-
-    public void ChangeCurrentNavNode(NavNode navNode)
-    {
-        m_currentNavNode.m_obstructingAgent = null;
-        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-
-        m_currentNavNode = navNode;
-
-        m_currentNavNode.m_obstructingAgent = this;
-        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
     }
 
     public static Vector3 FacingDirEnumToVector3(FACING_DIR facingDir)

@@ -42,7 +42,6 @@ public class PlayerController : Agent {
     public override AGENT_UPDATE_STATE AgentTurnUpdate()
     {
         m_playerActions.UpdateActions();
-        m_playerUI.UpdateUI();
 
         if(m_agentAnimationController.m_animationSteps.Count > 0)
         {

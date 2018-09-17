@@ -35,7 +35,7 @@ public class MeleeAttack : AIAction
     {
         List<NavNode> oneStep = new List<NavNode>();
         oneStep.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
-        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneStep, Agent.INTERACTION_TYPE.ATTACK);
+        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneStep, INTERACTION_TYPE.ATTACK);
 
         NPCAgent.m_agentAnimationController.PlayNextAnimation();
     }

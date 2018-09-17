@@ -201,29 +201,34 @@ public class PlayerActions : MonoBehaviour
             //Get animation steps
             m_agentAnimationController.m_animationSteps.Clear();
 
-            if (m_playerController.m_interaction == Agent.INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall, so defualt by adding idle
+            if (m_playerController.m_interaction == INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall, so defualt by adding idle
             {
                 m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.IDLE);
             }
 
-            m_playerController.m_interaction = Agent.INTERACTION_TYPE.NONE;//Reset interaction
+            m_playerController.m_interaction = INTERACTION_TYPE.NONE;//Reset interaction
 
             //Getting wall hide detection
-            Agent.FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
+            FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
 
-            if (wallHideDir != Agent.FACING_DIR.NONE)//Wall hiding animation calling
+            if (wallHideDir != FACING_DIR.NONE)//Wall hiding animation calling
             {
-                m_playerController.m_interaction = Agent.INTERACTION_TYPE.WALL_HIDE;
+                m_playerController.m_interaction = INTERACTION_TYPE.WALL_HIDE;
             }
             else if(m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
-                m_playerController.m_interaction = Agent.INTERACTION_TYPE.ATTACK;
+                m_playerController.m_interaction = INTERACTION_TYPE.ATTACK;
                 m_playerController.m_targetAgent = m_currentSelectedNode.m_obstructingAgent;
                 m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
             }
+            else if(m_currentSelectedNode.m_item != null)
+            {
+                m_playerController.m_interaction = INTERACTION_TYPE.PICKUP_ITEM_GROUND;
+                m_playerController.m_targetItem = m_currentSelectedNode.m_item;
+            }
             else if (m_currentSelectedNode.GetDownedAgent(m_playerController.m_team) != null)//Reviving team mate
             {
-                m_playerController.m_interaction = Agent.INTERACTION_TYPE.REVIVE;
+                m_playerController.m_interaction = INTERACTION_TYPE.REVIVE;
                 m_playerController.m_targetAgent = m_currentSelectedNode.GetDownedAgent(m_playerController.m_team);
                 m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
             }
@@ -238,6 +243,7 @@ public class PlayerActions : MonoBehaviour
         if(m_agentAnimationController.m_playNextAnimation)//End of animation
         {
             m_agentAnimationController.PlayNextAnimation();
+            m_playerUI.UpdateUI();
 
             if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
             {

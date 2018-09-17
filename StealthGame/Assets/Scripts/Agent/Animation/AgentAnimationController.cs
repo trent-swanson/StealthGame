@@ -103,6 +103,18 @@ public class AgentAnimationController : MonoBehaviour
                 case AnimationManager.ANIMATION_STEP.INTERACTION:
                     m_currentAnimation = "Interact";
                     break;
+                case AnimationManager.ANIMATION_STEP.PICKUP_ITEM_GROUND:
+                    Item groundItem = m_agent.m_targetItem;
+                    if (groundItem != null)
+                        groundItem.PickedUp(m_agent);
+                    m_currentAnimation = "Interaction";
+                    break;
+                case AnimationManager.ANIMATION_STEP.PICKUP_ITEM_SHELF:
+                    Item shelfItem = m_agent.m_targetItem;
+                    if (shelfItem != null)
+                        shelfItem.PickedUp(m_agent);
+                    m_currentAnimation = "Interaction";
+                    break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
                     if (m_agent.m_targetAgent != null)
                         m_agent.m_targetAgent.Knockout();

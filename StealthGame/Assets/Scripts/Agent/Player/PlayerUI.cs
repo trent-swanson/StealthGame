@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     private LineRenderer m_pathRenderer = null;
     private UIController m_uiController = null;
     private PlayerController m_playerController = null;
+    private AgentInventory m_agentInventory;
 
     [Space]
     [Space]
@@ -20,7 +21,7 @@ public class PlayerUI : MonoBehaviour
     public Sprite m_selectedAPDisplay;
     public TextMeshProUGUI m_APNumber;
 
-    private List<PickUp> m_visiblePickups = new List<PickUp>();
+    private List<Item> m_visiblePickups = new List<Item>();
 
     public enum MESH_STATE { DRAW_NAVMESH, DRAW_PATH, REMOVE_NAVMESH, REMOVE_PATH}
 
@@ -29,6 +30,8 @@ public class PlayerUI : MonoBehaviour
         m_pathRenderer = GetComponentInChildren<LineRenderer>();
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         m_playerController = GetComponent<PlayerController>();
+        m_agentInventory = GetComponent<AgentInventory>();
+
         m_unitCanvas.SetActive(true);
         m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
     }
@@ -37,28 +40,30 @@ public class PlayerUI : MonoBehaviour
     {
         m_APDisplay.sprite = m_defualtAPDisplay;
         m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
-        m_APNumber.text = m_playerController.m_currentActionPoints.ToString();
+        UpdateAPDisplay(m_playerController.m_currentActionPoints);
     }
 
     public void StartUI()
     {
-        ShowInteractables();
         m_APDisplay.sprite = m_selectedAPDisplay;
         m_APDisplay.rectTransform.sizeDelta = new Vector2(0, 0);
-    }
 
-    public void UpdateUI()
-    {
-        m_uiController.UpdateUI(m_playerController);
+        ShowInteractables();
     }
 
     public void EndUI()
     {
-        //m_unitCanvas.SetActive(false);
         m_APDisplay.sprite = m_defualtAPDisplay;
         m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
 
         RemoveInteractables();
+    }
+
+    public void UpdateUI()
+    {
+        ShowInteractables();
+        m_uiController.UpdateItemInventory(m_playerController);
+        UpdateAPDisplay(m_playerController.m_currentNavNode.m_BFSDistance);
     }
 
     public void UpdateNodeVisualisation(MESH_STATE state, List<NavNode> selectableNodes, NavNode currentSelectedNode = null, NavNode newSelectedNode = null, List<NavNode> nodePath = null)
@@ -172,7 +177,7 @@ public class PlayerUI : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_playerController.m_highlightInteractablesRange, LayerManager.m_interactableLayer);
         for (int i = 0; i < hitColliders.Length; i++)
         {
-            PickUp pickup = hitColliders[i].GetComponent<PickUp>(); //TODO change pickup to interactable
+            Item pickup = hitColliders[i].GetComponent<Item>(); //TODO change pickup to interactable
             if (pickup!=null)
             {
                 m_visiblePickups.Add(pickup);
@@ -183,15 +188,9 @@ public class PlayerUI : MonoBehaviour
 
     private void RemoveInteractables()
     {
-        foreach (PickUp pickUp in m_visiblePickups)
+        foreach (Item pickUp in m_visiblePickups)
         {
             pickUp.TurnOffOutline();
         }
-    }
-
-    public void AddItem(Item item)
-    {
-        m_playerController.m_currentItems.Add(item);
-        m_uiController.AddItem(m_playerController);
     }
 }

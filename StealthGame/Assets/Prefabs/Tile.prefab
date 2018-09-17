@@ -391,7 +391,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1820686087039842}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -0.5, z: 5}
+  m_LocalPosition: {x: 9, y: -0.5, z: -11}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children:
   - {fileID: 4560502023093840}
@@ -899,8 +899,10 @@ MonoBehaviour:
   m_selectedSprite: {fileID: 21300000, guid: 746f40fb66b44674a9f042e8cf1def20, type: 3}
   m_attackSprite: {fileID: 21300000, guid: 96f1126034944f2419bc7b1c0f7027ed, type: 3}
   m_reviveSprite: {fileID: 21300000, guid: 903a93cf43974fa488ecc585a285e955, type: 3}
+  m_pickupSprite: {fileID: 21300000, guid: 892a3799e5f23c64e99010420203e0ae, type: 3}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 212797366160729478}
+  m_item: {fileID: 0}
   m_wallHideIndicators:
   - m_wallHideSprite: {fileID: 212944209950567200}
     m_wallHideGroundSprite: {fileID: 212950026748818000}

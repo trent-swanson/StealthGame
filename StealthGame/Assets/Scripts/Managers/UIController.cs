@@ -5,15 +5,9 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour {
 
-	public List<GameObject> m_inventorySlots = new List<GameObject>();
-
-	[Space]
-	public GameObject m_inventorySlotInfo;
 	public List<Image> m_portraitImages;
 
-    Agent m_currentSelectedAgent;
-
-	TurnManager m_turnManager;
+    TurnManager m_turnManager;
 
     public float m_turnStartFadeTime = 1.0f;
 
@@ -25,6 +19,13 @@ public class UIController : MonoBehaviour {
 
     private bool m_UIInteractivity = true;
 
+    public List<GameObject> m_inventorySlots = new List<GameObject>();
+
+    [Space]
+    public GameObject m_inventorySlotInfo;
+
+    private List<Item> m_items = new List<Item>();
+
     void Start()
     {
 		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
@@ -33,6 +34,12 @@ public class UIController : MonoBehaviour {
             Debug.Log("End turn button has not been set in the UI controller");
         if (m_nextPlayerBtn == null)
             Debug.Log("Next player button has not been set in the UI controller");
+
+        //Initialise slot indexes
+        for (int i = 0; i < m_inventorySlots.Count; i++)
+        {
+            m_inventorySlots[i].GetComponent<InventorySlot>().m_slotIndex = i;
+        }
 
     }
 
@@ -49,11 +56,40 @@ public class UIController : MonoBehaviour {
         }
     }
 
-	public void UpdateUI(Agent p_agent) {
-		m_currentSelectedAgent = p_agent;
-		ResetUI();
-		GetInventoryItems();
-	}
+    public void UpdateItemInventory(Agent agent)
+    {
+        m_items = agent.m_agentInventory.m_currentItems;
+        int agentItemCount = m_items.Count;
+
+        for (int i = 0; i < m_inventorySlots.Count; i++)
+        {
+            //Draw item
+            if(i < agentItemCount)
+            {
+                m_inventorySlots[i].SetActive(true);
+                m_inventorySlots[i].GetComponent<Image>().sprite = m_items[i].m_icon;
+            }
+            else
+            {
+                m_inventorySlots[i].SetActive(false);
+            }
+        }
+    }
+
+    public void UpdateItemDescription(int index)
+    {
+        if (index >= 0 && index < m_items.Count)
+        {
+            Item item = m_items[index];
+            if (item != null)
+                m_inventorySlotInfo.GetComponent<Text>().text = item.m_description;
+        }
+        else
+        {
+            m_inventorySlotInfo.GetComponent<Text>().text = "";
+         
+        }
+    }
 
     public void SetUIInteractivity(bool togleVal)
     {
@@ -65,39 +101,6 @@ public class UIController : MonoBehaviour {
             m_nextPlayerBtn.interactable = togleVal;
         }
     }
-
-    public void ResetUI() {
-		foreach (GameObject slot in m_inventorySlots) {
-			slot.SetActive(false);
-		}
-	}
-
-	void GetInventoryItems() {
-		for (int i = 0; i < m_currentSelectedAgent.m_currentItems.Count; i++) {
-			m_inventorySlots[i].transform.GetChild(0).GetComponent<Image>().sprite = m_currentSelectedAgent.m_currentItems[i].icon;
-			m_inventorySlots[i].SetActive(true);
-		}
-	}
-
-	public void AddItem(Agent p_agent)
-    {
-		if (p_agent == m_currentSelectedAgent) {
-			int index = p_agent.m_currentItems.Count - 1;
-			m_inventorySlots[index].transform.GetChild(0).GetComponent<Image>().sprite = p_agent.m_currentItems[index].icon;
-			m_inventorySlots[index].SetActive(true);
-		}
-	}
-
-	public void inventorySlotHover(int slotID)
-    {
-		m_inventorySlotInfo.transform.GetChild(0).GetComponent<Text>().text = m_currentSelectedAgent.m_currentItems[slotID].description;
-		m_inventorySlotInfo.SetActive(true);
-	}
-
-	public void inventorySlotHoverExit()
-    {
-		m_inventorySlotInfo.SetActive(false);
-	}
 
     public void NextPlayer()
     {
