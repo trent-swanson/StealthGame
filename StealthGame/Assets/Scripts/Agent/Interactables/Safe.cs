@@ -15,7 +15,7 @@ public class Safe : Interactable
         RaycastHit hit;
         if (Physics.Raycast(transform.position + transform.up + transform.forward, Vector3.down, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
         {
-            m_interactionNode = hit.collider.GetComponent<NavNode>();
+            m_interactionNode.Add(hit.collider.GetComponent<NavNode>());
         }
     }
 
@@ -23,13 +23,22 @@ public class Safe : Interactable
     {
         if (m_health > 0)
         {
-            m_health--;
+            if (agent.m_agentInventory.AgentHasItem(Item.ITEM_TYPE.CROWBAR))//Instant opening with crowbar
+                m_health = 0;
+            else
+                m_health--;
+
             agent.m_currentActionPoints = 0;
         }
         else
         {
-        Item newItem = Instantiate(m_item);
-        newItem.EquipItem(agent);
+            Item newItem = Instantiate(m_item);
+            newItem.EquipItem(agent);
         }
+    }
+
+    public override NavNode GetInteractableNode(Agent agent)
+    {
+        return m_interactionNode[0];
     }
 }

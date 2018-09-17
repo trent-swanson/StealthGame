@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public NavNode m_interactionNode = null;
+    public List<NavNode> m_interactionNode = null;
     public NavNode m_currentNode = null;
 
     public Animation m_animation = null;
@@ -22,5 +22,10 @@ public class Interactable : MonoBehaviour
     public virtual void PerformAction(Agent agent)
     {
 
+    }
+
+    public virtual NavNode GetInteractableNode(Agent agent)
+    {
+        return m_currentNode;
     }
 }

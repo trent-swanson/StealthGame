@@ -8,12 +8,16 @@ public class PipeValve : Interactable
     {
         base.Start();
 
-        m_interactionNode = m_currentNode;
-
+        m_interactionNode.Add(m_currentNode);
     }
 
     public override void PerformAction(Agent agent)
     {
         Debug.Log("Busting Pipe");
+    }
+
+    public override NavNode GetInteractableNode(Agent agent)
+    {
+        return m_interactionNode[0];
     }
 }

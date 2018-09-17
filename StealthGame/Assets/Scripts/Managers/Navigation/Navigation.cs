@@ -259,6 +259,7 @@ public class Navigation : MonoBehaviour
                 if (interactable != null)
                 {
                     currentNode.m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+                    currentNode.m_interactable = interactable;
                 }
                 else
                 {
@@ -281,7 +282,7 @@ public class Navigation : MonoBehaviour
     //----------------
     //A* stuff
     //----------------
-    public List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent)
+    public static List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent)
     {
         if (startingNode == goalNode)//Already at position
             return new List<NavNode>();
@@ -309,7 +310,7 @@ public class Navigation : MonoBehaviour
         return new List<NavNode>();
     }
 
-    private void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent)
+    private static void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent)
     {
         openNodes.Remove(currentNode);
         closedNodes.Add(currentNode);
@@ -327,7 +328,7 @@ public class Navigation : MonoBehaviour
         }
     }
 
-    private NavNode GetLowestFScore(List<NavNode> openNodes)
+    private static NavNode GetLowestFScore(List<NavNode> openNodes)
     {
         float fScore = Mathf.Infinity;
         NavNode highestFNode = null;
@@ -342,7 +343,7 @@ public class Navigation : MonoBehaviour
         return highestFNode;
     }
 
-    private List<NavNode> GetPath(NavNode currentNode, NavNode startingNode)
+    private static List<NavNode> GetPath(NavNode currentNode, NavNode startingNode)
     {
         List<NavNode> path = new List<NavNode>();
 

@@ -32,15 +32,18 @@ public class Item : MonoBehaviour
         }
 	}
 
-	public void EquipItem(Agent p_agent)
+	public void EquipItem(Agent agent)
     {
-		p_agent.m_agentInventory.ItemManagement(ADD_REMOVE_FUNCTION.ADD, this);
+        if (!agent.m_agentInventory.AgentHasItem(m_itemType))
+        {
+            agent.m_agentInventory.ItemManagement(ADD_REMOVE_FUNCTION.ADD, this);
 
-        if(m_currentNode!= null)
-            m_currentNode.NavNodeItem(ADD_REMOVE_FUNCTION.REMOVE);
+            if (m_currentNode != null)
+                m_currentNode.NavNodeItem(ADD_REMOVE_FUNCTION.REMOVE);
 
-        //Move away from sight
-        transform.position = m_itemTempStorage;
+            //Move away from sight
+            transform.position = m_itemTempStorage;
+        }
     }
 
 	public void TurnOnOutline() {
