@@ -15,6 +15,17 @@ public class CameraController : MonoBehaviour
     public float minY = 0f;
     public float maxY = 15f;
 
+    int camDirection = 0;
+    [Space]
+    public WallFade NorthWalls;
+    public WallFade SouthWalls;
+    public WallFade EastWalls;
+    public WallFade WestWalls;
+
+    void Start() {
+        SouthWalls.FadeWall();
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
@@ -49,11 +60,25 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKeyDown("q"))
         {
+            //left
             transform.rotation *= Quaternion.Euler(0, -90, 0);
+
+            camDirection--;
+            if (camDirection < 0)
+                camDirection = 3;
+            
+            WallFade();
         }
         if (Input.GetKeyDown("e"))
         {
+            //right
             transform.rotation *= Quaternion.Euler(0, 90, 0);
+            
+            camDirection++;
+            if (camDirection > 3)
+                camDirection = 0;
+            
+            WallFade();
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -61,5 +86,27 @@ public class CameraController : MonoBehaviour
 
         transform.Translate(pos);
         transform.position = new Vector3(Mathf.Clamp(transform.position.x, transform.parent.position.x - panLimit.x, transform.parent.position.x + panLimit.x), Mathf.Clamp(transform.position.y, minY, maxY), Mathf.Clamp(transform.position.z, transform.parent.position.z - panLimit.y, transform.parent.position.z + panLimit.y));
+    }
+
+    void WallFade() {
+        NorthWalls.UnFadeWall();
+        SouthWalls.UnFadeWall();
+        EastWalls.UnFadeWall();
+        WestWalls.UnFadeWall();
+
+        switch (camDirection) {
+            case 0:
+                SouthWalls.FadeWall();
+            break;
+            case 1:
+                WestWalls.FadeWall();
+            break;
+            case 2:
+                NorthWalls.FadeWall();
+            break;
+            case 3:
+                EastWalls.FadeWall();
+            break;
+        }
     }
 }

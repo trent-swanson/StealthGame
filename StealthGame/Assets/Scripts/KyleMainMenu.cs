@@ -28,9 +28,6 @@ public class KyleMainMenu : MonoBehaviour {
 
     public void StartGame()
     {
-        //Resumes Time
-        Time.timeScale = 1;
-
         //Turns of Main Menu UI
         mainMenuUI.SetActive(false);
 
@@ -53,13 +50,16 @@ public class KyleMainMenu : MonoBehaviour {
     IEnumerator ExecuteAfterTime(float time)
     {
         //suspend execution for X seconds
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSecondsRealtime(time);
 
         //Swaps Cinematic camera with Gameplay camera
         mainCamera.SetActive(true);
         mainMenuCamera.SetActive(false);
         //Turns on In-Game UI
         inGameUI.SetActive(true);
+
+        //Resumes Time
+        Time.timeScale = 1;
     }
 
     

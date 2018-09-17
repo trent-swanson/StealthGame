@@ -3798,8 +3798,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1261249592991502}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 5, y: 0, z: 10}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224925064330406088}
@@ -4549,7 +4549,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 532e8bcf3636c2e4f85b3b0e4f8942ec, type: 3}
   m_Controller: {fileID: 9100000, guid: b5d28fb3639840a4c9d1161fa1ef5b39, type: 2}
   m_CullingMode: 1
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -4782,19 +4782,27 @@ MonoBehaviour:
   m_interaction: 0
   m_facingDir: 4
   m_animator: {fileID: 95675678552105234}
+  m_agentAnimationController: {fileID: 0}
   m_turn: 0
   m_knockedout: 0
-  m_maxActionPoints: 50
+  m_maxActionPoints: 6
   m_currentActionPoints: 0
   m_moveSpeed: 2
   m_highlightInteractablesRange: 6
   m_currentNavNode: {fileID: 0}
   m_team: 0
-  m_attackingTarget: {fileID: 0}
+  m_targetAgent: {fileID: 0}
   m_colliderExtents: {x: 0, y: 0, z: 0}
   m_currentItems: []
-  m_visionDistance: 10
-  m_visionAngle: 60
+  m_visionFullOpacity: 1
+  m_visionFadeMaxOpacity: 0.5
+  m_visionFadeMinOpacity: 0.3
+  m_visionFullDistance: 5
+  m_visionFullAngle: 30
+  m_visionFadeDistance: 10
+  m_visionFadeAngle: 60
+  m_path: []
+  m_autoStandupTimer: 0
   portrait: {fileID: 21300000, guid: da1299cda8879bb4bb05d7e7b2be19dd, type: 3}
 --- !u!114 &114563112806178036
 MonoBehaviour:
@@ -4808,7 +4816,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_currentSelectedNode: {fileID: 0}
-  m_path: []
   m_currentActionState: 0
 --- !u!114 &114747388290050114
 MonoBehaviour:

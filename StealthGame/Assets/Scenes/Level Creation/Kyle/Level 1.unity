@@ -1083,8 +1083,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64ba75e10a2258746b6b73e3320f78d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeMat: {fileID: 2100000, guid: 1758ee21e3490bc4a9a6487c7c8087d6, type: 2}
+  fadeWall: {fileID: 2100000, guid: c57c6e7fd6a4ada41b46acbc1729e263, type: 2}
   wallList: []
+  garageDoorMat: {fileID: 2100000, guid: c1173397b8bd33a4eaa8ce71dc208e80, type: 2}
+  fadeGarageDoor: {fileID: 2100000, guid: c8922e264a9965f4da1399f6b4606507, type: 2}
+  garageDoor: {fileID: 0}
+  smallDoorMat: {fileID: 2100000, guid: d9994e49ee6ce884b9184e50746d9145, type: 2}
+  fadeSmallDoor: {fileID: 2100000, guid: 01376963b0ac70440aa2996444559a51, type: 2}
+  smallDoor: {fileID: 0}
 --- !u!4 &116371850
 Transform:
   m_ObjectHideFlags: 0
@@ -9759,6 +9765,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 616179903}
+  - component: {fileID: 616179904}
   m_Layer: 10
   m_Name: Wall_East
   m_TagString: Obsticle
@@ -9788,6 +9795,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 30
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &616179904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 616179902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ba75e10a2258746b6b73e3320f78d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeWall: {fileID: 2100000, guid: c57c6e7fd6a4ada41b46acbc1729e263, type: 2}
+  wallList: []
+  garageDoorMat: {fileID: 2100000, guid: c1173397b8bd33a4eaa8ce71dc208e80, type: 2}
+  fadeGarageDoor: {fileID: 2100000, guid: c8922e264a9965f4da1399f6b4606507, type: 2}
+  garageDoor: {fileID: 0}
+  smallDoorMat: {fileID: 2100000, guid: d9994e49ee6ce884b9184e50746d9145, type: 2}
+  fadeSmallDoor: {fileID: 2100000, guid: 01376963b0ac70440aa2996444559a51, type: 2}
+  smallDoor: {fileID: 0}
 --- !u!4 &624080110 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4422455386417010, guid: 699de9f566e206c419c523f39cb3f408,
@@ -12456,6 +12482,16 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 200.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 49dbeb11ce440ed4ca006b7d6e372327, type: 2}
   m_IsPrefabParent: 0
@@ -12600,6 +12636,11 @@ Prefab:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9f174676dba6ec84092941228afd13f8, type: 2}
+    - target: {fileID: 114634859805395496, guid: ca20d867e9329824abc8361e09487744,
+        type: 2}
+      propertyPath: garageDoor
+      value: 
+      objectReference: {fileID: 1749946169}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ca20d867e9329824abc8361e09487744, type: 2}
   m_IsPrefabParent: 0
@@ -17043,7 +17084,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 28
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1364542052
 GameObject:
@@ -19901,6 +19942,46 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
       value: 1.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 922fc568e06f996439cdef6c3678c86f, type: 2}
   m_IsPrefabParent: 0
@@ -21226,7 +21307,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4341412105553014, guid: 66912d03d36e7f048a5ea42edb9e3051, type: 2}
       propertyPath: m_RootOrder
-      value: 27
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 23451438650333586, guid: 66912d03d36e7f048a5ea42edb9e3051,
         type: 2}
@@ -22640,6 +22721,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6fceb4f497226f84dbda40c16c6a9c82, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1749946169 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1453277356140744, guid: 6fceb4f497226f84dbda40c16c6a9c82,
+    type: 2}
+  m_PrefabInternal: {fileID: 1749946168}
 --- !u!1001 &1762614787
 Prefab:
   m_ObjectHideFlags: 0
@@ -23212,6 +23298,8 @@ MonoBehaviour:
   m_turnStartFadeTime: 1
   m_playerTurnStart: {fileID: 1389508548}
   m_enemyTurnStart: {fileID: 1784432387}
+  m_endTurnBtn: {fileID: 0}
+  m_nextPlayerBtn: {fileID: 0}
 --- !u!114 &1824268035
 MonoBehaviour:
   m_ObjectHideFlags: 0

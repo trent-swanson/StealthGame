@@ -145,6 +145,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4341412105553014}
+  - component: {fileID: 114880234798730304}
   m_Layer: 10
   m_Name: Wall_North
   m_TagString: Obsticle
@@ -889,3 +890,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 5, z: 2}
   m_Center: {x: -1, y: 2.5, z: -1}
+--- !u!114 &114880234798730304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1708386153499202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ba75e10a2258746b6b73e3320f78d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeWall: {fileID: 2100000, guid: c57c6e7fd6a4ada41b46acbc1729e263, type: 2}
+  wallList: []
+  garageDoorMat: {fileID: 2100000, guid: c1173397b8bd33a4eaa8ce71dc208e80, type: 2}
+  fadeGarageDoor: {fileID: 2100000, guid: c8922e264a9965f4da1399f6b4606507, type: 2}
+  garageDoor: {fileID: 0}
+  smallDoorMat: {fileID: 2100000, guid: d9994e49ee6ce884b9184e50746d9145, type: 2}
+  fadeSmallDoor: {fileID: 2100000, guid: 01376963b0ac70440aa2996444559a51, type: 2}
+  smallDoor: {fileID: 0}
