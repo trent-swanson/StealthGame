@@ -63,5 +63,6 @@ public class PlayerController : Agent {
     {
         base.AgentTurnEnd();
         m_playerActions.ActionEnd();
+        m_playerUI.UpdateUI();
     }
 }

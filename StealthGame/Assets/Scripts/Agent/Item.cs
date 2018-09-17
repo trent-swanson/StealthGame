@@ -14,7 +14,7 @@ public class Item : MonoBehaviour
 
     public GameObject m_canvas;
 
-	NavNode m_occupingTile;
+	NavNode m_currentNode;
 
 	public Color m_highlightColour;
 
@@ -27,15 +27,17 @@ public class Item : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
         {
-            m_occupingTile = hit.collider.GetComponent<NavNode>();
-            m_occupingTile.NavNodeItem(ADD_REMOVE_FUNCTION.ADD, this);
+            m_currentNode = hit.collider.GetComponent<NavNode>();
+            m_currentNode.NavNodeItem(ADD_REMOVE_FUNCTION.ADD, this);
         }
 	}
 
-	public void PickedUp(Agent p_agent)
+	public void EquipItem(Agent p_agent)
     {
 		p_agent.m_agentInventory.ItemManagement(ADD_REMOVE_FUNCTION.ADD, this);
-        m_occupingTile.NavNodeItem(ADD_REMOVE_FUNCTION.REMOVE);
+
+        if(m_currentNode!= null)
+            m_currentNode.NavNodeItem(ADD_REMOVE_FUNCTION.REMOVE);
 
         //Move away from sight
         transform.position = m_itemTempStorage;

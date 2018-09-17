@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTION, PICKUP_ITEM_GROUND, PICKUP_ITEM_SHELF, DEATH, REVIVE }//Animation states
+    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTABLE, PICKUP_ITEM, DEATH, REVIVE }//Animation states
 
     public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
     {
@@ -116,17 +116,17 @@ public class AnimationManager : MonoBehaviour
             case INTERACTION_TYPE.WALL_HIDE: // TODO left right
                 transitionSteps.Add(ANIMATION_STEP.WALL_HIDE_RIGHT);
                 break;
-            case INTERACTION_TYPE.USE_OBJECT:
-                transitionSteps.Add(ANIMATION_STEP.INTERACTION);
-                break;
             case INTERACTION_TYPE.ATTACK:
                 transitionSteps.Add(ANIMATION_STEP.ATTACK);
                 break;
             case INTERACTION_TYPE.REVIVE:
                 transitionSteps.Add(ANIMATION_STEP.REVIVE);
                 break;
-            case INTERACTION_TYPE.PICKUP_ITEM_GROUND:
-                transitionSteps.Add(ANIMATION_STEP.PICKUP_ITEM_GROUND);
+            case INTERACTION_TYPE.INTERACTABLE:
+                transitionSteps.Add(ANIMATION_STEP.INTERACTABLE);
+                break;
+            case INTERACTION_TYPE.PICKUP_ITEM:
+                transitionSteps.Add(ANIMATION_STEP.PICKUP_ITEM);
                 break;
             case INTERACTION_TYPE.NONE:
             default:

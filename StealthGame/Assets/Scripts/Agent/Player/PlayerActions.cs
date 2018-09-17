@@ -103,6 +103,7 @@ public class PlayerActions : MonoBehaviour
             Agent downedAgent = newSelectedNavNode.GetDownedAgent(m_playerController.m_team);
 
             bool nextNodeUsable = newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || //Node is walkable
+                newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE || //Interaction node
                 (newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED &&
                 newSelectedNavNode.m_obstructingAgent != null && 
                 newSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team) || //Node contains an enemy 
@@ -195,9 +196,6 @@ public class PlayerActions : MonoBehaviour
         {
             m_playerController.m_currentActionPoints = m_currentSelectedNode.m_BFSDistance;//Set action points to node value
 
-            m_playerController.m_path = GetPath(m_currentSelectedNode);
-            transform.position = m_playerController.m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
-
             //Get animation steps
             m_agentAnimationController.m_animationSteps.Clear();
 
@@ -215,23 +213,43 @@ public class PlayerActions : MonoBehaviour
             {
                 m_playerController.m_interaction = INTERACTION_TYPE.WALL_HIDE;
             }
-            else if(m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
+            else if (m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
                 m_playerController.m_interaction = INTERACTION_TYPE.ATTACK;
                 m_playerController.m_targetAgent = m_currentSelectedNode.m_obstructingAgent;
+
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
                 m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
             }
-            else if(m_currentSelectedNode.m_item != null)
+            else if (m_currentSelectedNode.m_item != null)//Picking up item
             {
-                m_playerController.m_interaction = INTERACTION_TYPE.PICKUP_ITEM_GROUND;
+                m_playerController.m_interaction = INTERACTION_TYPE.PICKUP_ITEM;
                 m_playerController.m_targetItem = m_currentSelectedNode.m_item;
+
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
+            }
+            else if (m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)//Using interactable
+            {
+                m_playerController.m_interaction = INTERACTION_TYPE.INTERACTABLE;
+                m_playerController.m_targetInteractable = m_currentSelectedNode.m_interactable;
+
+                //Get new path to interactable node
+                m_playerController.m_path = GetPath(m_currentSelectedNode.m_interactable.m_interactionNode);
             }
             else if (m_currentSelectedNode.GetDownedAgent(m_playerController.m_team) != null)//Reviving team mate
             {
                 m_playerController.m_interaction = INTERACTION_TYPE.REVIVE;
                 m_playerController.m_targetAgent = m_currentSelectedNode.GetDownedAgent(m_playerController.m_team);
-                m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile
+
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
+                m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were reviving no need to move to last tile
             }
+            else //Default to jst walk to node
+            {
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
+            }
+
+            transform.position = m_playerController.m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
             m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction, wallHideDir));
 
@@ -307,9 +325,8 @@ public class PlayerActions : MonoBehaviour
                     {
                         if(nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)//TODO if we want to move through team mates just compare team values
                             BFSQueue.Enqueue(nextBFSNode);
-                        else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)
+                        else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)
                             m_selectableNodes.Add(nextBFSNode);
-
                     }
                 }
             }

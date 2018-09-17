@@ -38,6 +38,7 @@ public class Agent : MonoBehaviour
 
     public Agent m_targetAgent = null;
     public Item m_targetItem = null;
+    public Interactable m_targetInteractable = null;
 
     public Vector3 m_colliderExtents;
 

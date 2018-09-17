@@ -18,6 +18,7 @@ public class NavNode : MonoBehaviour
     public static float m_wallHideSelectionDeadZone = 0.8f;
 
     public Item m_item = null;
+    public Interactable m_interactable = null;
 
     [System.Serializable]
     public struct WallHideIndicators
@@ -44,7 +45,7 @@ public class NavNode : MonoBehaviour
     Renderer myRenderer;
 
     public enum NODE_STATE { SELECTED, SELECTABLE, UNSELECTED }
-    public enum NODE_TYPE { NONE, WALKABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE }
+    public enum NODE_TYPE { NONE, WALKABLE, INTERACTABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE }
 
     public Agent m_obstructingAgent = null;
     public List<Agent> m_downedAgents = null;
@@ -114,9 +115,7 @@ public class NavNode : MonoBehaviour
                 }
                 else if (m_nodeType == NODE_TYPE.WALKABLE)
                 {
-                    Agent downAgent = GetDownedAgent(agent.m_team);
-
-                    if (downAgent != null)
+                    if (GetDownedAgent(agent.m_team) != null)
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
@@ -137,7 +136,15 @@ public class NavNode : MonoBehaviour
 
                     ToggleWallHideIndicators(false);
                 }
-                break;
+                else if (m_nodeType == NODE_TYPE.INTERACTABLE)
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(false);
+                    m_spriteRenderer.sprite = m_pickupSprite;
+
+                    ToggleWallHideIndicators(false);
+                }
+                    break;
 
             case NODE_STATE.SELECTED:
                 if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
@@ -171,6 +178,14 @@ public class NavNode : MonoBehaviour
 
                         ToggleWallHideIndicators(true);
                     }
+                }
+                else if (m_nodeType == NODE_TYPE.INTERACTABLE)
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(true);
+                    m_spriteRenderer.sprite = m_pickupSprite;
+
+                    ToggleWallHideIndicators(false);
                 }
                 break;
 
@@ -343,10 +358,21 @@ public class NavNode : MonoBehaviour
             default:
                 break;
         }
+    }
 
-        if (m_tileVisibleToNPCs.Count > 0)
-            m_NPCVisionUI.SetActive(true);
-        else
-            m_NPCVisionUI.SetActive(false);
+    public void NavNodeInteractable(ADD_REMOVE_FUNCTION functionType, Interactable interactable = null)
+    {
+        switch (functionType)
+        {
+            case ADD_REMOVE_FUNCTION.ADD:
+                if (m_interactable == null)
+                    m_interactable = interactable;
+                break;
+            case ADD_REMOVE_FUNCTION.REMOVE:
+                m_interactable = null;
+                break;
+            default:
+                break;
+        }
     }
 }

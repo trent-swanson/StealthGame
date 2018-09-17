@@ -255,11 +255,19 @@ public class Navigation : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
             {
-                float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
-                if (coliderHeight < m_lowObstacleHeight)
-                    currentNode.m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
+                Interactable interactable = hit.collider.GetComponent<Interactable>();
+                if (interactable != null)
+                {
+                    currentNode.m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+                }
                 else
-                    currentNode.m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
+                {
+                    float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
+                    if (coliderHeight < m_lowObstacleHeight)
+                        currentNode.m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
+                    else
+                        currentNode.m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
+                }
             }
             else
                 currentNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
@@ -310,7 +318,7 @@ public class Navigation : MonoBehaviour
         {
             //Only add nodes which have not already been considered, are walkable and not already obstructed, unless it is obstructed by an enemy as attacking should take place.
             if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && 
-                nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || 
+                nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE ||
                 (nextNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED && nextNode.m_obstructingAgent != null && nextNode.m_obstructingAgent.m_team != agent.m_team))
             {
                 openNodes.Add(nextNode);

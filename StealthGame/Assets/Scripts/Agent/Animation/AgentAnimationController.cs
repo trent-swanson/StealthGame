@@ -100,20 +100,17 @@ public class AgentAnimationController : MonoBehaviour
                     m_currentAnimation = "TurnAround";
                     RotateTurnAround();
                     break;
-                case AnimationManager.ANIMATION_STEP.INTERACTION:
+                case AnimationManager.ANIMATION_STEP.INTERACTABLE:
+                    Interactable interactable = m_agent.m_targetInteractable;
+                    if (interactable != null)
+                        interactable.PerformAction(m_agent);
                     m_currentAnimation = "Interact";
                     break;
-                case AnimationManager.ANIMATION_STEP.PICKUP_ITEM_GROUND:
-                    Item groundItem = m_agent.m_targetItem;
-                    if (groundItem != null)
-                        groundItem.PickedUp(m_agent);
-                    m_currentAnimation = "Interaction";
-                    break;
-                case AnimationManager.ANIMATION_STEP.PICKUP_ITEM_SHELF:
-                    Item shelfItem = m_agent.m_targetItem;
-                    if (shelfItem != null)
-                        shelfItem.PickedUp(m_agent);
-                    m_currentAnimation = "Interaction";
+                case AnimationManager.ANIMATION_STEP.PICKUP_ITEM:
+                    Item item = m_agent.m_targetItem;
+                    if (item != null)
+                        item.EquipItem(m_agent);
+                    m_currentAnimation = "Interact";
                     break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
                     if (m_agent.m_targetAgent != null)
@@ -139,7 +136,7 @@ public class AgentAnimationController : MonoBehaviour
     public void UpdateGridPos()
     {
         List<NavNode> path = m_agent.m_path;
-        if (path.Count > 0)
+        if (path.Count > 1)
         {
             path.RemoveAt(0);
 
