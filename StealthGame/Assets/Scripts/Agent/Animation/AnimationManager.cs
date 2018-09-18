@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, RANGED_ATTACK, INTERACTABLE, PICKUP_ITEM, DEATH, REVIVE }//Animation states
+    public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, WALL_ATTACK, RANGED_ATTACK, INTERACTABLE, PICKUP_ITEM, DEATH, REVIVE }//Animation states
 
     public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
     {
@@ -29,10 +29,10 @@ public class AnimationManager : MonoBehaviour
             GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
         }
 
-        if (interactionType == INTERACTION_TYPE.ATTACK)
+        if (interactionType == INTERACTION_TYPE.ATTACK || interactionType == INTERACTION_TYPE.REVIVE)
             interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
-        else if (interactionType == INTERACTION_TYPE.REVIVE)
-            interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
+        else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
+            interactionDir = FACING_DIR.NONE;
 
         GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
         agent.m_facingDir = playerDir;
@@ -109,7 +109,8 @@ public class AnimationManager : MonoBehaviour
 
     private static void GetInteraction(ref FACING_DIR playerDir, FACING_DIR interactionDir, List<ANIMATION_STEP> transitionSteps, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE)
     {
-        GetRotation(ref playerDir, interactionDir, ref transitionSteps);
+        if(interactionDir!= FACING_DIR.NONE)
+            GetRotation(ref playerDir, interactionDir, ref transitionSteps);
 
         switch (interactionType)
         {
@@ -118,6 +119,9 @@ public class AnimationManager : MonoBehaviour
                 break;
             case INTERACTION_TYPE.ATTACK:
                 transitionSteps.Add(ANIMATION_STEP.ATTACK);
+                break;
+            case INTERACTION_TYPE.WALL_ATTACK:
+                transitionSteps.Add(ANIMATION_STEP.WALL_ATTACK);
                 break;
             case INTERACTION_TYPE.REVIVE:
                 transitionSteps.Add(ANIMATION_STEP.REVIVE);
@@ -148,12 +152,11 @@ public class AnimationManager : MonoBehaviour
                     break;
                 case -1:
                 case 3:
-                        transitionSteps.Add(ANIMATION_STEP.TURN_LEFT);
+                    transitionSteps.Add(ANIMATION_STEP.TURN_LEFT);
                     break;
                 case 2:
                 case -2:
-                    transitionSteps.Add(ANIMATION_STEP.TURN_RIGHT);
-                    transitionSteps.Add(ANIMATION_STEP.TURN_RIGHT);
+                    transitionSteps.Add(ANIMATION_STEP.TURN_AROUND);
                     break;
                 default:
                     break;

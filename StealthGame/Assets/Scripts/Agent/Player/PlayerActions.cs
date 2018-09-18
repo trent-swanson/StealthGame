@@ -215,17 +215,31 @@ public class PlayerActions : MonoBehaviour
             if (wallHideDir != FACING_DIR.NONE)//Wall hiding animation calling
             {
                 m_playerController.m_interaction = INTERACTION_TYPE.WALL_HIDE;
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
             }
             else if (m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
-                if(m_agentAnimationController.m_animationSteps.Count == 1)//was previously on a wall, in this case want to setup wall attack it attack is nearby
-                {
+                m_playerController.m_targetAgent = m_currentSelectedNode.m_obstructingAgent;
 
+                if (m_agentAnimationController.m_animationSteps.Count == 1)//was previously on a wall, in this case want to setup wall attack it attack is nearby
+                {
+                    m_playerController.m_path = GetPath(m_currentSelectedNode);
+
+                    if (m_playerController.m_path.Count == 2)//Attakcing adjacent tile
+                    {
+                        m_playerController.m_interaction = INTERACTION_TYPE.WALL_ATTACK;
+                        m_agentAnimationController.m_animationSteps.Clear();
+                    }
+                    else
+                    {
+                        m_playerController.m_interaction = INTERACTION_TYPE.ATTACK;
+                    }
+
+                    m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1);
                 }
                 else
                 {
                     m_playerController.m_interaction = INTERACTION_TYPE.ATTACK;
-                    m_playerController.m_targetAgent = m_currentSelectedNode.m_obstructingAgent;
 
                     m_playerController.m_path = GetPath(m_currentSelectedNode);
                     m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were attackig no need to move to last tile

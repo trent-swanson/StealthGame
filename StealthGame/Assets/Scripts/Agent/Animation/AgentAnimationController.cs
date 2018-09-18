@@ -110,12 +110,43 @@ public class AgentAnimationController : MonoBehaviour
                     Item item = m_agent.m_targetItem;
                     if (item != null)
                         item.EquipItem(m_agent);
-                    m_currentAnimation = "Interact";
+                    m_currentAnimation = "Pickup";
                     break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
                     if (m_agent.m_targetAgent != null)
                         m_agent.m_targetAgent.Knockout();
                     m_currentAnimation = "Attack";
+                    break;
+                case AnimationManager.ANIMATION_STEP.RANGED_ATTACK:
+                    if (m_agent.m_targetAgent != null)
+                        m_agent.m_targetAgent.Knockout();
+                    m_currentAnimation = "RangedAttack";
+                    break;
+                case AnimationManager.ANIMATION_STEP.WALL_ATTACK:
+                    if (m_agent.m_targetAgent != null)
+                        m_agent.m_targetAgent.Knockout();
+
+                    FACING_DIR attackingDir = Agent.GetFacingDir(m_agent.m_targetAgent.transform.position - m_agent.transform.position);
+
+                    int dirAmount = (int)attackingDir - (int)m_agent.m_facingDir;
+
+                    switch (dirAmount)
+                    {
+                        case 1:
+                        case -3:
+                            m_currentAnimation = "WallAttackLeft";
+                            break;
+                        case -1:
+                        case 3:
+                            m_currentAnimation = "WallAttackRight";
+                            break;
+                        case 0:
+                            m_currentAnimation = "WallAttackForward";
+                            break;
+                        default:
+                            m_currentAnimation = "Idle";
+                            break;
+                    }
                     break;
                 case AnimationManager.ANIMATION_STEP.DEATH:
                     m_currentAnimation = "Death";
