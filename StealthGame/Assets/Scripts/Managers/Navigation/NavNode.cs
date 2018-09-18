@@ -11,10 +11,14 @@ public class NavNode : MonoBehaviour
     public Sprite m_selectedSprite;
     public Sprite m_attackSprite;
     public Sprite m_reviveSprite;
+    public Sprite m_pickupSprite;
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
     public static float m_wallHideSelectionDeadZone = 0.8f;
+
+    public Item m_item = null;
+    public Interactable m_interactable = null;
 
     [System.Serializable]
     public struct WallHideIndicators
@@ -41,7 +45,7 @@ public class NavNode : MonoBehaviour
     Renderer myRenderer;
 
     public enum NODE_STATE { SELECTED, SELECTABLE, UNSELECTED }
-    public enum NODE_TYPE { NONE, WALKABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE }
+    public enum NODE_TYPE { NONE, WALKABLE, INTERACTABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE }
 
     public Agent m_obstructingAgent = null;
     public List<Agent> m_downedAgents = null;
@@ -97,6 +101,30 @@ public class NavNode : MonoBehaviour
         m_fScore = m_hScore + m_gScore;
     }
 
+    public void SetupNodeType()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.up, out hit, Navigation.m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
+        {
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null && interactable.m_usable)
+            {
+                m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+                m_interactable = interactable;
+            }
+            else
+            {
+                float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
+                if (coliderHeight < Navigation.m_lowObstacleHeight)
+                    m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
+                else
+                    m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
+            }
+        }
+        else
+            m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+    }
+
     public void UpdateNavNodeState(NODE_STATE nodeState, Agent agent)
     {
         m_nodeState = nodeState;
@@ -111,24 +139,40 @@ public class NavNode : MonoBehaviour
                 }
                 else if (m_nodeType == NODE_TYPE.WALKABLE)
                 {
-                    Agent downAgent = GetDownedAgent(agent.m_team);
-
-                    if (downAgent != null)
+                    if (GetDownedAgent(agent.m_team) != null)
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_reviveSprite;
+                    }
+                    else if (m_item != null)
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(false);
+                        m_spriteRenderer.sprite = m_pickupSprite;
+
+                        //Show item highlight
+                        if (m_item != null)
+                            m_item.TurnOnOutline();
                     }
                     else
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_defaultSprite;
-
-                        ToggleWallHideIndicators(false);
                     }
+
+                    ToggleWallHideIndicators(false);
                 }
-                break;
+                else if (m_nodeType == NODE_TYPE.INTERACTABLE)
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(false);
+                    m_spriteRenderer.sprite = m_pickupSprite;
+
+                    ToggleWallHideIndicators(false);
+                }
+                    break;
 
             case NODE_STATE.SELECTED:
                 if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
@@ -147,6 +191,18 @@ public class NavNode : MonoBehaviour
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_reviveSprite;
                     }
+                    else if(m_item!= null)
+                    {
+                        m_selectableUI.SetActive(true);
+                        m_selectedUI.SetActive(true);
+                        m_spriteRenderer.sprite = m_pickupSprite;
+
+                        //Show item highlight
+                        if (m_item != null)
+                            m_item.TurnOnOutline();
+
+                        ToggleWallHideIndicators(true);
+                    }
                     else
                     {
                         m_selectedUI.SetActive(true);
@@ -155,12 +211,24 @@ public class NavNode : MonoBehaviour
                         ToggleWallHideIndicators(true);
                     }
                 }
+                else if (m_nodeType == NODE_TYPE.INTERACTABLE)
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(true);
+                    m_spriteRenderer.sprite = m_pickupSprite;
+
+                    ToggleWallHideIndicators(false);
+                }
                 break;
 
             case NODE_STATE.UNSELECTED:
                 m_selectableUI.SetActive(false);
                 m_selectedUI.SetActive(false);
                 m_spriteRenderer.sprite = m_defaultSprite;
+
+                //Remove item highlight
+                if(m_item!=null)
+                    m_item.TurnOffOutline();
                 break;
         }
     }
@@ -258,16 +326,16 @@ public class NavNode : MonoBehaviour
         }
     }
 
-    public Agent.FACING_DIR GetWallHideDir()
+    public FACING_DIR GetWallHideDir()
     {
         for (int i = 0; i < 4; i++)
         {
             if (m_wallHideIndicators[i].m_selected == true)
             {
-                return (Agent.FACING_DIR)i;//Casting 'i' to direction
+                return (FACING_DIR)i;//Casting 'i' to direction
             }
         }
-        return Agent.FACING_DIR.NONE;
+        return FACING_DIR.NONE;
     }
 
     public Agent GetDownedAgent(TurnManager.TEAM team)
@@ -291,8 +359,7 @@ public class NavNode : MonoBehaviour
         m_downedAgents.Remove(agent);
     }
 
-    public enum ADD_REMOVE_FUNCTION{ADD, REMOVE }
-    public void NPCVision(Agent npc, ADD_REMOVE_FUNCTION functionType )
+    public void NPCVision(ADD_REMOVE_FUNCTION functionType, Agent npc)
     {
         switch (functionType)
         {
@@ -311,5 +378,39 @@ public class NavNode : MonoBehaviour
             m_NPCVisionUI.SetActive(true);
         else
             m_NPCVisionUI.SetActive(false);
+    }
+
+    public void NavNodeItem(ADD_REMOVE_FUNCTION functionType, Item item = null)
+    {
+        switch (functionType)
+        {
+            case ADD_REMOVE_FUNCTION.ADD:
+                if (m_item == null)
+                    m_item = item;
+                break;
+            case ADD_REMOVE_FUNCTION.REMOVE:
+                m_item = null;
+                break;
+            default:
+                break;
+        }
+
+        SetupNodeType();
+    }
+
+    public void NavNodeInteractable(ADD_REMOVE_FUNCTION functionType, Interactable interactable = null)
+    {
+        switch (functionType)
+        {
+            case ADD_REMOVE_FUNCTION.ADD:
+                if (m_interactable == null)
+                    m_interactable = interactable;
+                break;
+            case ADD_REMOVE_FUNCTION.REMOVE:
+                m_interactable = null;
+                break;
+            default:
+                break;
+        }
     }
 }

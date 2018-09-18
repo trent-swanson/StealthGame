@@ -8,9 +8,6 @@ public class GotoNode : AIAction
     private bool m_isDone = false;
 
     private NavNode m_targetNode = null;
-
-    private Navigation m_navigation = null;
-
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -22,8 +19,6 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
-        m_navigation = GameObject.FindGameObjectWithTag("GameController").GetComponent<Navigation>();
-
         if (parentAction!=null)
         {
             parentAction.SetUpChildVaribles(NPCAgent);
@@ -48,7 +43,7 @@ public class GotoNode : AIAction
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
         {
-            navPath = m_navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent);
+            navPath = Navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent);
 
             if(navPath.Count == 0)//Unable to reach navnode, attempt to get to adjacent node
             {
@@ -89,7 +84,7 @@ public class GotoNode : AIAction
 
         foreach (NavNode adjacentNode in targetNode.m_adjacentNodes)
         {
-            List<NavNode> tempPath = m_navigation.GetNavPath(startingNode, adjacentNode, agent);
+            List<NavNode> tempPath = Navigation.GetNavPath(startingNode, adjacentNode, agent);
             if(tempPath.Count != 0 && tempPath.Count < distance)
             {
                 distance = tempPath.Count;

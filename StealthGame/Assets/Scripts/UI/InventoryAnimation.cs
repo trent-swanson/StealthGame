@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class InventoryAnimation : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public float m_minShowingTime = 2.0f;
     private Animator m_animator;

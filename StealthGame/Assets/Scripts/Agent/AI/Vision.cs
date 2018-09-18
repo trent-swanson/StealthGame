@@ -6,7 +6,7 @@ public class Vision : MonoBehaviour
 {
     public static List<NavNode> BuildVisionList(Agent agent, float visionDistance, float visionCone)
     {
-        Agent.FACING_DIR facingDir = agent.m_facingDir ;
+        FACING_DIR facingDir = agent.m_facingDir ;
 
         NavNode startingNode = agent.m_currentNavNode;
 
@@ -24,7 +24,7 @@ public class Vision : MonoBehaviour
         return visibleNodes;
     }
 
-    private static List<NavNode> GetNextLayer(Agent agent, List<NavNode> openNodes, Agent.FACING_DIR facingDir, float visionDistance, float visionCone)
+    private static List<NavNode> GetNextLayer(Agent agent, List<NavNode> openNodes, FACING_DIR facingDir, float visionDistance, float visionCone)
     {
         List<NavNode> newOpenNodes = new List<NavNode>();
         List<NavNode> forwardNodes = new List<NavNode>();
@@ -57,7 +57,7 @@ public class Vision : MonoBehaviour
         return newOpenNodes;
     }
 
-    private static NavNode GetNavNode(Agent agent, NavNode currentNavNode, Agent.FACING_DIR facingDir, float visionDistance, float visionCone)
+    private static NavNode GetNavNode(Agent agent, NavNode currentNavNode, FACING_DIR facingDir, float visionDistance, float visionCone)
     {
         List<NavNode> possibleNodes = new List<NavNode>();
 
@@ -65,19 +65,19 @@ public class Vision : MonoBehaviour
 
         switch (facingDir) //Get all navnodes adject to current
         {
-            case Agent.FACING_DIR.NORTH:
+            case FACING_DIR.NORTH:
                 possibleNodes.AddRange(currentNavNode.m_northNodes);
                 break;
-            case Agent.FACING_DIR.EAST:
+            case FACING_DIR.EAST:
                 possibleNodes.AddRange(currentNavNode.m_eastNodes);
                 break;
-            case Agent.FACING_DIR.SOUTH:
+            case FACING_DIR.SOUTH:
                 possibleNodes.AddRange(currentNavNode.m_southNodes);
                 break;
-            case Agent.FACING_DIR.WEST:
+            case FACING_DIR.WEST:
                 possibleNodes.AddRange(currentNavNode.m_westNodes);
                 break;
-            case Agent.FACING_DIR.NONE:
+            case FACING_DIR.NONE:
                 break;
             default:
                 break;
@@ -109,7 +109,7 @@ public class Vision : MonoBehaviour
     }
 
     private enum LEFT_RIGHT {RIGHT = 1, LEFT = -1 }
-    private static Agent.FACING_DIR GetRelativeDir(Agent.FACING_DIR facingDir, LEFT_RIGHT relativeDir)
+    private static FACING_DIR GetRelativeDir(FACING_DIR facingDir, LEFT_RIGHT relativeDir)
     {
         int dirAmount = (int)relativeDir + (int)facingDir;
 
@@ -118,6 +118,6 @@ public class Vision : MonoBehaviour
         else if (dirAmount == -1)
             dirAmount = 3;
 
-        return (Agent.FACING_DIR)dirAmount;
+        return (FACING_DIR)dirAmount;
     }
 }

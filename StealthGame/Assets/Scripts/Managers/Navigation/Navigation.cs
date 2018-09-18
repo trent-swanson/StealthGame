@@ -12,7 +12,7 @@ public class Navigation : MonoBehaviour
 
     //Node type determination
     public static float m_lowObstacleHeight = 1.0f;
-    public float m_obstacleDetection = 1.0f;
+    public static float m_obstacleDetection = 1.0f;
 
     private int m_navNodeLayer = 0;
 
@@ -91,7 +91,7 @@ public class Navigation : MonoBehaviour
                 for (int k = 0; k < m_navGridDepth; k++)
                 {
                     BuildNodeBranches(m_navGrid[i, j, k]);
-                    SetupNodeType(m_navGrid[i, j, k]);
+                    m_navGrid[i, j, k].SetupNodeType();
                 }
             }
         }
@@ -247,25 +247,6 @@ public class Navigation : MonoBehaviour
         return nodes;
     }
 
-
-    private void SetupNodeType(NavNode currentNode)
-    {
-        if (currentNode!=null)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
-            {
-                float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
-                if (coliderHeight < m_lowObstacleHeight)
-                    currentNode.m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
-                else
-                    currentNode.m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
-            }
-            else
-                currentNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-        }
-    }
-
     //----------------
     //End of Nav Grid Creation
     //----------------
@@ -273,7 +254,7 @@ public class Navigation : MonoBehaviour
     //----------------
     //A* stuff
     //----------------
-    public List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent)
+    public static List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent)
     {
         if (startingNode == goalNode)//Already at position
             return new List<NavNode>();
@@ -301,7 +282,7 @@ public class Navigation : MonoBehaviour
         return new List<NavNode>();
     }
 
-    private void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent)
+    private static void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent)
     {
         openNodes.Remove(currentNode);
         closedNodes.Add(currentNode);
@@ -310,7 +291,7 @@ public class Navigation : MonoBehaviour
         {
             //Only add nodes which have not already been considered, are walkable and not already obstructed, unless it is obstructed by an enemy as attacking should take place.
             if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && 
-                nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || 
+                nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE ||
                 (nextNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED && nextNode.m_obstructingAgent != null && nextNode.m_obstructingAgent.m_team != agent.m_team))
             {
                 openNodes.Add(nextNode);
@@ -319,7 +300,7 @@ public class Navigation : MonoBehaviour
         }
     }
 
-    private NavNode GetLowestFScore(List<NavNode> openNodes)
+    private static NavNode GetLowestFScore(List<NavNode> openNodes)
     {
         float fScore = Mathf.Infinity;
         NavNode highestFNode = null;
@@ -334,7 +315,7 @@ public class Navigation : MonoBehaviour
         return highestFNode;
     }
 
-    private List<NavNode> GetPath(NavNode currentNode, NavNode startingNode)
+    private static List<NavNode> GetPath(NavNode currentNode, NavNode startingNode)
     {
         List<NavNode> path = new List<NavNode>();
 

@@ -4,18 +4,36 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public Animation m_animation;
+    public bool m_usable = true;
 
-    [Tooltip("Does this interactable require the player to stop moving?")]
-    public bool m_requiresIdle = false;
+    public List<NavNode> m_interactionNode = null;
+    public NavNode m_currentNode = null;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public Animation m_animation = null;
+
+    protected virtual void Start()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + transform.up, Vector3.down, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
+        {
+            m_currentNode = hit.collider.GetComponent<NavNode>();
+            m_currentNode.NavNodeInteractable(ADD_REMOVE_FUNCTION.ADD, this);
+        }
+    }
+
+    public virtual void PerformAction(Agent agent)
+    {
+
+    }
+
+    public virtual NavNode GetInteractableNode(Agent agent)
+    {
+        return m_currentNode;
+    }
+
+    public void DisableInteractable()
+    {
+        m_usable = false;
+        m_currentNode.SetupNodeType();
+    }
 }
