@@ -11,7 +11,6 @@ public class WorldState : ScriptableObject
     public static Dictionary<WORLD_STATE, Func<NPC, bool>> m_StateFunctions = new Dictionary<WORLD_STATE, Func<NPC, bool>>
     {
         //{WORLD_STATE.IDLING, Idle}
-        //{WORLD_STATE.CLOSE_TO_TARGET, CloseToTarget},
         //{WORLD_STATE.HAS_TARGET, HasTarget},
         {WORLD_STATE.HAS_TARGET_NODE, HasTargetNode},
         {WORLD_STATE.AT_NODE, AtNode},

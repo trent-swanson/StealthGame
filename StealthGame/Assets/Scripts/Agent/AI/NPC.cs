@@ -102,13 +102,17 @@ public class NPC : Agent
     //Constant update while agent is selected
     public override AGENT_UPDATE_STATE AgentTurnUpdate()
     {
+        if (!m_agentAnimationController.m_playNextAnimation) //Currently animating, dont need any logic
+            return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
+
         //Check for update in world state
-        if(m_agentWorldState.m_modifiedFlag)
+        if (m_agentWorldState.m_modifiedFlag)
         {
             m_agentWorldState.m_modifiedFlag = false;
+            m_GOAP.GOAPInit();
         }
 
-        if(m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list
+        if (m_GOAP.m_actionList.Count == 0)//Checking if at the end of the action list
         {
             bool newAction = m_GOAP.GOAPInit();
 
