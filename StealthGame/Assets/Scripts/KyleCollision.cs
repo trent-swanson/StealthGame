@@ -9,6 +9,7 @@ public class KyleCollision : MonoBehaviour {
 
     public bool safe = false;
     public GameObject safeOBJ;
+    public GameObject safeDoor;
 
     void Start()
     {
@@ -49,7 +50,6 @@ public class KyleCollision : MonoBehaviour {
         safeOBJ.transform.GetChild(0).gameObject.SetActive(false);
 
         //Change mesh to open door
-        GameObject safeDoor = safeOBJ.transform.GetChild(1).gameObject;
         Animator anim = safeDoor.GetComponent<Animator>();
         anim.SetTrigger("Safe_Open");
 
