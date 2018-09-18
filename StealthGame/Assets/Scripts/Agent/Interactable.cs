@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
+    public bool m_usable = true;
+
     public List<NavNode> m_interactionNode = null;
     public NavNode m_currentNode = null;
 
@@ -27,5 +29,11 @@ public class Interactable : MonoBehaviour
     public virtual NavNode GetInteractableNode(Agent agent)
     {
         return m_currentNode;
+    }
+
+    public void DisableInteractable()
+    {
+        m_usable = false;
+        m_currentNode.SetupNodeType();
     }
 }

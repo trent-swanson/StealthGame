@@ -72,6 +72,7 @@ public class PlayerActions : MonoBehaviour
         {
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.DRAW_NAVMESH, m_selectableNodes);
             m_initActionState = false;
+            m_playerUI.UpdateUI();
         }
 
         NavNode newSelectedNavNode = GetMouseNode();
@@ -184,7 +185,9 @@ public class PlayerActions : MonoBehaviour
                 }
             }
             else
+            {
                 NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+            }
         }
     }
 

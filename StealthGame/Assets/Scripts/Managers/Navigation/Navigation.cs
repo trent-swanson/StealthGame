@@ -12,7 +12,7 @@ public class Navigation : MonoBehaviour
 
     //Node type determination
     public static float m_lowObstacleHeight = 1.0f;
-    public float m_obstacleDetection = 1.0f;
+    public static float m_obstacleDetection = 1.0f;
 
     private int m_navNodeLayer = 0;
 
@@ -91,7 +91,7 @@ public class Navigation : MonoBehaviour
                 for (int k = 0; k < m_navGridDepth; k++)
                 {
                     BuildNodeBranches(m_navGrid[i, j, k]);
-                    SetupNodeType(m_navGrid[i, j, k]);
+                    m_navGrid[i, j, k].SetupNodeType();
                 }
             }
         }
@@ -245,34 +245,6 @@ public class Navigation : MonoBehaviour
             nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y - 1, offsetGridPos.z]);
 
         return nodes;
-    }
-
-
-    private void SetupNodeType(NavNode currentNode)
-    {
-        if (currentNode!=null)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(currentNode.transform.position, Vector3.up, out hit, m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
-            {
-                Interactable interactable = hit.collider.GetComponent<Interactable>();
-                if (interactable != null)
-                {
-                    currentNode.m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
-                    currentNode.m_interactable = interactable;
-                }
-                else
-                {
-                    float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
-                    if (coliderHeight < m_lowObstacleHeight)
-                        currentNode.m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
-                    else
-                        currentNode.m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
-                }
-            }
-            else
-                currentNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
-        }
     }
 
     //----------------

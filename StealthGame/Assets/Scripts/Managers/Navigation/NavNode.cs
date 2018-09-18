@@ -101,6 +101,30 @@ public class NavNode : MonoBehaviour
         m_fScore = m_hScore + m_gScore;
     }
 
+    public void SetupNodeType()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.up, out hit, Navigation.m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
+        {
+            Interactable interactable = hit.collider.GetComponent<Interactable>();
+            if (interactable != null && interactable.m_usable)
+            {
+                m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+                m_interactable = interactable;
+            }
+            else
+            {
+                float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
+                if (coliderHeight < Navigation.m_lowObstacleHeight)
+                    m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
+                else
+                    m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
+            }
+        }
+        else
+            m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+    }
+
     public void UpdateNavNodeState(NODE_STATE nodeState, Agent agent)
     {
         m_nodeState = nodeState;
@@ -126,6 +150,10 @@ public class NavNode : MonoBehaviour
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_pickupSprite;
+
+                        //Show item highlight
+                        if (m_item != null)
+                            m_item.TurnOnOutline();
                     }
                     else
                     {
@@ -169,6 +197,10 @@ public class NavNode : MonoBehaviour
                         m_selectedUI.SetActive(true);
                         m_spriteRenderer.sprite = m_pickupSprite;
 
+                        //Show item highlight
+                        if (m_item != null)
+                            m_item.TurnOnOutline();
+
                         ToggleWallHideIndicators(true);
                     }
                     else
@@ -193,6 +225,10 @@ public class NavNode : MonoBehaviour
                 m_selectableUI.SetActive(false);
                 m_selectedUI.SetActive(false);
                 m_spriteRenderer.sprite = m_defaultSprite;
+
+                //Remove item highlight
+                if(m_item!=null)
+                    m_item.TurnOffOutline();
                 break;
         }
     }
@@ -358,6 +394,8 @@ public class NavNode : MonoBehaviour
             default:
                 break;
         }
+
+        SetupNodeType();
     }
 
     public void NavNodeInteractable(ADD_REMOVE_FUNCTION functionType, Interactable interactable = null)

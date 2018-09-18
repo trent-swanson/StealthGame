@@ -21,20 +21,21 @@ public class Safe : Interactable
 
     public override void PerformAction(Agent agent)
     {
-        if (m_health > 0)
-        {
-            if (agent.m_agentInventory.AgentHasItem(Item.ITEM_TYPE.CROWBAR))//Instant opening with crowbar
-                m_health = 0;
-            else
-                m_health--;
-
-            agent.m_currentActionPoints = 0;
-        }
+        if (agent.m_agentInventory.AgentHasItem(Item.ITEM_TYPE.CROWBAR))//Instant opening with crowbar
+            m_health = 0;
         else
+            m_health--;
+
+        if (m_health <= 0)
         {
             Item newItem = Instantiate(m_item);
             newItem.EquipItem(agent);
+
+            DisableInteractable();
         }
+
+        //After interaction, remove all points 
+        agent.m_currentActionPoints = 0;
     }
 
     public override NavNode GetInteractableNode(Agent agent)
