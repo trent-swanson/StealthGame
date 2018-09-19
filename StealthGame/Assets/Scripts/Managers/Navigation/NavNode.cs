@@ -258,6 +258,12 @@ public class NavNode : MonoBehaviour
 
         RaycastHit hit;
 
+        //TODO make better
+        m_wallHideIndicators[0].m_selected = false;
+        m_wallHideIndicators[1].m_selected = false;
+        m_wallHideIndicators[2].m_selected = false;
+        m_wallHideIndicators[3].m_selected = false;
+
         if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
         {
             Vector3 relativeMousePos = hit.point - transform.position;
