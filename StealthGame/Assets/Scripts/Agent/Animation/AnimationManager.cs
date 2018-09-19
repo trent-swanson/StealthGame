@@ -11,22 +11,22 @@ public class AnimationManager : MonoBehaviour
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
-        FACING_DIR playerDir = agent.m_facingDir;
+        FACING_DIR agentDir = agent.m_facingDir;
 
         int pathCount = pathNodes.Count;
 
         if (pathCount == 2)//Moving one square
         {
-            GetActionStepsForSingleStep(ref playerDir, transitionSteps, pathNodes[0], pathNodes[1]);
+            GetActionStepsForSingleStep(ref agentDir, transitionSteps, pathNodes[0], pathNodes[1]);
         }
         else if(pathCount > 2)            //Normal movement
         {
             for (int i = 0; i < pathCount - 2; i++)//Create all steps between, only will be movement
             {
-                GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
+                GetActionStepsForRunning(ref agentDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
             }
 
-            GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
+            GetActionStepsForRunning(ref agentDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
         }
 
         if (interactionType == INTERACTION_TYPE.ATTACK || interactionType == INTERACTION_TYPE.REVIVE)
@@ -34,8 +34,7 @@ public class AnimationManager : MonoBehaviour
         else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
             interactionDir = FACING_DIR.NONE;
 
-        GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
-        agent.m_facingDir = playerDir;
+        GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
 
         return transitionSteps;
     }

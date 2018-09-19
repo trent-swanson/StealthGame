@@ -54,6 +54,7 @@ public class AgentAnimationController : MonoBehaviour
     public void PlayNextAnimation()
     {
         m_turnManager.UpdateNPCWorldStates();
+
         if (m_animationSteps.Count > 0)
         {
             switch (m_animationSteps[0])
@@ -72,15 +73,19 @@ public class AgentAnimationController : MonoBehaviour
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_IDLE:
                     m_currentAnimation = "JumpToIdle";
+                    UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_WALK:
                     m_currentAnimation = "JumpToWalk";
+                    UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_IDLE:
                     m_currentAnimation = "DropToIdle";
+                    UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_WALK:
                     m_currentAnimation = "DropToWalk";
+                    UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.WALL_HIDE_RIGHT:
                     m_currentAnimation = "WallRight";
@@ -91,14 +96,18 @@ public class AgentAnimationController : MonoBehaviour
                 case AnimationManager.ANIMATION_STEP.TURN_RIGHT:
                     m_currentAnimation = "TurnRight";
                     RotateLeftRight(ROTATION_DIR.RIGHT);
+                    RotateFacingDir(m_agent, ROTATION_DIR.RIGHT);
                     break;
                 case AnimationManager.ANIMATION_STEP.TURN_LEFT:
                     m_currentAnimation = "TurnLeft";
                     RotateLeftRight(ROTATION_DIR.LEFT);
+                    RotateFacingDir(m_agent, ROTATION_DIR.LEFT);
                     break;
                 case AnimationManager.ANIMATION_STEP.TURN_AROUND:
                     m_currentAnimation = "TurnAround";
                     RotateTurnAround();
+                    RotateFacingDir(m_agent, ROTATION_DIR.RIGHT);
+                    RotateFacingDir(m_agent, ROTATION_DIR.RIGHT);
                     break;
                 case AnimationManager.ANIMATION_STEP.INTERACTABLE:
                     Interactable interactable = m_agent.m_targetInteractable;
@@ -212,5 +221,18 @@ public class AgentAnimationController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         transform.RotateAround(transform.position, Vector3.up, rotateAmount);
+    }
+
+    public void RotateFacingDir(Agent agent, ROTATION_DIR rotationDir)
+    {
+        FACING_DIR currentDir = agent.m_facingDir;
+        int newDir = (int)currentDir + (int)rotationDir;
+
+        if (newDir == -1)
+            newDir = 3;
+        else if(newDir == 4)
+            newDir = 0;
+
+        agent.m_facingDir = (FACING_DIR)newDir;
     }
 }
