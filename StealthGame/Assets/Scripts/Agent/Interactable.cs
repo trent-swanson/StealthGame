@@ -6,19 +6,23 @@ public class Interactable : MonoBehaviour
 {
     public bool m_usable = true;
 
-    public List<NavNode> m_interactionNode = null;
-    public NavNode m_currentNode = null;
+    public NavNode m_interactionNode = null;
 
     public Animation m_animation = null;
 
     protected virtual void Start()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position + transform.up, Vector3.down, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
+        if (m_interactionNode != null)
         {
-            m_currentNode = hit.collider.GetComponent<NavNode>();
-            m_currentNode.NavNodeInteractable(ADD_REMOVE_FUNCTION.ADD, this);
+            m_interactionNode.m_interactable = this;
+            m_interactionNode.SetupNodeType();
         }
+        #if UNITY_EDITOR
+        else
+        {
+            print("Interactable node is not set");
+        }
+        #endif
     }
 
     public virtual void PerformAction(Agent agent)
@@ -28,12 +32,12 @@ public class Interactable : MonoBehaviour
 
     public virtual NavNode GetInteractableNode(Agent agent)
     {
-        return m_currentNode;
+        return m_interactionNode;
     }
 
     public void DisableInteractable()
     {
         m_usable = false;
-        m_currentNode.SetupNodeType();
+        m_interactionNode.SetupNodeType();
     }
 }

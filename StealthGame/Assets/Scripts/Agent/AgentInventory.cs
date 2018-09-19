@@ -30,7 +30,7 @@ public class AgentInventory : MonoBehaviour
                 if (!m_currentItems.Contains(item))
                 {
                      m_currentItems.Add(item);
-                    GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>().inventoryAnimation.PopupInven();
+                    GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>().inventoryAnimation.PopupInventory();
                 }
                 break;
             case ADD_REMOVE_FUNCTION.REMOVE:

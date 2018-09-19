@@ -19,7 +19,7 @@ public class AnimationManager : MonoBehaviour
         {
             GetActionStepsForSingleStep(ref agentDir, transitionSteps, pathNodes[0], pathNodes[1]);
         }
-        else if(pathCount > 2)            //Normal movement
+        else if(pathCount > 2)//Normal movement
         {
             for (int i = 0; i < pathCount - 2; i++)//Create all steps between, only will be movement
             {
@@ -57,9 +57,7 @@ public class AnimationManager : MonoBehaviour
         }
         else if (nodeHeightDiff < 0)//negitive height diff, running down
         {
-            
             transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_IDLE);
-           
         }
     }
 

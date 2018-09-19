@@ -42,18 +42,8 @@ public class NPC : Agent
 
     public struct InvestigationNode
     {
-        private Agent m_target;
-        public Agent Target
-        {
-            get { return m_target; }
-            set { m_target = value; }
-        }
-        private Agent m_node;
-        public Agent Node
-        {
-            get { return m_node; }
-            set { m_node = value; }
-        }
+        public Agent m_target;
+        public NavNode m_node;
     }
 
     //Node this agent wants to go to
@@ -156,19 +146,45 @@ public class NPC : Agent
     {
         BuildVision();//Build vision
 
+        bool modifiedPossibleTargets = false;
+        List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
+        bool modifiedInvestigationTargets = false;
+        List<InvestigationNode> investigationNodes = m_agentWorldState.GetInvestigationNodes();
+
+        for (int i = 0; i < possibleTargets.Count; i++)
+        {
+            if (!m_visionNodes.Contains(possibleTargets[i].m_currentNavNode))
+            {
+                InvestigationNode newInvestigation;
+
+                newInvestigation.m_node = possibleTargets[i].m_currentNavNode;
+                newInvestigation.m_target = possibleTargets[i];
+                investigationNodes.Add(newInvestigation);
+
+                possibleTargets.RemoveAt(i);
+                i--;
+
+                modifiedInvestigationTargets = true;
+                modifiedPossibleTargets = true;
+            }
+        }
+
         foreach (NavNode navNode in m_visionNodes)//Check for player in vision
         {
             Agent obstructingAgent = navNode.m_obstructingAgent;
             if (obstructingAgent != null && obstructingAgent.m_team != m_team)//Vision node has enemy agent on it
             {
-                List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
                 if (!possibleTargets.Contains(obstructingAgent))
                 {
                     possibleTargets.Add(obstructingAgent);
-                    m_agentWorldState.SetPossibleTargets(possibleTargets);
                 }
             }
         }
+
+        if (modifiedPossibleTargets)
+            m_agentWorldState.SetPossibleTargets(possibleTargets);
+        if (modifiedInvestigationTargets)
+            m_agentWorldState.SetInvestigationNode(investigationNodes);
     }
 
     private void BuildVision()
