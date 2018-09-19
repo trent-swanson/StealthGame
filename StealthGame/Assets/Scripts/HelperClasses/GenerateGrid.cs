@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 
 [ExecuteInEditMode]
 [System.Serializable]
@@ -52,10 +52,10 @@ public class GenerateGrid : MonoBehaviour {
         for (int x = 0; x < gridSize.x; x++) {
             for (int y = 0; y < gridSize.y; y++) {
                 Vector3 tilePosition = new Vector3((-gridSize.x + (tileSize * 0.5f)) + (tileSize * x), -0.5f, (-gridSize.y + (tileSize * 0.5f)) + (tileSize * y));
-                GameObject newTile = PrefabUtility.InstantiatePrefab(tilePrefab as GameObject) as GameObject;
-                newTile.transform.position = tilePosition;
+                //GameObject newTile = PrefabUtility.InstantiatePrefab(tilePrefab as GameObject) as GameObject;
+                //newTile.transform.position = tilePosition;
                 //newTile.transform.localScale = newTile.transform.localScale*(1 - tilePadding);
-                newTile.transform.SetParent(gridHolder);
+                //newTile.transform.SetParent(gridHolder);
             }
         }
     }

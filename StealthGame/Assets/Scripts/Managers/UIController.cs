@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour {
 
 	public List<Image> m_portraitImages;
+    public InventoryAnimation inventoryAnimation = null;
 
     TurnManager m_turnManager;
 

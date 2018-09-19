@@ -30,7 +30,7 @@ public class Safe : Interactable
         {
             Item newItem = Instantiate(m_item);
             newItem.EquipItem(agent);
-
+            GetComponentInChildren<Animator>().SetTrigger("Safe_Open");
             DisableInteractable();
         }
 

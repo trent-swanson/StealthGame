@@ -73,11 +73,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4283613328104292}
   - component: {fileID: 33748191328405892}
-  - component: {fileID: 65367593397638046}
   - component: {fileID: 23815180100393274}
-  - component: {fileID: 114988868422617326}
+  - component: {fileID: 114303731270487162}
+  - component: {fileID: 65211554861546354}
   m_Layer: 8
-  m_Name: PickupGold
+  m_Name: Spanner
   m_TagString: PickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,14 +89,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902785328575640}
-  m_LocalRotation: {x: -0, y: -0.23832427, z: -0, w: 0.9711857}
-  m_LocalPosition: {x: 11.076296, y: 0, z: -5.490433}
+  m_LocalRotation: {x: 0.16852063, y: -0.16852078, z: -0.68673164, w: 0.6867323}
+  m_LocalPosition: {x: 3, y: 0.08, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224800291962232430}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -27.575, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -27.575, z: -90.00001}
 --- !u!23 &23815180100393274
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -137,19 +137,19 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902785328575640}
-  m_Mesh: {fileID: 4300000, guid: 5a427738763f7494189aea24631b1587, type: 3}
---- !u!65 &65367593397638046
+  m_Mesh: {fileID: 4300000, guid: 1dc5ed2d6d4745a4f82b58b51bf025b2, type: 3}
+--- !u!65 &65211554861546354
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902785328575640}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.73, y: 0.2, z: 0.5}
-  m_Center: {x: 0.1, y: 0, z: 0}
+  m_Size: {x: 0.1542818, y: 1.052783, z: 0.4897555}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114239290110784930
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -166,6 +166,23 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114303731270487162
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1902785328575640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae4593ac8e04c14b927b86622e88975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_itemType: 2
+  m_canvas: {fileID: 1087725911567208}
+  m_highlightColour: {r: 1, g: 0.64137936, b: 0, a: 1}
+  m_action: {fileID: 0}
+  m_icon: {fileID: 21300000, guid: 78855cde0dc53d149875b5836819f108, type: 3}
+  m_description: Wrench
 --- !u!114 &114493173204233716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,7 +240,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 5e701ae3d08d7cd4f8ae79f7d06edeba, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 78855cde0dc53d149875b5836819f108, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -252,23 +269,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 100
---- !u!114 &114988868422617326
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1902785328575640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ae4593ac8e04c14b927b86622e88975, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_itemType: 3
-  m_canvas: {fileID: 1087725911567208}
-  m_highlightColour: {r: 1, g: 0.6, b: 0, a: 1}
-  m_action: {fileID: 0}
-  m_icon: {fileID: 21300000, guid: f40f8bee7343cff41a5ec7b97a53040f, type: 3}
-  m_description: Gold
 --- !u!222 &222415168843660924
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -354,6 +354,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.8}
+  m_AnchoredPosition: {x: -1.8, y: 0}
   m_SizeDelta: {x: 10, y: 15}
   m_Pivot: {x: 0.5, y: 0.5}

@@ -90,8 +90,11 @@ public class Navigation : MonoBehaviour
             {
                 for (int k = 0; k < m_navGridDepth; k++)
                 {
-                    BuildNodeBranches(m_navGrid[i, j, k]);
-                    m_navGrid[i, j, k].SetupNodeType();
+                    if (m_navGrid[i, j, k] != null)
+                    {
+                        BuildNodeBranches(m_navGrid[i, j, k]);
+                        m_navGrid[i, j, k].SetupNodeType();
+                    }
                 }
             }
         }

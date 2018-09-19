@@ -28,7 +28,10 @@ public class AgentInventory : MonoBehaviour
         {
             case ADD_REMOVE_FUNCTION.ADD:
                 if (!m_currentItems.Contains(item))
+                {
                      m_currentItems.Add(item);
+                    GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>().inventoryAnimation.PopupInven();
+                }
                 break;
             case ADD_REMOVE_FUNCTION.REMOVE:
                 m_currentItems.Remove(item);

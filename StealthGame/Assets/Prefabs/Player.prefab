@@ -507,6 +507,7 @@ GameObject:
   - component: {fileID: 114563112806178036}
   - component: {fileID: 114747388290050114}
   - component: {fileID: 114225565733383380}
+  - component: {fileID: 114731973955441036}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4783,6 +4784,7 @@ MonoBehaviour:
   m_facingDir: 4
   m_animator: {fileID: 95675678552105234}
   m_agentAnimationController: {fileID: 0}
+  m_agentInventory: {fileID: 0}
   m_turn: 0
   m_knockedout: 0
   m_maxActionPoints: 6
@@ -4792,8 +4794,9 @@ MonoBehaviour:
   m_currentNavNode: {fileID: 0}
   m_team: 0
   m_targetAgent: {fileID: 0}
+  m_targetItem: {fileID: 0}
+  m_targetInteractable: {fileID: 0}
   m_colliderExtents: {x: 0, y: 0, z: 0}
-  m_currentItems: []
   m_visionFullOpacity: 1
   m_visionFadeMaxOpacity: 0.5
   m_visionFadeMinOpacity: 0.3
@@ -4817,6 +4820,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_currentSelectedNode: {fileID: 0}
   m_currentActionState: 0
+--- !u!114 &114731973955441036
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1261249592991502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2442ec57be3e0b64ebb15bef376b6348, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentItems: []
 --- !u!114 &114747388290050114
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1754,6 +1754,7 @@ GameObject:
   - component: {fileID: 114707595758177410}
   - component: {fileID: 114096561343684466}
   - component: {fileID: 114855349787061024}
+  - component: {fileID: 114235053762343128}
   m_Layer: 0
   m_Name: NPC Base
   m_TagString: Untagged
@@ -3331,15 +3332,15 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1923274230271608}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 11}
+  m_LocalRotation: {x: -0, y: -0.70710707, z: -0, w: 0.70710653}
+  m_LocalPosition: {x: 14, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4289983916812754}
   - {fileID: 224628615192155248}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90.00001, z: 0}
 --- !u!4 &4865861955387452
 Transform:
   m_ObjectHideFlags: 1
@@ -3897,6 +3898,18 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1000
+--- !u!114 &114235053762343128
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1923274230271608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2442ec57be3e0b64ebb15bef376b6348, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_currentItems: []
 --- !u!114 &114352602532980678
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4025,6 +4038,7 @@ MonoBehaviour:
   m_facingDir: 4
   m_animator: {fileID: 0}
   m_agentAnimationController: {fileID: 0}
+  m_agentInventory: {fileID: 0}
   m_turn: 0
   m_knockedout: 0
   m_maxActionPoints: 5
@@ -4034,8 +4048,9 @@ MonoBehaviour:
   m_currentNavNode: {fileID: 0}
   m_team: 1
   m_targetAgent: {fileID: 0}
+  m_targetItem: {fileID: 0}
+  m_targetInteractable: {fileID: 0}
   m_colliderExtents: {x: 0, y: 0, z: 0}
-  m_currentItems: []
   m_visionFullOpacity: 1
   m_visionFadeMaxOpacity: 0.5
   m_visionFadeMinOpacity: 0.3
@@ -4053,6 +4068,10 @@ MonoBehaviour:
     m_weaponType: 0
     m_possibleTargets: []
     m_waypoints:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
