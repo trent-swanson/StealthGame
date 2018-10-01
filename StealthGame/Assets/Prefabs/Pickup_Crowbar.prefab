@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4206442830440026}
   - component: {fileID: 33551591287262438}
   - component: {fileID: 23825350633347654}
-  - component: {fileID: 95504979858723996}
   m_Layer: 0
   m_Name: Pickup_Crowbar
   m_TagString: Untagged
@@ -56,7 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: d9994e49ee6ce884b9184e50746d9145, type: 2}
+  - {fileID: 2100000, guid: 850fb7d04cc9a144786c2ed082c00faf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -82,21 +81,4 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1255630386048932}
-  m_Mesh: {fileID: 4300000, guid: 1dc5ed2d6d4745a4f82b58b51bf025b2, type: 3}
---- !u!95 &95504979858723996
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1255630386048932}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 1dc5ed2d6d4745a4f82b58b51bf025b2, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
+  m_Mesh: {fileID: 4300002, guid: 1dc5ed2d6d4745a4f82b58b51bf025b2, type: 3}
