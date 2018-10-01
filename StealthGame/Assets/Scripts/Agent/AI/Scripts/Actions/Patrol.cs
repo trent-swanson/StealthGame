@@ -16,10 +16,7 @@ public class Patrol : AIAction
     //--------------------------------------------------------------------------------------
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
-        if (NPCAgent.m_agentWorldState.m_waypoints.Count > 0)
-            return true;
-
-        return false;
+        return NPCAgent.m_agentWorldState.m_waypoints.Count > 0;
     }
 
     //--------------------------------------------------------------------------------------

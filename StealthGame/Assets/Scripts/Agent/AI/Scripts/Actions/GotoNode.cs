@@ -60,7 +60,7 @@ public class GotoNode : AIAction
 
             NPCAgent.transform.position = navPath[0].m_nodeTop;
 
-            NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, navPath);
+            NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetNPCAnimationSteps(NPCAgent, navPath);
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }

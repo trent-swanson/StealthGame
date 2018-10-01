@@ -11,12 +11,6 @@ public class Safe : Interactable
     protected override void Start()
     {
         base.Start();
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position + transform.up + transform.forward, Vector3.down, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
-        {
-            m_interactionNode.Add(hit.collider.GetComponent<NavNode>());
-        }
     }
 
     public override void PerformAction(Agent agent)
@@ -36,10 +30,5 @@ public class Safe : Interactable
 
         //After interaction, remove all points 
         agent.m_currentActionPoints = 0;
-    }
-
-    public override NavNode GetInteractableNode(Agent agent)
-    {
-        return m_interactionNode[0];
     }
 }

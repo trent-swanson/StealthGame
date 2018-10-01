@@ -176,7 +176,7 @@ public class AgentAnimationController : MonoBehaviour
     public void UpdateGridPos()
     {
         List<NavNode> path = m_agent.m_path;
-        if (path.Count > 1)
+        if (path.Count > 0)
         {
             path.RemoveAt(0);
 

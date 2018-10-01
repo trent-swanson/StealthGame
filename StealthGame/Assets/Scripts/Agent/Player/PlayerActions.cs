@@ -258,7 +258,7 @@ public class PlayerActions : MonoBehaviour
                 m_playerController.m_targetInteractable = m_currentSelectedNode.m_interactable;
 
                 //Get new path to interactable node
-                m_playerController.m_path = GetPath(m_currentSelectedNode.m_interactable.GetInteractableNode(m_playerController));
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
             }
             else if (m_currentSelectedNode.GetDownedAgent(m_playerController.m_team) != null)//Reviving team mate
             {
@@ -275,7 +275,7 @@ public class PlayerActions : MonoBehaviour
 
             transform.position = m_playerController.m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
-            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction, wallHideDir));
+            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetPlayerAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction, wallHideDir));
 
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes, m_currentSelectedNode);//Remove UI
 
