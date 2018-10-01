@@ -35,7 +35,7 @@ public class MeleeAttack : AIAction
     {
         List<NavNode> oneStep = new List<NavNode>();
         oneStep.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
-        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneStep, INTERACTION_TYPE.ATTACK);
+        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetPlayerAnimationSteps(NPCAgent, oneStep, INTERACTION_TYPE.ATTACK);
 
         NPCAgent.m_agentAnimationController.PlayNextAnimation();
     }
@@ -87,6 +87,21 @@ public class MeleeAttack : AIAction
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
         if (m_target != null)
-            NPCAgent.m_targetNode = m_target.m_currentNavNode;
+        {
+            //Get closest adjacent node
+            float closestDistanceSqr = Mathf.Infinity;
+            NavNode targetNode = null;
+
+            foreach (NavNode adjacentNavNode in m_target.m_currentNavNode.m_adjacentNodes)
+            {
+                float distanceSqr = Vector3.SqrMagnitude(adjacentNavNode.transform.position - NPCAgent.transform.position);
+                if(distanceSqr < closestDistanceSqr)
+                {
+                    closestDistanceSqr = distanceSqr;
+                    targetNode = adjacentNavNode;
+                }
+            }
+            NPCAgent.m_targetNode = targetNode;
+        }
     }
 }

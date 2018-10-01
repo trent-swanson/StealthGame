@@ -25,7 +25,7 @@ public class NPC : Agent
         //Seen targets
         [SerializeField]
         private List<Agent> m_possibleTargets = new List<Agent>(); //Realtime
-        public void SetPossibleTargets(List<Agent> possibleTargets) { m_possibleTargets = possibleTargets; m_modifiedFlag = true; }
+        public void SetPossibleTargets(List<Agent> possibleTargets) {m_possibleTargets = possibleTargets; m_modifiedFlag = true;}
         public List<Agent> GetPossibleTargets() { return m_possibleTargets; }
 
         //Targets which have gone missing
@@ -177,6 +177,7 @@ public class NPC : Agent
                 if (!possibleTargets.Contains(obstructingAgent))
                 {
                     possibleTargets.Add(obstructingAgent);
+                    modifiedPossibleTargets = true;
                 }
             }
         }
