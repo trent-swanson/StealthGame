@@ -39,6 +39,5 @@ public class InventoryAnimation : MonoBehaviour, IPointerEnterHandler, IPointerE
     public void PopupInven()
     {
         m_desiredState = true;
-        m_animator.SetBool("ShowInventory", true);
     }
 }
