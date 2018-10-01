@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Patrol", menuName = "AI Actions/Patrol")]
-public class Patrol : AIAction
+[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/Go to Node")]
+public class InvestigateNode : AIAction
 {
+
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -16,7 +17,7 @@ public class Patrol : AIAction
     //--------------------------------------------------------------------------------------
     public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
     {
-        return NPCAgent.m_agentWorldState.m_waypoints.Count > 0;
+        return NPCAgent.m_agentWorldState.GetInvestigationNodes().Count > 0;
     }
 
     //--------------------------------------------------------------------------------------
@@ -81,21 +82,10 @@ public class Patrol : AIAction
     //--------------------------------------------------------------------------------------
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
-        NavNode targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
-        if(targetNode!=null && targetNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Obstructed, try to find node close by
-        {
-            List<NavNode> adjacentNodes = targetNode.m_adjacentNodes;
-            targetNode = null;
-            foreach (NavNode adjacentNode in adjacentNodes)
-            {
-                if (adjacentNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
-                {
-                    targetNode = adjacentNode; //TODO is this desired behaviour?
-                    break;
-                }
-            }
-        }
+        List<NPC.InvestigationNode> m_investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
 
-        NPCAgent.m_targetNode = targetNode;
+        NPC.InvestigationNode m_closestNode = m_investigationNodes[0];
+        //int nodeDistance = Navigation.
+        //NPCAgent.m_targetNode = targetNode;
     }
 }
