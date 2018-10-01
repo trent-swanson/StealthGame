@@ -14709,6 +14709,11 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 200.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 49dbeb11ce440ed4ca006b7d6e372327, type: 2}
   m_IsPrefabParent: 0
@@ -20256,7 +20261,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.4
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6, type: 2}
       propertyPath: m_LocalPosition.z
