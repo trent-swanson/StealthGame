@@ -6,23 +6,19 @@ public class Interactable : MonoBehaviour
 {
     public bool m_usable = true;
 
-    public NavNode m_interactionNode = null;
+    public List<NavNode> m_interactionNodes = new List<NavNode>();
 
     public Animation m_animation = null;
 
     protected virtual void Start()
     {
-        if (m_interactionNode != null)
+        foreach (NavNode interactionNode in m_interactionNodes)
         {
-            m_interactionNode.m_interactable = this;
-            m_interactionNode.SetupNodeType();
+            if (interactionNode != null)
+            {
+                interactionNode.SetNodeAsInteractable(this);
+            }
         }
-        #if UNITY_EDITOR
-        else
-        {
-            print("Interactable node is not set");
-        }
-        #endif
     }
 
     public virtual void PerformAction(Agent agent)
@@ -30,14 +26,17 @@ public class Interactable : MonoBehaviour
 
     }
 
-    public virtual NavNode GetInteractableNode(Agent agent)
-    {
-        return m_interactionNode;
-    }
-
     public void DisableInteractable()
     {
         m_usable = false;
-        m_interactionNode.SetupNodeType();
+
+        foreach (NavNode interactionNode in m_interactionNodes)
+        {
+            if (interactionNode != null)
+            {
+                interactionNode.m_interactable = null;
+                interactionNode.SetupNodeType();
+            }
+        }
     }
 }

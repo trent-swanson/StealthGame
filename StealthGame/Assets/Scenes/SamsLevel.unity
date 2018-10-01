@@ -893,7 +893,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6, type: 2}
       propertyPath: m_LocalPosition.z
@@ -14714,6 +14714,21 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 200.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 49dbeb11ce440ed4ca006b7d6e372327, type: 2}
   m_IsPrefabParent: 0
@@ -17132,6 +17147,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3aa800e0cbeabf448a627ffd44c638c6, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1129232270 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114882178679264212, guid: 3aa800e0cbeabf448a627ffd44c638c6,
+    type: 2}
+  m_PrefabInternal: {fileID: 1215493126}
+  m_Script: {fileID: 11500000, guid: 99afe3ff11e29b04a817fad3800791fa, type: 3}
 --- !u!4 &1135528987 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6,
@@ -18216,7 +18237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_usable: 1
-  m_interactionNode: {fileID: 0}
+  m_interactionNodes: []
   m_animation: {fileID: 0}
   m_item: {fileID: 0}
   m_health: 3
@@ -19793,7 +19814,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_usable: 1
-  m_interactionNode: {fileID: 825480956}
+  m_interactionNodes:
+  - {fileID: 825480956}
+  - {fileID: 1129232270}
   m_animation: {fileID: 0}
   m_requiredItem: 3
 --- !u!4 &1460167166 stripped

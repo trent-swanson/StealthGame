@@ -101,6 +101,12 @@ public class NavNode : MonoBehaviour
         m_fScore = m_hScore + m_gScore;
     }
 
+    public void SetNodeAsInteractable(Interactable interactable)
+    {
+        m_interactable = interactable;
+        m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+    }
+
     public void SetupNodeType()
     {
         if(m_interactable!=null)

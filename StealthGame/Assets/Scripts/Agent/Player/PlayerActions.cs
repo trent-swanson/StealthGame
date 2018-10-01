@@ -258,7 +258,7 @@ public class PlayerActions : MonoBehaviour
                 m_playerController.m_targetInteractable = m_currentSelectedNode.m_interactable;
 
                 //Get new path to interactable node
-                m_playerController.m_path = GetPath(m_currentSelectedNode.m_interactable.GetInteractableNode(m_playerController));
+                m_playerController.m_path = GetPath(m_currentSelectedNode);
             }
             else if (m_currentSelectedNode.GetDownedAgent(m_playerController.m_team) != null)//Reviving team mate
             {
