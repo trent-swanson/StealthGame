@@ -15,22 +15,11 @@ public class NavNode : MonoBehaviour
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
 
-    public static float m_wallHideSelectionDeadZone = 0.8f;
-
     public Item m_item = null;
     public Interactable m_interactable = null;
 
-    [System.Serializable]
-    public struct WallHideIndicators
-    {
-        public SpriteRenderer m_wallHideSprite;
-        public SpriteRenderer m_wallHideGroundSprite;
-        public NODE_TYPE m_wallHideType;
-        public bool m_selected;
-    }
-
-    [SerializeField]
-    public WallHideIndicators[] m_wallHideIndicators = new WallHideIndicators[4];
+    //[0] = North, [1] = East, [2] = South, [3] = West
+    public bool[] m_abilityToWallHide = new bool[4];
 
     [HideInInspector]
     public Color spriteColor;
@@ -109,7 +98,7 @@ public class NavNode : MonoBehaviour
 
     public void SetupNodeType()
     {
-        if(m_interactable!=null)
+        if (m_interactable != null)
         {
             m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
             return;
@@ -164,18 +153,14 @@ public class NavNode : MonoBehaviour
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_defaultSprite;
                     }
-
-                    ToggleWallHideIndicators(false);
                 }
                 else if (m_nodeType == NODE_TYPE.INTERACTABLE)
                 {
                     m_selectableUI.SetActive(true);
                     m_selectedUI.SetActive(false);
                     m_spriteRenderer.sprite = m_pickupSprite;
-
-                    ToggleWallHideIndicators(false);
                 }
-                    break;
+                break;
 
             case NODE_STATE.SELECTED:
                 if (m_obstructingAgent != null && m_obstructingAgent.m_team != agent.m_team)
@@ -194,7 +179,7 @@ public class NavNode : MonoBehaviour
                         m_selectedUI.SetActive(false);
                         m_spriteRenderer.sprite = m_reviveSprite;
                     }
-                    else if(m_item!= null)
+                    else if (m_item != null)
                     {
                         m_selectableUI.SetActive(true);
                         m_selectedUI.SetActive(true);
@@ -203,15 +188,12 @@ public class NavNode : MonoBehaviour
                         //Show item highlight
                         if (m_item != null)
                             m_item.TurnOnOutline();
-
-                        ToggleWallHideIndicators(true);
                     }
                     else
                     {
                         m_selectedUI.SetActive(true);
                         m_spriteRenderer.sprite = m_selectedSprite;
 
-                        ToggleWallHideIndicators(true);
                     }
                 }
                 else if (m_nodeType == NODE_TYPE.INTERACTABLE)
@@ -219,8 +201,6 @@ public class NavNode : MonoBehaviour
                     m_selectableUI.SetActive(true);
                     m_selectedUI.SetActive(true);
                     m_spriteRenderer.sprite = m_pickupSprite;
-
-                    ToggleWallHideIndicators(false);
                 }
                 break;
 
@@ -230,7 +210,7 @@ public class NavNode : MonoBehaviour
                 m_spriteRenderer.sprite = m_defaultSprite;
 
                 //Remove item highlight
-                if(m_item!=null)
+                if (m_item != null)
                     m_item.TurnOffOutline();
                 break;
         }
@@ -238,113 +218,26 @@ public class NavNode : MonoBehaviour
 
     public void SetupWallHideIndicators(Navigation navigation)
     {
-        m_wallHideIndicators[0].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(0, 0, 1));
-        m_wallHideIndicators[1].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(1, 0, 0));
-        m_wallHideIndicators[2].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(0, 0, -1));
-        m_wallHideIndicators[3].m_wallHideType = navigation.GetAdjacentNodeType(m_gridPos, new Vector3Int(-1, 0, 0));
+        m_abilityToWallHide[0] = AbilityToHide(this, m_northNodes);
+        m_abilityToWallHide[2] = AbilityToHide(this, m_southNodes);
+        m_abilityToWallHide[1] = AbilityToHide(this, m_eastNodes);
+        m_abilityToWallHide[3] = AbilityToHide(this, m_westNodes);
     }
 
-    public void UpdateWallIndicators()
+    private bool AbilityToHide(NavNode currentNode, List<NavNode> adjacentNodes)
     {
-        if (m_nodeType == NODE_TYPE.OBSTRUCTED && m_obstructingAgent.m_team == TurnManager.TEAM.AI)//No need to update wall hide indicators on nodes with enemy on them
-            return;
-
-        Color halfAlpha = new Color(1, 1, 1, 0.2f);
-        for (int i = 0; i < 4; i++)
+        foreach (NavNode adjacentNode in adjacentNodes)
         {
-            m_wallHideIndicators[i].m_wallHideSprite.color = halfAlpha;
-            m_wallHideIndicators[i].m_wallHideGroundSprite.color = halfAlpha;
-            m_wallHideIndicators[0].m_selected = false;
+            int heightDiff = adjacentNode.m_gridPos.y - currentNode.m_gridPos.y;
+
+            if (heightDiff == 0 && (adjacentNode.m_nodeType == NODE_TYPE.LOW_OBSTACLE || adjacentNode.m_nodeType == NODE_TYPE.HIGH_OBSTACLE))//Same height, check if obstructed
+                return true;
+            else if (heightDiff == 1)//Can hide against a tile one high
+                return true;
+            else if(heightDiff == -1 && adjacentNode.m_nodeType == NODE_TYPE.HIGH_OBSTACLE)// hidable when tile is one lower but its obstacle is at least two high
+                return true;
         }
-
-        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
-
-        RaycastHit hit;
-
-        //TODO make better
-        m_wallHideIndicators[0].m_selected = false;
-        m_wallHideIndicators[1].m_selected = false;
-        m_wallHideIndicators[2].m_selected = false;
-        m_wallHideIndicators[3].m_selected = false;
-
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
-        {
-            Vector3 relativeMousePos = hit.point - transform.position;
-
-            if (Mathf.Abs(relativeMousePos.z) > Mathf.Abs(relativeMousePos.x))//North south Indicator
-            {
-                if (relativeMousePos.z > m_wallHideSelectionDeadZone)//North Indicator
-                {
-                    if (m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[0].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
-                    {
-                        m_wallHideIndicators[0].m_wallHideSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[0].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[0].m_selected = true;
-                    }
-                }
-                else if (relativeMousePos.z < -m_wallHideSelectionDeadZone) //South indicator
-                {
-                    if (m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[2].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
-                    {
-                        m_wallHideIndicators[2].m_wallHideSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[2].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[2].m_selected = true;
-                    }
-                }
-            }
-            else
-            {
-                if (relativeMousePos.x > m_wallHideSelectionDeadZone)//East Indicator
-                {
-                    if (m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[1].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
-                    {
-                        m_wallHideIndicators[1].m_wallHideSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[1].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[1].m_selected = true;
-                    }
-                }
-                else if (relativeMousePos.x < -m_wallHideSelectionDeadZone) //West indicator
-                {
-                    if (m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[3].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
-                    {
-                        m_wallHideIndicators[3].m_wallHideSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[3].m_wallHideGroundSprite.color = new Color(1, 1, 1, 1);
-                        m_wallHideIndicators[3].m_selected = true;
-                    }
-                }
-            }
-        }
-    }
-
-    public void ToggleWallHideIndicators(bool toggleVal)
-    {
-        for (int i = 0; i < 4; i++) //Add wall hide icons
-        {
-            m_wallHideIndicators[i].m_selected = false;
-
-            if (m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.LOW_OBSTACLE || m_wallHideIndicators[i].m_wallHideType == NODE_TYPE.HIGH_OBSTACLE)
-            {
-                m_wallHideIndicators[i].m_wallHideSprite.enabled = toggleVal;
-                m_wallHideIndicators[i].m_wallHideGroundSprite.enabled = toggleVal;
-            }
-            else
-            {
-                m_wallHideIndicators[i].m_wallHideSprite.enabled = false;
-                m_wallHideIndicators[i].m_wallHideGroundSprite.enabled = false;
-            }
-        }
-    }
-
-    public FACING_DIR GetWallHideDir()
-    {
-        for (int i = 0; i < 4; i++)
-        {
-            if (m_wallHideIndicators[i].m_selected == true)
-            {
-                return (FACING_DIR)i;//Casting 'i' to direction
-            }
-        }
-        return FACING_DIR.NONE;
+        return false;
     }
 
     public Agent GetDownedAgent(TurnManager.TEAM team)
