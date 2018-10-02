@@ -56,7 +56,7 @@ public class PlayerActions : MonoBehaviour
                 break;
 
             case ACTION_STATE.ACTION_END:
-                EndTurnWallHide();
+                EndTurn();
                 break;
             default:
                 break;
@@ -247,7 +247,7 @@ public class PlayerActions : MonoBehaviour
     }
 
     //Wall hiding for end of turn
-    public void EndTurnWallHide()
+    public void EndTurn()
     {
         if (m_initActionState)
         {

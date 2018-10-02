@@ -31,7 +31,7 @@ public class NPC : Agent
         //Targets which have gone missing
         [SerializeField]
         private List<InvestigationNode> m_investigationNodes = new List<InvestigationNode>(); //Realtime
-        public void SetInvestigationNode(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
+        public void SetInvestigationNodes(List<InvestigationNode> investigationNodes) { m_investigationNodes = investigationNodes; m_modifiedFlag = true; }
         public List<InvestigationNode> GetInvestigationNodes() { return m_investigationNodes; }
 
         //Waypoints for patrolling
@@ -40,6 +40,7 @@ public class NPC : Agent
         public int m_waypointIndex = 0;
     }
 
+    [System.Serializable]
     public struct InvestigationNode
     {
         public Agent m_target;
@@ -95,6 +96,9 @@ public class NPC : Agent
         if (!m_agentAnimationController.m_playNextAnimation) //Currently animating, dont need any logic
             return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
 
+        if (m_currentActionPoints == 0) //Early break on no aciotn points
+            return AGENT_UPDATE_STATE.END_TURN;
+
         //Check for update in world state
         if (m_agentWorldState.m_modifiedFlag)
         {
@@ -122,7 +126,6 @@ public class NPC : Agent
                 m_GOAP.m_actionList.Clear();
                 break;
             case GOAP.GOAP_UPDATE_STATE.COMPLETED:
-                m_currentActionPoints -= m_GOAP.m_actionList[0].m_actionCost;
                 m_GOAP.m_actionList.RemoveAt(0);
                 break;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
@@ -185,7 +188,7 @@ public class NPC : Agent
         if (modifiedPossibleTargets)
             m_agentWorldState.SetPossibleTargets(possibleTargets);
         if (modifiedInvestigationTargets)
-            m_agentWorldState.SetInvestigationNode(investigationNodes);
+            m_agentWorldState.SetInvestigationNodes(investigationNodes);
     }
 
     private void BuildVision()
