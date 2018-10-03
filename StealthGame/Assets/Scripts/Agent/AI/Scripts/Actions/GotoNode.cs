@@ -58,10 +58,9 @@ public class GotoNode : AIAction
             NPCAgent.m_path.Clear();
             NPCAgent.m_path = navPath;
 
-            List<NavNode> oneTurnSteps = new List<NavNode>();
-            oneTurnSteps.Add(navPath[0]);//Only need one step at a time
-            oneTurnSteps.Add(navPath[1]);
-            NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetAnimationSteps(NPCAgent, oneTurnSteps);
+            NPCAgent.transform.position = navPath[0].m_nodeTop;
+
+            NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetNPCAnimationSteps(NPCAgent, navPath);
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }

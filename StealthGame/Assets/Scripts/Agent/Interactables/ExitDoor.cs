@@ -10,24 +10,13 @@ public class ExitDoor : Interactable
     protected override void Start()
     {
         base.Start();
-
-        if (m_interactionNode.Count == 0)
-            print("Exit door has no interactable nodes");
     }
 
     public override void PerformAction(Agent agent)
     {
         if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
         {
-            Debug.Log("OpeningDoor");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-        else
-            Debug.Log("Player has no gold :(");
-    }
-
-    public override NavNode GetInteractableNode(Agent agent)
-    {
-        return m_interactionNode[0];
     }
 }

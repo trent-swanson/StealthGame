@@ -31,11 +31,12 @@ public class UIController : MonoBehaviour {
     {
 		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
+#if UNITY_EDITOR
         if (m_endTurnBtn == null)
             Debug.Log("End turn button has not been set in the UI controller");
         if (m_nextPlayerBtn == null)
             Debug.Log("Next player button has not been set in the UI controller");
-
+#endif
         //Initialise slot indexes
         for (int i = 0; i < m_inventorySlots.Count; i++)
         {

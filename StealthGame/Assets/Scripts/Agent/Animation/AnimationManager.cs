@@ -7,26 +7,26 @@ public class AnimationManager : MonoBehaviour
 {
     public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, WALL_ATTACK, RANGED_ATTACK, INTERACTABLE, PICKUP_ITEM, DEATH, REVIVE }//Animation states
 
-    public static List<ANIMATION_STEP> GetAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
+    public static List<ANIMATION_STEP> GetPlayerAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
-        FACING_DIR playerDir = agent.m_facingDir;
+        FACING_DIR agentDir = agent.m_facingDir;
 
         int pathCount = pathNodes.Count;
 
         if (pathCount == 2)//Moving one square
         {
-            GetActionStepsForSingleStep(ref playerDir, transitionSteps, pathNodes[0], pathNodes[1]);
+            GetActionStepsForSingleStep(ref agentDir, transitionSteps, pathNodes[0], pathNodes[1]);
         }
-        else if(pathCount > 2)            //Normal movement
+        else if(pathCount > 2)//Normal movement
         {
             for (int i = 0; i < pathCount - 2; i++)//Create all steps between, only will be movement
             {
-                GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
+                GetActionStepsForRunning(ref agentDir, transitionSteps, pathNodes[i], pathNodes[i + 1], pathNodes[i + 2]);
             }
 
-            GetActionStepsForRunning(ref playerDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
+            GetActionStepsForRunning(ref agentDir, transitionSteps, pathNodes[pathCount - 2], pathNodes[pathCount - 1]);//Last step to add
         }
 
         if (interactionType == INTERACTION_TYPE.ATTACK || interactionType == INTERACTION_TYPE.REVIVE)
@@ -34,8 +34,34 @@ public class AnimationManager : MonoBehaviour
         else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
             interactionDir = FACING_DIR.NONE;
 
-        GetInteraction(ref playerDir, interactionDir, transitionSteps, interactionType);
-        agent.m_facingDir = playerDir;
+        GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
+
+        return transitionSteps;
+    }
+
+    public static List<ANIMATION_STEP> GetNPCAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
+    {
+        List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
+
+        FACING_DIR agentDir = agent.m_facingDir;
+
+        int pathCount = pathNodes.Count;
+
+        for (int i = 0; i < pathCount - 1; i++)//Create all steps between, only will be movement
+        {
+            FACING_DIR nextDir = Agent.GetFacingDir(pathNodes[i + 1].m_nodeTop - pathNodes[i].m_nodeTop);
+            GetRotation(ref agentDir, nextDir, ref transitionSteps);
+            agentDir = nextDir;
+
+            transitionSteps.Add(ANIMATION_STEP.WALK);
+        }
+
+        if (interactionType == INTERACTION_TYPE.ATTACK || interactionType == INTERACTION_TYPE.REVIVE)
+            interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
+        else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
+            interactionDir = FACING_DIR.NONE;
+
+        GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
 
         return transitionSteps;
     }
@@ -58,9 +84,7 @@ public class AnimationManager : MonoBehaviour
         }
         else if (nodeHeightDiff < 0)//negitive height diff, running down
         {
-            
             transitionSteps.Add(ANIMATION_STEP.CLIMB_DOWN_IDLE);
-           
         }
     }
 

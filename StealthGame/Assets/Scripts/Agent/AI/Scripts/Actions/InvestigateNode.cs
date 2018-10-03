@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoTarget", menuName = "AI Actions/Go to Target")]
-public class GotoTarget : AIAction
+[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/Go to Node")]
+public class InvestigateNode : AIAction
 {
+
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -14,7 +15,10 @@ public class GotoTarget : AIAction
     // Return:
     //      If this action can continue, e.g. Goto requires a target set by its parent -> Patrol sets next waypoint
     //--------------------------------------------------------------------------------------
-    public override bool ActionInit(NPC NPCAgent, AIAction parentAction) { return true; }
+    public override bool ActionInit(NPC NPCAgent, AIAction parentAction)
+    {
+        return NPCAgent.m_agentWorldState.GetInvestigationNodes().Count > 0;
+    }
 
     //--------------------------------------------------------------------------------------
     // Initialisation of an action 
@@ -38,7 +42,7 @@ public class GotoTarget : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return false;
+        return true;
     }
 
     //--------------------------------------------------------------------------------------
@@ -49,7 +53,11 @@ public class GotoTarget : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
+        NPCAgent.m_agentWorldState.m_waypointIndex++;
+        if (NPCAgent.m_agentWorldState.m_waypointIndex >= NPCAgent.m_agentWorldState.m_waypoints.Count)
+            NPCAgent.m_agentWorldState.m_waypointIndex = 0;
 
+        NPCAgent.m_targetNode = null;
     }
 
 
@@ -72,5 +80,12 @@ public class GotoTarget : AIAction
     // Param
     //		NPCAgent: Gameobject which script is used on
     //--------------------------------------------------------------------------------------
-    public override void SetUpChildVaribles(NPC NPCAgent) { }
+    public override void SetUpChildVaribles(NPC NPCAgent)
+    {
+        List<NPC.InvestigationNode> m_investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
+
+        NPC.InvestigationNode m_closestNode = m_investigationNodes[0];
+        //int nodeDistance = Navigation.
+        //NPCAgent.m_targetNode = targetNode;
+    }
 }

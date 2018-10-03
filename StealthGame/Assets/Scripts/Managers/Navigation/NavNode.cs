@@ -101,25 +101,28 @@ public class NavNode : MonoBehaviour
         m_fScore = m_hScore + m_gScore;
     }
 
+    public void SetNodeAsInteractable(Interactable interactable)
+    {
+        m_interactable = interactable;
+        m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+    }
+
     public void SetupNodeType()
     {
+        if(m_interactable!=null)
+        {
+            m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+            return;
+        }
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.up, out hit, Navigation.m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
         {
-            Interactable interactable = hit.collider.GetComponent<Interactable>();
-            if (interactable != null && interactable.m_usable)
-            {
-                m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
-                m_interactable = interactable;
-            }
+            float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
+            if (coliderHeight < Navigation.m_lowObstacleHeight)
+                m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
             else
-            {
-                float coliderHeight = hit.collider.gameObject.GetComponent<BoxCollider>().size.y;
-                if (coliderHeight < Navigation.m_lowObstacleHeight)
-                    m_nodeType = NavNode.NODE_TYPE.LOW_OBSTACLE;
-                else
-                    m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
-            }
+                m_nodeType = NavNode.NODE_TYPE.HIGH_OBSTACLE;
         }
         else
             m_nodeType = NavNode.NODE_TYPE.WALKABLE;
@@ -257,6 +260,12 @@ public class NavNode : MonoBehaviour
         Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 
         RaycastHit hit;
+
+        //TODO make better
+        m_wallHideIndicators[0].m_selected = false;
+        m_wallHideIndicators[1].m_selected = false;
+        m_wallHideIndicators[2].m_selected = false;
+        m_wallHideIndicators[3].m_selected = false;
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(mousePos), out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))
         {
