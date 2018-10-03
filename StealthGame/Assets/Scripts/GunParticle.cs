@@ -15,16 +15,38 @@ public class GunParticle : MonoBehaviour {
 
     private void OnParticleTrigger()
     {
+        KillParticle();
+    }
 
+    //private void ChangeColor(float alpha)
+    //{
+    //    //Gets the particles which enter the trigger this frame
+    //    int numEnter = ps.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, enter);
+
+    //    //Iterate through the particles which enter the trigger & deletes them
+    //    for (int i = 0; i < numEnter; i++)
+    //    {
+    //        ParticleSystem.Particle p = enter[i];
+    //        p.startColor = new Color(0, 0, 0, alpha);
+    //        enter[i] = p;
+    //    }
+
+    //    //Re-assign the modified particles back into the particle system
+    //    ps.SetTriggerParticles(ParticleSystemTriggerEventType.Enter, enter);
+    //}
+
+    private void KillParticle()
+    {
         //Gets the particles which enter the trigger this frame
         int numEnter = ps.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, enter);
 
         //Iterate through the particles which enter the trigger & deletes them
-        for (int i = 0; i < numEnter; i ++)
+        for (int i = 0; i <= numEnter; i++)
         {
             ParticleSystem.Particle p = enter[i];
-            p.startColor = new Color(0, 0, 0, 0);
+            p.remainingLifetime = 0;
             enter[i] = p;
+            Debug.Log("killed");
         }
 
         //Re-assign the modified particles back into the particle system
