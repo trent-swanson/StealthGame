@@ -8537,7 +8537,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 244e2c176f80bd3428d0563f6960aafc, type: 2}
@@ -11353,6 +11353,16 @@ Prefab:
     - target: {fileID: 4011563756981846, guid: 49dbeb11ce440ed4ca006b7d6e372327, type: 2}
       propertyPath: m_RootOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 200.0000
       objectReference: {fileID: 0}
     - target: {fileID: 198486992376786574, guid: 49dbeb11ce440ed4ca006b7d6e372327,
         type: 2}
@@ -19594,6 +19604,46 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
       value: 1.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: ShapeModule.radiusThickness
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[1].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198470800959608128, guid: 922fc568e06f996439cdef6c3678c86f,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[2].countCurve.minScalar
+      value: 1.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 922fc568e06f996439cdef6c3678c86f, type: 2}
   m_IsPrefabParent: 0
@@ -20515,7 +20565,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 244e2c176f80bd3428d0563f6960aafc, type: 2}
@@ -21344,15 +21394,6 @@ Prefab:
     - target: {fileID: 4110595847913312, guid: 244e2c176f80bd3428d0563f6960aafc, type: 2}
       propertyPath: m_RootOrder
       value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1064063117729186, guid: 244e2c176f80bd3428d0563f6960aafc, type: 2}
-      propertyPath: m_Name
-      value: Lights_01
-      objectReference: {fileID: 0}
-    - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
-        type: 2}
-      propertyPath: m_Intensity
-      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 244e2c176f80bd3428d0563f6960aafc, type: 2}
@@ -24394,7 +24435,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 244e2c176f80bd3428d0563f6960aafc, type: 2}
@@ -25306,6 +25347,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114996539345839188, guid: 704db82d0ff98d748b360483b92f19c6,
         type: 2}
+      propertyPath: m_NPCTeam.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114996539345839188, guid: 704db82d0ff98d748b360483b92f19c6,
+        type: 2}
       propertyPath: m_playerTeam.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -25359,6 +25405,11 @@ Prefab:
     - target: {fileID: 114996539345839188, guid: 704db82d0ff98d748b360483b92f19c6,
         type: 2}
       propertyPath: m_AITeam.Array.data[0]
+      value: 
+      objectReference: {fileID: 1073413642}
+    - target: {fileID: 114996539345839188, guid: 704db82d0ff98d748b360483b92f19c6,
+        type: 2}
+      propertyPath: m_NPCTeam.Array.data[0]
       value: 
       objectReference: {fileID: 1073413642}
     m_RemovedComponents: []
