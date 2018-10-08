@@ -8,6 +8,7 @@ public class GotoNode : AIAction
     private bool m_isDone = false;
 
     private NavNode m_targetNode = null;
+
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -55,12 +56,34 @@ public class GotoNode : AIAction
                 }
             }
 
+            //Keep guard within walking distance
+
+#if UNITY_EDITOR
+            if (m_baseActionCost == 0)
+            {
+                Debug.Log("GoToNode action for AI has no cost");
+                m_baseActionCost = 1;
+            }
+#endif
+            int maxSteps =  NPCAgent.m_currentActionPoints / m_baseActionCost + 1;
+
+            while (navPath.Count > maxSteps)
+            {
+                navPath.RemoveAt(navPath.Count - 1);
+            }
+
             NPCAgent.m_path.Clear();
             NPCAgent.m_path = navPath;
 
             NPCAgent.transform.position = navPath[0].m_nodeTop;
 
             NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetNPCAnimationSteps(NPCAgent, navPath);
+
+            //Decrease action point count only for walking anuimation, TODO, possibly add step down etc
+            AnimationManager.ANIMATION_STEP nextAnimation = NPCAgent.m_agentAnimationController.m_animationSteps[0];
+
+            if (nextAnimation == AnimationManager.ANIMATION_STEP.WALK || nextAnimation == AnimationManager.ANIMATION_STEP.STEP)
+                NPCAgent.m_currentActionPoints -= m_baseActionCost;
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }
@@ -138,7 +161,15 @@ public class GotoNode : AIAction
             if (NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0)
                 m_isDone = true;
             else
+            {
+                //Decrease action point count only for walking anuimation, TODO, possibly add step down etc
+                AnimationManager.ANIMATION_STEP nextAnimation = NPCAgent.m_agentAnimationController.m_animationSteps[0];
+
+                if (nextAnimation == AnimationManager.ANIMATION_STEP.WALK || nextAnimation == AnimationManager.ANIMATION_STEP.STEP)
+                    NPCAgent.m_currentActionPoints -= m_baseActionCost;
+
                 NPCAgent.m_agentAnimationController.PlayNextAnimation();
+            }
         }
 
         return true;

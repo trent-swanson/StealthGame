@@ -13,13 +13,12 @@ public class PlayerActions : MonoBehaviour
 
     private List<NavNode> m_selectableNodes = new List<NavNode>();
 
-    public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, WALL_HIDE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM }
+    public enum ACTION_STATE{ACTION_START, VALID_NODE_SELECTION, INVALID_NODE_SELECTION, ACTION_PERFORM, ACTION_END}
     public ACTION_STATE m_currentActionState = ACTION_STATE.ACTION_START;
 
     private bool m_initActionState = true;
-    
-    [Tooltip("How far the mouse will go off a node while keeping the wall hide icons")]
-    public static float m_wallHidingDistance = 2.5f;
+
+    private bool m_currentlyHiding = false;
 
     private void Start()
     {
@@ -52,14 +51,13 @@ public class PlayerActions : MonoBehaviour
                 InvalidSelection();
                 break;
 
-            case ACTION_STATE.WALL_HIDE_SELECTION:
-                WallHideSelection();
-                break;
-
             case ACTION_STATE.ACTION_PERFORM:
                 ActionPerform();
                 break;
 
+            case ACTION_STATE.ACTION_END:
+                EndTurn();
+                break;
             default:
                 break;
         }
@@ -97,10 +95,7 @@ public class PlayerActions : MonoBehaviour
     {
         NavNode newSelectedNavNode = GetMouseNode();
         if (newSelectedNavNode != null) // Hovering over empty space
-        {
-            if(newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)
-                newSelectedNavNode.UpdateWallIndicators();
-
+        { 
             Agent downedAgent = newSelectedNavNode.GetDownedAgent(m_playerController.m_team);
 
             bool nextNodeUsable = newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || //Node is walkable
@@ -126,10 +121,7 @@ public class PlayerActions : MonoBehaviour
             }
             else // hovering over unreachable nav node
             {
-                if(newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.LOW_OBSTACLE || newSelectedNavNode.m_nodeType == NavNode.NODE_TYPE.HIGH_OBSTACLE)
-                    NewActionState(ACTION_STATE.WALL_HIDE_SELECTION);
-                else
-                    NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
+                NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
             }
         }
         else
@@ -156,41 +148,6 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
-    private void WallHideSelection()
-    {
-        if(m_currentSelectedNode == null)
-            NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
-        else
-        {
-            m_currentSelectedNode.UpdateWallIndicators();
-
-            NavNode newSelectedNavNode = GetMouseNode();
-            if (newSelectedNavNode != null)
-            {
-                if (m_selectableNodes.Contains(newSelectedNavNode)) //Moving back to hovering over valid tile
-                    NewActionState(ACTION_STATE.VALID_NODE_SELECTION);
-                else if (Input.GetMouseButtonDown(0)) //Selecting wall hide
-                    NewActionState(ACTION_STATE.ACTION_PERFORM);
-                else
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if (!EventSystem.current.IsPointerOverGameObject() && Physics.Raycast(ray, out hit, Mathf.Infinity, LayerManager.m_navNodeLayer))//Dont raycast when over UI
-                    {
-                        Vector3 collisionPoint = hit.point;
-
-                        if (Vector3.Distance(collisionPoint, m_currentSelectedNode.m_nodeTop) > m_wallHidingDistance)
-                            NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
-                    }
-                }
-            }
-            else
-            {
-                NewActionState(ACTION_STATE.INVALID_NODE_SELECTION);
-            }
-        }
-    }
-
     //Moving action, Remove all UI for navmesh/ pathing, and path over to new selected node
     //After action go back to action start
     private void ActionPerform()
@@ -202,22 +159,15 @@ public class PlayerActions : MonoBehaviour
             //Get animation steps
             m_agentAnimationController.m_animationSteps.Clear();
 
-            if (m_playerController.m_interaction == INTERACTION_TYPE.WALL_HIDE)//Previously hiding on wall, so defualt by adding idle
+            if (m_currentlyHiding)//Previously hiding on wall, so defualt by adding idle
             {
                 m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.IDLE);
+                m_currentlyHiding = false;
             }
 
             m_playerController.m_interaction = INTERACTION_TYPE.NONE;//Reset interaction
 
-            //Getting wall hide detection
-            FACING_DIR wallHideDir = m_currentSelectedNode.GetWallHideDir();
-
-            if (wallHideDir != FACING_DIR.NONE)//Wall hiding animation calling
-            {
-                m_playerController.m_interaction = INTERACTION_TYPE.WALL_HIDE;
-                m_playerController.m_path = GetPath(m_currentSelectedNode);
-            }
-            else if (m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
+            if (m_currentSelectedNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Attacking as were moving to a obstructed tile
             {
                 m_playerController.m_targetAgent = m_currentSelectedNode.m_obstructingAgent;
 
@@ -268,14 +218,14 @@ public class PlayerActions : MonoBehaviour
                 m_playerController.m_path = GetPath(m_currentSelectedNode);
                 m_playerController.m_path.RemoveAt(m_playerController.m_path.Count - 1); //As were reviving no need to move to last tile
             }
-            else //Default to jst walk to node
+            else //Default to just walk to node
             {
                 m_playerController.m_path = GetPath(m_currentSelectedNode);
             }
 
             transform.position = m_playerController.m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
-            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetPlayerAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction, wallHideDir));
+            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetPlayerAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction));
 
             m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_selectableNodes, m_currentSelectedNode);//Remove UI
 
@@ -291,9 +241,80 @@ public class PlayerActions : MonoBehaviour
             {
                 m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
 
+                NewActionState(ACTION_STATE.ACTION_END);
+            }
+        }
+    }
+
+    //Wall hiding for end of turn
+    public void EndTurn()
+    {
+        if (m_initActionState)
+        {
+            FACING_DIR m_largestThreatDir = GetLargestThreatDir();
+
+            if (m_largestThreatDir != FACING_DIR.NONE && m_currentSelectedNode.m_abilityToWallHide[(int)m_largestThreatDir]) //Can hide in largest threat direction
+            {
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide(m_largestThreatDir, m_playerController));
+            }
+            else //Pick random wall to hide on 
+            {
+                //TODO get next closest wall to hide on
+                if(m_currentSelectedNode.m_abilityToWallHide[0])
+                    m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)0, m_playerController));
+                else if (m_currentSelectedNode.m_abilityToWallHide[1])
+                    m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)1, m_playerController));
+                else if (m_currentSelectedNode.m_abilityToWallHide[2])
+                    m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)2, m_playerController));
+                else if (m_currentSelectedNode.m_abilityToWallHide[3])
+                    m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)3, m_playerController));
+            }
+
+            //Only run when animations set up
+            if (m_agentAnimationController.m_animationSteps.Count == 0)
+            {
+                InitActions();
+                return;
+            }
+            m_currentlyHiding = true;
+
+            m_initActionState = false;
+
+        }
+
+        if (m_agentAnimationController.m_playNextAnimation)//End of animation
+        {
+            m_agentAnimationController.PlayNextAnimation();
+
+            if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
+            { 
                 InitActions();
             }
         }
+    }
+
+    public FACING_DIR GetLargestThreatDir()
+    {
+        //Get closest guard
+        List<Agent> m_guards = m_playerController.m_turnManager.m_NPCTeam;
+
+        float closestDistance = Mathf.Infinity;
+        Agent closestGuard = null;
+        foreach (Agent guard in m_guards)
+        {
+            float distance = Vector3.Distance(transform.position, guard.transform.position);
+            if(distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestGuard = guard;
+            }
+        }
+
+        if (closestGuard != null)
+        {
+            return Agent.GetFacingDir(closestGuard.transform.position - transform.position);
+        }
+        return FACING_DIR.NONE;
     }
 
     //Find what type of action is about to be take

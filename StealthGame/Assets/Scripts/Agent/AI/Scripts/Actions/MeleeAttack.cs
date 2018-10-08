@@ -62,6 +62,7 @@ public class MeleeAttack : AIAction
     public override void EndAction(NPC NPCAgent)
     {
         m_target = null;
+        NPCAgent.m_currentActionPoints -= m_baseActionCost;
     }
 
 

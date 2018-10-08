@@ -31,7 +31,7 @@ public class Agent : MonoBehaviour
     [Space]
     public float m_highlightInteractablesRange = 6;
 
-    protected TurnManager m_turnManager = null;
+    public TurnManager m_turnManager = null;
     public NavNode m_currentNavNode = null;
 
     public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
@@ -152,13 +152,13 @@ public class Agent : MonoBehaviour
         dir.y = 0; //Dont need to use y 
         float angle = Vector3.SignedAngle(dir.normalized, new Vector3(0, 0, 1), Vector3.up);
 
-        if (angle < 10.0f && angle > -10.0f) //allows for minor inaccuracies
+        if (angle < 45.0f && angle > -45.0f) //allows for minor inaccuracies
             return FACING_DIR.NORTH;
-        if (angle > 170.0f || angle < -170.0f)
+        if (angle > 135.0f || angle < -135.0f)
             return FACING_DIR.SOUTH;
-        if (angle < 100 && angle > 70)
+        if (angle < 135 && angle > 45)
             return FACING_DIR.WEST;
-        if (angle < -70 && angle > -100)
+        if (angle < -45 && angle > -135)
             return FACING_DIR.EAST;
         return FACING_DIR.NONE;
     }

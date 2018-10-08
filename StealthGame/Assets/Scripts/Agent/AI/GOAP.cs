@@ -36,7 +36,7 @@ public class GOAP : MonoBehaviour
         GetGoalPriority();
         StartCoroutine("ActionPlanning");
 
-        if(m_actionList.Count > 0 && m_actionList[0].m_actionCost <= m_NPC.m_currentActionPoints)
+        if(m_actionList.Count > 0 && m_actionList[0].m_baseActionCost <= m_NPC.m_currentActionPoints)
         {
             m_actionList[0].ActionStart(m_NPC);
             return true;
@@ -59,6 +59,7 @@ public class GOAP : MonoBehaviour
             m_actionList[0].EndAction(m_NPC);
             return GOAP_UPDATE_STATE.COMPLETED;
         }
+
         return GOAP_UPDATE_STATE.PERFORMING;
     }
 
@@ -256,7 +257,7 @@ public class GOAP : MonoBehaviour
             GetInvalidStates(NPCScript);
 
             m_hScore = m_invalidWorldStates.Count();
-            m_gScore = m_previousNode.m_gScore + m_AIAction.m_actionCost;
+            m_gScore = m_previousNode.m_gScore + m_AIAction.m_baseActionCost;
 
             m_fScore = m_hScore + m_gScore;
         }

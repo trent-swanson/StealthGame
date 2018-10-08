@@ -57,6 +57,8 @@ public class Patrol : AIAction
             NPCAgent.m_agentWorldState.m_waypointIndex = 0;
 
         NPCAgent.m_targetNode = null;
+
+        NPCAgent.m_currentActionPoints -= m_baseActionCost;
     }
 
 

@@ -20,10 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4388665136485858}
   - component: {fileID: 33021908179915148}
-  - component: {fileID: 65601239706312234}
   - component: {fileID: 23362629219341964}
   - component: {fileID: 114371983133200932}
-  m_Layer: 8
+  m_Layer: 10
   m_Name: Interact_PipeValve
   m_TagString: PickUp
   m_Icon: {fileID: 0}
@@ -210,18 +209,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1543487517046976}
   m_Mesh: {fileID: 4300002, guid: 47e205d7ca8191f4b858b0173680f2d6, type: 3}
---- !u!65 &65601239706312234
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1091333227510422}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 1, z: 2}
-  m_Center: {x: 0, y: 0, z: 0.5}
 --- !u!114 &114096387956052010
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -308,8 +295,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f553b1cd636f774499cf1535504bd9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_interactionNode: {fileID: 0}
-  m_currentNode: {fileID: 0}
+  m_usable: 1
+  m_interactionNodes: []
   m_animation: {fileID: 0}
 --- !u!114 &114893746211332272
 MonoBehaviour:

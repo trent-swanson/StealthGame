@@ -234,20 +234,29 @@ public class Navigation : MonoBehaviour
         }
     }
 
-    private List<NavNode> GetAdjacentNode(Vector3Int offsetGridPos)
+    private List<NavNode> GetAdjacentNode(Vector3Int gridOffset)
     {
         List<NavNode> nodes = new List<NavNode>();
         //Mid
-        if (m_navGrid[offsetGridPos.x, offsetGridPos.y, offsetGridPos.z] != null)
-            nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y, offsetGridPos.z]);
+        if (m_navGrid[gridOffset.x, gridOffset.y, gridOffset.z] != null)
+            nodes.Add(m_navGrid[gridOffset.x, gridOffset.y, gridOffset.z]);
         //Top
-        if (offsetGridPos.y + 1 < m_navGridHeight && m_navGrid[offsetGridPos.x, offsetGridPos.y+1, offsetGridPos.z] != null)
-            nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y+1, offsetGridPos.z]);
+        if (gridOffset.y + 1 < m_navGridHeight && m_navGrid[gridOffset.x, gridOffset.y+1, gridOffset.z] != null)
+            nodes.Add(m_navGrid[gridOffset.x, gridOffset.y+1, gridOffset.z]);
         //Lower
-        if (offsetGridPos.y - 1 >= 0 && m_navGrid[offsetGridPos.x, offsetGridPos.y - 1, offsetGridPos.z] != null)
-            nodes.Add(m_navGrid[offsetGridPos.x, offsetGridPos.y - 1, offsetGridPos.z]);
+        if (gridOffset.y - 1 >= 0 && m_navGrid[gridOffset.x, gridOffset.y - 1, gridOffset.z] != null)
+            nodes.Add(m_navGrid[gridOffset.x, gridOffset.y - 1, gridOffset.z]);
 
         return nodes;
+    }
+
+    public NavNode GetAdjacentNode(Vector3Int gridPos, Vector3Int gridOffset)
+    {
+        //Ensure offset is within range
+        if (gridPos.x + gridOffset.x < 0 || gridPos.x + gridOffset.x > m_navGridWidth - 1 || gridPos.y + gridOffset.y < 0 || gridPos.y + gridOffset.y > m_navGridHeight - 1 || gridPos.z + gridOffset.z < 0 || gridPos.z + gridOffset.z > m_navGridDepth - 1)
+            return null;
+
+        return m_navGrid[gridPos.x + gridOffset.x, gridPos.y + gridOffset.y, gridPos.z + gridOffset.z]; //Get offset node
     }
 
     //----------------
@@ -329,25 +338,5 @@ public class Navigation : MonoBehaviour
         }
         path.Insert(0, currentNode);
         return path;
-    }
-
-    public NavNode.NODE_TYPE GetAdjacentNodeType(Vector3Int gridPos, Vector3Int gridOffset)
-    {
-        //Ensure offset is within range
-        if(gridPos.x + gridOffset.x < 0 || gridPos.x + gridOffset.x > m_navGridWidth -1 || gridPos.y + gridOffset.y < 0 || gridPos.y + gridOffset.y > m_navGridHeight - 1 || gridPos.z + gridOffset.z < 0 || gridPos.z + gridOffset.z > m_navGridDepth - 1)
-            return NavNode.NODE_TYPE.NONE;
-
-        NavNode navNode = m_navGrid[gridPos.x + gridOffset.x, gridPos.y + gridOffset.y, gridPos.z + gridOffset.z]; //Get normal offest
-        if(navNode != null)
-            return navNode.m_nodeType;
-        else
-        {
-            if (gridPos.y + gridOffset.y + 1 > m_navGridHeight - 1)//Check for step up
-                return NavNode.NODE_TYPE.NONE;
-            navNode = m_navGrid[gridPos.x + gridOffset.x, gridPos.y + gridOffset.y + 1, gridPos.z + gridOffset.z];//Get normal offset up one
-            if (navNode != null)
-                return NavNode.NODE_TYPE.LOW_OBSTACLE;
-        }
-        return NavNode.NODE_TYPE.NONE;
     }
 }

@@ -7,6 +7,8 @@ public abstract class AIAction : ScriptableObject {
     [SerializeField]
     public List<WorldState.WORLD_STATE> m_satisfiedWorldStates = new List<WorldState.WORLD_STATE>();
 
+
+
     [System.Serializable]
     public struct RequiredWorldState
     {
@@ -24,7 +26,7 @@ public abstract class AIAction : ScriptableObject {
 
     [Tooltip("Cost of action")]
     [SerializeField]
-    public int m_actionCost = 0;
+    public int m_baseActionCost = 0; //How much each step will take in an action
 
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
