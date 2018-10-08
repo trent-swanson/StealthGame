@@ -15,8 +15,11 @@ public class UIController : MonoBehaviour {
     public Image m_playerTurnStart = null;
     public Image m_enemyTurnStart = null;
 
-    public Button m_endTurnBtn = null;
-    public Button m_nextPlayerBtn = null;
+    public Button m_endNextBtn = null;
+    private Text m_endNextBtnText = null;
+
+    private string m_endTurnString = "End Turn";
+    private string m_nextPlayerString = "Next Player";
 
     private bool m_UIInteractivity = true;
 
@@ -32,12 +35,12 @@ public class UIController : MonoBehaviour {
 		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
 
 #if UNITY_EDITOR
-        if (m_endTurnBtn == null)
+        if (m_endNextBtn == null)
             Debug.Log("End turn button has not been set in the UI controller");
-        if (m_nextPlayerBtn == null)
-            Debug.Log("Next player button has not been set in the UI controller");
+        else
+            m_endNextBtnText = m_endNextBtn.GetComponentInChildren<Text>();
 #endif
-        //Initialise slot indexes
+            //Initialise slot indexes
         for (int i = 0; i < m_inventorySlots.Count; i++)
         {
             m_inventorySlots[i].GetComponent<InventorySlot>().m_slotIndex = i;
@@ -89,7 +92,6 @@ public class UIController : MonoBehaviour {
         else
         {
             m_inventorySlotInfo.GetComponent<Text>().text = "";
-         
         }
     }
 
@@ -99,21 +101,16 @@ public class UIController : MonoBehaviour {
         {
             m_UIInteractivity = togleVal;
 
-            m_endTurnBtn.interactable = togleVal;
-            m_nextPlayerBtn.interactable = togleVal;
+            m_endNextBtn.interactable = togleVal;
         }
     }
-
-    public void NextPlayer()
-    {
-        m_turnManager.NextPlayer();
-    }
-
 
     public void ChangeAgent(int index)
     {
         if (m_UIInteractivity && index != 0 && m_turnManager.m_currentTeam == TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
             m_turnManager.SwapAgents(index);
+
+        m_endNextBtnText.text = m_endTurnString;
     }
 
     public void TurnStart(TurnManager.TEAM team)
@@ -123,6 +120,8 @@ public class UIController : MonoBehaviour {
             Color spriteColor = m_playerTurnStart.color;
             spriteColor.a = 1;
             m_playerTurnStart.color = spriteColor;
+
+            m_endNextBtnText.text = m_nextPlayerString;
 
             StartCoroutine(FadeTurnStart(Time.deltaTime / m_turnStartFadeTime, m_playerTurnStart));
         }
@@ -136,9 +135,15 @@ public class UIController : MonoBehaviour {
         }
     }
 
-    public void TurnEnd()
+    public void EndNextBtn()
     {
-        m_turnManager.EndTeamTurn();
+        if(m_endNextBtnText.text == m_nextPlayerString)
+        {
+            m_turnManager.NextPlayer();
+            m_endNextBtnText.text = m_endTurnString; 
+        }
+        else
+            m_turnManager.EndTeamTurn();
     }
 
     public IEnumerator FadeTurnStart(float time, Image imageToFade)

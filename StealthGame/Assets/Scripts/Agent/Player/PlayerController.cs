@@ -43,8 +43,6 @@ public class PlayerController : Agent {
     {
         m_playerActions.UpdateActions();
 
-        Debug.Log(m_agentAnimationController.m_playNextAnimation);
-
         if (m_agentAnimationController.m_animationSteps.Count > 0) //Play animation is false while playing an animation
         {
             return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
