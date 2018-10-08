@@ -22,8 +22,11 @@ public class CameraController : MonoBehaviour
     public WallFade EastWalls;
     public WallFade WestWalls;
 
+    private float xRot;
+
     void Start() {
         SouthWalls.FadeWall();
+        xRot = cam.position.x;
     }
 
     void OnDrawGizmosSelected()
@@ -82,10 +85,33 @@ public class CameraController : MonoBehaviour
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        pos.y -= scroll * scrollSpeed * 100f * Time.deltaTime;
+        float scrollValue = scroll * scrollSpeed * 100f * Time.deltaTime;
+        //pos.y -= scrollValue;
+        ////South
+        //if (camDirection == 0)
+        //{
+        //    cam.position = new Vector3(cam.position.x, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z + Mathf.Sin(xRot) * scrollValue);
+        //}
+        ////North
+        //else if (camDirection == 2)
+        //{
+        //    cam.position = new Vector3(cam.position.x, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z - Mathf.Sin(xRot) * scrollValue);
+        //}
+        ////West
+        //else if (camDirection == 1)
+        //{
+        //    cam.position = new Vector3(cam.position.x + Mathf.Sin(xRot) * scrollValue, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z);
+        //}
+        ////East
+        //else
+        //{
+        //    cam.position = new Vector3(cam.position.x - Mathf.Sin(xRot) * scrollValue, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z);
+        //}
 
         transform.Translate(pos);
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, transform.parent.position.x - panLimit.x, transform.parent.position.x + panLimit.x), Mathf.Clamp(transform.position.y, minY, maxY), Mathf.Clamp(transform.position.z, transform.parent.position.z - panLimit.y, transform.parent.position.z + panLimit.y));
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, transform.parent.position.x - panLimit.x, transform.parent.position.x + panLimit.x),
+            Mathf.Clamp(transform.position.y, minY, maxY),
+            Mathf.Clamp(transform.position.z, transform.parent.position.z - panLimit.y, transform.parent.position.z + panLimit.y));
     }
 
     void WallFade() {
