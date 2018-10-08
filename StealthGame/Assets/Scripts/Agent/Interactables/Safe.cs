@@ -8,6 +8,8 @@ public class Safe : Interactable
 
     public int m_health = 3;
 
+    public Item.ITEM_TYPE m_discountItem = Item.ITEM_TYPE.CROWBAR;
+
     protected override void Start()
     {
         base.Start();
@@ -15,7 +17,7 @@ public class Safe : Interactable
 
     public override void PerformAction(Agent agent)
     {
-        if (agent.m_agentInventory.AgentHasItem(Item.ITEM_TYPE.CROWBAR))//Instant opening with crowbar
+        if (agent.m_agentInventory.AgentHasItem(m_discountItem))//Instant opening with crowbar
             m_health = 0;
         else
             m_health--;
