@@ -8,7 +8,7 @@ public class UIController : MonoBehaviour {
 	public List<Image> m_portraitImages;
     public InventoryAnimation inventoryAnimation = null;
 
-    TurnManager m_turnManager;
+    GameState_TurnManager m_turnManager;
 
     public float m_turnStartFadeTime = 1.0f;
 
@@ -32,7 +32,7 @@ public class UIController : MonoBehaviour {
 
     void Start()
     {
-		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
+		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
 
 #if UNITY_EDITOR
         if (m_endNextBtn == null)
@@ -107,15 +107,15 @@ public class UIController : MonoBehaviour {
 
     public void ChangeAgent(int index)
     {
-        if (m_UIInteractivity && index != 0 && m_turnManager.m_currentTeam == TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
+        if (m_UIInteractivity && index != 0 && m_turnManager.m_currentTeam == GameState_TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
             m_turnManager.SwapAgents(index);
 
         m_endNextBtnText.text = m_endTurnString;
     }
 
-    public void TurnStart(TurnManager.TEAM team)
+    public void TurnStart(GameState_TurnManager.TEAM team)
     {
-        if(team == TurnManager.TEAM.PLAYER && m_playerTurnStart != null)
+        if(team == GameState_TurnManager.TEAM.PLAYER && m_playerTurnStart != null)
         {
             Color spriteColor = m_playerTurnStart.color;
             spriteColor.a = 1;
@@ -125,7 +125,7 @@ public class UIController : MonoBehaviour {
 
             StartCoroutine(FadeTurnStart(Time.deltaTime / m_turnStartFadeTime, m_playerTurnStart));
         }
-        else if(team == TurnManager.TEAM.AI && m_enemyTurnStart != null)
+        else if(team == GameState_TurnManager.TEAM.AI && m_enemyTurnStart != null)
         {
             Color spriteColor = m_enemyTurnStart.color;
             spriteColor.a = 1;
