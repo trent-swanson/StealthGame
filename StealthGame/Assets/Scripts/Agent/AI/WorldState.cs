@@ -5,15 +5,14 @@ using UnityEngine;
 
 public class WorldState : ScriptableObject
 {
-    public enum WORLD_STATE { IDLING, PATROLLING, USING_NODE, AT_NODE, HAS_TARGET_NODE, ATTACKING_TARGET, AT_TARGET, TARGET_IN_LINE_OF_SIGHT,
-                                NEAR_TARGET, AT_LAST_TARGET_LOCATION, AT_INVESTIGATE_LOCATION, KO_GUARD_IN_LINE_OF_SIGHT, HELPING_GUARD,
+    public enum WORLD_STATE { IDLING, PATROLLING, USING_NODE, AT_OBJECT_NODE, AT_PATROL_NODE, AT_INVESTIGATION_NODE, ATTACKING_TARGET, TARGET_IN_LINE_OF_SIGHT,
+                                NEAR_TARGET, AT_INVESTIGATE_LOCATION, KO_GUARD_IN_LINE_OF_SIGHT, HELPING_GUARD,
                                 SEARCHED_AREA, INVESTIGATED, GUARDING_TARGET, FOUND_TARGET, AMBUSHED_TARGET}
     public static Dictionary<WORLD_STATE, Func<NPC, bool>> m_StateFunctions = new Dictionary<WORLD_STATE, Func<NPC, bool>>
     {
-        //{WORLD_STATE.IDLING, Idle}
-        //{WORLD_STATE.HAS_TARGET, HasTarget},
-        {WORLD_STATE.HAS_TARGET_NODE, HasTargetNode},
-        {WORLD_STATE.AT_NODE, AtNode},
+        {WORLD_STATE.AT_OBJECT_NODE, AtObjectNode},
+        {WORLD_STATE.AT_PATROL_NODE, AtPatrolNode},
+        {WORLD_STATE.AT_INVESTIGATION_NODE, AtInvestigationNode},
         {WORLD_STATE.NEAR_TARGET, NearTarget}
     };
 
@@ -38,58 +37,17 @@ public class WorldState : ScriptableObject
     }
 
     //--------------------------------------------------------------------------------------
-    // Get closest valid target to agent
-    // Compare against range of agent
+    // Determine if agent is at target node
     // 
     // Param
     //		NPCAgent: Gameobject which script is used on
     // Return:
-    //		true when range is greater than distance
+    //		true when the node below agent is equal to agents target node
     //--------------------------------------------------------------------------------------
-    //public static bool CloseToTarget(NPC NPCAgent)
-    //{
-    //    Agent agentScript = agent.GetComponent<Agent>();
-    //    NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
-    //    if (agentScript != null && planner != null)
-    //    {
-    //        GameObject closestTarget = null;
-    //        float dis = 0.0f;
-    //        planner.GetClosesetTarget(ref closestTarget, ref dis);
-    //        if (closestTarget && dis < agentScript.m_range)
-    //            return true;
-    //    }
-    //    return false;
-    //}
-
-    //--------------------------------------------------------------------------------------
-    // Check agents seen targets to see if theres any valid targets 
-    // 
-    // Param
-    //		NPCAgent: Gameobject which script is used on
-    // Return:
-    //		true when at least one target still is seen
-    //--------------------------------------------------------------------------------------
-    //public static bool HasTarget(NPC NPCAgent)
-    //{
-    //    NPCAgentPlanner planner = agent.GetComponent<NPCAgentPlanner>();
-    //    if (planner != null)
-    //    {
-    //        return planner.PossibleTargets.Count > 0;
-    //    }
-    //    return false;
-    //}
-
-    //--------------------------------------------------------------------------------------
-    // Check agents seen targets to see if theres any valid targets 
-    // 
-    // Param
-    //		NPCAgent: Gameobject which script is used on
-    // Return:
-    //		true when at least one target still is seen
-    //--------------------------------------------------------------------------------------
-    public static bool HasTargetNode(NPC NPCAgent)
+    public static bool AtObjectNode(NPC NPCAgent)
     {
-        return NPCAgent.m_targetNode != null;
+        //TODO
+        return false;
     }
 
     //--------------------------------------------------------------------------------------
@@ -100,10 +58,26 @@ public class WorldState : ScriptableObject
     // Return:
     //		true when the node below agent is equal to agents target node
     //--------------------------------------------------------------------------------------
-    public static bool AtNode(NPC NPCAgent)
+    public static bool AtPatrolNode(NPC NPCAgent)
     {
-        if(NPCAgent.m_targetNode != null)
-            return (NPCAgent.m_targetNode == NPCAgent.m_currentNavNode);
+        if (NPCAgent.m_agentWorldState.m_waypoints.Count > 0)
+            return (NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex] == NPCAgent.m_currentNavNode);
+        return false;
+    }
+
+    //--------------------------------------------------------------------------------------
+    // Determine if agent is at target node
+    // 
+    // Param
+    //		NPCAgent: Gameobject which script is used on
+    // Return:
+    //		true when the node below agent is equal to agents target node
+    //--------------------------------------------------------------------------------------
+    public static bool AtInvestigationNode(NPC NPCAgent)
+    {
+        List<NPC.InvestigationNode> m_investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
+        if (m_investigationNodes.Count > 0)
+            return (m_investigationNodes[0].m_node == NPCAgent.m_currentNavNode);
         return false;
     }
 

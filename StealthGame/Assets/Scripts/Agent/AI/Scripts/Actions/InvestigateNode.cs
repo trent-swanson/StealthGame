@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GotoNode", menuName = "AI Actions/Go to Node")]
+[CreateAssetMenu(fileName = "InvestigateNode", menuName = "AI Actions/Investigate Node")]
 public class InvestigateNode : AIAction
 {
-
     //--------------------------------------------------------------------------------------
     // Initialisation of an action at node creation 
     // Setup any used varibles, can get varibles from parent
@@ -29,7 +28,6 @@ public class InvestigateNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void ActionStart(NPC NPCAgent)
     {
-
     }
 
     //--------------------------------------------------------------------------------------
@@ -53,11 +51,9 @@ public class InvestigateNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        NPCAgent.m_agentWorldState.m_waypointIndex++;
-        if (NPCAgent.m_agentWorldState.m_waypointIndex >= NPCAgent.m_agentWorldState.m_waypoints.Count)
-            NPCAgent.m_agentWorldState.m_waypointIndex = 0;
-
-        NPCAgent.m_targetNode = null;
+        List<NPC.InvestigationNode> investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
+        investigationNodes.RemoveAt(0);
+        NPCAgent.m_agentWorldState.SetInvestigationNodes(investigationNodes);
     }
 
 
@@ -82,10 +78,11 @@ public class InvestigateNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
-        List<NPC.InvestigationNode> m_investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
-
-        NPC.InvestigationNode m_closestNode = m_investigationNodes[0];
-        //int nodeDistance = Navigation.
-        //NPCAgent.m_targetNode = targetNode;
+        List<NPC.InvestigationNode> investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
+        if (investigationNodes.Count > 0)
+        {
+            NPCAgent.m_targetNode = investigationNodes[0].m_node;
+        }
+        NPCAgent.m_targetNode = null;
     }
 }

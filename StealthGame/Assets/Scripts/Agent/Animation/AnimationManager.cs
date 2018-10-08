@@ -39,7 +39,7 @@ public class AnimationManager : MonoBehaviour
         return transitionSteps;
     }
 
-    public static List<ANIMATION_STEP> GetNPCAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
+    public static List<ANIMATION_STEP> GetNPCAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
 
@@ -56,10 +56,12 @@ public class AnimationManager : MonoBehaviour
             transitionSteps.Add(ANIMATION_STEP.WALK);
         }
 
+        FACING_DIR interactionDir = FACING_DIR.NONE;
+
         if (interactionType == INTERACTION_TYPE.ATTACK || interactionType == INTERACTION_TYPE.REVIVE)
             interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
-        else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
-            interactionDir = FACING_DIR.NONE;
+        //else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
+        //    interactionDir = FACING_DIR.NONE;
 
         GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
 
@@ -138,9 +140,6 @@ public class AnimationManager : MonoBehaviour
 
         switch (interactionType)
         {
-            case INTERACTION_TYPE.WALL_HIDE: // TODO left right
-                transitionSteps.Add(ANIMATION_STEP.WALL_HIDE_RIGHT);
-                break;
             case INTERACTION_TYPE.ATTACK:
                 transitionSteps.Add(ANIMATION_STEP.ATTACK);
                 break;
@@ -160,6 +159,18 @@ public class AnimationManager : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public static List<ANIMATION_STEP> EndTurnWallHide(FACING_DIR wallHideDir, Agent agent)
+    {
+        List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
+
+        FACING_DIR agentDir = agent.m_facingDir;
+        GetRotation(ref agentDir, wallHideDir, ref transitionSteps);
+
+        transitionSteps.Add(ANIMATION_STEP.WALL_HIDE_RIGHT);
+
+        return transitionSteps;
     }
 
     private static void GetRotation(ref FACING_DIR currentDir, FACING_DIR nextDir, ref List<ANIMATION_STEP> transitionSteps)
