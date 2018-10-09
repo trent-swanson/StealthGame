@@ -70,7 +70,14 @@ public class GameState_TurnManager : GameState
 
     public override void StartState()
     {
-
+        foreach (Agent NPCAgent in m_NPCTeam)
+        {
+            NPC NPCScript = NPCAgent.GetComponent<NPC>();
+            if(NPCScript != null)
+            {
+                NPCScript.BuildVision();
+            }
+        }
     }
 
     public override void EndState()
