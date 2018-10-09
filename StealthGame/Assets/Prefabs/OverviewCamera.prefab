@@ -74,7 +74,7 @@ GameObject:
   m_Layer: 0
   m_Name: Pivot
   m_TagString: CamPivot
-  m_Icon: {fileID: -3839803715187477772, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: -982381405332843317, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -85,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1379797505429332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -2.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4913627033394110}
@@ -100,7 +100,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115641978136022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4627388129698264}
@@ -142,7 +142,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.27205884, g: 0.24245244, b: 0.19804284, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -216,10 +216,14 @@ MonoBehaviour:
   cam: {fileID: 4627388129698264}
   panSpeed: 10
   panBorderPadding: 10
-  panLimit: {x: 8, y: 10}
+  panLimit: {x: 11, y: 9}
   scrollSpeed: 10
   minY: -3.5
   maxY: 7
+  NorthWalls: {fileID: 0}
+  SouthWalls: {fileID: 0}
+  EastWalls: {fileID: 0}
+  WestWalls: {fileID: 0}
 --- !u!114 &114624663730394576
 MonoBehaviour:
   m_ObjectHideFlags: 1
