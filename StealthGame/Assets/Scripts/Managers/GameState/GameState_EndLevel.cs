@@ -21,12 +21,12 @@ public class GameState_EndLevel : GameState
 
     public override void StartState()
     {
-
+        SceneManager.LoadScene(m_nextLevel);
     }
 
     public override void EndState()
     {
-        SceneManager.LoadScene(m_nextLevel);
+
     }
 
     public override bool IsValid()

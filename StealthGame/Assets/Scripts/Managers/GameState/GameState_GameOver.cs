@@ -19,12 +19,11 @@ public class GameState_GameOver : GameState
 
     public override void StartState()
     {
-
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public override void EndState()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public override bool IsValid()
