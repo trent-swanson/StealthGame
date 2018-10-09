@@ -55,7 +55,7 @@ public class GameState_TurnManager : GameState
             case Agent.AGENT_UPDATE_STATE.END_TURN:
                 EndUnitTurn(m_turnTeam[0]);
 
-                if(!ValidTeam())
+                if(!ValidTeam(m_turnTeam))
                     InitTeamTurnMove();
 
                 m_UIController.SetUIInteractivity(true);
@@ -116,7 +116,7 @@ public class GameState_TurnManager : GameState
             agent.AgentTurnInit();
         }
 
-        if (!ValidTeam())
+        if (!ValidTeam(m_turnTeam))
         {
             InitTeamTurnMove();
         }
@@ -129,7 +129,7 @@ public class GameState_TurnManager : GameState
     {
         agent.AgentTurnEnd();
 
-        if (ValidTeam())
+        if (ValidTeam(m_turnTeam))
         {
             NextPlayer();
         }
@@ -182,9 +182,9 @@ public class GameState_TurnManager : GameState
         return m_playerTeam;
     }
 
-    private bool ValidTeam()
+    private bool ValidTeam(List<Agent> team)
     {
-        foreach (Agent agent in m_turnTeam)
+        foreach (Agent agent in team)
         {
             if(!agent.m_knockedout && agent.m_currentActionPoints > 0)
                 return true;

@@ -5,6 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class GameState_GameOver : GameState
 {
+    private GameState_TurnManager m_turnManager = null;
+
+    private void Start()
+    {
+        m_turnManager = GetComponent<GameState_TurnManager>();
+    }
+
     public override bool UpdateState()
     {
         return true;
@@ -22,6 +29,6 @@ public class GameState_GameOver : GameState
 
     public override bool IsValid()
     {
-        return true;
+        return m_turnManager.GameOver();
     }
 }

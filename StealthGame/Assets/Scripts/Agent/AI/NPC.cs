@@ -247,6 +247,13 @@ public class NPC : Agent
         return possibleTarget;
     }
 
+    public override void Knockout()
+    {
+        base.Knockout();
 
-   
+        foreach (NavNode navNode in m_visionNodes) //Remove old vision
+        {
+            navNode.NPCVision(ADD_REMOVE_FUNCTION.REMOVE, this);
+        }
+    }
 }
