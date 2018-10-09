@@ -34,7 +34,6 @@ public class GameState_TurnManager : GameState
         //Find all tiles in level and add them to GameManager tile list
         m_squadManager = GetComponent<SquadManager>();
         m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
-        InitTeamTurnMove();
     }
 
     //------Game state------
@@ -78,6 +77,8 @@ public class GameState_TurnManager : GameState
                 NPCScript.BuildVision();
             }
         }
+
+        InitTeamTurnMove();
     }
 
     public override void EndState()
