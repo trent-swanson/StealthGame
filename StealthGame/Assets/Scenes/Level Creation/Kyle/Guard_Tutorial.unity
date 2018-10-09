@@ -2797,8 +2797,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_usable: 1
-  m_interactionNode: []
-  m_currentNode: {fileID: 0}
+  m_interactionNodes: []
   m_animation: {fileID: 0}
   m_item: {fileID: 114988868422617326, guid: 05c3e1c2832ecdb49bcfffe5ef572626, type: 2}
   m_health: 3
@@ -3618,23 +3617,7 @@ MonoBehaviour:
   m_spriteRenderer: {fileID: 185635188}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
-  m_wallHideIndicators:
-  - m_wallHideSprite: {fileID: 1659655617}
-    m_wallHideGroundSprite: {fileID: 18992756}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1831949367}
-    m_wallHideGroundSprite: {fileID: 924430295}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 397157908}
-    m_wallHideGroundSprite: {fileID: 1790293524}
-    m_wallHideType: 0
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1357782845}
-    m_wallHideGroundSprite: {fileID: 1877462836}
-    m_wallHideType: 1
-    m_selected: 0
+  m_abilityToWallHide: 00000000
   spriteColor: {r: 1, g: 1, b: 1, a: 1}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 10
@@ -4404,23 +4387,7 @@ MonoBehaviour:
   m_spriteRenderer: {fileID: 1712491561}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
-  m_wallHideIndicators:
-  - m_wallHideSprite: {fileID: 992458677}
-    m_wallHideGroundSprite: {fileID: 1576192080}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1893511520}
-    m_wallHideGroundSprite: {fileID: 878334391}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 376282593}
-    m_wallHideGroundSprite: {fileID: 1147283065}
-    m_wallHideType: 0
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1130977885}
-    m_wallHideGroundSprite: {fileID: 1000649769}
-    m_wallHideType: 1
-    m_selected: 0
+  m_abilityToWallHide: 00000000
   spriteColor: {r: 1, g: 1, b: 1, a: 1}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 10
@@ -5531,8 +5498,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a33d36cf3eb0f1d4ab3efddc279b1ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inGameUI: {fileID: 1930929465}
-  mainMenuUI: {fileID: 1687379496}
+  inGameUI: {fileID: 0}
+  mainMenuUI: {fileID: 0}
   mainCamera: {fileID: 1585839722}
   mainMenuCamera: {fileID: 1005973304}
 --- !u!4 &599734437
@@ -6487,23 +6454,7 @@ MonoBehaviour:
   m_spriteRenderer: {fileID: 803100134}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
-  m_wallHideIndicators:
-  - m_wallHideSprite: {fileID: 2017556589}
-    m_wallHideGroundSprite: {fileID: 19560713}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 720494197}
-    m_wallHideGroundSprite: {fileID: 1557350153}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1817986946}
-    m_wallHideGroundSprite: {fileID: 777160032}
-    m_wallHideType: 0
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1453215866}
-    m_wallHideGroundSprite: {fileID: 1228130834}
-    m_wallHideType: 1
-    m_selected: 0
+  m_abilityToWallHide: 00000000
   spriteColor: {r: 1, g: 1, b: 1, a: 1}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 10
@@ -13903,7 +13854,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114990868039528188, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
@@ -14166,7 +14117,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114990868039528188, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
@@ -15589,7 +15540,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114990868039528188, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
@@ -15742,11 +15693,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6,
     type: 2}
   m_PrefabInternal: {fileID: 1678627082}
---- !u!1 &1687379496 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1470382492229492, guid: 984554dc6e560f640bdc87bd3eca3a57,
-    type: 2}
-  m_PrefabInternal: {fileID: 1378660065}
 --- !u!1001 &1696236035
 Prefab:
   m_ObjectHideFlags: 0
@@ -15840,7 +15786,7 @@ Prefab:
     - target: {fileID: 108175795702322278, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
       propertyPath: m_Intensity
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114990868039528188, guid: 244e2c176f80bd3428d0563f6960aafc,
         type: 2}
@@ -17967,11 +17913,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4039481999543518, guid: 3aa800e0cbeabf448a627ffd44c638c6,
     type: 2}
   m_PrefabInternal: {fileID: 1918807685}
---- !u!1 &1930929465 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1065450864911590, guid: 984554dc6e560f640bdc87bd3eca3a57,
-    type: 2}
-  m_PrefabInternal: {fileID: 1378660065}
 --- !u!1001 &1934872713
 Prefab:
   m_ObjectHideFlags: 0
@@ -18928,23 +18869,7 @@ MonoBehaviour:
   m_spriteRenderer: {fileID: 329632791}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
-  m_wallHideIndicators:
-  - m_wallHideSprite: {fileID: 2014132349}
-    m_wallHideGroundSprite: {fileID: 1015328211}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1635707810}
-    m_wallHideGroundSprite: {fileID: 2088307932}
-    m_wallHideType: 1
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1440031262}
-    m_wallHideGroundSprite: {fileID: 552048603}
-    m_wallHideType: 0
-    m_selected: 0
-  - m_wallHideSprite: {fileID: 1225801146}
-    m_wallHideGroundSprite: {fileID: 1494589089}
-    m_wallHideType: 1
-    m_selected: 0
+  m_abilityToWallHide: 00000000
   spriteColor: {r: 1, g: 1, b: 1, a: 1}
   m_BFSPreviousNode: {fileID: 0}
   m_BFSDistance: 10
