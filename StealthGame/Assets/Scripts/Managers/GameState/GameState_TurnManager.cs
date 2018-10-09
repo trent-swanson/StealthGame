@@ -108,11 +108,7 @@ public class GameState_TurnManager : GameState
             agent.AgentTurnInit();
         }
 
-        if (ValidTeam())
-        {
-            SwapAgents(GetNextTeamAgentIndex());
-        }
-        else
+        if (!ValidTeam())
         {
             InitTeamTurnMove();
         }
