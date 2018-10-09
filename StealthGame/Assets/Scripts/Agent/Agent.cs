@@ -31,10 +31,10 @@ public class Agent : MonoBehaviour
     [Space]
     public float m_highlightInteractablesRange = 6;
 
-    public TurnManager m_turnManager = null;
+    public GameState_TurnManager m_turnManager = null;
     public NavNode m_currentNavNode = null;
 
-    public TurnManager.TEAM m_team = TurnManager.TEAM.AI;
+    public GameState_TurnManager.TEAM m_team = GameState_TurnManager.TEAM.AI;
 
     public Agent m_targetAgent = null;
     public Item m_targetItem = null;
@@ -81,7 +81,7 @@ public class Agent : MonoBehaviour
         m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_agentInventory = GetComponent<AgentInventory>();
 
-        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
+        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
 

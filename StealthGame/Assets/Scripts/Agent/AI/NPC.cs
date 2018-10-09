@@ -191,7 +191,7 @@ public class NPC : Agent
             m_agentWorldState.SetInvestigationNodes(investigationNodes);
     }
 
-    private void BuildVision()
+    public void BuildVision()
     {
         foreach (NavNode navNode in m_visionNodes) //Remove old vision
         {
