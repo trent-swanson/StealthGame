@@ -9,13 +9,16 @@ public class MainMenuController : MonoBehaviour
 
     public void StartGame()
     {
-        //TODO apply camera transisition
-
         SceneManager.LoadScene(m_firstLevel);
     }
 
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void LoadLevel(string levelString)
+    {
+        SceneManager.LoadScene(levelString);
     }
 }
