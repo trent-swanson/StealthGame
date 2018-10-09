@@ -120,6 +120,8 @@ public class GameState_TurnManager : GameState
         {
             InitTeamTurnMove();
         }
+
+        m_turnTeam[0].AgentSelected();
     }
 
     //end of unit turn
