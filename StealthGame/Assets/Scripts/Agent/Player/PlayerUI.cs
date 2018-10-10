@@ -159,12 +159,11 @@ public class PlayerUI : MonoBehaviour
                     pathPos.Add(nodes[i + 1].m_nodeTop + (Vector3.up * 0.1f) - (dir * 0.45f));//Edge to center of next box
                 }
             }
-
         }
         return pathPos.ToArray();
     }
 
-    private void UpdateAPDisplay(int APLeft)
+    public void UpdateAPDisplay(int APLeft)
     {
         m_APNumber.text = APLeft.ToString();
     }

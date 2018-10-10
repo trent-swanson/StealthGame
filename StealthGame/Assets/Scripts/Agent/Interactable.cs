@@ -10,6 +10,8 @@ public class Interactable : MonoBehaviour
 
     public Animation m_animation = null;
 
+    protected GameController m_gameController = null;
+
     protected virtual void Start()
     {
         foreach (NavNode interactionNode in m_interactionNodes)
@@ -19,6 +21,8 @@ public class Interactable : MonoBehaviour
                 interactionNode.SetNodeAsInteractable(this);
             }
         }
+
+        m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     public virtual void PerformAction(Agent agent)

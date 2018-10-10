@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ExitDoor : Interactable
 {
@@ -16,7 +15,7 @@ public class ExitDoor : Interactable
     {
         if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            m_gameController.GetComponent<GameState_TurnManager>().m_objectiveAchived = true;
         }
     }
 }

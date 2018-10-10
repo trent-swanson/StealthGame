@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PipeValve : Interactable
 {
+    public EnviromentHazard m_activatedHazard = null;
+    public Item.ITEM_TYPE m_requiredItem = Item.ITEM_TYPE.WRENCH;
     protected override void Start()
     {
         base.Start();
@@ -11,6 +13,7 @@ public class PipeValve : Interactable
 
     public override void PerformAction(Agent agent)
     {
-        Debug.Log("Busting Pipe");
+        if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
+            m_activatedHazard.ActivateHazard();
     }
 }

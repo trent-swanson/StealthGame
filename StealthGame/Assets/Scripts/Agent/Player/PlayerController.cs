@@ -11,7 +11,7 @@ public class PlayerController : Agent {
 
     static CameraController m_cameraController = null;
 
-    private PlayerUI m_playerUI = null;
+    public PlayerUI m_playerUI = null;
     private PlayerActions m_playerActions = null;
 
     protected override void Start()
@@ -27,6 +27,7 @@ public class PlayerController : Agent {
     public override void AgentTurnInit()
     {
         base.AgentTurnInit();
+
         m_playerUI.InitUI();
     }
 

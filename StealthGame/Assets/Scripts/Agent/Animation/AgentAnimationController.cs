@@ -18,7 +18,7 @@ public class AgentAnimationController : MonoBehaviour
 
     public List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
 
-    private TurnManager m_turnManager = null;
+    private GameState_TurnManager m_turnManager = null;
 
     private void Start()
     {
@@ -40,7 +40,7 @@ public class AgentAnimationController : MonoBehaviour
             }
         }
 
-        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<TurnManager>();
+        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
     }
 
     public void EndAnimationState()

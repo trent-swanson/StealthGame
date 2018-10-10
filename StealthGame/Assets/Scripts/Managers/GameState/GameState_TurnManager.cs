@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurnManager : MonoBehaviour {
-
+public class GameState_TurnManager : GameState
+{
 	public List<Agent> m_playerTeam = new List<Agent>();
 
     public List<Agent> m_NPCTeam = new List<Agent>();
@@ -19,21 +19,27 @@ public class TurnManager : MonoBehaviour {
 
     public int m_autoStandupTime = 2;
 
+    public float m_pressure = 0.0f;
+
+    public bool m_objectiveAchived = false;
+
     /*
     * Important Note:
     * Check any code relating to agents being dead and removing them from turn manager
     * Agents can be knocked out, but then revived so must be readded
     */
 
-    void Start()
+    private void Start()
     {
         //Find all tiles in level and add them to GameManager tile list
         m_squadManager = GetComponent<SquadManager>();
         m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
-        InitTeamTurnMove();
     }
 
-    private void Update()
+    //------Game state------
+
+    
+    public override bool UpdateState()
     {
         m_currentAgentState = m_turnTeam[0].AgentTurnUpdate();
 
@@ -57,7 +63,35 @@ public class TurnManager : MonoBehaviour {
             default:
                 break;
         }
+
+        return (m_objectiveAchived || GameOver());
     }
+
+    public override void StartState()
+    {
+        foreach (Agent NPCAgent in m_NPCTeam)
+        {
+            NPC NPCScript = NPCAgent.GetComponent<NPC>();
+            if(NPCScript != null)
+            {
+                NPCScript.BuildVision();
+            }
+        }
+
+        InitTeamTurnMove();
+    }
+
+    public override void EndState()
+    {
+
+    }
+
+    public override bool IsValid()
+    {
+        return true;
+    }
+
+    //------End Game state------
 
     //initilise unit team
     private void InitTeamTurnMove()
@@ -82,14 +116,12 @@ public class TurnManager : MonoBehaviour {
             agent.AgentTurnInit();
         }
 
-        if (ValidTeam())
-        {
-            SwapAgents(GetNextTeamAgentIndex());
-        }
-        else
+        if (!ValidTeam())
         {
             InitTeamTurnMove();
         }
+
+        m_turnTeam[0].AgentSelected();
     }
 
     //end of unit turn
@@ -177,5 +209,15 @@ public class TurnManager : MonoBehaviour {
             if (!m_NPCTeam[i].m_knockedout)
                 m_NPCTeam[i].GetComponent<NPC>().UpdateWorldState();
         }
+    }
+
+    public bool GameOver()
+    {
+        foreach (Agent agent in m_playerTeam)
+        {
+            if (!agent.m_knockedout)
+                return false;
+        }
+        return true;
     }
 }

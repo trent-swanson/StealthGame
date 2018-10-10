@@ -240,7 +240,7 @@ public class NavNode : MonoBehaviour
         return false;
     }
 
-    public Agent GetDownedAgent(TurnManager.TEAM team)
+    public Agent GetDownedAgent(GameState_TurnManager.TEAM team)
     {
         foreach (Agent agent in m_downedAgents)
         {
