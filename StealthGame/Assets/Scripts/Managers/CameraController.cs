@@ -3,72 +3,82 @@
 public class CameraController : MonoBehaviour
 {
 
-    public Transform cam;
+    [Header("Pivot Panning")]
+    public float m_pivotSpeed = 10f;
+    public Vector2 m_pivotLimit;
+    private Vector3 m_desiredPosition;
 
-    [Header("Panning")]
-    public float panSpeed = 10f;
-    public float panBorderPadding = 10f;
-    public Vector2 panLimit;
+    [Header("Camera Movement")]
+    public GameObject m_camera = null;
+    public GameObject m_cameraPivot = null;
+    public float m_maxMovementSpeed = 10.0f;
+    public float m_distanceFromPivot = 3.0f;
+    public float m_rotationSpeed = 30.0f;
 
-    [Header("Zooming")]
-    public float scrollSpeed = 10;
-    public float minY = 0f;
-    public float maxY = 15f;
+    [Header("Camera Zooming")]
+    public float m_scrollSpeed = 10;
+    public float m_minY = 0f;
+    public float m_maxY = 15f;
 
-    int camDirection = 0;
+    private FACING_DIR m_camDirection = FACING_DIR.NORTH;
+    private Vector3 m_movementExtents;
+    private float m_cameraHeight = 0.0f;
+
     [Space]
     public WallFade NorthWalls;
     public WallFade SouthWalls;
     public WallFade EastWalls;
     public WallFade WestWalls;
 
-    private float xRot;
+    void Start()
+    {
+        Vector3 parentPos = transform.parent.gameObject.transform.position;
 
-    void Start() {
+        m_movementExtents = parentPos + new Vector3(m_pivotLimit.x, 0.0f, m_pivotLimit.y);
+
         SouthWalls.FadeWall();
-        xRot = cam.position.x;
+
+#if UNITY_EDITOR
+        if (m_camera == null || m_cameraPivot == null)
+            Debug.Log("Need to assign camera in camera controller");
+#endif
+
     }
 
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(new Vector3(transform.parent.position.x, cam.position.y, transform.parent.position.z), new Vector3((panLimit.x * 2f), 1f, (panLimit.y * 2f)));
+        Gizmos.DrawWireCube(new Vector3(transform.parent.position.x, 5, transform.parent.position.z), new Vector3((m_pivotLimit.x * 2f), 1f, (m_pivotLimit.y * 2f)));
     }
 
     public void Focus(Transform p_focusTarget)
     {
-        transform.position = new Vector3(p_focusTarget.position.x, transform.position.y, p_focusTarget.position.z);
+        m_desiredPosition = new Vector3(p_focusTarget.position.x, transform.position.y, p_focusTarget.position.z);
     }
 
     void Update()
     {
-        Vector3 pos = Vector3.zero;
+        m_desiredPosition += (transform.forward * Input.GetAxisRaw("Vertical") + transform.right * Input.GetAxisRaw("Horizontal")) * Time.deltaTime * m_pivotSpeed;
+        //Clamp within boundary
+        m_desiredPosition.x = Mathf.Clamp(m_desiredPosition.x, -m_movementExtents.x, m_movementExtents.x);
+        m_desiredPosition.z = Mathf.Clamp(m_desiredPosition.z, -m_movementExtents.z, m_movementExtents.z);
 
-        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panBorderPadding || Input.GetKey(KeyCode.UpArrow))
-        {
-            pos.z += panSpeed * Time.deltaTime;
-        }
-        if (Input.GetKey("s") || Input.mousePosition.y <= panBorderPadding || Input.GetKey(KeyCode.DownArrow))
-        {
-            pos.z -= panSpeed * Time.deltaTime;
-        }
-        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - panBorderPadding || Input.GetKey(KeyCode.RightArrow))
-        {
-            pos.x += panSpeed * Time.deltaTime;
-        }
-        if (Input.GetKey("a") || Input.mousePosition.x <= panBorderPadding || Input.GetKey(KeyCode.LeftArrow))
-        {
-            pos.x -= panSpeed * Time.deltaTime;
-        }
+        Vector3 diffVector = m_desiredPosition - transform.position;
+        Vector3 frameDiffVector = diffVector.normalized * m_maxMovementSpeed * Time.deltaTime;
+
+        if (frameDiffVector.magnitude > -diffVector.magnitude && frameDiffVector.magnitude < diffVector.magnitude)
+            transform.position += frameDiffVector;
+        else
+            transform.position = m_desiredPosition;
 
         if (Input.GetKeyDown("q"))
         {
             //left
             transform.rotation *= Quaternion.Euler(0, -90, 0);
 
-            camDirection--;
-            if (camDirection < 0)
-                camDirection = 3;
+            m_camDirection--;
+            if (m_camDirection < 0)
+                m_camDirection = FACING_DIR.WEST;
             
             WallFade();
         }
@@ -77,41 +87,17 @@ public class CameraController : MonoBehaviour
             //right
             transform.rotation *= Quaternion.Euler(0, 90, 0);
             
-            camDirection++;
-            if (camDirection > 3)
-                camDirection = 0;
+            m_camDirection++;
+            if ((int)m_camDirection > 3)
+                m_camDirection = FACING_DIR.NORTH;
             
             WallFade();
         }
 
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        float scrollValue = scroll * scrollSpeed * 100f * Time.deltaTime;
-        //pos.y -= scrollValue;
-        ////South
-        //if (camDirection == 0)
-        //{
-        //    cam.position = new Vector3(cam.position.x, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z + Mathf.Sin(xRot) * scrollValue);
-        //}
-        ////North
-        //else if (camDirection == 2)
-        //{
-        //    cam.position = new Vector3(cam.position.x, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z - Mathf.Sin(xRot) * scrollValue);
-        //}
-        ////West
-        //else if (camDirection == 1)
-        //{
-        //    cam.position = new Vector3(cam.position.x + Mathf.Sin(xRot) * scrollValue, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z);
-        //}
-        ////East
-        //else
-        //{
-        //    cam.position = new Vector3(cam.position.x - Mathf.Sin(xRot) * scrollValue, cam.position.y - Mathf.Cos(xRot) * scrollValue, cam.position.z);
-        //}
+        m_cameraHeight += Input.GetAxis("Mouse ScrollWheel") * m_scrollSpeed;
+        m_cameraHeight = Mathf.Clamp(m_cameraHeight, m_minY, m_maxY);
 
-        transform.Translate(pos);
-        transform.position = new Vector3(Mathf.Clamp(transform.position.x, transform.parent.position.x - panLimit.x, transform.parent.position.x + panLimit.x),
-            Mathf.Clamp(transform.position.y, minY, maxY),
-            Mathf.Clamp(transform.position.z, transform.parent.position.z - panLimit.y, transform.parent.position.z + panLimit.y));
+        UpdateCameraPos();
     }
 
     void WallFade() {
@@ -120,19 +106,39 @@ public class CameraController : MonoBehaviour
         EastWalls.UnFadeWall();
         WestWalls.UnFadeWall();
 
-        switch (camDirection) {
-            case 0:
+        switch (m_camDirection)
+        {
+            case FACING_DIR.NORTH:
                 SouthWalls.FadeWall();
-            break;
-            case 1:
+                break;
+            case FACING_DIR.EAST:
                 WestWalls.FadeWall();
-            break;
-            case 2:
+                break;
+            case FACING_DIR.SOUTH:
                 NorthWalls.FadeWall();
             break;
-            case 3:
+            case FACING_DIR.WEST:
                 EastWalls.FadeWall();
             break;
         }
+    }
+
+    private void UpdateCameraPos()
+    {
+        float diffAngle = Vector3.SignedAngle(m_cameraPivot.transform.forward, transform.forward, Vector3.up);
+        diffAngle = Mathf.Clamp(diffAngle, -m_rotationSpeed, m_rotationSpeed);
+
+        m_cameraPivot.transform.Rotate(Vector3.up, diffAngle);
+        m_cameraPivot.transform.position = transform.position + m_cameraPivot.transform.forward * m_distanceFromPivot;
+
+        m_camera.transform.localPosition = new Vector3(0.0f, m_cameraHeight, 0.0f);
+
+        m_camera.transform.LookAt(transform.position);
+
+        Quaternion cameraRot = m_camera.transform.localRotation;
+        cameraRot.y = 0.0f;
+        cameraRot.z = 0.0f;
+
+        m_camera.transform.localRotation = cameraRot;
     }
 }

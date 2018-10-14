@@ -296,8 +296,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_usable: 1
-  m_interactionNodes: []
+  m_interactionNodes:
+  - {fileID: 0}
   m_animation: {fileID: 0}
+  m_activatedHazard: {fileID: 0}
+  m_requiredItem: 4
 --- !u!114 &114893746211332272
 MonoBehaviour:
   m_ObjectHideFlags: 1

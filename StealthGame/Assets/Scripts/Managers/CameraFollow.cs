@@ -23,11 +23,11 @@ public class CameraFollow : MonoBehaviour
 
         if (Input.GetMouseButton(1))
         {
-            pos.x -= Input.GetAxis("Mouse X") * cameraController.panSpeed * 2 * Time.deltaTime;
-            pos.z -= Input.GetAxis("Mouse Y") * cameraController.panSpeed * 2 * Time.deltaTime;
+            pos.x -= Input.GetAxis("Mouse X") * cameraController.m_pivotSpeed * 2 * Time.deltaTime;
+            pos.z -= Input.GetAxis("Mouse Y") * cameraController.m_pivotSpeed * 2 * Time.deltaTime;
 
             transform.Translate(pos);
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -cameraController.panLimit.x, cameraController.panLimit.x), Mathf.Clamp(transform.position.y, cameraController.minY, cameraController.maxY), Mathf.Clamp(transform.position.z, -cameraController.panLimit.y, cameraController.panLimit.y));
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -cameraController.m_pivotLimit.x, cameraController.m_pivotLimit.x), Mathf.Clamp(transform.position.y, cameraController.m_minY, cameraController.m_maxY), Mathf.Clamp(transform.position.z, -cameraController.m_pivotLimit.y, cameraController.m_pivotLimit.y));
             cameraPivot.position = transform.position;
         }
     }
