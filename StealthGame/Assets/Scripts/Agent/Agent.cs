@@ -104,7 +104,7 @@ public class Agent : MonoBehaviour
     //Runs when agent is removed from team list, end of turn
     public virtual void AgentTurnEnd(){}
 
-	public void Knockout()
+	public virtual void  Knockout()
     {
 		m_knockedout = true;
 
@@ -117,7 +117,7 @@ public class Agent : MonoBehaviour
         m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.DEATH);
         m_agentAnimationController.PlayNextAnimation();
 
-        m_turnManager.EndUnitTurn(this);
+        AgentTurnEnd();
 
         m_autoStandupTimer = m_turnManager.m_autoStandupTime;
 	}

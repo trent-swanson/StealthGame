@@ -74,10 +74,10 @@ GameObject:
   - component: {fileID: 4283613328104292}
   - component: {fileID: 33748191328405892}
   - component: {fileID: 23815180100393274}
-  - component: {fileID: 114303731270487162}
   - component: {fileID: 65211554861546354}
+  - component: {fileID: 114369454332638174}
   m_Layer: 8
-  m_Name: Spanner
+  m_Name: Crowbar
   m_TagString: PickUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,7 +90,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902785328575640}
   m_LocalRotation: {x: 0.16852063, y: -0.16852078, z: -0.68673164, w: 0.6867323}
-  m_LocalPosition: {x: 3, y: 0.08, z: -11}
+  m_LocalPosition: {x: -6.915, y: 0.078, z: 7.085}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224800291962232430}
@@ -137,7 +137,7 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1902785328575640}
-  m_Mesh: {fileID: 4300000, guid: 1dc5ed2d6d4745a4f82b58b51bf025b2, type: 3}
+  m_Mesh: {fileID: 4300002, guid: 1dc5ed2d6d4745a4f82b58b51bf025b2, type: 3}
 --- !u!65 &65211554861546354
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &114303731270487162
+--- !u!114 &114369454332638174
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -179,10 +179,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_itemType: 2
   m_canvas: {fileID: 1087725911567208}
-  m_highlightColour: {r: 1, g: 0.64137936, b: 0, a: 1}
+  m_highlightColour: {r: 0, g: 0, b: 0, a: 0}
   m_action: {fileID: 0}
   m_icon: {fileID: 21300000, guid: 78855cde0dc53d149875b5836819f108, type: 3}
-  m_description: Wrench
+  m_description: 
 --- !u!114 &114493173204233716
 MonoBehaviour:
   m_ObjectHideFlags: 1

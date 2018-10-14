@@ -7,6 +7,13 @@ public class GameState_EndLevel : GameState
 {
     public string m_nextLevel = "";
 
+    private GameState_TurnManager m_turnManager = null;
+
+    private void Start()
+    {
+        m_turnManager = GetComponent<GameState_TurnManager>();
+    }
+
     public override bool UpdateState()
     {
         return true;
@@ -14,16 +21,16 @@ public class GameState_EndLevel : GameState
 
     public override void StartState()
     {
-
+        SceneManager.LoadScene(m_nextLevel);
     }
 
     public override void EndState()
     {
-        SceneManager.LoadScene(m_nextLevel);
+
     }
 
     public override bool IsValid()
     {
-        return true;
+        return !m_turnManager.GameOver();
     }
 }
