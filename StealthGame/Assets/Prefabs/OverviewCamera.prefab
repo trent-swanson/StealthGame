@@ -84,7 +84,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1379797505429332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4913627033394110}
@@ -204,8 +204,8 @@ MonoBehaviour:
   m_cameraPivot: {fileID: 1971424125370280}
   m_maxMovementSpeed: 20
   m_distanceFromPivot: -15
-  m_rotationSpeed: 10
-  m_scrollSpeed: 10
+  m_rotationSpeed: 6.75
+  m_scrollSpeed: -10
   m_minY: 5
   m_maxY: 20
   NorthWalls: {fileID: 0}
