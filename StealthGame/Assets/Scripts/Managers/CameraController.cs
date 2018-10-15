@@ -43,6 +43,7 @@ public class CameraController : MonoBehaviour
             Debug.Log("Need to assign camera in camera controller");
 #endif
 
+        m_cameraHeight = m_maxY;
     }
 
     void OnDrawGizmosSelected()
