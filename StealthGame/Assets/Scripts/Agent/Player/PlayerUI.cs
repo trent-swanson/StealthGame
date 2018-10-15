@@ -61,9 +61,12 @@ public class PlayerUI : MonoBehaviour
 
     public void UpdateUI()
     {
-        ShowInteractables();
-        m_uiController.UpdateItemInventory(m_playerController);
-        UpdateAPDisplay(m_playerController.m_currentNavNode.m_BFSDistance);
+        if(m_playerController!=null)
+        {
+            ShowInteractables();
+            m_uiController.UpdateItemInventory(m_playerController);
+            UpdateAPDisplay(m_playerController.m_currentNavNode.m_BFSDistance);
+        }
     }
 
     public void UpdateNodeVisualisation(MESH_STATE state, List<NavNode> selectableNodes, NavNode currentSelectedNode = null, NavNode newSelectedNode = null, List<NavNode> nodePath = null)

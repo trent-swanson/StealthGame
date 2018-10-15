@@ -55,7 +55,6 @@ public class Navigation : MonoBehaviour
         m_maxY = m_minY = gridCenter.y;
         m_maxZ = m_minZ = gridCenter.z;
 
-
         List<NavNode> newNodes = GetNavNode(orginatingPos, gridCenter, tempNavNodeGrid);
         
         foreach (NavNode navNode in newNodes)

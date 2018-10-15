@@ -58,7 +58,7 @@ public class GameState_TurnManager : GameState
                 if(!ValidTeam(m_turnTeam))
                     InitTeamTurnMove();
 
-                m_UIController.SetUIInteractivity(true);
+                m_UIController.SetUIInteractivity(false);
                 break;
             default:
                 break;

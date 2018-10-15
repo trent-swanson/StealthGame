@@ -12,7 +12,7 @@ public class PlayerController : Agent {
     static CameraController m_cameraController = null;
 
     public PlayerUI m_playerUI = null;
-    private PlayerActions m_playerActions = null;
+    private PlayerStateMachine m_playerStateMachine = null;
 
     protected override void Start()
     {
@@ -20,7 +20,7 @@ public class PlayerController : Agent {
         m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
 
         m_playerUI = GetComponent<PlayerUI>();
-        m_playerActions = GetComponent<PlayerActions>();
+        m_playerStateMachine = GetComponent<PlayerStateMachine>();
     }
 
     //Start of turn, only runs once per turn
@@ -34,7 +34,7 @@ public class PlayerController : Agent {
     //Runs every time a agent is selected, this can be at end of an action is completed
     public override void AgentSelected()
     {
-        m_playerActions.InitActions();
+        m_playerStateMachine.TurnStartStateMachine();
         m_playerUI.StartUI();
         m_cameraController.Focus(transform);
     }
@@ -42,16 +42,13 @@ public class PlayerController : Agent {
     //Constant update while agent is selected
     public override AGENT_UPDATE_STATE AgentTurnUpdate()
     {
-        m_playerActions.UpdateActions();
+        m_playerStateMachine.UpdateStateMachine();
 
-        if (m_agentAnimationController.m_animationSteps.Count > 0) //Play animation is false while playing an animation
-        {
+        if(!m_agentAnimationController.m_playNextAnimation || m_agentAnimationController.m_animationSteps.Count !=0)
             return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
-        }
-        else if (m_currentActionPoints <= 0)
-        {
+
+        if (m_currentActionPoints <= 0)
             return AGENT_UPDATE_STATE.END_TURN;
-        }
 
         return AGENT_UPDATE_STATE.AWAITING_INPUT;
     }
@@ -60,7 +57,7 @@ public class PlayerController : Agent {
     public override void AgentTurnEnd()
     {
         base.AgentTurnEnd();
-        m_playerActions.ActionEnd();
+        m_playerStateMachine.TurnEndStateMachine();
         m_playerUI.UpdateUI();
     }
 }

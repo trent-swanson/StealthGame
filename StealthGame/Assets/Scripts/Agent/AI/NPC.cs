@@ -127,7 +127,7 @@ public class NPC : Agent
                 break;
             case GOAP.GOAP_UPDATE_STATE.COMPLETED:
                 m_GOAP.m_actionList.RemoveAt(0);
-                break;
+                return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
                 return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
             default:
