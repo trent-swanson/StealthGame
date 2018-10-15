@@ -31,8 +31,6 @@ public class NavNode : MonoBehaviour
     public NavNode m_BFSPreviousNode = null;
     public int m_BFSDistance = 0;
 
-    Renderer myRenderer;
-
     public enum NODE_STATE { SELECTED, SELECTABLE, UNSELECTED }
     public enum NODE_TYPE { NONE, WALKABLE, INTERACTABLE, OBSTRUCTED, HIGH_OBSTACLE, LOW_OBSTACLE }
 
@@ -61,7 +59,6 @@ public class NavNode : MonoBehaviour
 
     void Start()
     {
-        myRenderer = GetComponent<Renderer>();
         m_spriteRenderer = m_selectableUI.GetComponent<SpriteRenderer>();
         spriteColor = m_spriteRenderer.color;
         Vector3 colliderExtents = GetComponent<BoxCollider>().size;

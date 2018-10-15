@@ -16,4 +16,9 @@ public class EnviromentHazard_SteamPipe : EnviromentHazard
                 effectedNavNode.m_obstructingAgent.Knockout();
         }
     }
+
+    public override void DeactivateHazard()
+    {
+        m_activatedSteamObj.SetActive(false);
+    }
 }

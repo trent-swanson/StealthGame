@@ -18,8 +18,6 @@ public class PressureGauge : MonoBehaviour
     {
         m_currentPressure = m_minAngle;
 
-        Vector3 angleVector = new Vector3(0, 0, m_minAngle);
-
         m_dial.transform.rotation = Quaternion.Euler(0, 0, m_minAngle);
     }
 

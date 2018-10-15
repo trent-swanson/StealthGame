@@ -14,7 +14,6 @@ public class GameState_TurnManager : GameState
     public enum TEAM {PLAYER, AI };
     public TEAM m_currentTeam = TEAM.PLAYER;
 
-    static SquadManager m_squadManager;
     private UIController m_UIController = null;
 
     public int m_autoStandupTime = 2;
@@ -32,7 +31,6 @@ public class GameState_TurnManager : GameState
     private void Start()
     {
         //Find all tiles in level and add them to GameManager tile list
-        m_squadManager = GetComponent<SquadManager>();
         m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
     }
 
@@ -41,6 +39,9 @@ public class GameState_TurnManager : GameState
     
     public override bool UpdateState()
     {
+        if (Input.GetAxisRaw("Cancel") != 0)
+            Application.Quit();
+
         m_currentAgentState = m_turnTeam[0].AgentTurnUpdate();
 
         //Super basic state machine for turn management
@@ -174,7 +175,10 @@ public class GameState_TurnManager : GameState
             m_turnTeam[0].AgentSelected();
 
             if(m_currentTeam == TEAM.PLAYER)
+            {
                 m_UIController.InitUIPortraits(m_turnTeam);
+                m_UIController.SwapEndTurnButton();
+            }
         }
     }
 

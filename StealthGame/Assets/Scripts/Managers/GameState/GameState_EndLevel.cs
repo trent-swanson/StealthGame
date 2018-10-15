@@ -20,7 +20,7 @@ public class GameState_EndLevel : GameState
     public override void StartState()
     {
         int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (SceneManager.sceneCount > nextSceneIndex)
+        if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
         {
             SceneManager.LoadScene(nextSceneIndex);
         }

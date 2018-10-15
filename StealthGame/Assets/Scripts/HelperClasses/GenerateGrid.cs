@@ -16,7 +16,7 @@ public class GenerateGrid : MonoBehaviour {
 
     string holderName = "Generate Grid";
 
-    [ContextMenu("GenerateGrid")]
+    //[ContextMenu("GenerateGrid")]
 
   //  void Awake() {
   //      GameManager.gridSize = gridSize;
@@ -41,22 +41,22 @@ public class GenerateGrid : MonoBehaviour {
 
     public void Generate() {
         //Destroy grid if already exists
-        if (transform.Find(holderName)) {
-            DestroyImmediate(transform.Find(holderName).gameObject);
-        }
+        //if (transform.Find(holderName)) {
+        //    DestroyImmediate(transform.Find(holderName).gameObject);
+        //}
 
-        Transform gridHolder = new GameObject(holderName).transform;
-        gridHolder.parent = transform;
+        //Transform gridHolder = new GameObject(holderName).transform;
+        //gridHolder.parent = transform;
 
-        //instantiate new tiles, move them into a grid position, and add them to the GameManager.grid list
-        for (int x = 0; x < gridSize.x; x++) {
-            for (int y = 0; y < gridSize.y; y++) {
-                Vector3 tilePosition = new Vector3((-gridSize.x + (tileSize * 0.5f)) + (tileSize * x), -0.5f, (-gridSize.y + (tileSize * 0.5f)) + (tileSize * y));
-                //GameObject newTile = PrefabUtility.InstantiatePrefab(tilePrefab as GameObject) as GameObject;
-                //newTile.transform.position = tilePosition;
-                //newTile.transform.localScale = newTile.transform.localScale*(1 - tilePadding);
-                //newTile.transform.SetParent(gridHolder);
-            }
-        }
+        ////instantiate new tiles, move them into a grid position, and add them to the GameManager.grid list
+        //for (int x = 0; x < gridSize.x; x++) {
+        //    for (int y = 0; y < gridSize.y; y++) {
+        //        Vector3 tilePosition = new Vector3((-gridSize.x + (tileSize * 0.5f)) + (tileSize * x), -0.5f, (-gridSize.y + (tileSize * 0.5f)) + (tileSize * y));
+        //        GameObject newTile = PrefabUtility.InstantiatePrefab(tilePrefab as GameObject) as GameObject;
+        //        newTile.transform.position = tilePosition;
+        //        newTile.transform.localScale = newTile.transform.localScale * (1 - tilePadding);
+        //        newTile.transform.SetParent(gridHolder);
+        //    }
+        //}
     }
 }

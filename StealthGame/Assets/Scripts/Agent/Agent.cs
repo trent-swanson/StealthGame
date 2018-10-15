@@ -10,8 +10,6 @@ public class Agent : MonoBehaviour
 
     public FACING_DIR m_facingDir = FACING_DIR.NONE;
 
-    protected SquadManager squadManager;
-
     public Animator m_animator = null;
     public AgentAnimationController m_agentAnimationController = null;
     public AgentInventory m_agentInventory = null;

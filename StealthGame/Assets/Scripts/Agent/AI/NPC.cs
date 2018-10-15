@@ -57,15 +57,11 @@ public class NPC : Agent
     [Header("AgentState")]
     public AgentWorldState m_agentWorldState;
 
-    [Space]
-    private List<Agent> m_opposingTeam;
-
     protected override void Start()
     {
         base.Start();
 
         m_GOAP = GetComponent<GOAP>();
-        m_opposingTeam = m_turnManager.GetOpposingTeam(m_team);
     }
 
 
@@ -77,9 +73,13 @@ public class NPC : Agent
         if(m_knockedout)
         {
             m_autoStandupTimer--;
-            if(m_autoStandupTimer<=0)
+            if(m_autoStandupTimer<=0 && m_currentNavNode.m_obstructingAgent == null)
             {
                 Revive();
+
+                //Reset all world states
+                m_agentWorldState.SetInvestigationNodes(new List<InvestigationNode>());
+                m_agentWorldState.SetPossibleTargets(new List<Agent>());
             }
         }
     }

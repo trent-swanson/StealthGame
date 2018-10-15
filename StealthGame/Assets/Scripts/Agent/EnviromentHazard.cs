@@ -10,4 +10,9 @@ public class EnviromentHazard : MonoBehaviour
     {
 
     }
+
+    public virtual void DeactivateHazard()
+    {
+
+    }
 }

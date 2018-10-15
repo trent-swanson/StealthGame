@@ -6,12 +6,7 @@ using UnityEngine.UI;
 public class AgentInventory : MonoBehaviour
 {
     public List<Item> m_currentItems = new List<Item>();
-    private Agent m_agent = null;
 
-    private void Start()
-    {
-        m_agent = GetComponent<Agent>();
-    }
     public bool AgentHasItem(Item.ITEM_TYPE itemType)
     {
         foreach (Item item in m_currentItems)

@@ -6,6 +6,8 @@ public class CameraController : MonoBehaviour
     [Header("Pivot Panning")]
     public float m_pivotSpeed = 10f;
     public Vector2 m_pivotLimit;
+
+    [SerializeField]
     private Vector3 m_desiredPosition;
 
     [Header("Camera Movement")]
@@ -21,7 +23,7 @@ public class CameraController : MonoBehaviour
     public float m_maxY = 15f;
 
     private FACING_DIR m_camDirection = FACING_DIR.NORTH;
-    private Vector3 m_movementExtents;
+
     private float m_cameraHeight = 0.0f;
 
     [Space]
@@ -32,11 +34,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        Vector3 parentPos = transform.parent.gameObject.transform.position;
-
-        m_movementExtents = parentPos + new Vector3(m_pivotLimit.x, 0.0f, m_pivotLimit.y);
-
-        SouthWalls.FadeWall();
+        WallFade();
 
 #if UNITY_EDITOR
         if (m_camera == null || m_cameraPivot == null)
@@ -54,23 +52,24 @@ public class CameraController : MonoBehaviour
 
     public void Focus(Transform p_focusTarget)
     {
-        m_desiredPosition = new Vector3(p_focusTarget.position.x, transform.position.y, p_focusTarget.position.z);
+        Vector3 localPosition = p_focusTarget.position - transform.parent.transform.position;
+        m_desiredPosition = new Vector3(localPosition.x, transform.position.y, localPosition.z);
     }
 
     void Update()
     {
         m_desiredPosition += (transform.forward * Input.GetAxisRaw("Vertical") + transform.right * Input.GetAxisRaw("Horizontal")) * Time.deltaTime * m_pivotSpeed;
         //Clamp within boundary
-        m_desiredPosition.x = Mathf.Clamp(m_desiredPosition.x, -m_movementExtents.x, m_movementExtents.x);
-        m_desiredPosition.z = Mathf.Clamp(m_desiredPosition.z, -m_movementExtents.z, m_movementExtents.z);
+        m_desiredPosition.x = Mathf.Clamp(m_desiredPosition.x, -m_pivotLimit.x, m_pivotLimit.x);
+        m_desiredPosition.z = Mathf.Clamp(m_desiredPosition.z, -m_pivotLimit.y, m_pivotLimit.y);
 
-        Vector3 diffVector = m_desiredPosition - transform.position;
+        Vector3 diffVector = m_desiredPosition - transform.localPosition;
         Vector3 frameDiffVector = diffVector.normalized * m_maxMovementSpeed * Time.deltaTime;
 
         if (frameDiffVector.magnitude > -diffVector.magnitude && frameDiffVector.magnitude < diffVector.magnitude)
-            transform.position += frameDiffVector;
+            transform.localPosition += frameDiffVector;
         else
-            transform.position = m_desiredPosition;
+            transform.localPosition = m_desiredPosition;
 
         if (Input.GetKeyDown("q"))
         {

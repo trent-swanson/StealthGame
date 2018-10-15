@@ -76,7 +76,7 @@ public class AgentAnimationController : MonoBehaviour
                     UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_UP_WALK:
-                    m_currentAnimation = "JumpToWalk";
+                    m_currentAnimation = "JumpToRun";
                     UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_IDLE:
@@ -84,7 +84,7 @@ public class AgentAnimationController : MonoBehaviour
                     UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.CLIMB_DOWN_WALK:
-                    m_currentAnimation = "DropToWalk";
+                    m_currentAnimation = "DropToRun";
                     UpdateGridPos();
                     break;
                 case AnimationManager.ANIMATION_STEP.WALL_HIDE_RIGHT:

@@ -18,7 +18,7 @@ public class WallFade : MonoBehaviour {
     public GameObject smallDoor;
 
 
-    void Start () {
+    void Awake () {
 
         wallList = new GameObject[transform.childCount];
 

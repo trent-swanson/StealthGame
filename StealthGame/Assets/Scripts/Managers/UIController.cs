@@ -34,13 +34,14 @@ public class UIController : MonoBehaviour {
     {
 		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
 
-#if UNITY_EDITOR
-        if (m_endNextBtn == null)
-            Debug.Log("End turn button has not been set in the UI controller");
-        else
+
+        if (m_endNextBtn != null)
             m_endNextBtnText = m_endNextBtn.GetComponentInChildren<Text>();
-#endif
-            //Initialise slot indexes
+        #if UNITY_EDITOR
+        else
+            Debug.Log("End turn button has not been set in the UI controller");
+        #endif
+        //Initialise slot indexes
         for (int i = 0; i < m_inventorySlots.Count; i++)
         {
             m_inventorySlots[i].GetComponent<InventorySlot>().m_slotIndex = i;
@@ -110,8 +111,14 @@ public class UIController : MonoBehaviour {
         if (m_UIInteractivity && index != 0 && m_turnManager.m_currentTeam == GameState_TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
             m_turnManager.SwapAgents(index);
 
+        SwapEndTurnButton();
+    }
+
+    public void SwapEndTurnButton()
+    {
         m_endNextBtnText.text = m_endTurnString;
     }
+
 
     public void TurnStart(GameState_TurnManager.TEAM team)
     {
