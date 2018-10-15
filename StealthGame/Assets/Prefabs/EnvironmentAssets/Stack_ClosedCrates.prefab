@@ -21,12 +21,12 @@ GameObject:
   - component: {fileID: 4641366445021790}
   - component: {fileID: 33823199650436566}
   - component: {fileID: 23386377140941756}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1585212594836002
 GameObject:
@@ -38,12 +38,12 @@ GameObject:
   - component: {fileID: 4850853545341522}
   - component: {fileID: 33826644070940180}
   - component: {fileID: 23725714847256610}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1629717917743928
 GameObject:
@@ -55,12 +55,12 @@ GameObject:
   - component: {fileID: 4987300038958430}
   - component: {fileID: 33080733839449800}
   - component: {fileID: 23771882300285924}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1729096656664748
 GameObject:
@@ -72,12 +72,12 @@ GameObject:
   - component: {fileID: 4322106255671256}
   - component: {fileID: 33814588278288074}
   - component: {fileID: 23470029546326270}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1750596560703262
 GameObject:
@@ -89,12 +89,12 @@ GameObject:
   - component: {fileID: 4023527693631386}
   - component: {fileID: 33125001963635772}
   - component: {fileID: 23219645126559838}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1754441333320352
 GameObject:
@@ -106,12 +106,12 @@ GameObject:
   - component: {fileID: 4249097848203748}
   - component: {fileID: 33011672962033606}
   - component: {fileID: 23679879089697350}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1843856446833254
 GameObject:
@@ -122,12 +122,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4311682243921896}
   - component: {fileID: 65263619813477716}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Stack_ClosedCrates
-  m_TagString: Untagged
+  m_TagString: Obsticle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1952621918567752
 GameObject:
@@ -139,12 +139,12 @@ GameObject:
   - component: {fileID: 4714037509019600}
   - component: {fileID: 33081881050210448}
   - component: {fileID: 23980380921360080}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &1978471621415538
 GameObject:
@@ -156,12 +156,12 @@ GameObject:
   - component: {fileID: 4538514715226600}
   - component: {fileID: 33833768530648154}
   - component: {fileID: 23100776958166370}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crate_Closed (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4023527693631386
 Transform:
@@ -302,7 +302,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -336,7 +336,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -370,7 +370,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -404,7 +404,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -438,7 +438,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -472,7 +472,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -506,7 +506,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -540,7 +540,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 77d98b2ef3dd04e4d8f0ee5f2b0f51b9, type: 2}
+  - {fileID: 2100000, guid: 2f8fdbb566749c34b9779fde7d17d606, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
