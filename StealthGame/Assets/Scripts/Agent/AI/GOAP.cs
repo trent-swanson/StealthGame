@@ -72,19 +72,6 @@ public class GOAP : MonoBehaviour
 
         List<Goal> possibleGoals = new List<Goal>();
 
-        //switch (m_goalState) //TODO add back
-        //{
-        //    case GOAL_STATE.AMBIENT:
-        //        possibleGoals = m_ambientGoals;
-        //        break;
-        //    case GOAL_STATE.SUSPICIOUS:
-        //        possibleGoals = m_suspiciousGoals;
-        //        break;
-        //    case GOAL_STATE.ALERT:
-        //        possibleGoals = m_alertGoals;
-        //        break;
-        //}
-
         possibleGoals.AddRange(m_ambientGoals);
         possibleGoals.AddRange(m_suspiciousGoals);
         possibleGoals.AddRange(m_alertGoals);
@@ -130,12 +117,7 @@ public class GOAP : MonoBehaviour
 
         ActionNode currentNode = NewCurrentNode(goalNode); //Starting node
 
-        NewOpenNodes(currentNode, openNodes, closedNodes); // open list setup
-
-        if (goalNode.m_invalidWorldStates.Count == 0) //Goal required just one action to be satified, current action will do this
-            return BuildActionList(currentNode);
-
-        while (openNodes.Count > 0)
+        do
         {
             NewOpenNodes(currentNode, openNodes, closedNodes);
 
@@ -146,9 +128,9 @@ public class GOAP : MonoBehaviour
 
             if (goalNode.m_invalidWorldStates.Count == 0) //New current node just satisfied the goals final state
                 return BuildActionList(currentNode);
-        }
+        } while (openNodes.Count > 0);
 
-        return new List<AIAction>();
+            return new List<AIAction>();
     }
 
     private List<AIAction> BuildActionList(ActionNode finalActionNode)
