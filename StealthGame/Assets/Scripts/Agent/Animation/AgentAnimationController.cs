@@ -150,10 +150,8 @@ public class AgentAnimationController : MonoBehaviour
                             m_currentAnimation = "WallAttackRight";
                             break;
                         case 0:
+                        case 2:
                             m_currentAnimation = "WallAttackForward";
-                            break;
-                        default:
-                            m_currentAnimation = "Idle";
                             break;
                     }
                     break;

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: af5bfc88c3631b34db108d9566a50b24
-timeCreated: 1534069235
+guid: 02669d60c2a592c468958fa70cda2f60
+timeCreated: 1539126861
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -271,14 +271,14 @@ ModelImporter:
     400260: Ring_Con_Left
     400262: Ring_Con_Right
     400264: JNT_Root
-    7400000: PlayerTinkerer_IdleToPunchToIdle
+    7400000: idletosafehack
     9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -288,26 +288,26 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'punchidle2' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'JNT_Spine0' has translation animation that
+    animationImportWarnings: "\nClip 'idletosafehack' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'JNT_Spine0' has translation animation that
       will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
-    animationCompression: 1
-    animationRotationError: 0
-    animationPositionError: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PlayerTinkerer_IdleToPunchToIdle
-      takeName: punchidle2
+      name: idletosafehack
+      takeName: idletosafehack
       firstFrame: 1
-      lastFrame: 32
+      lastFrame: 20
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -327,7 +327,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.997957
+      - time: 0.9871794
         functionName: EndAnimationState
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -355,7 +355,7 @@ ModelImporter:
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
-    indexFormat: 1
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88

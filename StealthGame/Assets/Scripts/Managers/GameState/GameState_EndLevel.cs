@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameState_EndLevel : GameState
 {
-    public string m_nextLevel = "";
-
     private GameState_TurnManager m_turnManager = null;
 
     private void Start()
@@ -21,7 +19,15 @@ public class GameState_EndLevel : GameState
 
     public override void StartState()
     {
-        SceneManager.LoadScene(m_nextLevel);
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (SceneManager.sceneCount > nextSceneIndex)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     public override void EndState()

@@ -83,6 +83,9 @@ public class InvestigateNode : AIAction
         {
             NPCAgent.m_targetNode = investigationNodes[0].m_node;
         }
-        NPCAgent.m_targetNode = null;
+        else
+        {
+            NPCAgent.m_targetNode = null;
+        }
     }
 }

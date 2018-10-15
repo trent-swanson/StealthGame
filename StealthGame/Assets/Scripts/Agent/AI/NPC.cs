@@ -127,7 +127,7 @@ public class NPC : Agent
                 break;
             case GOAP.GOAP_UPDATE_STATE.COMPLETED:
                 m_GOAP.m_actionList.RemoveAt(0);
-                break;
+                return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
             case GOAP.GOAP_UPDATE_STATE.PERFORMING:
                 return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
             default:
@@ -154,24 +154,6 @@ public class NPC : Agent
         bool modifiedInvestigationTargets = false;
         List<InvestigationNode> investigationNodes = m_agentWorldState.GetInvestigationNodes();
 
-        for (int i = 0; i < possibleTargets.Count; i++)
-        {
-            if (!m_visionNodes.Contains(possibleTargets[i].m_currentNavNode))
-            {
-                InvestigationNode newInvestigation;
-
-                newInvestigation.m_node = possibleTargets[i].m_currentNavNode;
-                newInvestigation.m_target = possibleTargets[i];
-                investigationNodes.Add(newInvestigation);
-
-                possibleTargets.RemoveAt(i);
-                i--;
-
-                modifiedInvestigationTargets = true;
-                modifiedPossibleTargets = true;
-            }
-        }
-
         foreach (NavNode navNode in m_visionNodes)//Check for player in vision
         {
             Agent obstructingAgent = navNode.m_obstructingAgent;
@@ -179,9 +161,48 @@ public class NPC : Agent
             {
                 if (!possibleTargets.Contains(obstructingAgent))
                 {
+                    //Add player to possible targets
                     possibleTargets.Add(obstructingAgent);
+
+                    //Remove any investigation nodes
+                    for (int i = 0; i < investigationNodes.Count; i++)
+                    {
+                        if(investigationNodes[i].m_target == obstructingAgent)
+                        {
+                            investigationNodes.RemoveAt(i);
+                            i--;
+                        }
+                    }
+
                     modifiedPossibleTargets = true;
                 }
+            }
+        }
+
+        for (int possibleTargetIndex = 0; possibleTargetIndex < possibleTargets.Count; possibleTargetIndex++)//See if player has left vision
+        {
+            if(!m_visionNodes.Contains(possibleTargets[possibleTargetIndex].m_currentNavNode)) //Player left view
+            {
+                for (int investigationNodeIndex = 0; investigationNodeIndex < investigationNodes.Count; investigationNodeIndex++)//Has node already been added
+                {
+                    if (investigationNodes[investigationNodeIndex].m_target == possibleTargets[possibleTargetIndex])
+                    {
+                        investigationNodes.RemoveAt(investigationNodeIndex);
+                        investigationNodeIndex--;
+                    }
+                }
+
+                InvestigationNode newInvestigation;
+
+                newInvestigation.m_node = possibleTargets[possibleTargetIndex].m_currentNavNode;
+                newInvestigation.m_target = possibleTargets[possibleTargetIndex];
+                investigationNodes.Add(newInvestigation);
+
+                possibleTargets.RemoveAt(possibleTargetIndex);
+                possibleTargetIndex--;
+
+                modifiedInvestigationTargets = true;
+                modifiedPossibleTargets = true;
             }
         }
 

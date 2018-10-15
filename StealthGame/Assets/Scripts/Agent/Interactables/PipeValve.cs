@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PipeValve : Interactable
 {
-    public EnviromentHazard m_activatedHazard = null;
+    public List<EnviromentHazard> m_activatedHazard = new List<EnviromentHazard>();
     public Item.ITEM_TYPE m_requiredItem = Item.ITEM_TYPE.WRENCH;
 
     protected override void Start()
@@ -15,6 +15,11 @@ public class PipeValve : Interactable
     public override void PerformAction(Agent agent)
     {
         if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
-            m_activatedHazard.ActivateHazard();
+        {
+            foreach (EnviromentHazard enviromentalHazard in m_activatedHazard)
+            {
+                enviromentalHazard.ActivateHazard();
+            }
+        }
     }
 }
