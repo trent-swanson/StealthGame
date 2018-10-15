@@ -46,7 +46,12 @@ public class WallFade : MonoBehaviour {
             }
             if (smallDoor != null)
             {
-                smallDoor.GetComponent<Renderer>().material = fadeSmallDoor;
+                Renderer[] renderers = smallDoor.transform.GetComponentsInChildren<Renderer>();
+                foreach (Renderer render in renderers)
+                {
+                    render.material = fadeSmallDoor;
+                }
+                //smallDoor.GetComponent<Renderer>().material = fadeSmallDoor;
             }
         }
     }
@@ -64,7 +69,12 @@ public class WallFade : MonoBehaviour {
         }
         if (smallDoor != null)
         {
-            smallDoor.GetComponent<Renderer>().material = smallDoorMat;
+            Renderer[] renderers = smallDoor.transform.GetComponentsInChildren<Renderer>();
+            foreach (Renderer render in renderers)
+            {
+                render.material = smallDoorMat;
+            }
+            //smallDoor.GetComponent<Renderer>().material = smallDoorMat;
         }
     }
 }
