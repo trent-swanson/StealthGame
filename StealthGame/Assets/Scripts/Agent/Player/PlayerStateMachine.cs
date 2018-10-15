@@ -21,6 +21,14 @@ public class PlayerStateMachine : MonoBehaviour {
         m_playerController = GetComponent<PlayerController>();
         m_playerUI = GetComponent<PlayerUI>();
 
+        //Initilise all states
+        PlayerState[] m_playerStates = GetComponentsInChildren<PlayerState>();
+
+        for (int i = 0; i < m_playerStates.Length; i++)
+        {
+            m_playerStates[i].StateInit();
+        }
+
         //Run first state
         m_currentState.StateStart();
     }

@@ -121,6 +121,9 @@ public class GameState_TurnManager : GameState
             InitTeamTurnMove();
         }
 
+        if (m_turnTeam[0].m_knockedout)
+            NextPlayer();
+
         m_turnTeam[0].AgentSelected();
     }
 

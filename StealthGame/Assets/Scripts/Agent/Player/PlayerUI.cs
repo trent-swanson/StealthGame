@@ -40,7 +40,7 @@ public class PlayerUI : MonoBehaviour
     {
         m_APDisplay.sprite = m_defualtAPDisplay;
         m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
-        UpdateAPDisplay(m_playerController.m_currentActionPoints);
+        UpdateAPDisplay(null);
     }
 
     public void StartUI()
@@ -65,7 +65,7 @@ public class PlayerUI : MonoBehaviour
         {
             ShowInteractables();
             m_uiController.UpdateItemInventory(m_playerController);
-            UpdateAPDisplay(m_playerController.m_currentNavNode.m_BFSDistance);
+            UpdateAPDisplay(m_playerController.m_currentNavNode);
         }
     }
 
@@ -89,7 +89,7 @@ public class PlayerUI : MonoBehaviour
 
             //Update AP
             if (newSelectedNode != null)
-                UpdateAPDisplay(newSelectedNode.m_BFSDistance);
+                UpdateAPDisplay(newSelectedNode);
         }
         else if (state == MESH_STATE.REMOVE_PATH) //remove path to selected node
         {
@@ -99,7 +99,7 @@ public class PlayerUI : MonoBehaviour
             ClearPathRender();
 
             //Update AP
-            UpdateAPDisplay(m_playerController.m_currentActionPoints);
+            UpdateAPDisplay(null);
         }
         else if (state == MESH_STATE.REMOVE_NAVMESH) //remove all visualisation
         {
@@ -166,9 +166,12 @@ public class PlayerUI : MonoBehaviour
         return pathPos.ToArray();
     }
 
-    public void UpdateAPDisplay(int APLeft)
+    public void UpdateAPDisplay(NavNode navNode)
     {
-        m_APNumber.text = APLeft.ToString();
+        if(navNode==null)
+            m_APNumber.text = m_playerController.m_currentActionPoints.ToString();
+        else
+            m_APNumber.text = navNode.m_BFSDistance.ToString();
     }
 
     //highlight interactable objects in range

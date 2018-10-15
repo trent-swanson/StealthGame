@@ -9,9 +9,9 @@ public class PlayerState_ValidNodeSelection : PlayerState
     //-------------------
     //Initilse the state
     //-------------------
-    protected override void Start()
+    public override void StateInit()
     {
-        base.Start();
+        base.StateInit();
     }
 
     //-------------------

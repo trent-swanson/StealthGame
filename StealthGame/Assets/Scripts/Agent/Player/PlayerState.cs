@@ -16,7 +16,7 @@ public class PlayerState : MonoBehaviour
     //-------------------
     //Initilse the state
     //-------------------
-    protected virtual void Start()
+    public virtual void StateInit()
     {
         m_playerUI = GetComponent<PlayerUI>();
         m_agentAnimationController = GetComponent<AgentAnimationController>();

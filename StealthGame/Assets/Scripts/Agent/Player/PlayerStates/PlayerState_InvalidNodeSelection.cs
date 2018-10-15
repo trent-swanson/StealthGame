@@ -7,9 +7,9 @@ public class PlayerState_InvalidNodeSelection : PlayerState
     //-------------------
     //Initilse the state
     //-------------------
-    protected override void Start()
+    public override void StateInit()
     {
-        base.Start();
+        base.StateInit();
     }
 
     //-------------------

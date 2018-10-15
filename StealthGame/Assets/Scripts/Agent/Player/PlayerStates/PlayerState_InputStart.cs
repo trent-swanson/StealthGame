@@ -7,9 +7,9 @@ public class PlayerState_InputStart : PlayerState
     //-------------------
     //Initilse the state
     //-------------------
-    protected override void Start()
+    public override void StateInit()
     {
-        base.Start();
+        base.StateInit();
     }
 
     //-------------------
@@ -17,7 +17,6 @@ public class PlayerState_InputStart : PlayerState
     //-------------------
     public override void StateStart()
     {
-        
         GetAllSelectableNodes();
         m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.DRAW_NAVMESH, m_parentStateMachine.m_selectableNodes);
         m_playerUI.UpdateUI();
