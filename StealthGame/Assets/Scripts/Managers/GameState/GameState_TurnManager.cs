@@ -58,7 +58,7 @@ public class GameState_TurnManager : GameState
                 if(!ValidTeam(m_turnTeam))
                     InitTeamTurnMove();
 
-                m_UIController.SetUIInteractivity(true);
+                m_UIController.SetUIInteractivity(false);
                 break;
             default:
                 break;
@@ -120,6 +120,9 @@ public class GameState_TurnManager : GameState
         {
             InitTeamTurnMove();
         }
+
+        if (m_turnTeam[0].m_knockedout)
+            NextPlayer();
 
         m_turnTeam[0].AgentSelected();
     }
