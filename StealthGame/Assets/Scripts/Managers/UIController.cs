@@ -19,7 +19,7 @@ public class UIController : MonoBehaviour {
     private Text m_endNextBtnText = null;
 
     private string m_endTurnString = "End Turn";
-    private string m_nextPlayerString = "Next Player";
+    private string m_nextPlayerString = "Next";
 
     private bool m_UIInteractivity = true;
 
