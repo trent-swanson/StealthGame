@@ -14,6 +14,7 @@ public class NavNode : MonoBehaviour
     public Sprite m_pickupSprite;
     public Sprite m_defaultSprite;
     public SpriteRenderer m_spriteRenderer;
+    public SpriteRenderer m_requiredItem;
 
     public Item m_item = null;
     public Interactable m_interactable = null;
@@ -91,6 +92,7 @@ public class NavNode : MonoBehaviour
     {
         m_interactable = interactable;
         m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
+        m_requiredItem.sprite = interactable.m_requiredItem.m_icon;
     }
 
     public void SetupNodeType()
@@ -126,6 +128,12 @@ public class NavNode : MonoBehaviour
                     m_selectedUI.SetActive(false);
                     m_spriteRenderer.sprite = m_attackSprite;
                 }
+                else if (m_interactable != null)
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(false);
+                    m_spriteRenderer.sprite = m_pickupSprite;
+                }
                 else if (m_nodeType == NODE_TYPE.WALKABLE)
                 {
                     if (GetDownedAgent(agent.m_team) != null)
@@ -151,12 +159,6 @@ public class NavNode : MonoBehaviour
                         m_spriteRenderer.sprite = m_defaultSprite;
                     }
                 }
-                else if (m_nodeType == NODE_TYPE.INTERACTABLE)
-                {
-                    m_selectableUI.SetActive(true);
-                    m_selectedUI.SetActive(false);
-                    m_spriteRenderer.sprite = m_pickupSprite;
-                }
                 break;
 
             case NODE_STATE.SELECTED:
@@ -165,6 +167,12 @@ public class NavNode : MonoBehaviour
                     m_selectableUI.SetActive(true);
                     m_selectedUI.SetActive(false);
                     m_spriteRenderer.sprite = m_attackSprite;
+                }
+                else if (m_interactable != null)
+                {
+                    m_selectableUI.SetActive(true);
+                    m_selectedUI.SetActive(true);
+                    m_spriteRenderer.sprite = m_pickupSprite;
                 }
                 else if (m_nodeType == NODE_TYPE.WALKABLE)
                 {
@@ -192,12 +200,6 @@ public class NavNode : MonoBehaviour
                         m_spriteRenderer.sprite = m_selectedSprite;
 
                     }
-                }
-                else if (m_nodeType == NODE_TYPE.INTERACTABLE)
-                {
-                    m_selectableUI.SetActive(true);
-                    m_selectedUI.SetActive(true);
-                    m_spriteRenderer.sprite = m_pickupSprite;
                 }
                 break;
 
@@ -237,7 +239,7 @@ public class NavNode : MonoBehaviour
         return false;
     }
 
-    public Agent GetDownedAgent(GameState_TurnManager.TEAM team)
+    public Agent GetDownedAgent(Agent.TEAM team)
     {
         foreach (Agent agent in m_downedAgents)
         {
@@ -311,5 +313,37 @@ public class NavNode : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public NavNode GetAdjacentNode(FACING_DIR facingDir)
+    {
+        int height = m_gridPos.y;
+        List<NavNode> m_adjacentNodes = new List<NavNode>();
+        switch (facingDir)
+        {
+            case FACING_DIR.NORTH:
+                m_adjacentNodes = m_northNodes;
+                break;
+            case FACING_DIR.EAST:
+                m_adjacentNodes = m_eastNodes;
+                break;
+            case FACING_DIR.SOUTH:
+                m_adjacentNodes = m_southNodes;
+                break;
+            case FACING_DIR.WEST:
+                m_adjacentNodes = m_westNodes;
+                break;
+            case FACING_DIR.NONE:
+            default:
+                return null;
+        }
+
+        foreach (NavNode adjacentNavNode in m_adjacentNodes)
+        {
+            if (height == adjacentNavNode.m_gridPos.y)
+                return adjacentNavNode;
+        }
+
+        return null;
     }
 }

@@ -53,9 +53,13 @@ public class NPC : Agent
     public List<NavNode> m_visionNodes = new List<NavNode>();
 
     [Space]
-    [Space]
     [Header("AgentState")]
     public AgentWorldState m_agentWorldState;
+
+    [Space]
+    public int m_autoStandupTimer = 0;
+    public SpriteRenderer m_alertIcon = null;
+
 
     protected override void Start()
     {
@@ -69,25 +73,12 @@ public class NPC : Agent
     public override void AgentTurnInit()
     {
         base.AgentTurnInit();
-
-        if(m_knockedout)
-        {
-            m_autoStandupTimer--;
-            if(m_autoStandupTimer<=0 && m_currentNavNode.m_obstructingAgent == null)
-            {
-                Revive();
-
-                //Reset all world states
-                m_agentWorldState.SetInvestigationNodes(new List<InvestigationNode>());
-                m_agentWorldState.SetPossibleTargets(new List<Agent>());
-            }
-        }
     }
 
     //Runs every time a agent is selected, this can be at end of an action is completed
     public override void AgentSelected()
     {
-        
+        m_cameraController.Focus(transform);
     }
 
     //Constant update while agent is selected
@@ -173,7 +164,6 @@ public class NPC : Agent
                             i--;
                         }
                     }
-
                     modifiedPossibleTargets = true;
                 }
             }
@@ -181,7 +171,7 @@ public class NPC : Agent
 
         for (int possibleTargetIndex = 0; possibleTargetIndex < possibleTargets.Count; possibleTargetIndex++)//See if player has left vision
         {
-            if(!m_visionNodes.Contains(possibleTargets[possibleTargetIndex].m_currentNavNode)) //Player left view
+            if(!m_visionNodes.Contains(possibleTargets[possibleTargetIndex].m_currentNavNode) && !possibleTargets[possibleTargetIndex].m_knockedout) //Player left view and is not not knocked out
             {
                 for (int investigationNodeIndex = 0; investigationNodeIndex < investigationNodes.Count; investigationNodeIndex++)//Has node already been added
                 {
@@ -207,13 +197,22 @@ public class NPC : Agent
         }
 
         if (modifiedPossibleTargets)
+        {
             m_agentWorldState.SetPossibleTargets(possibleTargets);
+        }
         if (modifiedInvestigationTargets)
+        {
             m_agentWorldState.SetInvestigationNodes(investigationNodes);
+        }
+
+        ToggleAlertIcon();
     }
 
     public void BuildVision()
     {
+        if (m_knockedout)//Early breakout for any knocked out units
+            return;
+
         foreach (NavNode navNode in m_visionNodes) //Remove old vision
         {
             navNode.NPCVision(ADD_REMOVE_FUNCTION.REMOVE, this);
@@ -221,29 +220,12 @@ public class NPC : Agent
 
         m_visionNodes.Clear();
 
-        List<NavNode> fullVisibleNavNode = Vision.BuildVisionList(this, m_visionFullDistance, m_visionFullAngle);
-        List<NavNode> fadeVisibleNavNode = Vision.BuildVisionList(this, m_visionFadeDistance, m_visionFadeAngle);
+        m_visionNodes = Vision.BuildVisionList(this, m_visionFullDistance, m_visionFullAngle);
 
         //Build vision cone, dont add duplicates to list
-        foreach (NavNode navNode in fullVisibleNavNode)
-        {
-            fadeVisibleNavNode.Remove(navNode);
-            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, m_visionFullOpacity);
-        }
-
-        foreach (NavNode navNode in fadeVisibleNavNode)
-        {
-            float navNodeDistance = Vector3.Distance(navNode.m_nodeTop, m_currentNavNode.m_nodeTop);
-            float opacticy = m_visionFadeMinOpacity + ((m_visionFadeMaxOpacity - m_visionFadeMinOpacity) * ((m_visionFadeDistance - navNodeDistance) / (m_visionFadeDistance - m_visionFullDistance)));
-            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, opacticy);
-        }
-
-        m_visionNodes.AddRange(fullVisibleNavNode);
-        m_visionNodes.AddRange(fadeVisibleNavNode);
-
-        //Build guard vision range
         foreach (NavNode navNode in m_visionNodes)
         {
+            navNode.m_NPCVisionUI.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, m_visionFullOpacity);
             navNode.NPCVision(ADD_REMOVE_FUNCTION.ADD, this);
         }
     }
@@ -276,5 +258,14 @@ public class NPC : Agent
         {
             navNode.NPCVision(ADD_REMOVE_FUNCTION.REMOVE, this);
         }
+
+        m_currentActionPoints = 0;
+        m_autoStandupTimer = m_NPCTurn.m_autoStandupTime;
+        ToggleAlertIcon();
+    }
+
+    public void ToggleAlertIcon()
+    {
+        m_alertIcon.enabled = !m_knockedout && (m_agentWorldState.GetPossibleTargets().Count > 0 || m_agentWorldState.GetInvestigationNodes().Count > 0);
     }
 }

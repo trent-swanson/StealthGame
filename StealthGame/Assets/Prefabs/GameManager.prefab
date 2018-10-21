@@ -21,10 +21,11 @@ GameObject:
   - component: {fileID: 4322745389344106}
   - component: {fileID: 114830992936346278}
   - component: {fileID: 114211141191023392}
-  - component: {fileID: 114996539345839188}
   - component: {fileID: 114203638280292954}
   - component: {fileID: 114996788902129410}
   - component: {fileID: 114512113158640800}
+  - component: {fileID: 114935651520854332}
+  - component: {fileID: 114890809852153942}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -57,7 +58,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nextStates: []
-  m_nextLevel: 
 --- !u!114 &114211141191023392
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -82,7 +82,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nextStates:
-  - {fileID: 114996539345839188}
+  - {fileID: 114935651520854332}
 --- !u!114 &114830992936346278
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_navGridWidth: 0
   m_navGridDepth: 0
   m_navGridHeight: 0
---- !u!114 &114996539345839188
+--- !u!114 &114890809852153942
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -106,22 +106,38 @@ MonoBehaviour:
   m_GameObject: {fileID: 1987652157899944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ed26ef3053bf9d4c91cc2adb744ebc1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d6a8fc705e62844ba180aa0bec4b48e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_nextStates:
+  - {fileID: 114996788902129410}
+  - {fileID: 114935651520854332}
+  m_team:
+  - {fileID: 0}
+  - {fileID: 0}
+  m_currentAgentIndex: 0
+  m_currentAgentState: 2
+  m_autoStandupTime: 2
+--- !u!114 &114935651520854332
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1987652157899944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72d5226ddc103894896d0a7ca70dfe90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_nextStates:
   - {fileID: 114996788902129410}
   - {fileID: 114203638280292954}
-  m_playerTeam:
+  - {fileID: 114890809852153942}
+  m_team:
   - {fileID: 0}
   - {fileID: 0}
-  m_NPCTeam:
-  - {fileID: 0}
-  m_turnTeam: []
+  m_currentAgentIndex: 0
   m_currentAgentState: 2
-  m_currentTeam: 1
-  m_autoStandupTime: 2
-  m_pressure: 0
   m_objectiveAchived: 0
 --- !u!114 &114996788902129410
 MonoBehaviour:

@@ -54,6 +54,7 @@ public class RangedAttack : AIAction {
     public override void EndAction(NPC NPCAgent)
     {
         NPCAgent.m_currentActionPoints -= m_baseActionCost;
+        NPCAgent.ToggleAlertIcon();
     }
 
 

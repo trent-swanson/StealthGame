@@ -13,18 +13,51 @@ public class Vision : MonoBehaviour
         List<NavNode> visibleNodes = new List<NavNode>();
 
         List<NavNode> openNodes = new List<NavNode>();
+
         openNodes.Add(startingNode);
+
+        //TODO make better
+
         while (openNodes.Count > 0)
         {
             visibleNodes.AddRange(openNodes);
 
-            openNodes = GetNextLayer(agent, openNodes, facingDir, visionDistance, visionCone);
+            openNodes = GetNextLayer(agent, startingNode, openNodes, facingDir, visionDistance, visionCone);
         }
+
+        //Add left right nodes
+        FACING_DIR rightDir = GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT);
+        NavNode rightNode = startingNode.GetAdjacentNode(rightDir);
+        if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE))
+        {
+            openNodes.Add(rightNode);
+            while (openNodes.Count > 0)
+            {
+                visibleNodes.AddRange(openNodes);
+
+                openNodes = GetNextLayer(agent, rightNode, openNodes, facingDir, visionDistance, visionCone);
+            }
+        }
+
+        FACING_DIR leftDir = GetRelativeDir(facingDir, LEFT_RIGHT.LEFT);
+        NavNode leftNode = startingNode.GetAdjacentNode(leftDir);
+        if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE))
+        {
+            openNodes.Add(leftNode);
+            while (openNodes.Count > 0)
+            {
+                visibleNodes.AddRange(openNodes);
+
+                openNodes = GetNextLayer(agent, leftNode, openNodes, facingDir, visionDistance, visionCone);
+            }
+        }
+
+
 
         return visibleNodes;
     }
 
-    private static List<NavNode> GetNextLayer(Agent agent, List<NavNode> openNodes, FACING_DIR facingDir, float visionDistance, float visionCone)
+    private static List<NavNode> GetNextLayer(Agent agent, NavNode startingNode, List<NavNode> openNodes, FACING_DIR facingDir, float visionDistance, float visionCone)
     {
         List<NavNode> newOpenNodes = new List<NavNode>();
         List<NavNode> forwardNodes = new List<NavNode>();
@@ -32,7 +65,7 @@ public class Vision : MonoBehaviour
         foreach (NavNode navNode in openNodes)
         {
             //Get forward node
-            NavNode forwardNode = GetNavNode(agent, navNode, facingDir, visionDistance, visionCone);
+            NavNode forwardNode = GetNavNode(agent, startingNode, navNode, facingDir, visionDistance, visionCone);
             if (forwardNode != null && (forwardNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || forwardNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) && !newOpenNodes.Contains(forwardNode))
             {
                 forwardNodes.Add(forwardNode);
@@ -44,12 +77,12 @@ public class Vision : MonoBehaviour
         foreach (NavNode forwardNode in forwardNodes)
         {
             //Get rightwards node
-            NavNode leftNode = GetNavNode(agent, forwardNode, GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT), visionDistance, visionCone);
+            NavNode leftNode = GetNavNode(agent, startingNode, forwardNode, GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT), visionDistance, visionCone);
             if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) && !newOpenNodes.Contains(leftNode))
                 newOpenNodes.Add(leftNode);
 
             //Get leftwards node
-            NavNode rightNode = GetNavNode(agent, forwardNode, GetRelativeDir(facingDir, LEFT_RIGHT.LEFT), visionDistance, visionCone);
+            NavNode rightNode = GetNavNode(agent, startingNode, forwardNode, GetRelativeDir(facingDir, LEFT_RIGHT.LEFT), visionDistance, visionCone);
             if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) && !newOpenNodes.Contains(rightNode))
                 newOpenNodes.Add(rightNode);
         }
@@ -57,48 +90,23 @@ public class Vision : MonoBehaviour
         return newOpenNodes;
     }
 
-    private static NavNode GetNavNode(Agent agent, NavNode currentNavNode, FACING_DIR facingDir, float visionDistance, float visionCone)
+    private static NavNode GetNavNode(Agent agent, NavNode startingNode, NavNode currentNavNode, FACING_DIR facingDir, float visionDistance, float visionCone)
     {
         List<NavNode> possibleNodes = new List<NavNode>();
 
         NavNode nextNavNode = null;
 
-        switch (facingDir) //Get all navnodes adject to current
-        {
-            case FACING_DIR.NORTH:
-                possibleNodes.AddRange(currentNavNode.m_northNodes);
-                break;
-            case FACING_DIR.EAST:
-                possibleNodes.AddRange(currentNavNode.m_eastNodes);
-                break;
-            case FACING_DIR.SOUTH:
-                possibleNodes.AddRange(currentNavNode.m_southNodes);
-                break;
-            case FACING_DIR.WEST:
-                possibleNodes.AddRange(currentNavNode.m_westNodes);
-                break;
-            case FACING_DIR.NONE:
-                break;
-            default:
-                break;
-        }
-
-        //Only get nav nodes on same height
-        foreach (NavNode navNode in possibleNodes) 
-        {
-            if (navNode.m_gridPos.y == currentNavNode.m_gridPos.y)
-                nextNavNode = navNode;
-        }
+        nextNavNode = currentNavNode.GetAdjacentNode(facingDir);
 
         if (nextNavNode == null)
             return null;
 
         //Distance
-        if (Vector3.Distance(nextNavNode.m_nodeTop, agent.m_currentNavNode.m_nodeTop) > visionDistance)
+        if (Vector3.Distance(nextNavNode.m_nodeTop, startingNode.m_nodeTop) > visionDistance)
             return null;
 
         //Get navNode within vision cone
-        Vector3 startToNode = (nextNavNode.m_nodeTop - agent.m_currentNavNode.m_nodeTop).normalized;
+        Vector3 startToNode = (nextNavNode.m_nodeTop - startingNode.m_nodeTop).normalized;
         Vector3 facingVector = Agent.FacingDirEnumToVector3(agent.m_facingDir);
 
         float angle = Mathf.Acos(Vector3.Dot(startToNode, facingVector));

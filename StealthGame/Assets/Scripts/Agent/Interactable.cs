@@ -6,6 +6,8 @@ public class Interactable : MonoBehaviour
 {
     public bool m_usable = true;
 
+    public Item m_requiredItem = null;
+
     public List<NavNode> m_interactionNodes = new List<NavNode>();
 
     public Animation m_animation = null;

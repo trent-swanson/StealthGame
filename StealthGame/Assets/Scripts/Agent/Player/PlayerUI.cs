@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using TMPro;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -11,15 +10,6 @@ public class PlayerUI : MonoBehaviour
     private UIController m_uiController = null;
     private PlayerController m_playerController = null;
     private AgentInventory m_agentInventory;
-
-    [Space]
-    [Space]
-    [Header("Unit Editable Variables")]
-    public GameObject m_unitCanvas;
-    public Image m_APDisplay;
-    public Sprite m_defualtAPDisplay;
-    public Sprite m_selectedAPDisplay;
-    public TextMeshProUGUI m_APNumber;
 
     private List<Item> m_visiblePickups = new List<Item>();
 
@@ -31,31 +21,15 @@ public class PlayerUI : MonoBehaviour
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         m_playerController = GetComponent<PlayerController>();
         m_agentInventory = GetComponent<AgentInventory>();
-
-        m_unitCanvas.SetActive(true);
-        m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
-    }
-
-    public void InitUI()
-    {
-        m_APDisplay.sprite = m_defualtAPDisplay;
-        m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
-        UpdateAPDisplay(null);
     }
 
     public void StartUI()
     {
-        m_APDisplay.sprite = m_selectedAPDisplay;
-        m_APDisplay.rectTransform.sizeDelta = new Vector2(0, 0);
-
         ShowInteractables();
     }
 
     public void EndUI()
     {
-        m_APDisplay.sprite = m_defualtAPDisplay;
-        m_APDisplay.rectTransform.sizeDelta = new Vector2(-0.14f, -0.16f);
-
         RemoveInteractables();
     }
 
@@ -65,7 +39,6 @@ public class PlayerUI : MonoBehaviour
         {
             ShowInteractables();
             m_uiController.UpdateItemInventory(m_playerController);
-            UpdateAPDisplay(m_playerController.m_currentNavNode);
         }
     }
 
@@ -86,10 +59,6 @@ public class PlayerUI : MonoBehaviour
             //Redraw path
             ClearPathRender();
             CalculatePathRender(nodePath);
-
-            //Update AP
-            if (newSelectedNode != null)
-                UpdateAPDisplay(newSelectedNode);
         }
         else if (state == MESH_STATE.REMOVE_PATH) //remove path to selected node
         {
@@ -97,9 +66,6 @@ public class PlayerUI : MonoBehaviour
                 currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE, m_playerController);
 
             ClearPathRender();
-
-            //Update AP
-            UpdateAPDisplay(null);
         }
         else if (state == MESH_STATE.REMOVE_NAVMESH) //remove all visualisation
         {
@@ -117,7 +83,7 @@ public class PlayerUI : MonoBehaviour
             SpriteRenderer spriteRenderer = navNode.m_selectableUI.GetComponent<SpriteRenderer>();
             Color newColor = spriteRenderer.color;
 
-            if (navNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Full view for obstructed tiles
+            if (navNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || navNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)//Full view for obstructed tiles
                 newColor.a = 1;
             else
                 newColor.a = (float)(navNode.m_BFSDistance + 1) / m_playerController.m_currentActionPoints;//min val of 1/current action points
@@ -164,14 +130,6 @@ public class PlayerUI : MonoBehaviour
             }
         }
         return pathPos.ToArray();
-    }
-
-    public void UpdateAPDisplay(NavNode navNode)
-    {
-        if(navNode==null)
-            m_APNumber.text = m_playerController.m_currentActionPoints.ToString();
-        else
-            m_APNumber.text = navNode.m_BFSDistance.ToString();
     }
 
     //highlight interactable objects in range

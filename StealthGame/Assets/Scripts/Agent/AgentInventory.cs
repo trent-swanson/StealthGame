@@ -7,11 +7,20 @@ public class AgentInventory : MonoBehaviour
 {
     public List<Item> m_currentItems = new List<Item>();
 
-    public bool AgentHasItem(Item.ITEM_TYPE itemType)
+    private InventoryUI m_inventoryUI = null;
+
+    private void Start()
     {
-        foreach (Item item in m_currentItems)
+        m_inventoryUI = GetComponent<Agent>().m_agentInventoryUI;
+        if(m_inventoryUI!=null)
+            m_inventoryUI.UpdateInventory(this);
+    }
+
+    public bool AgentHasItem(Item item)
+    {
+        foreach (Item currentItem in m_currentItems)
         {
-            if (item.m_itemType == itemType)
+            if (currentItem.m_itemType == item.m_itemType)
                 return true;
         }
         return false;
@@ -33,5 +42,7 @@ public class AgentInventory : MonoBehaviour
             default:
                 break;
         }
+
+        m_inventoryUI.UpdateInventory(this);
     }
 }

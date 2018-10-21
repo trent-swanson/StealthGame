@@ -35,7 +35,7 @@ public class MeleeAttack : AIAction
     {
         List<NavNode> oneStep = new List<NavNode>();
         oneStep.Add(NPCAgent.m_currentNavNode);//Only need one step at a time
-        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetPlayerAnimationSteps(NPCAgent, oneStep, INTERACTION_TYPE.ATTACK);
+        NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetNPCAnimationSteps(NPCAgent, oneStep, INTERACTION_TYPE.ATTACK);
 
         NPCAgent.m_agentAnimationController.PlayNextAnimation();
     }
@@ -50,7 +50,7 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override bool IsDone(NPC NPCAgent)
     {
-        return NPCAgent.m_agentAnimationController.m_playNextAnimation;
+        return NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0;
     }
 
     //--------------------------------------------------------------------------------------
@@ -61,8 +61,13 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        m_target = null;
         NPCAgent.m_currentActionPoints -= m_baseActionCost;
+        List<Agent> possibleTargets = NPCAgent.m_agentWorldState.GetPossibleTargets();
+        possibleTargets.Remove(m_target);
+        NPCAgent.m_agentWorldState.SetPossibleTargets(possibleTargets);
+        m_target = null;
+
+        NPCAgent.ToggleAlertIcon();
     }
 
 
@@ -75,6 +80,8 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
+        if(NPCAgent.m_agentAnimationController.m_playNextAnimation)
+            NPCAgent.m_agentAnimationController.PlayNextAnimation();
         return true;
     }
 

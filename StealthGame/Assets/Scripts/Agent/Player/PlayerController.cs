@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerController : Agent {
-
-    [Space]
+public class PlayerController : Agent
+{
     [Space]
     public Sprite portrait;
-
-    static CameraController m_cameraController = null;
 
     public PlayerUI m_playerUI = null;
     private PlayerStateMachine m_playerStateMachine = null;
@@ -17,7 +14,6 @@ public class PlayerController : Agent {
     protected override void Start()
     {
         base.Start();
-        m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
 
         m_playerUI = GetComponent<PlayerUI>();
         m_playerStateMachine = GetComponent<PlayerStateMachine>();
@@ -27,8 +23,6 @@ public class PlayerController : Agent {
     public override void AgentTurnInit()
     {
         base.AgentTurnInit();
-
-        m_playerUI.InitUI();
     }
 
     //Runs every time a agent is selected, this can be at end of an action is completed
@@ -44,11 +38,11 @@ public class PlayerController : Agent {
     {
         m_playerStateMachine.UpdateStateMachine();
 
-        if(!m_agentAnimationController.m_playNextAnimation || m_agentAnimationController.m_animationSteps.Count !=0)
+        if (!m_agentAnimationController.m_playNextAnimation || m_agentAnimationController.m_animationSteps.Count != 0)
             return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
 
-        if (m_currentActionPoints <= 0)
-            return AGENT_UPDATE_STATE.END_TURN;
+        //if (m_currentActionPoints <= 0)
+        //    return AGENT_UPDATE_STATE.END_TURN;
 
         return AGENT_UPDATE_STATE.AWAITING_INPUT;
     }
@@ -57,7 +51,76 @@ public class PlayerController : Agent {
     public override void AgentTurnEnd()
     {
         base.AgentTurnEnd();
+        EndTurn();
         m_playerStateMachine.TurnEndStateMachine();
         m_playerUI.UpdateUI();
+    }
+
+    //Wall hiding for end of turn
+    public void EndTurn()
+    {
+        if (m_playerStateMachine.m_currentlyHiding)
+            return;
+
+        FACING_DIR m_largestThreatDir = GetLargestThreatDir();
+
+        if (m_largestThreatDir != FACING_DIR.NONE && m_currentNavNode.m_abilityToWallHide[(int)m_largestThreatDir]) //Can hide in largest threat direction
+        {
+            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide(m_largestThreatDir, this));
+        }
+        else //Pick random wall to hide on 
+        {
+            //TODO get next closest wall to hide on
+            if (m_currentNavNode.m_abilityToWallHide[0])
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)0, this));
+            else if (m_currentNavNode.m_abilityToWallHide[1])
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)1, this));
+            else if (m_currentNavNode.m_abilityToWallHide[2])
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)2, this));
+            else if (m_currentNavNode.m_abilityToWallHide[3])
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)3, this));
+        }
+
+        m_playerStateMachine.m_currentlyHiding = true;
+
+        StartCoroutine(EndTurnAnimationUpdate());
+    }
+
+    private IEnumerator EndTurnAnimationUpdate()
+    {
+        yield return 0;
+        if (m_agentAnimationController.m_playNextAnimation)//End of animation
+        {
+            m_agentAnimationController.PlayNextAnimation();
+        }
+
+        if (m_agentAnimationController.m_animationSteps.Count > 0)
+        {
+            StartCoroutine(EndTurnAnimationUpdate());
+        }
+    }
+
+    private FACING_DIR GetLargestThreatDir()
+    {
+        //Get closest guard
+        List<Agent> m_guards = m_NPCTurn.m_team;
+
+        float closestDistance = Mathf.Infinity;
+        Agent closestGuard = null;
+        foreach (Agent guard in m_guards)
+        {
+            float distance = Vector3.Distance(transform.position, guard.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestGuard = guard;
+            }
+        }
+
+        if (closestGuard != null)
+        {
+            return Agent.GetFacingDir(closestGuard.transform.position - transform.position);
+        }
+        return FACING_DIR.NONE;
     }
 }

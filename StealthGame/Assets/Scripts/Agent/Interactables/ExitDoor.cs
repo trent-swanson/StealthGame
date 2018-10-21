@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class ExitDoor : Interactable
 {
-    public Item.ITEM_TYPE m_requiredItem = Item.ITEM_TYPE.GOLD;
+    private GameState_PlayerTurn m_playerTurn = null;
 
     protected override void Start()
     {
         base.Start();
+        m_playerTurn = m_gameController.GetComponent<GameState_PlayerTurn>();
     }
 
     public override void PerformAction(Agent agent)
     {
         if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
         {
-            m_gameController.GetComponent<GameState_TurnManager>().m_objectiveAchived = true;
+            m_playerTurn.m_objectiveAchived = true;
         }
     }
 }

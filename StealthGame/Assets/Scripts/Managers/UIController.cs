@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIController : MonoBehaviour {
 
-	public List<Image> m_portraitImages;
-    public InventoryAnimation inventoryAnimation = null;
+    public List<Image> m_portraitImages = new List<Image>();
+    public List<TextMeshProUGUI> m_APText =  new List<TextMeshProUGUI>();
+    public List<GameObject> m_portraitHighlight = new List<GameObject>();
 
-    GameState_TurnManager m_turnManager;
+    public GameState_PlayerTurn m_playerTurn = null;
 
     public float m_turnStartFadeTime = 1.0f;
 
@@ -23,77 +25,50 @@ public class UIController : MonoBehaviour {
 
     private bool m_UIInteractivity = true;
 
-    public List<GameObject> m_inventorySlots = new List<GameObject>();
+    private Vector4 m_fadedColor = new Vector4(0.1f, 0.1f, 0.1f, 1.0f);
+    private Vector4 m_fullColor = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
-    [Space]
-    public GameObject m_inventorySlotInfo;
-
-    private List<Item> m_items = new List<Item>();
+    //Very big hack but hey it works
+    public Image m_UIBlocker = null;
 
     void Start()
     {
-		m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
-
-
         if (m_endNextBtn != null)
             m_endNextBtnText = m_endNextBtn.GetComponentInChildren<Text>();
         #if UNITY_EDITOR
         else
             Debug.Log("End turn button has not been set in the UI controller");
-        #endif
-        //Initialise slot indexes
-        for (int i = 0; i < m_inventorySlots.Count; i++)
-        {
-            m_inventorySlots[i].GetComponent<InventorySlot>().m_slotIndex = i;
-        }
-
+#endif
+        m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
     }
 
-    public void InitUIPortraits(List<Agent> agents)
+    public void UpdateUI(List<Agent> agents)
     {
-        foreach (Image portraitImage in m_portraitImages)
+        int currentPlayer = m_playerTurn.m_currentAgentIndex;
+
+        //Update live/dead
+        for (int i = 0; i < agents.Count; i++)
         {
-            portraitImage.enabled = false;
-        }
-        for (int i = 0; i < agents.Count && i < m_portraitImages.Count; i++)
-        {
-            m_portraitImages[i].enabled = true;
-            m_portraitImages[i].sprite = agents[i].GetComponent<PlayerController>().portrait;
+            //Update live/dead
+            if (agents[i].m_knockedout)
+                m_portraitImages[i].color = m_fadedColor;
+            else
+                m_portraitImages[i].color = m_fullColor;
+
+            //Update AP
+            m_APText[i].text = agents[i].m_currentActionPoints.ToString();
+
+            //Update highlight
+            if (i == currentPlayer)
+                m_portraitHighlight[i].SetActive(true);
+            else
+                m_portraitHighlight[i].SetActive(false);
         }
     }
 
     public void UpdateItemInventory(Agent agent)
     {
-        m_items = agent.m_agentInventory.m_currentItems;
-        int agentItemCount = m_items.Count;
-
-        for (int i = 0; i < m_inventorySlots.Count; i++)
-        {
-            //Draw item
-            if(i < agentItemCount)
-            {
-                m_inventorySlots[i].SetActive(true);
-                m_inventorySlots[i].GetComponent<Image>().sprite = m_items[i].m_icon;
-            }
-            else
-            {
-                m_inventorySlots[i].SetActive(false);
-            }
-        }
-    }
-
-    public void UpdateItemDescription(int index)
-    {
-        if (index >= 0 && index < m_items.Count)
-        {
-            Item item = m_items[index];
-            if (item != null)
-                m_inventorySlotInfo.GetComponent<Text>().text = item.m_description;
-        }
-        else
-        {
-            m_inventorySlotInfo.GetComponent<Text>().text = "";
-        }
+           
     }
 
     public void SetUIInteractivity(bool togleVal)
@@ -101,15 +76,14 @@ public class UIController : MonoBehaviour {
         if (togleVal != m_UIInteractivity)
         {
             m_UIInteractivity = togleVal;
-
-            m_endNextBtn.interactable = togleVal;
+            m_UIBlocker.enabled = !togleVal;
         }
     }
 
     public void ChangeAgent(int index)
     {
-        if (m_UIInteractivity && index != 0 && m_turnManager.m_currentTeam == GameState_TurnManager.TEAM.PLAYER) // Only swap player when selecting new player and is players turn
-            m_turnManager.SwapAgents(index);
+        if (index != m_playerTurn.m_currentAgentIndex) // Only swap player when selecting new player and is players turn
+            m_playerTurn.SwapAgents(index);
 
         SwapEndTurnButton();
     }
@@ -119,26 +93,17 @@ public class UIController : MonoBehaviour {
         m_endNextBtnText.text = m_endTurnString;
     }
 
-
-    public void TurnStart(GameState_TurnManager.TEAM team)
+    public void TurnStart(Agent.TEAM team)
     {
-        if(team == GameState_TurnManager.TEAM.PLAYER && m_playerTurnStart != null)
+        if(team == Agent.TEAM.PLAYER && m_playerTurnStart != null)
         {
-            Color spriteColor = m_playerTurnStart.color;
-            spriteColor.a = 1;
-            m_playerTurnStart.color = spriteColor;
+            FadeTurnStart(m_playerTurnStart);
 
             m_endNextBtnText.text = m_nextPlayerString;
-
-            StartCoroutine(FadeTurnStart(Time.deltaTime / m_turnStartFadeTime, m_playerTurnStart));
         }
-        else if(team == GameState_TurnManager.TEAM.AI && m_enemyTurnStart != null)
+        else if(team == Agent.TEAM.NPC && m_enemyTurnStart != null)
         {
-            Color spriteColor = m_enemyTurnStart.color;
-            spriteColor.a = 1;
-            m_enemyTurnStart.color = spriteColor;
-
-            StartCoroutine(FadeTurnStart(Time.deltaTime / m_turnStartFadeTime, m_enemyTurnStart));
+            FadeTurnStart(m_enemyTurnStart);
         }
     }
 
@@ -146,14 +111,23 @@ public class UIController : MonoBehaviour {
     {
         if(m_endNextBtnText.text == m_nextPlayerString)
         {
-            m_turnManager.NextPlayer();
+            m_playerTurn.NextPlayer();
             m_endNextBtnText.text = m_endTurnString; 
         }
         else
-            m_turnManager.EndTeamTurn();
+            m_playerTurn.EndTurn();
     }
 
-    public IEnumerator FadeTurnStart(float time, Image imageToFade)
+    public void FadeTurnStart(Image imageToFade)
+    {
+        Color spriteColor = imageToFade.color;
+        spriteColor.a = 1;
+        imageToFade.color = spriteColor;
+
+        StartCoroutine(FadeTurnLogo(Time.deltaTime / m_turnStartFadeTime, imageToFade));//Turn fade
+    }
+
+    public IEnumerator FadeTurnLogo(float time, Image imageToFade)
     {
         yield return new WaitForSeconds(time);
         Color spriteColor = imageToFade.color;
@@ -162,7 +136,7 @@ public class UIController : MonoBehaviour {
 
         if(spriteColor.a > 0.05f)
         {
-            StartCoroutine(FadeTurnStart(Time.deltaTime / m_turnStartFadeTime, imageToFade));
+            StartCoroutine(FadeTurnLogo(Time.deltaTime / m_turnStartFadeTime, imageToFade));
         }
         else
         {

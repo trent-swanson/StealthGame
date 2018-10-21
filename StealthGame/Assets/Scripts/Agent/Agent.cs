@@ -6,19 +6,29 @@ using UnityEngine.UI;
 
 public class Agent : MonoBehaviour
 {
+    public enum TEAM { PLAYER, NPC };
+    public TEAM m_team = TEAM.PLAYER;
+
     public INTERACTION_TYPE m_interaction = INTERACTION_TYPE.NONE;
 
     public FACING_DIR m_facingDir = FACING_DIR.NONE;
 
     public Animator m_animator = null;
     public AgentAnimationController m_agentAnimationController = null;
+
     public AgentInventory m_agentInventory = null;
+    public InventoryUI m_agentInventoryUI = null;
+
+    public CameraController m_cameraController = null;
 
     [Header("DebugDebugging Only")]
     [Tooltip("Do Not Assign")]
     public bool m_turn = false;
     [Tooltip("Do Not Assign")]
     public bool m_knockedout = false;
+
+    public GameState_PlayerTurn m_playerTurn = null;
+    public GameState_NPCTurn m_NPCTurn = null;
 
     [Tooltip("# of actions unit can perform")]
     public int m_maxActionPoints = 2;
@@ -29,10 +39,7 @@ public class Agent : MonoBehaviour
     [Space]
     public float m_highlightInteractablesRange = 6;
 
-    public GameState_TurnManager m_turnManager = null;
     public NavNode m_currentNavNode = null;
-
-    public GameState_TurnManager.TEAM m_team = GameState_TurnManager.TEAM.AI;
 
     public Agent m_targetAgent = null;
     public Item m_targetItem = null;
@@ -43,7 +50,6 @@ public class Agent : MonoBehaviour
     [Header("Vision details")]
     public float m_visionFullOpacity = 1;
     public float m_visionFadeMaxOpacity = 0.5f;
-    public float m_visionFadeMinOpacity = 0.3f;
 
     [Header("Full alertness")]
     [Tooltip("Distance in units, remember a tile is 2 metres's")]
@@ -59,8 +65,6 @@ public class Agent : MonoBehaviour
 
     [SerializeField]
     public List<NavNode> m_path = new List<NavNode>();
-
-    public int m_autoStandupTimer = 0;
 
     protected virtual void Start()
     {
@@ -79,7 +83,9 @@ public class Agent : MonoBehaviour
         m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_agentInventory = GetComponent<AgentInventory>();
 
-        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
+        m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
+        m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
+        m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
 
@@ -102,7 +108,7 @@ public class Agent : MonoBehaviour
     //Runs when agent is removed from team list, end of turn
     public virtual void AgentTurnEnd(){}
 
-	public virtual void  Knockout()
+	public virtual void Knockout()
     {
 		m_knockedout = true;
 
@@ -114,10 +120,6 @@ public class Agent : MonoBehaviour
         //Setup animation
         m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.DEATH);
         m_agentAnimationController.PlayNextAnimation();
-
-        AgentTurnEnd();
-
-        m_autoStandupTimer = m_turnManager.m_autoStandupTime;
 	}
 
     public void Revive()
