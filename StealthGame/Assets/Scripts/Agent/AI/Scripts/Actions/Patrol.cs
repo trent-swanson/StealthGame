@@ -84,7 +84,7 @@ public class Patrol : AIAction
     public override void SetUpChildVaribles(NPC NPCAgent)
     {
         NavNode targetNode = NPCAgent.m_agentWorldState.m_waypoints[NPCAgent.m_agentWorldState.m_waypointIndex];
-        if(targetNode!=null && targetNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Obstructed, try to find node close by
+        if(targetNode !=null && targetNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)//Obstructed, try to find node close by
         {
             List<NavNode> adjacentNodes = targetNode.m_adjacentNodes;
             targetNode = null;

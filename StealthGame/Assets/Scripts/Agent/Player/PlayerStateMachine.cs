@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerStateMachine : MonoBehaviour {
-
+public class PlayerStateMachine : MonoBehaviour
+{
     public PlayerState m_currentState = null;
     public PlayerState m_turnStartingState = null;
 

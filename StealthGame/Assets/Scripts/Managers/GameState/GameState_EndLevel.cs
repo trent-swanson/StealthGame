@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GameState_EndLevel : GameState
 {
-    private GameState_TurnManager m_turnManager = null;
+    private GameState_PlayerTurn m_playerState = null;
 
     private void Start()
     {
-        m_turnManager = GetComponent<GameState_TurnManager>();
+        m_playerState = GetComponent<GameState_PlayerTurn>();
     }
 
     public override bool UpdateState()
@@ -37,6 +37,6 @@ public class GameState_EndLevel : GameState
 
     public override bool IsValid()
     {
-        return !m_turnManager.GameOver();
+        return m_playerState.m_objectiveAchived;
     }
 }

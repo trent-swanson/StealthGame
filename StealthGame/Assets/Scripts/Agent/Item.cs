@@ -34,7 +34,7 @@ public class Item : MonoBehaviour
 
 	public void EquipItem(Agent agent)
     {
-        if (!agent.m_agentInventory.AgentHasItem(m_itemType))
+        if (!agent.m_agentInventory.AgentHasItem(this))
         {
             agent.m_agentInventory.ItemManagement(ADD_REMOVE_FUNCTION.ADD, this);
 

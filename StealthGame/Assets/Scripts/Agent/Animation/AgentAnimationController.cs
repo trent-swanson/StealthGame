@@ -18,7 +18,7 @@ public class AgentAnimationController : MonoBehaviour
 
     public List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
 
-    private GameState_TurnManager m_turnManager = null;
+    private GameState_NPCTurn m_NPCTurn = null;
 
     private void Start()
     {
@@ -40,7 +40,7 @@ public class AgentAnimationController : MonoBehaviour
             }
         }
 
-        m_turnManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_TurnManager>();
+        m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
     }
 
     public void EndAnimationState()
@@ -53,8 +53,6 @@ public class AgentAnimationController : MonoBehaviour
 
     public void PlayNextAnimation()
     {
-        m_turnManager.UpdateNPCWorldStates();
-
         if (m_animationSteps.Count > 0)
         {
             switch (m_animationSteps[0])
@@ -168,6 +166,8 @@ public class AgentAnimationController : MonoBehaviour
             }
             m_animator.SetBool(m_currentAnimation, true);
             m_playNextAnimation = false;
+
+            m_NPCTurn.UpdateNPCWorldStates();
         }
     }
 

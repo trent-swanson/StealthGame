@@ -54,6 +54,8 @@ public class InvestigateNode : AIAction
         List<NPC.InvestigationNode> investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
         investigationNodes.RemoveAt(0);
         NPCAgent.m_agentWorldState.SetInvestigationNodes(investigationNodes);
+
+        NPCAgent.ToggleAlertIcon();
     }
 
 

@@ -17,26 +17,7 @@ public class PlayerState_InputEnd : PlayerState
     //-------------------
     public override void StateStart()
     {
-        FACING_DIR m_largestThreatDir = GetLargestThreatDir();
 
-        if (m_largestThreatDir != FACING_DIR.NONE && m_parentStateMachine.m_currentSelectedNode.m_abilityToWallHide[(int)m_largestThreatDir]) //Can hide in largest threat direction
-        {
-            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide(m_largestThreatDir, m_playerController));
-        }
-        else //Pick random wall to hide on 
-        {
-            //TODO get next closest wall to hide on
-            if (m_parentStateMachine.m_currentSelectedNode.m_abilityToWallHide[0])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)0, m_playerController));
-            else if (m_parentStateMachine.m_currentSelectedNode.m_abilityToWallHide[1])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)1, m_playerController));
-            else if (m_parentStateMachine.m_currentSelectedNode.m_abilityToWallHide[2])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)2, m_playerController));
-            else if (m_parentStateMachine.m_currentSelectedNode.m_abilityToWallHide[3])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)3, m_playerController));
-        }
-
-        m_parentStateMachine.m_currentlyHiding = true;
     }
 
     //-------------------
@@ -81,7 +62,7 @@ public class PlayerState_InputEnd : PlayerState
     public FACING_DIR GetLargestThreatDir()
     {
         //Get closest guard
-        List<Agent> m_guards = m_playerController.m_turnManager.m_NPCTeam;
+        List<Agent> m_guards = m_playerController.m_NPCTurn.m_team;
 
         float closestDistance = Mathf.Infinity;
         Agent closestGuard = null;

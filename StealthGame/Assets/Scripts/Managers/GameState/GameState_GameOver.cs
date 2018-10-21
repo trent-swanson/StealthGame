@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class GameState_GameOver : GameState
 {
-    private GameState_TurnManager m_turnManager = null;
+    private GameState_PlayerTurn m_playerTurn = null;
 
     private void Start()
     {
-        m_turnManager = GetComponent<GameState_TurnManager>();
+        m_playerTurn = GetComponent<GameState_PlayerTurn>();
     }
 
     public override bool UpdateState()
@@ -28,6 +28,6 @@ public class GameState_GameOver : GameState
 
     public override bool IsValid()
     {
-        return m_turnManager.GameOver();
+        return !m_playerTurn.TeamStillAlive();
     }
 }

@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 099ee1cae91963c41867c52f580762fa
-timeCreated: 1536027766
+timeCreated: 1540142699
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -132,11 +132,11 @@ ModelImporter:
     100248: Middle_Con_Right
     100250: Pinke_Con_Left
     100252: Pinkie_Con_Right
-    100254: Right_Arm
-    100256: Right_ForeArm
-    100258: Ring_Con_Left
-    100260: Ring_Con_Right
-    100262: //RootNode
+    100254: //RootNode
+    100256: Right_Arm
+    100258: Right_ForeArm
+    100260: Ring_Con_Left
+    100262: Ring_Con_Right
     100264: JNT_Root
     400000: _control
     400002: _control1
@@ -265,13 +265,13 @@ ModelImporter:
     400248: Middle_Con_Right
     400250: Pinke_Con_Left
     400252: Pinkie_Con_Right
-    400254: Right_Arm
-    400256: Right_ForeArm
-    400258: Ring_Con_Left
-    400260: Ring_Con_Right
-    400262: //RootNode
+    400254: //RootNode
+    400256: Right_Arm
+    400258: Right_ForeArm
+    400260: Ring_Con_Left
+    400262: Ring_Con_Right
     400264: JNT_Root
-    7400000: PlayerTinkerer_Walk
+    7400000: Walk
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -304,10 +304,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PlayerTinkerer_Walk
+      name: Walk
       takeName: Walk
       firstFrame: 1
-      lastFrame: 28
+      lastFrame: 18
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -327,7 +327,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9801455
+      - time: 0.99761623
         functionName: EndAnimationState
         data: 
         objectReferenceParameter: {instanceID: 0}
