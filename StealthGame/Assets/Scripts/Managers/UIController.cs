@@ -7,6 +7,8 @@ using TMPro;
 
 public class UIController : MonoBehaviour {
 
+    public bool m_soloMode = false;
+
     public List<Image> m_portraitImages = new List<Image>();
     public List<TextMeshProUGUI> m_APText =  new List<TextMeshProUGUI>();
 
@@ -45,6 +47,9 @@ public class UIController : MonoBehaviour {
         m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
 
         m_levelInteractables.AddRange(Object.FindObjectsOfType<Interactable>());
+
+        if (m_soloMode)
+            m_endNextBtnText.text = m_endTurnString;
     }
 
     public void UpdateUI(List<Agent> agents)
@@ -103,7 +108,10 @@ public class UIController : MonoBehaviour {
         {
             FadeTurnStart(m_playerTurnStart);
 
-            m_endNextBtnText.text = m_nextPlayerString;
+            if(m_soloMode)
+                m_endNextBtnText.text = m_endTurnString;
+            else
+                m_endNextBtnText.text = m_nextPlayerString;
         }
         else if(team == Agent.TEAM.NPC && m_enemyTurnStart != null)
         {

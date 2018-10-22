@@ -4550,6 +4550,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e296e7f310e11fc4da1d709786838bf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_APImage: {fileID: 0}
+  m_selectedSprite: {fileID: 21300000, guid: 253ad1455f68ff742b4ed809191ff8b1, type: 3}
+  m_unselectedSprite: {fileID: 21300000, guid: 58b666ae51c2dae4ca628c2efb54db9a, type: 3}
 --- !u!114 &114244775184624972
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4581,7 +4584,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_nextStates:
   - {fileID: 114481877229364922}
-  - {fileID: 114547340638262126}
   m_defaultState: {fileID: 0}
 --- !u!114 &114481877229364922
 MonoBehaviour:

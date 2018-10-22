@@ -13,6 +13,9 @@ public class PlayerUI : MonoBehaviour
 
     private List<Item> m_visiblePickups = new List<Item>();
 
+    public Image m_APImage = null;
+    public Sprite m_selectedSprite = null;
+    public Sprite m_unselectedSprite = null;
     public enum MESH_STATE { DRAW_NAVMESH, DRAW_PATH, REMOVE_NAVMESH, REMOVE_PATH}
 
     private void Start()
@@ -21,17 +24,24 @@ public class PlayerUI : MonoBehaviour
         m_uiController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
         m_playerController = GetComponent<PlayerController>();
         m_agentInventory = GetComponent<AgentInventory>();
+
+#if UNITY_EDITOR
+        if (m_APImage == null)
+            Debug.Log("Player UI need to have the AP canvas applied");
+#endif
     }
 
     public void StartUI()
     {
         ShowInteractables();
         m_playerController.m_agentInventoryUI.UpdateInventory(m_agentInventory);
+        m_APImage.sprite = m_selectedSprite;
     }
 
     public void EndUI()
     {
         RemoveInteractables();
+        m_APImage.sprite = m_unselectedSprite;
     }
 
     public void UpdateUI()
