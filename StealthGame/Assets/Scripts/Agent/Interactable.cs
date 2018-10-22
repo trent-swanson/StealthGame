@@ -21,6 +21,10 @@ public class Interactable : MonoBehaviour
     static Color m_fadedColour = new Color(0.5f, 0.5f, 0.5f, 1);
     protected virtual void Start()
     {
+#if UNITY_EDITOR
+        if (m_interactableCanvas == null)
+            Debug.Log("Interactable canvas on interactable has not been set");
+#endif
         foreach (NavNode interactionNode in m_interactionNodes)
         {
             if (interactionNode != null)
