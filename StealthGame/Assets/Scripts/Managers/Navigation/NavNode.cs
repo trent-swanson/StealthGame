@@ -92,7 +92,6 @@ public class NavNode : MonoBehaviour
     {
         m_interactable = interactable;
         m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
-        m_requiredItem.sprite = interactable.m_requiredItem.m_icon;
     }
 
     public void SetupNodeType()

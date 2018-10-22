@@ -8,12 +8,15 @@ public class AgentInventory : MonoBehaviour
     public List<Item> m_currentItems = new List<Item>();
 
     private InventoryUI m_inventoryUI = null;
+    private UIController m_UIController = null;
 
     private void Start()
     {
         m_inventoryUI = GetComponent<Agent>().m_agentInventoryUI;
         if(m_inventoryUI!=null)
             m_inventoryUI.UpdateInventory(this);
+
+        m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
     }
 
     public bool AgentHasItem(Item item)
@@ -44,5 +47,6 @@ public class AgentInventory : MonoBehaviour
         }
 
         m_inventoryUI.UpdateInventory(this);
+        m_UIController.ShowInteractables(this);
     }
 }

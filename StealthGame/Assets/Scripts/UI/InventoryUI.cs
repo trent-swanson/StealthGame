@@ -9,6 +9,8 @@ public class InventoryUI : MonoBehaviour
 
     public InventorySlot[] m_inventorySlots = new InventorySlot[INVENTORY_SLOT_COUNT];
     public TextMeshProUGUI m_itemDescription = null;
+    public GameObject m_inventoryBarObject = null;
+    private Animator m_inventoryBarAnimator = null;
 
     public void Start()
     {
@@ -16,6 +18,9 @@ public class InventoryUI : MonoBehaviour
         {
             m_inventorySlots[i].SetupSlot(this, i);
         }
+
+        if(m_inventoryBarObject!=null)
+            m_inventoryBarAnimator = m_inventoryBarObject.GetComponent<Animator>();
     }
 
     public void UpdateInventory(AgentInventory attachedInventory)
@@ -29,6 +34,15 @@ public class InventoryUI : MonoBehaviour
             else
                 m_inventorySlots[i].gameObject.SetActive(false);
         }
+
+        if (m_inventoryBarAnimator != null)
+            m_inventoryBarAnimator.SetInteger("InventoryCount", items.Count);
+    }
+
+    public void DisableInventory()
+    {
+        if (m_inventoryBarAnimator != null)
+            m_inventoryBarAnimator.SetInteger("InventoryCount", 0);
     }
 
     public void EnableItemDescription(int slotIndex)

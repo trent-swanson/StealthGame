@@ -41,9 +41,6 @@ public class PlayerController : Agent
         if (!m_agentAnimationController.m_playNextAnimation || m_agentAnimationController.m_animationSteps.Count != 0)
             return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
 
-        //if (m_currentActionPoints <= 0)
-        //    return AGENT_UPDATE_STATE.END_TURN;
-
         return AGENT_UPDATE_STATE.AWAITING_INPUT;
     }
 
@@ -54,6 +51,7 @@ public class PlayerController : Agent
         EndTurn();
         m_playerStateMachine.TurnEndStateMachine();
         m_playerUI.UpdateUI();
+        m_agentInventoryUI.DisableInventory();
     }
 
     //Wall hiding for end of turn

@@ -9,7 +9,6 @@ public class GameState_NPCTurn : GameState_Turn
     protected override void Start()
     {
         base.Start();
-        m_UIController.SetUIInteractivity(false);
     }
 
     /// <returns>True when state is completed</returns>
@@ -76,6 +75,8 @@ public class GameState_NPCTurn : GameState_Turn
             m_team[m_currentAgentIndex].AgentSelected();
             m_UIController.TurnStart(Agent.TEAM.NPC);
         }
+
+        m_UIController.SetUIInteractivity(false);
     }
 
     public override void EndState()

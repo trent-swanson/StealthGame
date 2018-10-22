@@ -46,7 +46,8 @@ public class PlayerState_InputEnd : PlayerState
     //-------------------
     public override void StateEnd()
     {
-
+        m_parentStateMachine.m_selectableNodes.Clear();
+        m_parentStateMachine.m_currentSelectedNode = null;
     }
 
     //-------------------

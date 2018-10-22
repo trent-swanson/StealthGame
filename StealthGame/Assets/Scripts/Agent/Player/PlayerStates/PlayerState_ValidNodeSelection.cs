@@ -19,8 +19,8 @@ public class PlayerState_ValidNodeSelection : PlayerState
     //-------------------
     public override void StateStart()
     {
-        m_currentNode = m_parentStateMachine.GetMouseNode();
-        m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.DRAW_PATH, m_parentStateMachine.m_selectableNodes, null, m_currentNode, m_parentStateMachine.GetPath(m_currentNode));
+        m_currentNode = null;
+        m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.DRAW_NAVMESH, m_parentStateMachine.m_selectableNodes);
     }
 
     //-------------------

@@ -30,12 +30,14 @@ public class InventorySlot : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(m_item!=null)
-            m_parentInventory.EnableItemDescription(m_slotIndex);
+        //Removed becuase of not knowing where to put it
+        //if (m_item!=null)
+        //    m_parentInventory.EnableItemDescription(m_slotIndex);
     }
 
     public void OnPointerExit(PointerEventData eventData)
-    {
-        m_parentInventory.DisableItemDescription();
+    {        
+        //Removed becuase of not knowing where to put it
+        //m_parentInventory.DisableItemDescription();
     }
 }

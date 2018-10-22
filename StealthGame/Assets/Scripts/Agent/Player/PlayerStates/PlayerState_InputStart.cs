@@ -29,8 +29,6 @@ public class PlayerState_InputStart : PlayerState
     //-------------------
     public override bool UpdateState()
     {
-        m_parentStateMachine.m_currentSelectedNode = m_parentStateMachine.GetMouseNode();
-
         return true;
     }
 

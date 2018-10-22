@@ -11,6 +11,8 @@ public class PipeValve : Interactable
     protected override void Start()
     {
         base.Start();
+
+        FadeCanvas();
     }
 
     public override void PerformAction(Agent agent)
@@ -24,17 +26,7 @@ public class PipeValve : Interactable
         }
 
         m_usable = false;
-        //StartCoroutine(DisableHazard(m_steamEffect));
     }
-
-    //private IEnumerator DisableHazard(float delay)
-    //{
-    //    yield return new WaitForSeconds(delay);
-    //    foreach (EnviromentHazard enviromentalHazard in m_activatedHazards)
-    //    {
-    //        enviromentalHazard.DeactivateHazard();
-    //    }
-    //}
 }
 
 

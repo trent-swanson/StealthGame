@@ -68,6 +68,7 @@ public class GameState_PlayerTurn : GameState_Turn
 
             m_team[m_currentAgentIndex].AgentSelected();
             m_UIController.TurnStart(Agent.TEAM.PLAYER);
+            m_UIController.ShowInteractables(m_team[m_currentAgentIndex].m_agentInventory);
         }
     }
 
@@ -101,6 +102,7 @@ public class GameState_PlayerTurn : GameState_Turn
 
             m_UIController.UpdateUI(m_team);
             m_UIController.SwapEndTurnButton();
+            m_UIController.ShowInteractables(m_team[m_currentAgentIndex].m_agentInventory);
         }
     }
 

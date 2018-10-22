@@ -18,7 +18,6 @@ public class PlayerState_InvalidNodeSelection : PlayerState
     public override void StateStart()
     {
         m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_PATH, m_parentStateMachine.m_selectableNodes, m_parentStateMachine.m_currentSelectedNode);
-        m_parentStateMachine.m_currentSelectedNode = null;
     }
 
     //-------------------

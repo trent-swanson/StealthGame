@@ -26,6 +26,7 @@ public class PlayerUI : MonoBehaviour
     public void StartUI()
     {
         ShowInteractables();
+        m_playerController.m_agentInventoryUI.UpdateInventory(m_agentInventory);
     }
 
     public void EndUI()
@@ -62,8 +63,7 @@ public class PlayerUI : MonoBehaviour
         }
         else if (state == MESH_STATE.REMOVE_PATH) //remove path to selected node
         {
-            if (currentSelectedNode != null)
-                currentSelectedNode.UpdateNavNodeState(NavNode.NODE_STATE.SELECTABLE, m_playerController);
+            SetNodeStates(selectableNodes, NavNode.NODE_STATE.SELECTABLE);
 
             ClearPathRender();
         }

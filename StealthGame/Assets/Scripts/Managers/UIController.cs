@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class UIController : MonoBehaviour {
 
     public List<Image> m_portraitImages = new List<Image>();
     public List<TextMeshProUGUI> m_APText =  new List<TextMeshProUGUI>();
-    public List<GameObject> m_portraitHighlight = new List<GameObject>();
 
     public GameState_PlayerTurn m_playerTurn = null;
 
@@ -28,6 +28,9 @@ public class UIController : MonoBehaviour {
     private Vector4 m_fadedColor = new Vector4(0.1f, 0.1f, 0.1f, 1.0f);
     private Vector4 m_fullColor = new Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 
+    [SerializeField]
+    private List<Interactable> m_levelInteractables = new List<Interactable>();
+
     //Very big hack but hey it works
     public Image m_UIBlocker = null;
 
@@ -40,6 +43,8 @@ public class UIController : MonoBehaviour {
             Debug.Log("End turn button has not been set in the UI controller");
 #endif
         m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
+
+        m_levelInteractables.AddRange(Object.FindObjectsOfType<Interactable>());
     }
 
     public void UpdateUI(List<Agent> agents)
@@ -57,12 +62,6 @@ public class UIController : MonoBehaviour {
 
             //Update AP
             m_APText[i].text = agents[i].m_currentActionPoints.ToString();
-
-            //Update highlight
-            if (i == currentPlayer)
-                m_portraitHighlight[i].SetActive(true);
-            else
-                m_portraitHighlight[i].SetActive(false);
         }
     }
 
@@ -91,6 +90,11 @@ public class UIController : MonoBehaviour {
     public void SwapEndTurnButton()
     {
         m_endNextBtnText.text = m_endTurnString;
+    }
+
+    public void ReturnMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void TurnStart(Agent.TEAM team)
@@ -142,6 +146,24 @@ public class UIController : MonoBehaviour {
         {
             spriteColor.a = 0;
             imageToFade.color = spriteColor;
+        }
+    }
+
+    public void ShowInteractables(AgentInventory agentInventory)
+    {
+        foreach (Interactable interactable in m_levelInteractables)
+        {
+            if(interactable.m_usable)
+            {
+                if(agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
+                {
+                    interactable.FullCanvas();
+                }
+                else//Player does not have the required item, fade canvas
+                {
+                    interactable.FadeCanvas();
+                }
+            }
         }
     }
 }
