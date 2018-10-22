@@ -9,7 +9,7 @@ public class PlayerController : Agent
     public Sprite portrait;
 
     public PlayerUI m_playerUI = null;
-    private PlayerStateMachine m_playerStateMachine = null;
+    public PlayerStateMachine m_playerStateMachine = null;
 
     protected override void Start()
     {

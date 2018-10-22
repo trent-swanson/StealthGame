@@ -43,6 +43,10 @@ public class AgentAnimationController : MonoBehaviour
         m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
     }
 
+    private void Update()
+    {
+    }
+
     public void EndAnimationState()
     {
         if(m_animationSteps.Count > 0)
@@ -141,16 +145,22 @@ public class AgentAnimationController : MonoBehaviour
                     {
                         case 1:
                         case -3:
-                            m_currentAnimation = "WallAttackLeft";
+                            m_currentAnimation = "WallAttackRight";
                             break;
                         case -1:
                         case 3:
-                            m_currentAnimation = "WallAttackRight";
+                            m_currentAnimation = "WallAttackLeft";
                             break;
                         case 0:
                         case 2:
                             m_currentAnimation = "WallAttackForward";
                             break;
+                    }
+
+                    PlayerController playerController = m_agent.GetComponent<PlayerController>();
+                    if(playerController != null)
+                    {
+                        playerController.m_playerStateMachine.m_currentlyHiding = true;
                     }
                     break;
                 case AnimationManager.ANIMATION_STEP.DEATH:

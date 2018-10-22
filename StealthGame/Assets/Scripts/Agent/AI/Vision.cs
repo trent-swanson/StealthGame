@@ -28,7 +28,7 @@ public class Vision : MonoBehaviour
         //Add left right nodes
         FACING_DIR rightDir = GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT);
         NavNode rightNode = startingNode.GetAdjacentNode(rightDir);
-        if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE))
+        if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || rightNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
         {
             openNodes.Add(rightNode);
             while (openNodes.Count > 0)
@@ -41,7 +41,7 @@ public class Vision : MonoBehaviour
 
         FACING_DIR leftDir = GetRelativeDir(facingDir, LEFT_RIGHT.LEFT);
         NavNode leftNode = startingNode.GetAdjacentNode(leftDir);
-        if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE))
+        if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || rightNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
         {
             openNodes.Add(leftNode);
             while (openNodes.Count > 0)
@@ -66,7 +66,7 @@ public class Vision : MonoBehaviour
         {
             //Get forward node
             NavNode forwardNode = GetNavNode(agent, startingNode, navNode, facingDir, visionDistance, visionCone);
-            if (forwardNode != null && (forwardNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || forwardNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) && !newOpenNodes.Contains(forwardNode))
+            if (forwardNode != null && (forwardNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || forwardNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || forwardNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE) && !newOpenNodes.Contains(forwardNode))
             {
                 forwardNodes.Add(forwardNode);
             }
@@ -78,12 +78,12 @@ public class Vision : MonoBehaviour
         {
             //Get rightwards node
             NavNode leftNode = GetNavNode(agent, startingNode, forwardNode, GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT), visionDistance, visionCone);
-            if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) && !newOpenNodes.Contains(leftNode))
+            if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || leftNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE) && !newOpenNodes.Contains(leftNode))
                 newOpenNodes.Add(leftNode);
 
             //Get leftwards node
             NavNode rightNode = GetNavNode(agent, startingNode, forwardNode, GetRelativeDir(facingDir, LEFT_RIGHT.LEFT), visionDistance, visionCone);
-            if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE) && !newOpenNodes.Contains(rightNode))
+            if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || rightNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE) && !newOpenNodes.Contains(rightNode))
                 newOpenNodes.Add(rightNode);
         }
 
