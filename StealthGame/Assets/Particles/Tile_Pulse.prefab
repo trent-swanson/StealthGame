@@ -35,7 +35,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1777182313289276}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalPosition: {x: -7.369847, y: 0.166, z: -5.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -48,7 +48,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1777182313289276}
   serializedVersion: 5
-  lengthInSec: 9
+  lengthInSec: 6
   simulationSpeed: 1
   stopAction: 0
   looping: 1
@@ -101,7 +101,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -2056899405
+  randomSeed: -607497909
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -191,7 +191,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.7254902, g: 0.10980392, b: 0.10980392, a: 1}
+      maxColor: {r: 0.16084558, g: 0.25442436, b: 0.875, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
