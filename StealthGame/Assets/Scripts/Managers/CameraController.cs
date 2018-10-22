@@ -22,7 +22,7 @@ public class CameraController : MonoBehaviour
     public float m_minY = 0f;
     public float m_maxY = 15f;
 
-    private FACING_DIR m_camDirection = FACING_DIR.NORTH;
+    public FACING_DIR m_camDirection = FACING_DIR.NORTH;
 
     private float m_cameraHeight = 0.0f;
 
@@ -34,6 +34,9 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
+        //Set up initial rotation
+        InitialRotate();
+
         WallFade();
 
 #if UNITY_EDITOR
@@ -123,14 +126,55 @@ public class CameraController : MonoBehaviour
         }
     }
 
+    private void InitialRotate()
+    {
+        //Hacky way to get inital rotation, TODO using facing dir casting get actual rotation
+        switch (m_camDirection)
+        {
+            case FACING_DIR.NORTH:
+                transform.rotation *= Quaternion.Euler(0, 0, 0);
+                break;
+            case FACING_DIR.EAST:
+                transform.rotation *= Quaternion.Euler(0, 90, 0);
+                break;
+            case FACING_DIR.SOUTH:
+                transform.rotation *= Quaternion.Euler(0, 180, 0);
+                break;
+            case FACING_DIR.WEST:
+                transform.rotation *= Quaternion.Euler(0, -90, 0);
+                break;
+            case FACING_DIR.NONE:
+                break;
+            default:
+                break;
+        }
+
+        //Move pivot, y rotation axis / x,z position
+        m_cameraPivot.transform.rotation = transform.rotation;
+        m_cameraPivot.transform.position = transform.position + m_cameraPivot.transform.forward * m_distanceFromPivot;
+
+        //Move camera, x,z rotation axis / y position
+        m_camera.transform.localPosition = new Vector3(0.0f, m_cameraHeight, 0.0f);
+
+        m_camera.transform.LookAt(transform.position);
+
+        Quaternion cameraRot = m_camera.transform.localRotation;
+        cameraRot.y = 0.0f;
+        cameraRot.z = 0.0f;
+
+        m_camera.transform.localRotation = cameraRot;
+    }
+
     private void UpdateCameraPos()
     {
+        //Move pivot, y rotation axis / x,z position
         float diffAngle = Vector3.SignedAngle(m_cameraPivot.transform.forward, transform.forward, Vector3.up);
         diffAngle = Mathf.Clamp(diffAngle, -m_rotationSpeed, m_rotationSpeed);
 
         m_cameraPivot.transform.Rotate(Vector3.up, diffAngle);
         m_cameraPivot.transform.position = transform.position + m_cameraPivot.transform.forward * m_distanceFromPivot;
 
+        //Move camera, x,z rotation axis / y position
         m_camera.transform.localPosition = new Vector3(0.0f, m_cameraHeight, 0.0f);
 
         m_camera.transform.LookAt(transform.position);
