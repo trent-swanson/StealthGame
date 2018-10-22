@@ -141,11 +141,11 @@ public class AgentAnimationController : MonoBehaviour
                     {
                         case 1:
                         case -3:
-                            m_currentAnimation = "WallAttackLeft";
+                            m_currentAnimation = "WallAttackRight";
                             break;
                         case -1:
                         case 3:
-                            m_currentAnimation = "WallAttackRight";
+                            m_currentAnimation = "WallAttackLeft";
                             break;
                         case 0:
                         case 2:

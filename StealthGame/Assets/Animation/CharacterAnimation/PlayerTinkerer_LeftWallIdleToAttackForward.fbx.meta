@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 9fe21d15478613c4790a7324f0273288
-timeCreated: 1539127638
+guid: e4dd49ef08debc34895b44aed28bcc33
+timeCreated: 1540246395
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -271,7 +271,7 @@ ModelImporter:
     400260: Ring_Con_Left
     400262: Ring_Con_Right
     400264: JNT_Root
-    7400000: PlayerTinkerer_SafehackToIdle
+    7400000: PlayerTinkerer_RightWallIdleToAttackForward
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -288,11 +288,10 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'PlayerTinkerer_SafehackToIdle' has import animation
-      warnings that might lower retargeting quality:\nNote: Activate translation DOF
-      on avatar to improve retargeting quality.\n\t'JNT_Spine0' has translation animation
-      that will be discarded.\nEvent EndAnimationState has a time (0.610256) outside
-      the clip's valid range (0.000000..0.600000). It will never be fired"
+    animationImportWarnings: "\nClip 'PlayerTinkerer_RightWallIdleToAttackForward'
+      has import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'JNT_Spine0' has
+      translation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -305,10 +304,10 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PlayerTinkerer_SafehackToIdle
-      takeName: PlayerTinkerer_SafehackToIdle
-      firstFrame: 32
-      lastFrame: 50
+      name: PlayerTinkerer_RightWallIdleToAttackForward
+      takeName: PlayerTinkerer_RightWallIdleToAttackForward
+      firstFrame: 1
+      lastFrame: 32
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -328,7 +327,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9943297
+      - time: 0.9864706
         functionName: EndAnimationState
         data: 
         objectReferenceParameter: {instanceID: 0}
