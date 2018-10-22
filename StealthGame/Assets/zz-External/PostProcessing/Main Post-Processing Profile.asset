@@ -42,7 +42,7 @@ MonoBehaviour:
   ambientOcclusion:
     m_Enabled: 1
     m_Settings:
-      intensity: 1
+      intensity: 4
       radius: 0.1
       sampleCount: 10
       downsampling: 1
@@ -54,20 +54,20 @@ MonoBehaviour:
     m_Settings:
       reflection:
         blendType: 0
-        reflectionQuality: 2
-        maxDistance: 100
+        reflectionQuality: 0
+        maxDistance: 190
         iterationCount: 256
         stepSize: 3
         widthModifier: 0.5
         reflectionBlur: 1
         reflectBackfaces: 0
       intensity:
-        reflectionMultiplier: 1
-        fadeDistance: 100
-        fresnelFade: 1
+        reflectionMultiplier: 2
+        fadeDistance: 238
+        fresnelFade: 0.171
         fresnelFadePower: 1
       screenEdgeMask:
-        intensity: 0.03
+        intensity: 0
   depthOfField:
     m_Enabled: 0
     m_Settings:
@@ -120,23 +120,23 @@ MonoBehaviour:
         neutralWhiteLevel: 5.3
         neutralWhiteClip: 10
       basic:
-        postExposure: 0
+        postExposure: -1
         temperature: 10
         tint: 3
         hueShift: 0
-        saturation: 1
+        saturation: 0.8
         contrast: 1.1
       channelMixer:
-        red: {x: 1, y: 0, z: 0}
+        red: {x: 0.64, y: 0.94, z: -0.83}
         green: {x: 0, y: 1, z: 0}
         blue: {x: 0, y: 0, z: 1}
         currentEditingChannel: 0
       colorWheels:
         mode: 1
         log:
-          slope: {r: 1, g: 0.89652425, b: 0.9698376, a: 0}
-          power: {r: 1, g: 0.8651589, b: 0.9662899, a: 0}
-          offset: {r: 0.9852887, g: 0.9336368, b: 1, a: 0}
+          slope: {r: 1, g: 0.9221246, b: 0.9303537, a: 0}
+          power: {r: 0.9612998, g: 1, b: 0.92260015, a: 0}
+          offset: {r: 1, g: 0.95865583, b: 0.81138843, a: 0}
         linear:
           lift: {r: 1, g: 1, b: 1, a: 0}
           gamma: {r: 1, g: 1, b: 1, a: 0}

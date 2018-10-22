@@ -33,8 +33,8 @@ RenderSettings:
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
-  m_DefaultReflectionResolution: 128
-  m_ReflectionBounces: 1
+  m_DefaultReflectionResolution: 512
+  m_ReflectionBounces: 2
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
@@ -50,12 +50,12 @@ LightmapSettings:
     m_IndirectOutputScale: 1
     m_AlbedoBoost: 1
     m_TemporalCoherenceThreshold: 1
-    m_EnvironmentLightingMode: 0
+    m_EnvironmentLightingMode: 1
     m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 9
-    m_Resolution: 2
+    m_Resolution: 4
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
@@ -3514,6 +3514,7 @@ MonoBehaviour:
   m_pickupSprite: {fileID: 21300000, guid: 892a3799e5f23c64e99010420203e0ae, type: 3}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 185635188}
+  m_requiredItem: {fileID: 0}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
   m_abilityToWallHide: 00000000
@@ -4194,6 +4195,7 @@ MonoBehaviour:
   m_pickupSprite: {fileID: 21300000, guid: 892a3799e5f23c64e99010420203e0ae, type: 3}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 1712491561}
+  m_requiredItem: {fileID: 0}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
   m_abilityToWallHide: 00000000
@@ -5953,6 +5955,7 @@ MonoBehaviour:
   m_pickupSprite: {fileID: 21300000, guid: 892a3799e5f23c64e99010420203e0ae, type: 3}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 803100134}
+  m_requiredItem: {fileID: 0}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
   m_abilityToWallHide: 00000000
@@ -16310,16 +16313,21 @@ Prefab:
     - target: {fileID: 224325607839400692, guid: 984554dc6e560f640bdc87bd3eca3a57,
         type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 224640061311183410, guid: 984554dc6e560f640bdc87bd3eca3a57,
         type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1151249089968024, guid: 984554dc6e560f640bdc87bd3eca3a57, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224855569924915794, guid: 984554dc6e560f640bdc87bd3eca3a57,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: -3.743042
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 984554dc6e560f640bdc87bd3eca3a57, type: 2}
@@ -17394,6 +17402,7 @@ MonoBehaviour:
   m_pickupSprite: {fileID: 21300000, guid: 892a3799e5f23c64e99010420203e0ae, type: 3}
   m_defaultSprite: {fileID: 21300000, guid: 246323887aea9cd4bb79b56309e6e455, type: 3}
   m_spriteRenderer: {fileID: 329632791}
+  m_requiredItem: {fileID: 0}
   m_item: {fileID: 0}
   m_interactable: {fileID: 0}
   m_abilityToWallHide: 00000000
