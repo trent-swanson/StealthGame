@@ -48,6 +48,7 @@ public class PlayerState_ValidNodeSelection : PlayerState
                 {
                     m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.DRAW_PATH, m_parentStateMachine.m_selectableNodes, m_currentNode, newSelectedNavNode, m_parentStateMachine.GetPath(newSelectedNavNode));
                     m_currentNode = newSelectedNavNode;
+                    m_parentStateMachine.m_currentSelectedNode = m_currentNode;
                 }
             }
         }
@@ -60,7 +61,7 @@ public class PlayerState_ValidNodeSelection : PlayerState
     //-------------------
     public override void StateEnd()
     {
-        m_parentStateMachine.m_currentSelectedNode = m_currentNode;
+        //m_parentStateMachine.m_currentSelectedNode = m_currentNode;
     }
 
     //-------------------

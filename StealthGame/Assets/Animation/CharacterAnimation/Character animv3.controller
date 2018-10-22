@@ -3235,7 +3235,7 @@ AnimatorState:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: WallLeftToRight 0
+  m_Name: WallLeftToRightAttackTransistion
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -3533,7 +3533,7 @@ AnimatorState:
   m_ObjectHideFlags: 3
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: WallRightToLeft 0
+  m_Name: WallRightToLeftAttackTransistion
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -3737,10 +3737,10 @@ AnimatorStateMachine:
     m_Position: {x: -192, y: 432, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102794275152654410}
-    m_Position: {x: -744, y: 216, z: 0}
+    m_Position: {x: -600, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102988275068135058}
-    m_Position: {x: -540, y: 216, z: 0}
+    m_Position: {x: -600, y: 264, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

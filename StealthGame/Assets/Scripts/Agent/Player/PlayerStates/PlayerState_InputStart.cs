@@ -17,6 +17,7 @@ public class PlayerState_InputStart : PlayerState
     //-------------------
     public override void StateStart()
     {
+        m_parentStateMachine.m_currentSelectedNode = null;
         GetAllSelectableNodes();
         m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.DRAW_NAVMESH, m_parentStateMachine.m_selectableNodes);
         m_playerUI.UpdateUI();

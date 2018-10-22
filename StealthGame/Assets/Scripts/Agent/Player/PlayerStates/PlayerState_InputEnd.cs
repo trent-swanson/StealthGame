@@ -17,7 +17,6 @@ public class PlayerState_InputEnd : PlayerState
     //-------------------
     public override void StateStart()
     {
-
     }
 
     //-------------------
