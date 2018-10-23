@@ -21,9 +21,9 @@ public class Safe : Interactable
             newItem.EquipItem(agent);
             GetComponentInChildren<Animator>().SetTrigger("Safe_Open");
             DisableInteractable();
-        }
 
-        //After interaction, remove all points 
-        agent.m_currentActionPoints = 0;
+            //After interaction, remove all points 
+            agent.m_currentActionPoints = 0;
+        }
     }
 }
