@@ -16,7 +16,12 @@ public class GameState_OpeningCamera : GameState
 
     public override void EndState()
     {
-
+        //Update vision of Guards
+        foreach (NPC NPCScript in GameObject.FindObjectsOfType<NPC>())
+        {
+            NPCScript.UpdateWorldState();
+        }
+       
     }
 
     public override bool IsValid()

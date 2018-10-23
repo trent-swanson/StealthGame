@@ -93,7 +93,7 @@ public class PlayerUI : MonoBehaviour
             SpriteRenderer spriteRenderer = navNode.m_selectableUI.GetComponent<SpriteRenderer>();
             Color newColor = spriteRenderer.color;
 
-            if (navNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || navNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE || navNode.m_item != null)//Full view for obstructed tiles
+            if (navNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || navNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE || navNode.m_item != null || navNode.m_downedAgents.Count > 0)//Full view for obstructed tiles
                 newColor.a = 1;
             else
                 newColor.a = (float)(navNode.m_BFSDistance + 1) / m_playerController.m_currentActionPoints;//min val of 1/current action points
