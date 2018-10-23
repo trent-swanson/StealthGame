@@ -75,6 +75,6 @@ public class PlayerState_ValidNodeSelection : PlayerState
 
         return currentSelectedNavNode != null && 
             m_parentStateMachine.m_selectableNodes.Contains(currentSelectedNavNode) && 
-            (currentSelectedNavNode.m_obstructingAgent == null || m_currentNode.m_obstructingAgent.m_team != m_playerController.m_team);
+            (currentSelectedNavNode.m_obstructingAgent == null || currentSelectedNavNode.m_obstructingAgent.m_team != m_playerController.m_team);
     }
 }

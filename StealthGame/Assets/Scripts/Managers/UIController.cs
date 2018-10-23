@@ -159,17 +159,31 @@ public class UIController : MonoBehaviour {
 
     public void ShowInteractables(AgentInventory agentInventory)
     {
-        foreach (Interactable interactable in m_levelInteractables)
+        PlayerController playerController = agentInventory.GetComponent<PlayerController>();
+
+        if(playerController!=null)
         {
-            if(interactable.m_usable)
+            foreach (Interactable interactable in m_levelInteractables)
             {
-                if(agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
+                if(interactable.m_usable)
                 {
-                    interactable.FullCanvas();
-                }
-                else//Player does not have the required item, fade canvas
-                {
-                    interactable.FadeCanvas();
+                    List<NavNode> pathToInteractable = Navigation.GetNavPath(playerController.m_currentNavNode, interactable.m_interactionNodes[0], playerController);
+
+                    if(pathToInteractable.Count <= playerController.m_currentActionPoints)
+                    {
+                        if(agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
+                        {
+                            interactable.FullCanvas();
+                        }
+                        else//Player does not have the required item, fade canvas
+                        {
+                            interactable.FadeCanvas();
+                        }
+                    }
+                    else
+                    {
+                        interactable.RemoveCanvas();
+                    }
                 }
             }
         }
