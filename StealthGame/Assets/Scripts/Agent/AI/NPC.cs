@@ -6,6 +6,8 @@ public class NPC : Agent
 {
     public GOAP m_GOAP = null;
 
+    public PathCreator m_pathCreator = null;
+
     //-----------------------
     // Agent States
     //-----------------------
@@ -66,6 +68,9 @@ public class NPC : Agent
         base.Start();
 
         m_GOAP = GetComponent<GOAP>();
+
+        if (m_pathCreator != null)
+            m_path = m_pathCreator.m_path;
     }
 
 
