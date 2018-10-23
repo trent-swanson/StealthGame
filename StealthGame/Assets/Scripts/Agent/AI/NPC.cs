@@ -79,6 +79,7 @@ public class NPC : Agent
     public override void AgentSelected()
     {
         m_cameraController.Focus(transform);
+        UpdateWorldState();
     }
 
     //Constant update while agent is selected
