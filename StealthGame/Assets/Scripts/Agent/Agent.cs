@@ -116,6 +116,7 @@ public class Agent : MonoBehaviour
         m_currentNavNode.m_obstructingAgent = null;
         m_currentNavNode.AddDownedAgent(this);
         m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+        m_currentActionPoints = 0;
 
         //Setup animation
         m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.DEATH);
