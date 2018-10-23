@@ -81,6 +81,8 @@ public class UIController : MonoBehaviour {
         {
             m_UIInteractivity = togleVal;
             m_UIBlocker.enabled = !togleVal;
+
+            m_endNextBtn.GetComponent<Button>().interactable = togleVal;
         }
     }
 
