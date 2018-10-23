@@ -41,7 +41,7 @@ public class Vision : MonoBehaviour
 
         FACING_DIR leftDir = GetRelativeDir(facingDir, LEFT_RIGHT.LEFT);
         NavNode leftNode = startingNode.GetAdjacentNode(leftDir);
-        if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || rightNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
+        if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || leftNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
         {
             openNodes.Add(leftNode);
             while (openNodes.Count > 0)
