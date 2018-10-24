@@ -5,12 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class UIController : MonoBehaviour {
+public class UIController : MonoBehaviour
+{
 
     public bool m_soloMode = false;
 
     public List<Image> m_portraitImages = new List<Image>();
-    public List<TextMeshProUGUI> m_APText =  new List<TextMeshProUGUI>();
+    public List<TextMeshProUGUI> m_APText = new List<TextMeshProUGUI>();
 
     public GameState_PlayerTurn m_playerTurn = null;
 
@@ -40,7 +41,7 @@ public class UIController : MonoBehaviour {
     {
         if (m_endNextBtn != null)
             m_endNextBtnText = m_endNextBtn.GetComponentInChildren<Text>();
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         else
             Debug.Log("End turn button has not been set in the UI controller");
 #endif
@@ -72,7 +73,7 @@ public class UIController : MonoBehaviour {
 
     public void UpdateItemInventory(Agent agent)
     {
-           
+
     }
 
     public void SetUIInteractivity(bool togleVal)
@@ -106,16 +107,16 @@ public class UIController : MonoBehaviour {
 
     public void TurnStart(Agent.TEAM team)
     {
-        if(team == Agent.TEAM.PLAYER && m_playerTurnStart != null)
+        if (team == Agent.TEAM.PLAYER && m_playerTurnStart != null)
         {
             FadeTurnStart(m_playerTurnStart);
 
-            if(m_soloMode)
+            if (m_soloMode)
                 m_endNextBtnText.text = m_endTurnString;
             else
                 m_endNextBtnText.text = m_nextPlayerString;
         }
-        else if(team == Agent.TEAM.NPC && m_enemyTurnStart != null)
+        else if (team == Agent.TEAM.NPC && m_enemyTurnStart != null)
         {
             FadeTurnStart(m_enemyTurnStart);
         }
@@ -123,10 +124,10 @@ public class UIController : MonoBehaviour {
 
     public void EndNextBtn()
     {
-        if(m_endNextBtnText.text == m_nextPlayerString)
+        if (m_endNextBtnText.text == m_nextPlayerString)
         {
             m_playerTurn.NextPlayer();
-            m_endNextBtnText.text = m_endTurnString; 
+            m_endNextBtnText.text = m_endTurnString;
         }
         else
             m_playerTurn.EndTurn();
@@ -148,7 +149,7 @@ public class UIController : MonoBehaviour {
         spriteColor.a -= time;
         imageToFade.color = spriteColor;
 
-        if(spriteColor.a > 0.05f)
+        if (spriteColor.a > 0.05f)
         {
             StartCoroutine(FadeTurnLogo(Time.deltaTime / m_turnStartFadeTime, imageToFade));
         }
@@ -163,17 +164,15 @@ public class UIController : MonoBehaviour {
     {
         PlayerController playerController = agentInventory.GetComponent<PlayerController>();
 
-        if(playerController!=null)
+        if (playerController != null)
         {
             foreach (Interactable interactable in m_levelInteractables)
             {
-                if(interactable.m_usable)
+                if (interactable.m_usable)
                 {
-                    List<NavNode> pathToInteractable = Navigation.GetNavPath(playerController.m_currentNavNode, interactable.m_interactionNodes[0], playerController);
-
-                    if(pathToInteractable.Count <= playerController.m_currentActionPoints)
+                    if (playerController.m_playerStateMachine.m_selectableNodes.Contains(interactable.m_interactionNodes[0]))
                     {
-                        if(agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
+                        if (agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
                         {
                             interactable.FullCanvas();
                         }

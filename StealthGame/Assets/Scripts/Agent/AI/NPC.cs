@@ -70,7 +70,7 @@ public class NPC : Agent
         m_GOAP = GetComponent<GOAP>();
 
         if (m_pathCreator != null)
-            m_path = m_pathCreator.m_path;
+            m_agentWorldState.m_waypoints = m_pathCreator.m_path;
     }
 
 
