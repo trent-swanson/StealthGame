@@ -192,7 +192,10 @@ public class NPC : Agent
 
                 newInvestigation.m_node = possibleTargets[possibleTargetIndex].m_currentNavNode;
                 newInvestigation.m_target = possibleTargets[possibleTargetIndex];
-                investigationNodes.Add(newInvestigation);
+
+                //Check if player can be gotten to
+                if(newInvestigation.m_node.m_nodeTop.y == m_currentNavNode.m_nodeTop.y)
+                    investigationNodes.Add(newInvestigation);
 
                 possibleTargets.RemoveAt(possibleTargetIndex);
                 possibleTargetIndex--;
