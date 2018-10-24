@@ -63,7 +63,7 @@ public class Agent : MonoBehaviour
     [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
     public float m_visionFadeAngle = 60;
 
-    [SerializeField]
+    [HideInInspector]
     public List<NavNode> m_path = new List<NavNode>();
 
     protected virtual void Start()
