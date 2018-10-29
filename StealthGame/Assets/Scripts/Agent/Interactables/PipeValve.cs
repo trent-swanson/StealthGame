@@ -15,14 +15,16 @@ public class PipeValve : Interactable
         FadeCanvas();
     }
 
+    public override bool CanPerform(Agent agent)
+    {
+        return m_usable && agent.m_agentInventory.AgentHasItem(m_requiredItem);
+    }
+
     public override void PerformAction(Agent agent)
     {
-        if (m_usable && agent.m_agentInventory.AgentHasItem(m_requiredItem))
+        foreach (EnviromentHazard enviromentalHazard in m_activatedHazards)
         {
-            foreach (EnviromentHazard enviromentalHazard in m_activatedHazards)
-            {
-                enviromentalHazard.ActivateHazard();
-            }
+            enviromentalHazard.ActivateHazard();
         }
 
         m_usable = false;
