@@ -8,9 +8,18 @@ public class Safe : Interactable
 
     public int m_health = 3;
 
+    private GameObject boozeGroup;
+    private GameObject boozeEmpty;
+    private GameObject sparkleParticle;
+
     protected override void Start()
     {
         base.Start();
+
+        boozeGroup = gameObject.transform.Find("BoozeGroup").gameObject;
+        sparkleParticle = gameObject.transform.Find("Sparkle_Multiple").gameObject;
+        boozeEmpty = boozeGroup = gameObject.transform.Find("BoozeGroup_Empty").gameObject;
+        boozeEmpty.SetActive(false);
     }
 
     public override void PerformAction(Agent agent)
@@ -24,6 +33,15 @@ public class Safe : Interactable
 
             //After interaction, remove all points 
             agent.m_currentActionPoints = 0;
+
+            HideObjects();
         }
+    }
+
+    private void HideObjects()
+    {
+        boozeGroup.SetActive(false);
+        sparkleParticle.SetActive(false);
+        boozeEmpty.SetActive(true);
     }
 }
