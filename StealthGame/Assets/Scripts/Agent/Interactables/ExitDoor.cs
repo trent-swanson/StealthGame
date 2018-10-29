@@ -12,11 +12,13 @@ public class ExitDoor : Interactable
         m_playerTurn = m_gameController.GetComponent<GameState_PlayerTurn>();
     }
 
+    public override bool CanPerform(Agent agent)
+    {
+        return agent.m_agentInventory.AgentHasItem(m_requiredItem);
+    }
+
     public override void PerformAction(Agent agent)
     {
-        if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
-        {
-            m_playerTurn.m_objectiveAchived = true;
-        }
+        m_playerTurn.m_objectiveAchived = true;
     }
 }

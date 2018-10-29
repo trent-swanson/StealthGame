@@ -113,9 +113,13 @@ public class AgentAnimationController : MonoBehaviour
                     break;
                 case AnimationManager.ANIMATION_STEP.INTERACTABLE:
                     Interactable interactable = m_agent.m_targetInteractable;
-                    if (interactable != null)
+                    if (interactable != null && interactable.CanPerform(m_agent))
+                    {
                         interactable.PerformAction(m_agent);
-                    m_currentAnimation = "Interact";
+                        m_currentAnimation = "Interact";
+                    }
+                    else
+                        m_currentAnimation = "";
                     break;
                 case AnimationManager.ANIMATION_STEP.PICKUP_ITEM:
                     Item item = m_agent.m_targetItem;
@@ -174,10 +178,14 @@ public class AgentAnimationController : MonoBehaviour
                 default:
                     break;
             }
-            m_animator.SetBool(m_currentAnimation, true);
-            m_playNextAnimation = false;
 
-            m_NPCTurn.UpdateNPCWorldStates();
+            if(m_currentAnimation!="")
+            {
+                m_animator.SetBool(m_currentAnimation, true);
+                m_playNextAnimation = false;
+
+                m_NPCTurn.UpdateNPCWorldStates();
+            }
         }
     }
 
