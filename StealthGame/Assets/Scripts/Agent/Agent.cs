@@ -140,12 +140,12 @@ public class Agent : MonoBehaviour
     public void ChangeCurrentNavNode(NavNode navNode)
     {
         m_currentNavNode.m_obstructingAgent = null;
-        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.WALKABLE;
+        m_currentNavNode.SetupNodeType();
 
         m_currentNavNode = navNode;
 
         m_currentNavNode.m_obstructingAgent = this;
-        m_currentNavNode.m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+        m_currentNavNode.SetupNodeType();
     }
 
     public static FACING_DIR GetFacingDir(Vector3 dir)
