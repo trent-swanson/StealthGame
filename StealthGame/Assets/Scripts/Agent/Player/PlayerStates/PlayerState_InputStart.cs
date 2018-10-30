@@ -70,7 +70,6 @@ public class PlayerState_InputStart : PlayerState
         while (BFSQueue.Count > 0) //BFS implementation
         {
             currentBFSNode = BFSQueue.Dequeue();
-            m_parentStateMachine.m_selectableNodes.Add(currentBFSNode);
 
             foreach (NavNode nextBFSNode in currentBFSNode.m_adjacentNodes)
             {
@@ -83,10 +82,18 @@ public class PlayerState_InputStart : PlayerState
 
                     if (distance >= 0)
                     {
-                        if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE)//TODO if we want to move through team mates just compare team values
+                        if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)//TODO if we want to move through team mates just compare team values
+                        {
                             BFSQueue.Enqueue(nextBFSNode);
-                        else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)
                             m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
+                        }
+                        else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED && nextBFSNode.m_obstructingAgent.m_team != m_playerController.m_team)
+                        { 
+                            if(nextBFSNode.m_obstructingAgent.m_team != m_playerController.m_team)//enemy on square, only add selectable, not moving through
+                                m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
+                            else if (nextBFSNode.m_obstructingAgent.m_knockedout)
+                                m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
+                        }
                     }
                 }
             }

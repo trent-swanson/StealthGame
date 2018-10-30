@@ -47,6 +47,11 @@ public class PlayerState_InputEnd : PlayerState
     {
         m_parentStateMachine.m_selectableNodes.Clear();
         m_parentStateMachine.m_currentSelectedNode = null;
+
+        if(m_playerController.m_currentActionPoints == 0)
+        {
+            m_playerController.m_playerTurn.AutoEndTurn();
+        }
     }
 
     //-------------------
