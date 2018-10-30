@@ -52,7 +52,8 @@ public class Item : MonoBehaviour
 			Renderer renderer = GetComponent<Renderer>();
 			renderer.material.shader = outlineShader;
 			renderer.material.SetColor("_OutlineColor", m_highlightColour);
-		}
+            renderer.material.SetFloat("_OutlineWidth", 1.0f);
+        }
 
         m_canvas.SetActive(true);
     }
