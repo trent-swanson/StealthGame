@@ -13,8 +13,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     public List<NavNode> m_selectableNodes = new List<NavNode>();
 
-    private PlayerController m_playerController = null;
-    private PlayerUI m_playerUI = null;
+    public PlayerController m_playerController = null;
+    public PlayerUI m_playerUI = null;
 
     public void Start()
     {

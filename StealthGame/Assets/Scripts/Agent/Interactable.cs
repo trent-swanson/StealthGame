@@ -36,6 +36,11 @@ public class Interactable : MonoBehaviour
         m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
+    public virtual bool CanPerform(Agent agent)
+    {
+        return false;
+    }
+
     public virtual void PerformAction(Agent agent)
     {
 

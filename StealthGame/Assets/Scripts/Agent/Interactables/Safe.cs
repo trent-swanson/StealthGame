@@ -22,20 +22,23 @@ public class Safe : Interactable
         boozeEmpty.SetActive(false);
     }
 
+    public override bool CanPerform(Agent agent)
+    {
+        return m_usable && agent.m_agentInventory.AgentHasItem(m_requiredItem);
+    }
+
+
     public override void PerformAction(Agent agent)
     {
-        if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
-        {
-            Item newItem = Instantiate(m_item);
-            newItem.EquipItem(agent);
-            GetComponentInChildren<Animator>().SetTrigger("Safe_Open");
-            DisableInteractable();
+        Item newItem = Instantiate(m_item);
+        newItem.EquipItem(agent);
+        GetComponentInChildren<Animator>().SetTrigger("Safe_Open");
+        DisableInteractable();
 
-            //After interaction, remove all points 
-            agent.m_currentActionPoints = 0;
+        //After interaction, remove all points 
+        agent.m_currentActionPoints = 0;
 
-            HideObjects();
-        }
+        HideObjects();
     }
 
     private void HideObjects()
