@@ -65,38 +65,56 @@ public class PlayerState_InputStart : PlayerState
 
         Queue<NavNode> BFSQueueOpen = new Queue<NavNode>();
         Queue<NavNode> BFSQueueClosed = new Queue<NavNode>();
+
         BFSQueueOpen.Enqueue(currentNavNode);
+
         NavNode currentBFSNode = null;
 
         while (BFSQueueOpen.Count > 0) //BFS implementation
         {
             currentBFSNode = BFSQueueOpen.Dequeue();
 
-            foreach (NavNode nextBFSNode in currentBFSNode.m_adjacentNodes)
+            if (!BFSQueueClosed.Contains(currentBFSNode))
             {
-                if (!m_parentStateMachine.m_selectableNodes.Contains(nextBFSNode) && !BFSQueueOpen.Contains(nextBFSNode) && !BFSQueueClosed.Contains(nextBFSNode))
+                BFSQueueClosed.Enqueue(currentBFSNode);
+
+                foreach (NavNode nextBFSNode in currentBFSNode.m_adjacentNodes)
                 {
-                    int distance = currentBFSNode.m_BFSDistance - 1;
-
-                    nextBFSNode.m_BFSDistance = distance;
-                    nextBFSNode.m_BFSPreviousNode = currentBFSNode;
-
-                    if (distance >= 0)
+                    if (!m_parentStateMachine.m_selectableNodes.Contains(nextBFSNode) && !BFSQueueOpen.Contains(nextBFSNode) && !BFSQueueClosed.Contains(nextBFSNode))
                     {
-                        if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)//TODO if we want to move through team mates just compare team values
+                        int distance = currentBFSNode.m_BFSDistance - 1;
+
+                        nextBFSNode.m_BFSDistance = distance;
+                        nextBFSNode.m_BFSPreviousNode = currentBFSNode;
+
+                        if (distance >= 0)
                         {
-                            BFSQueueOpen.Enqueue(nextBFSNode);
-                            m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
-                        }
-                        else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)
-                        {
-                            if (nextBFSNode.m_obstructingAgent.m_team != m_playerController.m_team)//enemy on square, only add selectable, not moving through
+                            if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextBFSNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE)//TODO if we want to move through team mates just compare team values
+                            {
+                                BFSQueueOpen.Enqueue(nextBFSNode);
                                 m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
-                            else if (nextBFSNode.m_obstructingAgent.m_knockedout)
-                                m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
+                            }
+                            else if (nextBFSNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)
+                            {
+                                if (nextBFSNode.m_obstructingAgent.m_team != m_playerController.m_team)//enemy on square, only add selectable, not moving through
+                                    m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
+                                else if (nextBFSNode.m_obstructingAgent.m_knockedout)// obstructing agent is on same team, hence can select
+                                {
+                                    m_parentStateMachine.m_selectableNodes.Add(nextBFSNode);
+
+                                    BFSQueueOpen.Enqueue(nextBFSNode);
+                                }
+                                else
+                                {
+                                    PlayerController playerController = nextBFSNode.m_obstructingAgent.GetComponent<PlayerController>();
+                                    if(playerController!=null && playerController.m_playerStateMachine.m_currentlyHiding)
+                                    {
+                                        BFSQueueOpen.Enqueue(nextBFSNode);
+                                    }
+                                }
+                            }
                         }
                     }
-                    BFSQueueClosed.Enqueue(nextBFSNode);
                 }
             }
         }

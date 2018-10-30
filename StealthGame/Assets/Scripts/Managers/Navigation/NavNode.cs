@@ -101,6 +101,12 @@ public class NavNode : MonoBehaviour
             m_nodeType = NavNode.NODE_TYPE.INTERACTABLE;
             return;
         }
+        else if(m_obstructingAgent!= null)
+        {
+            m_nodeType = NavNode.NODE_TYPE.OBSTRUCTED;
+            return;
+        }
+
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.up, out hit, Navigation.m_obstacleDetection, LayerManager.m_enviromentLayer | LayerManager.m_navNodeLayer))
