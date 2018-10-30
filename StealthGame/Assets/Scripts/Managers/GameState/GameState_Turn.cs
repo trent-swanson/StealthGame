@@ -54,7 +54,7 @@ public class GameState_Turn : GameState
             if (i != m_currentAgentIndex && !m_team[i].m_knockedout && m_team[i].m_currentActionPoints > 0)
                 return i;
         }
-        return 0;
+        return m_currentAgentIndex;
     }
 
     public bool TeamCanMove()

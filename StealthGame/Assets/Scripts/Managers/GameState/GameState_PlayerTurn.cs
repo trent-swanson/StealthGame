@@ -90,6 +90,19 @@ public class GameState_PlayerTurn : GameState_Turn
         return TeamStillAlive();
     }
 
+    public void AutoEndTurn()
+    {
+        int nextPlayer = GetNextTeamAgentIndex();
+        if(nextPlayer!= m_currentAgentIndex)//Next player is valid, swap to next player 
+        {
+            SwapAgents(nextPlayer);
+        }
+        else//Next player is not a valid choice, end turn
+        {
+            EndTurn();
+        }
+    }
+
     public override void SwapAgents(int agentIndex)
     {
         if (agentIndex < m_team.Count && agentIndex >= 0 && agentIndex != m_currentAgentIndex)
