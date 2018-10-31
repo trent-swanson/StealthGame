@@ -62,9 +62,9 @@ public class MeleeAttack : AIAction
     public override void EndAction(NPC NPCAgent)
     {
         NPCAgent.m_currentActionPoints -= m_baseActionCost;
-        List<Agent> possibleTargets = NPCAgent.m_agentWorldState.GetPossibleTargets();
-        possibleTargets.Remove(m_target);
-        NPCAgent.m_agentWorldState.SetPossibleTargets(possibleTargets);
+
+        NPCAgent.RemoveTarget(m_target);
+
         m_target = null;
 
         NPCAgent.ToggleAlertIcon();

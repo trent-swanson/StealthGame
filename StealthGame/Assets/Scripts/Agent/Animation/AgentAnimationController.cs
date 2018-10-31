@@ -19,6 +19,7 @@ public class AgentAnimationController : MonoBehaviour
     public List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
 
     private GameState_NPCTurn m_NPCTurn = null;
+    private GameState_PlayerTurn m_playerTurn = null;
 
     private void Start()
     {
@@ -41,6 +42,7 @@ public class AgentAnimationController : MonoBehaviour
         }
 
         m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
+        m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
     }
 
     private void Update()
@@ -137,11 +139,14 @@ public class AgentAnimationController : MonoBehaviour
 
                         if(NPCDefender!=null && NPCDefender.KnowsOfPlayer(playerAttacker))
                         {
-                            playerAttacker.Knockout();
                             NPCDefender.m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.ATTACK);
                             NPCDefender.m_agentAnimationController.PlayNextAnimation();
 
                             NPCDefender.UpdateWorldState();
+                            NPCDefender.RemoveTarget(playerAttacker);
+
+                            playerAttacker.Knockout();
+                            m_playerTurn.AutoEndTurn();
                         }
                         else
                         {

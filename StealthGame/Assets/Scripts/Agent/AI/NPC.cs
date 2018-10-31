@@ -302,4 +302,26 @@ public class NPC : Agent
         return false;
     }
 
+    public void RemoveTarget(Agent agent)
+    {
+        List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
+        if(possibleTargets.Contains(agent))
+        {
+            possibleTargets.Remove(agent);
+            m_agentWorldState.SetPossibleTargets(possibleTargets);
+        }
+
+        List<NPC.InvestigationNode> investigationNodes = m_agentWorldState.GetInvestigationNodes();
+
+        for (int investigationIndex = 0; investigationIndex < investigationNodes.Count; investigationIndex++)
+        {
+            if(investigationNodes[investigationIndex].m_target == agent)
+            {
+                investigationNodes.RemoveAt(investigationIndex);
+                m_agentWorldState.SetInvestigationNodes(investigationNodes);
+                break;
+            }
+        }
+    }
+
 }

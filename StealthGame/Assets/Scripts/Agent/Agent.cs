@@ -122,8 +122,6 @@ public class Agent : MonoBehaviour
         m_agentAnimationController.m_animationSteps.Clear();
         m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.DEATH);
         m_agentAnimationController.PlayNextAnimation();
-        AgentTurnEnd();
-
     }
 
     public void Revive()
