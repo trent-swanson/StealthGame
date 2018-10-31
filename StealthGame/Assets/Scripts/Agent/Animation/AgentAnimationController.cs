@@ -128,9 +128,33 @@ public class AgentAnimationController : MonoBehaviour
                     m_currentAnimation = "Pickup";
                     break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
-                    if (m_agent.m_targetAgent != null)
-                        m_agent.m_targetAgent.Knockout();
-                    m_currentAnimation = "Attack";
+                    //Determine atrtack direction, if guard knows of player then guard attacks, else same as normal
+                    PlayerController playerAttacker = m_agent.GetComponent<PlayerController>();
+
+                    if(playerAttacker != null)
+                    {
+                        NPC NPCDefender = playerAttacker.m_targetAgent.GetComponent<NPC>();
+
+                        if(NPCDefender!=null && NPCDefender.KnowsOfPlayer(playerAttacker))
+                        {
+                            playerAttacker.Knockout();
+                            NPCDefender.m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.ATTACK);
+                            NPCDefender.m_agentAnimationController.PlayNextAnimation();
+
+                            NPCDefender.UpdateWorldState();
+                        }
+                        else
+                        {
+                            NPCDefender.Knockout();
+                            m_currentAnimation = "Attack";
+                        }
+                    }
+                    else
+                    {
+                        if (m_agent.m_targetAgent != null)
+                            m_agent.m_targetAgent.Knockout();
+                        m_currentAnimation = "Attack";
+                    }
                     break;
                 case AnimationManager.ANIMATION_STEP.RANGED_ATTACK:
                     if (m_agent.m_targetAgent != null)

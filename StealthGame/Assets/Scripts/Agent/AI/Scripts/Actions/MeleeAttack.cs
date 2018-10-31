@@ -68,6 +68,9 @@ public class MeleeAttack : AIAction
         m_target = null;
 
         NPCAgent.ToggleAlertIcon();
+
+        //Get next patrol node
+        NPCAgent.NextWaypoint();
     }
 
 

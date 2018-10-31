@@ -56,6 +56,9 @@ public class InvestigateNode : AIAction
         NPCAgent.m_agentWorldState.SetInvestigationNodes(investigationNodes);
 
         NPCAgent.ToggleAlertIcon();
+
+        //Get next patrol node
+        NPCAgent.NextWaypoint();
     }
 
 
