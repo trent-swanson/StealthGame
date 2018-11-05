@@ -19,6 +19,7 @@ public class AgentAnimationController : MonoBehaviour
     public List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
 
     private GameState_NPCTurn m_NPCTurn = null;
+    private GameState_PlayerTurn m_playerTurn = null;
 
     private void Start()
     {
@@ -41,6 +42,7 @@ public class AgentAnimationController : MonoBehaviour
         }
 
         m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
+        m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
     }
 
     private void Update()
@@ -128,9 +130,36 @@ public class AgentAnimationController : MonoBehaviour
                     m_currentAnimation = "Pickup";
                     break;
                 case AnimationManager.ANIMATION_STEP.ATTACK:
-                    if (m_agent.m_targetAgent != null)
-                        m_agent.m_targetAgent.Knockout();
-                    m_currentAnimation = "Attack";
+                    //Determine atrtack direction, if guard knows of player then guard attacks, else same as normal
+                    PlayerController playerAttacker = m_agent.GetComponent<PlayerController>();
+
+                    if(playerAttacker != null)
+                    {
+                        NPC NPCDefender = playerAttacker.m_targetAgent.GetComponent<NPC>();
+
+                        if(NPCDefender!=null && NPCDefender.KnowsOfPlayer(playerAttacker))
+                        {
+                            NPCDefender.m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.ATTACK);
+                            NPCDefender.m_agentAnimationController.PlayNextAnimation();
+
+                            NPCDefender.UpdateWorldState();
+                            NPCDefender.RemoveTarget(playerAttacker);
+
+                            playerAttacker.Knockout();
+                            m_playerTurn.AutoEndTurn();
+                        }
+                        else
+                        {
+                            NPCDefender.Knockout();
+                            m_currentAnimation = "Attack";
+                        }
+                    }
+                    else
+                    {
+                        if (m_agent.m_targetAgent != null)
+                            m_agent.m_targetAgent.Knockout();
+                        m_currentAnimation = "Attack";
+                    }
                     break;
                 case AnimationManager.ANIMATION_STEP.RANGED_ATTACK:
                     if (m_agent.m_targetAgent != null)

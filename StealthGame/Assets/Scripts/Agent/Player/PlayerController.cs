@@ -65,21 +65,37 @@ public class PlayerController : Agent
         if (m_largestThreatDir != FACING_DIR.NONE && m_currentNavNode.m_abilityToWallHide[(int)m_largestThreatDir]) //Can hide in largest threat direction
         {
             m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide(m_largestThreatDir, this));
+
+            m_playerStateMachine.m_currentlyHiding = true;
         }
         else //Pick random wall to hide on 
         {
             //TODO get next closest wall to hide on
             if (m_currentNavNode.m_abilityToWallHide[0])
+            {
                 m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)0, this));
-            else if (m_currentNavNode.m_abilityToWallHide[1])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)1, this));
-            else if (m_currentNavNode.m_abilityToWallHide[2])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)2, this));
-            else if (m_currentNavNode.m_abilityToWallHide[3])
-                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)3, this));
-        }
 
-        m_playerStateMachine.m_currentlyHiding = true;
+                m_playerStateMachine.m_currentlyHiding = true;
+            }
+            else if (m_currentNavNode.m_abilityToWallHide[1])
+            {
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)1, this));
+
+                m_playerStateMachine.m_currentlyHiding = true;
+            }
+            else if (m_currentNavNode.m_abilityToWallHide[2])
+            {
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)2, this));
+
+                m_playerStateMachine.m_currentlyHiding = true;
+            }
+            else if (m_currentNavNode.m_abilityToWallHide[3])
+            {
+                m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)3, this));
+
+                m_playerStateMachine.m_currentlyHiding = true;
+            }
+        }
 
         StartCoroutine(EndTurnAnimationUpdate());
     }

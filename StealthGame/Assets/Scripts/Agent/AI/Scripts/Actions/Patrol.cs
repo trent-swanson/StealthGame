@@ -52,9 +52,8 @@ public class Patrol : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        NPCAgent.m_agentWorldState.m_waypointIndex++;
-        if (NPCAgent.m_agentWorldState.m_waypointIndex >= NPCAgent.m_agentWorldState.m_waypoints.Count)
-            NPCAgent.m_agentWorldState.m_waypointIndex = 0;
+        //Get next patrol node
+        NPCAgent.NextWaypoint();
 
         NPCAgent.m_targetNode = null;
 

@@ -52,6 +52,8 @@ public class PlayerState_InvalidNodeSelection : PlayerState
     {
         NavNode currentSelectedNavNode = m_parentStateMachine.GetMouseNode();
 
-        return currentSelectedNavNode == null || !m_parentStateMachine.m_selectableNodes.Contains(currentSelectedNavNode);
+        return currentSelectedNavNode == null || 
+            (currentSelectedNavNode.m_obstructingAgent != null && currentSelectedNavNode.m_obstructingAgent.m_team == m_playerController.m_team) ||
+            !m_parentStateMachine.m_selectableNodes.Contains(currentSelectedNavNode);
     }
 }

@@ -61,7 +61,6 @@ public class PlayerState_ValidNodeSelection : PlayerState
     //-------------------
     public override void StateEnd()
     {
-        //m_parentStateMachine.m_currentSelectedNode = m_currentNode;
     }
 
     //-------------------

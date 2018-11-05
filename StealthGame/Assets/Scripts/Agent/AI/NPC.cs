@@ -277,4 +277,51 @@ public class NPC : Agent
     {
         m_alertIcon.enabled = !m_knockedout && (m_agentWorldState.GetPossibleTargets().Count > 0 || m_agentWorldState.GetInvestigationNodes().Count > 0);
     }
+
+    public void NextWaypoint()
+    {
+        m_agentWorldState.m_waypointIndex++;
+        if (m_agentWorldState.m_waypointIndex >= m_agentWorldState.m_waypoints.Count)
+            m_agentWorldState.m_waypointIndex = 0;
+    }
+
+    public bool KnowsOfPlayer(Agent agent)
+    {
+        foreach (Agent possibleTarget in m_agentWorldState.GetPossibleTargets())
+        {
+            if (possibleTarget == agent)
+                return true;
+        }
+
+        foreach (InvestigationNode investgationNode in m_agentWorldState.GetInvestigationNodes())
+        {
+            if (investgationNode.m_target == agent)
+                return true;
+        }
+
+        return false;
+    }
+
+    public void RemoveTarget(Agent agent)
+    {
+        List<Agent> possibleTargets = m_agentWorldState.GetPossibleTargets();
+        if(possibleTargets.Contains(agent))
+        {
+            possibleTargets.Remove(agent);
+            m_agentWorldState.SetPossibleTargets(possibleTargets);
+        }
+
+        List<NPC.InvestigationNode> investigationNodes = m_agentWorldState.GetInvestigationNodes();
+
+        for (int investigationIndex = 0; investigationIndex < investigationNodes.Count; investigationIndex++)
+        {
+            if(investigationNodes[investigationIndex].m_target == agent)
+            {
+                investigationNodes.RemoveAt(investigationIndex);
+                m_agentWorldState.SetInvestigationNodes(investigationNodes);
+                break;
+            }
+        }
+    }
+
 }

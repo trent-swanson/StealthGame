@@ -51,11 +51,12 @@ public class InvestigateNode : AIAction
     //--------------------------------------------------------------------------------------
     public override void EndAction(NPC NPCAgent)
     {
-        List<NPC.InvestigationNode> investigationNodes = NPCAgent.m_agentWorldState.GetInvestigationNodes();
-        investigationNodes.RemoveAt(0);
-        NPCAgent.m_agentWorldState.SetInvestigationNodes(investigationNodes);
+        NPCAgent.RemoveTarget(NPCAgent.m_agentWorldState.GetInvestigationNodes()[0].m_target);
 
         NPCAgent.ToggleAlertIcon();
+
+        //Get next patrol node
+        NPCAgent.NextWaypoint();
     }
 
 
