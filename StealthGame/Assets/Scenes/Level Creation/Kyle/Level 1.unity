@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.4044118, g: 0.24650252, b: 0.07731402, a: 1}
+  m_AmbientSkyColor: {r: 0.27205884, g: 0.16486324, b: 0.050010815, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 0.5
@@ -89,7 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 112000456, guid: 25ac5832ea36f76468d697f36007e3c8,
+  m_LightingDataAsset: {fileID: 112000402, guid: 25ac5832ea36f76468d697f36007e3c8,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -4697,7 +4697,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4149958779814942, guid: 43cef7daf1f091044a9133aa606c1843, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4149958779814942, guid: 43cef7daf1f091044a9133aa606c1843, type: 2}
       propertyPath: m_LocalPosition.y
@@ -5035,7 +5035,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1065226975}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.23, y: 4, z: -1.5299997}
+  m_LocalPosition: {x: 11.09, y: 4, z: -1.5299997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1384553686}
@@ -5051,8 +5051,8 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 0.8088235, g: 0.631473, b: 0.24978374, a: 1}
-  m_Intensity: 7
-  m_Range: 4.5260983
+  m_Intensity: 4.17
+  m_Range: 3.36
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -6945,7 +6945,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4718206223551136, guid: 8dddc58db3d7cf742b4b4d29801d5ef1, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4718206223551136, guid: 8dddc58db3d7cf742b4b4d29801d5ef1, type: 2}
       propertyPath: m_LocalPosition.y
