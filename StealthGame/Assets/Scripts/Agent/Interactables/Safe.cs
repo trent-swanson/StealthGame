@@ -38,6 +38,10 @@ public class Safe : Interactable
         //After interaction, remove all points 
         agent.m_currentActionPoints = 0;
 
+        PlayerController playerController = agent.GetComponent<PlayerController>();
+        if (playerController != null)
+            playerController.AddGoldBag();
+
         HideObjects();
     }
 

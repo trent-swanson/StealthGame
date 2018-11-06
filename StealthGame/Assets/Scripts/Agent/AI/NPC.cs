@@ -58,7 +58,7 @@ public class NPC : Agent
     [Header("AgentState")]
     public AgentWorldState m_agentWorldState;
 
-    [Space]
+    [HideInInspector]
     public int m_autoStandupTimer = 0;
     public SpriteRenderer m_alertIcon = null;
 

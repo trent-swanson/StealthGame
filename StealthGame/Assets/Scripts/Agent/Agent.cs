@@ -127,7 +127,7 @@ public class Agent : MonoBehaviour
         m_agentAnimationController.PlayNextAnimation();
     }
 
-    public void Revive()
+    public virtual void Revive()
     {
         m_knockedout = false;
 

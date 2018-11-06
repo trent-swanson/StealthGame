@@ -11,12 +11,17 @@ public class PlayerController : Agent
     public PlayerUI m_playerUI = null;
     public PlayerStateMachine m_playerStateMachine = null;
 
+    public GameObject m_goldBag = null;
+
     protected override void Start()
     {
         base.Start();
 
         m_playerUI = GetComponent<PlayerUI>();
         m_playerStateMachine = GetComponent<PlayerStateMachine>();
+
+        if (m_goldBag != null)
+            m_goldBag.SetActive(false);
     }
 
     //Start of turn, only runs once per turn
@@ -136,5 +141,11 @@ public class PlayerController : Agent
             return Agent.GetFacingDir(closestGuard.transform.position - transform.position);
         }
         return FACING_DIR.NONE;
+    }
+
+    public void AddGoldBag()
+    {
+        if (m_goldBag != null)
+            m_goldBag.SetActive(true);
     }
 }

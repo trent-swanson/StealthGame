@@ -63,6 +63,7 @@ public class GameState_PlayerTurn : GameState_Turn
         m_currentAgentIndex = 0;
         m_gameController.m_currentTeam = Agent.TEAM.PLAYER;
         m_NPCTurn.UpdateNPCVision();
+        m_NPCTurn.UpdateNPCWorldStates();
 
         m_endTurn = false;
 
