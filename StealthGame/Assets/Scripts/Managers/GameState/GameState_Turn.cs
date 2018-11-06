@@ -11,10 +11,13 @@ public class GameState_Turn : GameState
 
     public Agent.AGENT_UPDATE_STATE m_currentAgentState = Agent.AGENT_UPDATE_STATE.END_TURN;
 
+    public GameController m_gameController = null;
+
     protected virtual void Start()
     {
         //Find all tiles in level and add them to GameManager tile list
         m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
+        m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     public override bool UpdateState()

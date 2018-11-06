@@ -30,6 +30,8 @@ public class Agent : MonoBehaviour
     public GameState_PlayerTurn m_playerTurn = null;
     public GameState_NPCTurn m_NPCTurn = null;
 
+    public GameController m_gameController = null;
+
     [Tooltip("# of actions unit can perform")]
     public int m_maxActionPoints = 2;
     public int m_currentActionPoints = 2;
@@ -85,6 +87,7 @@ public class Agent : MonoBehaviour
 
         m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
         m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
+        m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
         m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;

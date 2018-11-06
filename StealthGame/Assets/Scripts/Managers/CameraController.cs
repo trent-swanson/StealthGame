@@ -2,12 +2,12 @@
 
 public class CameraController : MonoBehaviour
 {
-
     [Header("Pivot Panning")]
     public float m_pivotSpeed = 10f;
     public Vector2 m_pivotLimit;
 
-    [SerializeField]
+    public float m_edgeDetection = 0.1f;
+
     private Vector3 m_desiredPosition;
 
     [Header("Camera Movement")]
@@ -61,7 +61,30 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        m_desiredPosition += (transform.forward * Input.GetAxisRaw("Vertical") + transform.right * Input.GetAxisRaw("Horizontal")) * Time.deltaTime * m_pivotSpeed;
+        Vector3 mouseToScreenPos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+        float xAxis = 0.0f;
+        float zAxis = 0.0f;
+
+        //Horizontal camera movement
+        if (mouseToScreenPos.x <= m_edgeDetection)
+            xAxis = -1;
+        else if (mouseToScreenPos.x >= 1 - m_edgeDetection)
+            xAxis = 1;
+        else
+            xAxis = Input.GetAxisRaw("Horizontal");
+
+        //Depth camera movement
+        if (mouseToScreenPos.y <= m_edgeDetection)
+            zAxis = -1;
+        else if (mouseToScreenPos.y >= 1 - m_edgeDetection)
+            zAxis = 1;
+        else
+            zAxis = Input.GetAxisRaw("Vertical");
+
+        //Apply movements
+        m_desiredPosition += (transform.forward * zAxis + transform.right * xAxis) * Time.deltaTime * m_pivotSpeed;
+
         //Clamp within boundary
         m_desiredPosition.x = Mathf.Clamp(m_desiredPosition.x, -m_pivotLimit.x, m_pivotLimit.x);
         m_desiredPosition.z = Mathf.Clamp(m_desiredPosition.z, -m_pivotLimit.y, m_pivotLimit.y);

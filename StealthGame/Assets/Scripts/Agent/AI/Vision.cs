@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Vision : MonoBehaviour
 {
-    public static List<NavNode> BuildVisionList(Agent agent, float visionDistance, float visionCone)
+    public static List<NavNode> BuildVisionList(Agent agent, float visionDistance, float visionCone, bool playerTurn)
     {
         FACING_DIR facingDir = agent.m_facingDir ;
 
@@ -16,7 +16,7 @@ public class Vision : MonoBehaviour
 
         openNodes.Add(startingNode);
 
-        //TODO make better
+        //TODO Use different vision system
 
         while (openNodes.Count > 0)
         {
@@ -25,30 +25,33 @@ public class Vision : MonoBehaviour
             openNodes = GetNextLayer(agent, startingNode, openNodes, facingDir, visionDistance, visionCone);
         }
 
-        //Add left right nodes
-        FACING_DIR rightDir = GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT);
-        NavNode rightNode = startingNode.GetAdjacentNode(rightDir);
-        if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || rightNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
+        //Add left right nodes when Player turn 
+        if(playerTurn)
         {
-            openNodes.Add(rightNode);
-            while (openNodes.Count > 0)
+            FACING_DIR rightDir = GetRelativeDir(facingDir, LEFT_RIGHT.RIGHT);
+            NavNode rightNode = startingNode.GetAdjacentNode(rightDir);
+            if (rightNode != null && (rightNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || rightNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || rightNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
             {
-                visibleNodes.AddRange(openNodes);
+                openNodes.Add(rightNode);
+                while (openNodes.Count > 0)
+                {
+                    visibleNodes.AddRange(openNodes);
 
-                openNodes = GetNextLayer(agent, rightNode, openNodes, facingDir, visionDistance, visionCone);
+                    openNodes = GetNextLayer(agent, rightNode, openNodes, facingDir, visionDistance, visionCone);
+                }
             }
-        }
 
-        FACING_DIR leftDir = GetRelativeDir(facingDir, LEFT_RIGHT.LEFT);
-        NavNode leftNode = startingNode.GetAdjacentNode(leftDir);
-        if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || leftNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
-        {
-            openNodes.Add(leftNode);
-            while (openNodes.Count > 0)
+            FACING_DIR leftDir = GetRelativeDir(facingDir, LEFT_RIGHT.LEFT);
+            NavNode leftNode = startingNode.GetAdjacentNode(leftDir);
+            if (leftNode != null && (leftNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED || leftNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || leftNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE))
             {
-                visibleNodes.AddRange(openNodes);
+                openNodes.Add(leftNode);
+                while (openNodes.Count > 0)
+                {
+                    visibleNodes.AddRange(openNodes);
 
-                openNodes = GetNextLayer(agent, leftNode, openNodes, facingDir, visionDistance, visionCone);
+                    openNodes = GetNextLayer(agent, leftNode, openNodes, facingDir, visionDistance, visionCone);
+                }
             }
         }
 

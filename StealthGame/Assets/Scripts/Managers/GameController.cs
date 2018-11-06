@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public GameState m_currentState = null;
-
+    public Agent.TEAM m_currentTeam = Agent.TEAM.NPC;
     private void Update()
     {
         //State completed

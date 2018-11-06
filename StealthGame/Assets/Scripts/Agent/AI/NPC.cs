@@ -229,7 +229,7 @@ public class NPC : Agent
 
         m_visionNodes.Clear();
 
-        m_visionNodes = Vision.BuildVisionList(this, m_visionFullDistance, m_visionFullAngle);
+        m_visionNodes = Vision.BuildVisionList(this, m_visionFullDistance, m_visionFullAngle, m_gameController.m_currentTeam == TEAM.PLAYER);
 
         //Build vision cone, dont add duplicates to list
         foreach (NavNode navNode in m_visionNodes)

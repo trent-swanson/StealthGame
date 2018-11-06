@@ -23,6 +23,18 @@ public class GameState_PlayerTurn : GameState_Turn
         if (Input.GetAxisRaw("Cancel") != 0)
             Application.Quit();
 
+        if (Input.GetAxisRaw("PlayerSwap") != 0)
+        {
+            NextPlayer();
+            return false;
+        }
+
+        if (Input.GetAxisRaw("TurnEnd") != 0)
+        {
+            EndTurn();
+            return false;
+        }
+
         m_currentAgentState = m_team[m_currentAgentIndex].AgentTurnUpdate();
         m_UIController.UpdateUI(m_team);
 
@@ -49,6 +61,9 @@ public class GameState_PlayerTurn : GameState_Turn
     public override void StartState()
     {
         m_currentAgentIndex = 0;
+        m_gameController.m_currentTeam = Agent.TEAM.PLAYER;
+        m_NPCTurn.UpdateNPCVision();
+
         m_endTurn = false;
 
         m_UIController.UpdateUI(m_team);

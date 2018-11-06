@@ -41,6 +41,7 @@ public class GameState_NPCTurn : GameState_Turn
     public override void StartState()
     {
         m_currentAgentIndex = 0;
+        m_gameController.m_currentTeam = Agent.TEAM.NPC;
 
         foreach (Agent agent in m_team)
         {
@@ -75,6 +76,8 @@ public class GameState_NPCTurn : GameState_Turn
             m_team[m_currentAgentIndex].AgentSelected();
             m_UIController.TurnStart(Agent.TEAM.NPC);
         }
+
+        UpdateNPCVision();
 
         m_UIController.SetUIInteractivity(false);
     }
