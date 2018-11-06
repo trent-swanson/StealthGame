@@ -20,18 +20,18 @@ public class GameState_PlayerTurn : GameState_Turn
     /// <returns>True when state is completed</returns>
     public override bool UpdateState()
     {
-        if (Input.GetAxisRaw("Cancel") != 0)
+        if (Input.GetAxisRaw("Cancel") != 0)//Quit game
             Application.Quit();
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab))//Swap players
         {
             NextPlayer();
             return false;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))//End turn
         {
-            EndTurn();
+            m_UIController.EndNextBtn();
             return false;
         }
 

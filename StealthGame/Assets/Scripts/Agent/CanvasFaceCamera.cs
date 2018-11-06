@@ -14,6 +14,7 @@ public class CanvasFaceCamera : MonoBehaviour
             Debug.Log("Canvas is unable to find camera Pivot");
 #endif
     }
+
     private void Update ()
     {
         transform.rotation = m_cameraController.transform.rotation;
