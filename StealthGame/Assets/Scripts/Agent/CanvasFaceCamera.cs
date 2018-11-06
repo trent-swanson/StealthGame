@@ -10,7 +10,7 @@ public class CanvasFaceCamera : MonoBehaviour
         m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
 
 #if UNITY_EDITOR
-        if (m_cameraController != null)
+        if (m_cameraController == null)
             Debug.Log("Canvas is unable to find camera Pivot");
 #endif
     }

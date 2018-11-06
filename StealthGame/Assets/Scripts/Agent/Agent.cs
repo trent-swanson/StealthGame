@@ -13,7 +13,7 @@ public class Agent : MonoBehaviour
 
     public FACING_DIR m_facingDir = FACING_DIR.NONE;
 
-    public Animator m_animator = null;
+    public Animator m_characterAnimator = null;
     public AgentAnimationController m_agentAnimationController = null;
 
     public AgentInventory m_agentInventory = null;
@@ -70,6 +70,10 @@ public class Agent : MonoBehaviour
 
     protected virtual void Start()
     {
+#if UNITY_EDITOR
+        if (m_characterAnimator == null)
+            Debug.Log("character animator needs to be assigned");
+#endif
         //New Stuff
         RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
@@ -81,7 +85,6 @@ public class Agent : MonoBehaviour
             m_currentNavNode.m_obstructingAgent = this;
         }
 
-        m_animator = GetComponent<Animator>();
         m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_agentInventory = GetComponent<AgentInventory>();
 

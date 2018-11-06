@@ -3778,7 +3778,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1771527911741606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224085533154322012}
@@ -4509,6 +4509,8 @@ MonoBehaviour:
   m_currentSelectedNode: {fileID: 0}
   m_currentlyHiding: 0
   m_selectableNodes: []
+  m_playerController: {fileID: 0}
+  m_playerUI: {fileID: 0}
 --- !u!114 &114057211042283482
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4649,7 +4651,7 @@ MonoBehaviour:
   m_team: 0
   m_interaction: 0
   m_facingDir: 4
-  m_animator: {fileID: 95184856460620904}
+  m_characterAnimator: {fileID: 95184856460620904}
   m_agentAnimationController: {fileID: 0}
   m_agentInventory: {fileID: 114655792531748394}
   m_agentInventoryUI: {fileID: 0}
@@ -4658,6 +4660,7 @@ MonoBehaviour:
   m_knockedout: 0
   m_playerTurn: {fileID: 0}
   m_NPCTurn: {fileID: 0}
+  m_gameController: {fileID: 0}
   m_maxActionPoints: 6
   m_currentActionPoints: 0
   m_moveSpeed: 2
@@ -4676,6 +4679,8 @@ MonoBehaviour:
   m_path: []
   portrait: {fileID: 21300000, guid: da1299cda8879bb4bb05d7e7b2be19dd, type: 3}
   m_playerUI: {fileID: 0}
+  m_playerStateMachine: {fileID: 0}
+  m_goldBag: {fileID: 0}
 --- !u!114 &114655792531748394
 MonoBehaviour:
   m_ObjectHideFlags: 1
