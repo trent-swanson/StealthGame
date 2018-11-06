@@ -23,13 +23,13 @@ public class GameState_PlayerTurn : GameState_Turn
         if (Input.GetAxisRaw("Cancel") != 0)
             Application.Quit();
 
-        if (Input.GetAxisRaw("PlayerSwap") != 0)
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             NextPlayer();
             return false;
         }
 
-        if (Input.GetAxisRaw("TurnEnd") != 0)
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             EndTurn();
             return false;
