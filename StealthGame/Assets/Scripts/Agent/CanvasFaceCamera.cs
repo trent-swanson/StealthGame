@@ -17,6 +17,6 @@ public class CanvasFaceCamera : MonoBehaviour
 
     private void Update ()
     {
-        transform.rotation = m_cameraController.transform.rotation;
+        transform.rotation = m_cameraController.m_cameraPivot.transform.rotation;
     }
 }

@@ -170,20 +170,13 @@ public class UIController : MonoBehaviour
             {
                 if (interactable.m_usable)
                 {
-                    if (playerController.m_playerStateMachine.m_selectableNodes.Contains(interactable.m_interactionNodes[0]))
+                    if (agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
                     {
-                        if (agentInventory.AgentHasItem(interactable.m_requiredItem))//Player has the required item, highlight canvas
-                        {
-                            interactable.FullCanvas();
-                        }
-                        else//Player does not have the required item, fade canvas
-                        {
-                            interactable.FadeCanvas();
-                        }
+                        interactable.FullCanvas();
                     }
-                    else
+                    else//Player does not have the required item, fade canvas
                     {
-                        interactable.RemoveCanvas();
+                        interactable.FadeCanvas();
                     }
                 }
             }

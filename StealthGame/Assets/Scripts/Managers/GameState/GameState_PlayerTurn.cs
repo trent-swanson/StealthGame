@@ -46,7 +46,7 @@ public class GameState_PlayerTurn : GameState_Turn
                 break;
             case Agent.AGENT_UPDATE_STATE.PERFORMING_ACTIONS:
                 m_UIController.SetUIInteractivity(false);
-                break;
+                return (false);//Early break out, ensures game continues till end of player animations
             case Agent.AGENT_UPDATE_STATE.END_TURN:
                 NextPlayer();
                 m_UIController.SetUIInteractivity(false);
