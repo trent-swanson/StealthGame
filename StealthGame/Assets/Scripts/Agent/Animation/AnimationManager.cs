@@ -33,6 +33,12 @@ public class AnimationManager : MonoBehaviour
             interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
         else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
             interactionDir = FACING_DIR.NONE;
+        else if (interactionType == INTERACTION_TYPE.INTERACTABLE)
+        {
+            Vector3 interactDir = agent.m_targetInteractable.transform.position - pathNodes[pathCount - 1].transform.position;
+            interactDir.y = 0;
+            interactionDir = Agent.GetFacingDir(interactDir.normalized);
+        }
 
         GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
 
@@ -60,8 +66,6 @@ public class AnimationManager : MonoBehaviour
 
         if (interactionType == INTERACTION_TYPE.ATTACK || interactionType == INTERACTION_TYPE.REVIVE)
             interactionDir = Agent.GetFacingDir((agent.m_targetAgent.transform.position - pathNodes[pathCount - 1].m_nodeTop).normalized);
-        //else if (interactionType == INTERACTION_TYPE.WALL_ATTACK)
-        //    interactionDir = FACING_DIR.NONE;
 
         GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
 

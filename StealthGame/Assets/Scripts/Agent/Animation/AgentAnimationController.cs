@@ -118,7 +118,11 @@ public class AgentAnimationController : MonoBehaviour
                     if (interactable != null && interactable.CanPerform(m_agent))
                     {
                         interactable.PerformAction(m_agent);
-                        m_currentAnimation = "Interact";
+
+                        if(interactable.m_customAnimation == "")
+                            m_currentAnimation = "Interact";
+                        else
+                            m_currentAnimation = interactable.m_customAnimation;
                     }
                     else
                         m_currentAnimation = "";

@@ -15,6 +15,8 @@ public class Interactable : MonoBehaviour
 
     public GameObject m_interactableCanvas = null;
 
+    public string m_customAnimation = "";
+
     protected GameController m_gameController = null;
 
     static Color m_fullColour = new Color(1, 1, 1, 1);

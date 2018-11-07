@@ -2212,7 +2212,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1396725063192256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: -6}
+  m_LocalPosition: {x: 1, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4915708439417538}
@@ -3958,7 +3958,7 @@ MonoBehaviour:
   m_playerTurn: {fileID: 0}
   m_NPCTurn: {fileID: 0}
   m_gameController: {fileID: 0}
-  m_maxActionPoints: 60000
+  m_maxActionPoints: 6
   m_currentActionPoints: 0
   m_moveSpeed: 2
   m_highlightInteractablesRange: 6
@@ -3971,8 +3971,6 @@ MonoBehaviour:
   m_visionFadeMaxOpacity: 0.5
   m_visionFullDistance: 5
   m_visionFullAngle: 30
-  m_visionFadeDistance: 10
-  m_visionFadeAngle: 60
   m_path: []
   portrait: {fileID: 21300000, guid: 4e2306d7f96cfee489cbafcb0da95cee, type: 3}
   m_playerUI: {fileID: 0}
