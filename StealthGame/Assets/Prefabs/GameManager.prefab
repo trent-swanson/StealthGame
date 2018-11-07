@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4322745389344106}
   - component: {fileID: 114830992936346278}
   - component: {fileID: 114211141191023392}
+  - component: {fileID: 114932985727434244}
   - component: {fileID: 114203638280292954}
   - component: {fileID: 114996788902129410}
   - component: {fileID: 114512113158640800}
@@ -70,6 +71,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_currentState: {fileID: 114512113158640800}
+  m_currentTeam: 1
 --- !u!114 &114512113158640800
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -115,9 +117,22 @@ MonoBehaviour:
   m_team:
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
   m_currentAgentIndex: 0
   m_currentAgentState: 2
-  m_autoStandupTime: 2
+  m_gameController: {fileID: 0}
+  m_autoStandupTime: 5
+--- !u!114 &114932985727434244
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1987652157899944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b4b4bee25381154480924ed9bdfce8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114935651520854332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -138,6 +153,7 @@ MonoBehaviour:
   - {fileID: 0}
   m_currentAgentIndex: 0
   m_currentAgentState: 2
+  m_gameController: {fileID: 0}
   m_objectiveAchived: 0
 --- !u!114 &114996788902129410
 MonoBehaviour:
