@@ -59,12 +59,6 @@ public class Agent : MonoBehaviour
     [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
     public float m_visionFullAngle = 30;
 
-    [Header("Investigation alertness")]
-    [Tooltip("Distance in units, remember a tile is 2 metres's")]
-    public int m_visionFadeDistance = 10;
-    [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
-    public float m_visionFadeAngle = 60;
-
     [HideInInspector]
     public List<NavNode> m_path = new List<NavNode>();
 
