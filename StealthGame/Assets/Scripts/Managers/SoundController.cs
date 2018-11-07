@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
-    public enum SOUNDS {CLICK_MOVE_1 }
+    public enum SOUNDS {CLICK_MOVE_1}
 }
