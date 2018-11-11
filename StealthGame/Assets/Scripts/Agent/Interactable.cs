@@ -19,6 +19,8 @@ public class Interactable : MonoBehaviour
 
     protected GameController m_gameController = null;
 
+    public Interactable m_nextInteractable = null;
+
     static Color m_fullColour = new Color(1, 1, 1, 1);
     static Color m_fadedColour = new Color(0.2f, 0.2f, 0.2f, 0.8f);
     protected virtual void Start()
@@ -45,7 +47,8 @@ public class Interactable : MonoBehaviour
 
     public virtual void PerformAction(Agent agent)
     {
-
+        if (m_nextInteractable != null)
+            m_nextInteractable.ToggleCanvas(true);
     }
 
     public void DisableInteractable()
@@ -80,8 +83,8 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public void RemoveCanvas()
+    public void ToggleCanvas(bool val)
     {
-        m_interactableCanvas.SetActive(false);
+        m_interactableCanvas.SetActive(val);
     }
 }

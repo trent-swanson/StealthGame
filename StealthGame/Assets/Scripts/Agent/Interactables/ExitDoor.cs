@@ -36,6 +36,7 @@ public class ExitDoor : Interactable
 
     public override void PerformAction(Agent agent)
     {
+        base.PerformAction(agent);
         m_playerTurn.m_objectiveAchived = true;
     }
 }

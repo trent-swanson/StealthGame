@@ -42,6 +42,7 @@ public class Safe : Interactable
         if (playerController != null)
             playerController.AddGoldBag();
 
+        base.PerformAction(agent);
         HideObjects();
     }
 
