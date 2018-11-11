@@ -13,7 +13,7 @@ public class Agent : MonoBehaviour
 
     public FACING_DIR m_facingDir = FACING_DIR.NONE;
 
-    public Animator m_animator = null;
+    public Animator m_characterAnimator = null;
     public AgentAnimationController m_agentAnimationController = null;
 
     public AgentInventory m_agentInventory = null;
@@ -59,17 +59,15 @@ public class Agent : MonoBehaviour
     [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
     public float m_visionFullAngle = 30;
 
-    [Header("Investigation alertness")]
-    [Tooltip("Distance in units, remember a tile is 2 metres's")]
-    public int m_visionFadeDistance = 10;
-    [Tooltip("Total vision cone forwards, e.g. 60 is forwards, left/right 30 degrees")]
-    public float m_visionFadeAngle = 60;
-
     [HideInInspector]
     public List<NavNode> m_path = new List<NavNode>();
 
     protected virtual void Start()
     {
+#if UNITY_EDITOR
+        if (m_characterAnimator == null)
+            Debug.Log("character animator needs to be assigned");
+#endif
         //New Stuff
         RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("NavNode")))
@@ -81,7 +79,6 @@ public class Agent : MonoBehaviour
             m_currentNavNode.m_obstructingAgent = this;
         }
 
-        m_animator = GetComponent<Animator>();
         m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_agentInventory = GetComponent<AgentInventory>();
 

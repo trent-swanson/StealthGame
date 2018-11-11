@@ -20,18 +20,18 @@ public class GameState_PlayerTurn : GameState_Turn
     /// <returns>True when state is completed</returns>
     public override bool UpdateState()
     {
-        if (Input.GetAxisRaw("Cancel") != 0)
+        if (Input.GetAxisRaw("Cancel") != 0)//Quit game
             Application.Quit();
 
-        if (Input.GetAxisRaw("PlayerSwap") != 0)
+        if (Input.GetKeyDown(KeyCode.Tab))//Swap players
         {
             NextPlayer();
             return false;
         }
 
-        if (Input.GetAxisRaw("TurnEnd") != 0)
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter))//End turn
         {
-            EndTurn();
+            m_UIController.EndNextBtn();
             return false;
         }
 
@@ -46,7 +46,7 @@ public class GameState_PlayerTurn : GameState_Turn
                 break;
             case Agent.AGENT_UPDATE_STATE.PERFORMING_ACTIONS:
                 m_UIController.SetUIInteractivity(false);
-                break;
+                return (false);//Early break out, ensures game continues till end of player animations
             case Agent.AGENT_UPDATE_STATE.END_TURN:
                 NextPlayer();
                 m_UIController.SetUIInteractivity(false);

@@ -15,10 +15,12 @@ public class Interactable : MonoBehaviour
 
     public GameObject m_interactableCanvas = null;
 
+    public string m_customAnimation = "";
+
     protected GameController m_gameController = null;
 
     static Color m_fullColour = new Color(1, 1, 1, 1);
-    static Color m_fadedColour = new Color(0.5f, 0.5f, 0.5f, 1);
+    static Color m_fadedColour = new Color(0.2f, 0.2f, 0.2f, 0.8f);
     protected virtual void Start()
     {
 #if UNITY_EDITOR
@@ -32,7 +34,7 @@ public class Interactable : MonoBehaviour
                 interactionNode.SetNodeAsInteractable(this);
             }
         }
-
+        m_interactableCanvas.SetActive(false);
         m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 

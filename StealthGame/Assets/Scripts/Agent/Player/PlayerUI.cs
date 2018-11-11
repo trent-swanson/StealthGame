@@ -155,6 +155,8 @@ public class PlayerUI : MonoBehaviour
                 pickup.TurnOnOutline();
             }
         }
+
+        m_uiController.ShowInteractables(m_agentInventory);
     }
 
     private void RemoveInteractables()

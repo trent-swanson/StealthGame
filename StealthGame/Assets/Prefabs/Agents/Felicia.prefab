@@ -2212,7 +2212,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1396725063192256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: -6}
+  m_LocalPosition: {x: 1, y: 0, z: -6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4915708439417538}
@@ -2316,7 +2316,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1665726602134996}
-  m_LocalRotation: {x: 0.000004184262, y: -0.02244545, z: -0.00015705057, w: 0.99974805}
+  m_LocalRotation: {x: 0.0000041842623, y: -0.02244545, z: -0.00015705058, w: 0.99974805}
   m_LocalPosition: {x: -0.025497641, y: -2.8421383e-16, z: -4.5519144e-17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3101,7 +3101,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1342002215644624}
-  m_LocalRotation: {x: 0.023369877, y: 0.10244615, z: -0.036082745, w: 0.99380916}
+  m_LocalRotation: {x: 0.023369879, y: 0.10244615, z: -0.03608275, w: 0.99380916}
   m_LocalPosition: {x: -0.020197649, y: 2.985806e-16, z: 1.6098233e-17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3895,7 +3895,7 @@ Animator:
   m_GameObject: {fileID: 1396725063192256}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 70ad9d6127337af4ebcfa1b02104a992, type: 3}
-  m_Controller: {fileID: 9100000, guid: b5d28fb3639840a4c9d1161fa1ef5b39, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6cd5e261aa1aa744c9d5e5c2100d75db, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 2
   m_ApplyRootMotion: 1
@@ -3948,7 +3948,7 @@ MonoBehaviour:
   m_team: 0
   m_interaction: 0
   m_facingDir: 4
-  m_animator: {fileID: 95612650612307294}
+  m_characterAnimator: {fileID: 95612650612307294}
   m_agentAnimationController: {fileID: 0}
   m_agentInventory: {fileID: 0}
   m_agentInventoryUI: {fileID: 0}
@@ -3957,6 +3957,7 @@ MonoBehaviour:
   m_knockedout: 0
   m_playerTurn: {fileID: 0}
   m_NPCTurn: {fileID: 0}
+  m_gameController: {fileID: 0}
   m_maxActionPoints: 6
   m_currentActionPoints: 0
   m_moveSpeed: 2
@@ -3970,11 +3971,11 @@ MonoBehaviour:
   m_visionFadeMaxOpacity: 0.5
   m_visionFullDistance: 5
   m_visionFullAngle: 30
-  m_visionFadeDistance: 10
-  m_visionFadeAngle: 60
   m_path: []
   portrait: {fileID: 21300000, guid: 4e2306d7f96cfee489cbafcb0da95cee, type: 3}
   m_playerUI: {fileID: 0}
+  m_playerStateMachine: {fileID: 0}
+  m_goldBag: {fileID: 0}
 --- !u!114 &114096612146804966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4052,6 +4053,8 @@ MonoBehaviour:
   m_currentSelectedNode: {fileID: 0}
   m_currentlyHiding: 0
   m_selectableNodes: []
+  m_playerController: {fileID: 0}
+  m_playerUI: {fileID: 0}
 --- !u!114 &114811910265243666
 MonoBehaviour:
   m_ObjectHideFlags: 1

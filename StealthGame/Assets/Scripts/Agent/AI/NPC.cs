@@ -8,6 +8,7 @@ public class NPC : Agent
 
     public PathCreator m_pathCreator = null;
 
+    public Animator m_dazeAnimator = null;
     //-----------------------
     // Agent States
     //-----------------------
@@ -61,7 +62,6 @@ public class NPC : Agent
     [HideInInspector]
     public int m_autoStandupTimer = 0;
     public SpriteRenderer m_alertIcon = null;
-
 
     protected override void Start()
     {
@@ -270,6 +270,7 @@ public class NPC : Agent
 
         m_currentActionPoints = 0;
         m_autoStandupTimer = m_NPCTurn.m_autoStandupTime;
+        m_dazeAnimator.SetInteger("StarNumber", m_autoStandupTimer);
         ToggleAlertIcon();
     }
 

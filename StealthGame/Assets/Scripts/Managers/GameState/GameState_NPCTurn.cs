@@ -50,6 +50,7 @@ public class GameState_NPCTurn : GameState_Turn
                 NPC NPCAgent = agent.GetComponent<NPC>();
 
                 NPCAgent.m_autoStandupTimer--;
+                NPCAgent.m_dazeAnimator.SetInteger("StarNumber", NPCAgent.m_autoStandupTimer);
 
                 if (NPCAgent.m_autoStandupTimer <= 0 && NPCAgent.m_currentNavNode.m_obstructingAgent == null)
                 {
