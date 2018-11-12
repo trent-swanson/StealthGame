@@ -80,7 +80,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1822589105241330
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +254,8 @@ MonoBehaviour:
   - {fileID: 0}
   m_animation: {fileID: 0}
   m_interactableCanvas: {fileID: 1734861376522098}
+  m_customAnimation: 
+  m_nextInteractable: {fileID: 0}
   m_activatedHazards:
   - {fileID: 0}
   - {fileID: 0}

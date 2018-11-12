@@ -67,7 +67,6 @@ public class Interactable : MonoBehaviour
 
     public void FullCanvas()
     {
-        m_interactableCanvas.SetActive(true);
         foreach (Image canvasImage in GetComponentsInChildren<Image>())
         {
             canvasImage.color = m_fullColour;
@@ -76,7 +75,6 @@ public class Interactable : MonoBehaviour
 
     public void FadeCanvas()
     {
-        m_interactableCanvas.SetActive(true);
         foreach (Image canvasImage in m_interactableCanvas.GetComponentsInChildren<Image>())
         {
             canvasImage.color = m_fadedColour;
