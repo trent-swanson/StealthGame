@@ -16,8 +16,8 @@ public class GameState_NPCTurn : GameState_Turn
     {
         UpdateNPCVision();
 
-        if (Input.GetAxisRaw("Cancel") != 0)
-            Application.Quit();
+        //if (Input.GetAxisRaw("Cancel") != 0)
+        //    Application.Quit();
 
         m_currentAgentState = m_team[m_currentAgentIndex].AgentTurnUpdate();
 
