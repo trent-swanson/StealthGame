@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SoundController : MonoBehaviour
 {
-    public enum SOUND {CLICK_MOVE_0, CLICK_MOVE_1, CLICK_MOVE_2, CLICK_MOVE_3, UI_BUTTON_0, UI_BUTTON_1, WALK_0, WALK_1, WALK_2, WALK_3, WALK_4, SLIDE_0, SLIDE_1, SLIDE_2, SLIDE_3, DOOR_SAFE, DOOR_ENTRANCE_0, DOOR_ENTRANCE_1, PUNCH, MELEE_WEAPON, DEATH, COUNT};
+    public enum SOUND { CLICK_MOVE_0, CLICK_MOVE_1, CLICK_MOVE_2, CLICK_MOVE_3, UI_BUTTON_0, UI_BUTTON_1, WALK_0, WALK_1, WALK_2, WALK_3, WALK_4, SLIDE_0, SLIDE_1, SLIDE_2, SLIDE_3, DOOR_SAFE, DOOR_ENTRANCE_0, DOOR_ENTRANCE_1, PUNCH, MELEE_WEAPON, DEATH, COUNT };
+
     public AudioSource m_clickMove0 = null;
     public AudioSource m_clickMove1 = null;
     public AudioSource m_clickMove2 = null;
@@ -61,7 +62,7 @@ public class SoundController : MonoBehaviour
 
     public void PlaySound(SOUND sound)
     {
-        if(m_soundArray[(int)sound]!=null)
+        if(m_soundArray[(int)sound]!=null && !m_soundArray[(int)sound].isPlaying)
             m_soundArray[(int)sound].Play();
     }
 }

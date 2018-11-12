@@ -42,6 +42,7 @@ public class Agent : MonoBehaviour
     public float m_highlightInteractablesRange = 6;
 
     public NavNode m_currentNavNode = null;
+    public NavNode m_lastFreeNavNode = null;
 
     public Agent m_targetAgent = null;
     public Item m_targetItem = null;
@@ -96,6 +97,7 @@ public class Agent : MonoBehaviour
     public virtual void AgentTurnInit()
     {
         m_currentActionPoints = m_maxActionPoints;
+        m_lastFreeNavNode = m_currentNavNode;
     }
 
     //Runs every time a agent is selected, this can be at end of an action is completed
@@ -144,6 +146,9 @@ public class Agent : MonoBehaviour
         m_currentNavNode.SetupNodeType();
 
         m_currentNavNode = navNode;
+
+        if (m_currentNavNode.m_obstructingAgent == null) //Remeber last free navNode
+            m_lastFreeNavNode = m_currentNavNode;
 
         m_currentNavNode.m_obstructingAgent = this;
         m_currentNavNode.SetupNodeType();

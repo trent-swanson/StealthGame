@@ -71,9 +71,17 @@ public class PlayerController : Agent
         if (m_playerStateMachine.m_currentlyHiding)
             return;
 
+        if(m_lastFreeNavNode!= m_currentNavNode)//Need to add in movement back to last available node
+        {
+            m_path = m_playerStateMachine.GetPath(m_lastFreeNavNode);
+
+            m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetPlayerAnimationSteps(this, m_path, m_interaction));
+            m_agentAnimationController.PlayNextAnimation();
+        }
+
         FACING_DIR m_largestThreatDir = GetLargestThreatDir();
 
-        if (m_largestThreatDir != FACING_DIR.NONE && m_currentNavNode.m_abilityToWallHide[(int)m_largestThreatDir]) //Can hide in largest threat direction
+        if (m_largestThreatDir != FACING_DIR.NONE && m_lastFreeNavNode.m_abilityToWallHide[(int)m_largestThreatDir]) //Can hide in largest threat direction
         {
             m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide(m_largestThreatDir, this));
 
@@ -82,25 +90,25 @@ public class PlayerController : Agent
         else //Pick random wall to hide on 
         {
             //TODO get next closest wall to hide on
-            if (m_currentNavNode.m_abilityToWallHide[0])
+            if (m_lastFreeNavNode.m_abilityToWallHide[0])
             {
                 m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)0, this));
 
                 m_playerStateMachine.m_currentlyHiding = true;
             }
-            else if (m_currentNavNode.m_abilityToWallHide[1])
+            else if (m_lastFreeNavNode.m_abilityToWallHide[1])
             {
                 m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)1, this));
 
                 m_playerStateMachine.m_currentlyHiding = true;
             }
-            else if (m_currentNavNode.m_abilityToWallHide[2])
+            else if (m_lastFreeNavNode.m_abilityToWallHide[2])
             {
                 m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)2, this));
 
                 m_playerStateMachine.m_currentlyHiding = true;
             }
-            else if (m_currentNavNode.m_abilityToWallHide[3])
+            else if (m_lastFreeNavNode.m_abilityToWallHide[3])
             {
                 m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.EndTurnWallHide((FACING_DIR)3, this));
 
