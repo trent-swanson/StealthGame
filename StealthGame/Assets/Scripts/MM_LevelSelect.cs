@@ -23,9 +23,16 @@ public class MM_LevelSelect : MonoBehaviour {
     public float xStartPos = -433f;
     public float xEndPos = 2f;
 
+    [Header("Credits")]
+    public GameObject creditObject;
+    private Animator creditAnim;
+
+    public GameObject exitButton;
+    public GameObject backButton;
+    public Animator creditsButtonAnim;
+
     // Use this for initialization
     void Start () {
-
 
         startButtonImage = GameObject.FindGameObjectWithTag("StartButton").GetComponent<Image>();
         levelList = GameObject.FindGameObjectWithTag("LevelList");
@@ -45,6 +52,11 @@ public class MM_LevelSelect : MonoBehaviour {
         levelOneImage.color = one;
         levelTwoImage.color = one;
         levelThreeImage.color = one;
+
+        ///Credits
+        creditAnim = creditObject.GetComponent<Animator>();
+        //Exit Button on
+        SwapInBack(false);
     }
 
     public void StartButton()
@@ -52,45 +64,39 @@ public class MM_LevelSelect : MonoBehaviour {
         start = true;
         anim.SetBool("SlideIn", true);
         startButtonImage.gameObject.GetComponent<Animator>().SetBool("FadeOut", true);
+        creditsButtonAnim.SetBool("CreditFade", true);
     }
 
-    //void Update()
-    //{
-    //    if (start)
-    //    {
-    //        ColorChange();
-    //        ColorFade(startButtonImage);
-    //    }
-    //}
+    public void RollCredits()
+    {
+        //Credit button Fade + Move Credits
+        creditAnim.SetBool("RollCredits", true);
+        //StartButton Fade
+        startButtonImage.gameObject.GetComponent<Animator>().SetBool("FadeOut", true);
+        SwapInBack(true);
+    }
 
-    //public void ColorChange()
-    //{
-    //    for (int i = 0; i < buttonImages.Count; i++)
-    //    {
-    //        Color color = buttonImages[i].color;
-    //        color.a = ((buttonImages[i].GetComponent<RectTransform>().localPosition.x - xStartPos)/(-xStartPos + xEndPos));
-    //        buttonImages[i].color = color;
-    //        Debug.Log(color.a);
-    //    }
-    //}
-
-    //private float currentAlpha = 255f;
-    //public float fadeOutRate = 5f;
-    //public void ColorFade(Image image)
-    //{
-    //    if (currentAlpha > 0) {
-
-    //        currentAlpha -= fadeOutRate * Time.deltaTime;
-
-    //    }
-    //    else
-    //    {
-    //        currentAlpha = 0f;
-    //    }
-    //    Color color = image.color;
-    //    color.a = currentAlpha;
-    //    image.color = color;
-
-    //}
+    public void BackButton()
+    {
+        SwapInBack(false);
+        startButtonImage.gameObject.GetComponent<Animator>().SetBool("FadeOut", false);
+        //Turns off credits scroll
+        creditAnim.SetBool("RollCredits", false);
+    }
+    public void SwapInBack(bool backButtonOn)
+    {
+        //Turn on Back button
+        if (backButtonOn)
+        {
+            backButton.SetActive(true);
+            exitButton.SetActive(false);
+        }
+        //Turn on Exit Button
+        else
+        {
+            exitButton.SetActive(true);
+            backButton.SetActive(false);
+        }
+    }
 
 }
