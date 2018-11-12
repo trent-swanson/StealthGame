@@ -23,7 +23,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: e6450494af539854a947b38e85c99e85, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -43,7 +43,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 37b28a70eb85c9d4eaf434bb29ab826e, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7574ae6dc30d5b6408bb759a7904b78d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -59,13 +59,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecTex:
-        m_Texture: {fileID: 2800000, guid: 861a968282641584f9539b140ab3a561, type: 3}
+        m_Texture: {fileID: 2800000, guid: 979c88f5230e6b740b799a7cf190288d, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _BumpBias: 1
     - _BumpScale: 1
-    - _CurvatureScale: 0.02
+    - _CurvatureScale: 0.2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _Distortion: 0.1
@@ -77,15 +77,15 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Power: 2
+    - _Power: 5
     - _Scale: 2
-    - _Smoothness: 0.4
+    - _Smoothness: 0.03
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.93184584, b: 0.8455882, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SubColor: {r: 1, g: 0.31034482, b: 0, a: 1}
+    - _SubColor: {r: 1, g: 0, b: 0, a: 1}
