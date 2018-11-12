@@ -177,7 +177,7 @@ public class AnimationManager : MonoBehaviour
         return transitionSteps;
     }
 
-    private static void GetRotation(ref FACING_DIR currentDir, FACING_DIR nextDir, ref List<ANIMATION_STEP> transitionSteps)
+    public static void GetRotation(ref FACING_DIR currentDir, FACING_DIR nextDir, ref List<ANIMATION_STEP> transitionSteps)
     {
         if (currentDir != nextDir && nextDir != FACING_DIR.NONE)
         {

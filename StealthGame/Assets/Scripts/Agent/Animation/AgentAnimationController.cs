@@ -52,9 +52,14 @@ public class AgentAnimationController : MonoBehaviour
     public void EndAnimationState()
     {
         if(m_animationSteps.Count > 0)
+        {
             m_animationSteps.RemoveAt(0);
+        }
+
         m_animator.SetBool(m_currentAnimation, false);
         m_playNextAnimation = true;
+
+        PlayNextAnimation();
     }
 
     public void PlayNextAnimation()
@@ -143,6 +148,10 @@ public class AgentAnimationController : MonoBehaviour
 
                         if(NPCDefender!=null && NPCDefender.KnowsOfPlayer(playerAttacker))
                         {
+                            //Add rotation animaiton
+                            AnimationManager.GetRotation(ref NPCDefender.m_facingDir, Agent.GetFacingDir(playerAttacker.m_currentNavNode.m_nodeTop - NPCDefender.m_currentNavNode.m_nodeTop), ref NPCDefender.m_agentAnimationController.m_animationSteps);
+
+                            //Add attacking
                             NPCDefender.m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.ATTACK);
                             NPCDefender.m_agentAnimationController.PlayNextAnimation();
 
@@ -150,7 +159,6 @@ public class AgentAnimationController : MonoBehaviour
                             NPCDefender.RemoveTarget(playerAttacker);
 
                             playerAttacker.Knockout();
-                            m_playerTurn.AutoEndTurn();
                         }
                         else
                         {
@@ -251,7 +259,6 @@ public class AgentAnimationController : MonoBehaviour
 
     public IEnumerator Rotate(float angle, float totalTime)
     {
-
         float steptime = totalTime / m_rotationSteps;
         float stepAmount = angle / m_rotationSteps;
 

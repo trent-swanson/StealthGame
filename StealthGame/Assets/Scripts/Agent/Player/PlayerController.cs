@@ -59,6 +59,12 @@ public class PlayerController : Agent
         m_agentInventoryUI.DisableInventory();
     }
 
+    public override void Knockout()
+    {
+        base.Knockout();
+        StartCoroutine(KnockoutDelay());
+    }
+
     //Wall hiding for end of turn
     public void EndTurn()
     {
@@ -101,22 +107,6 @@ public class PlayerController : Agent
                 m_playerStateMachine.m_currentlyHiding = true;
             }
         }
-
-        StartCoroutine(EndTurnAnimationUpdate());
-    }
-
-    private IEnumerator EndTurnAnimationUpdate()
-    {
-        yield return 0;
-        if (m_agentAnimationController.m_playNextAnimation)//End of animation
-        {
-            m_agentAnimationController.PlayNextAnimation();
-        }
-
-        if (m_agentAnimationController.m_animationSteps.Count > 0)
-        {
-            StartCoroutine(EndTurnAnimationUpdate());
-        }
     }
 
     private FACING_DIR GetLargestThreatDir()
@@ -147,5 +137,13 @@ public class PlayerController : Agent
     {
         if (m_goldBag != null)
             m_goldBag.SetActive(true);
+    }
+
+    //Used to delay camera movement on player death
+    public IEnumerator KnockoutDelay()
+    {
+        yield return new WaitForSeconds(m_playerTurn.m_showDeathDelay);
+
+        m_playerTurn.NextPlayer();
     }
 }

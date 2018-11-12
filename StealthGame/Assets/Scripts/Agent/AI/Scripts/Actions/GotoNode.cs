@@ -79,11 +79,7 @@ public class GotoNode : AIAction
 
             NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetNPCAnimationSteps(NPCAgent, navPath);
 
-            //Decrease action point count only for walking anuimation, TODO, possibly add step down etc
-            AnimationManager.ANIMATION_STEP nextAnimation = NPCAgent.m_agentAnimationController.m_animationSteps[0];
-
-            if (nextAnimation == AnimationManager.ANIMATION_STEP.WALK || nextAnimation == AnimationManager.ANIMATION_STEP.STEP)
-                NPCAgent.m_currentActionPoints -= m_baseActionCost;
+            NPCAgent.m_currentActionPoints -= navPath.Count;
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }
@@ -155,22 +151,10 @@ public class GotoNode : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
-        if(NPCAgent.m_agentAnimationController.m_playNextAnimation)//Arrived at node
-        {
-            //Precheck for aniomation step count
-            if (NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0)
-                m_isDone = true;
-            else
-            {
-                //Decrease action point count only for walking anuimation, TODO, possibly add step down etc
-                AnimationManager.ANIMATION_STEP nextAnimation = NPCAgent.m_agentAnimationController.m_animationSteps[0];
 
-                if (nextAnimation == AnimationManager.ANIMATION_STEP.WALK || nextAnimation == AnimationManager.ANIMATION_STEP.STEP)
-                    NPCAgent.m_currentActionPoints -= m_baseActionCost;
-
-                NPCAgent.m_agentAnimationController.PlayNextAnimation();
-            }
-        }
+        //Precheck for aniomation step count
+        if (NPCAgent.m_agentAnimationController.m_animationSteps.Count == 0)
+            m_isDone = true;
 
         return true;
     }

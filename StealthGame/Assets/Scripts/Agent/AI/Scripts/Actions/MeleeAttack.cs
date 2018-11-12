@@ -83,8 +83,6 @@ public class MeleeAttack : AIAction
     //--------------------------------------------------------------------------------------
     public override bool Perform(NPC NPCAgent)
     {
-        if(NPCAgent.m_agentAnimationController.m_playNextAnimation)
-            NPCAgent.m_agentAnimationController.PlayNextAnimation();
         return true;
     }
 

@@ -26,15 +26,11 @@ public class PlayerState_InputEnd : PlayerState
     //-------------------
     public override bool UpdateState()
     {
-        if (m_agentAnimationController.m_playNextAnimation)//End of animation
-        {
-            if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
-            {
-                m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
-                return true;
-            }
 
-            m_agentAnimationController.PlayNextAnimation();
+        if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
+        {
+            m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
+            return true;
         }
 
         return false;
