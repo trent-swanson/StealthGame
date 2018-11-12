@@ -10921,12 +10921,12 @@ Prefab:
     - target: {fileID: 224833911988303998, guid: 96496acdc6036074b8c18a2a5f749150,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: -3.688324
+      value: -3.662262
       objectReference: {fileID: 0}
     - target: {fileID: 224080557069713728, guid: 96496acdc6036074b8c18a2a5f749150,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: -3.688324
+      value: -3.662262
       objectReference: {fileID: 0}
     - target: {fileID: 114681762560538774, guid: 96496acdc6036074b8c18a2a5f749150,
         type: 2}
@@ -21017,6 +21017,11 @@ Prefab:
       propertyPath: m_agentInventoryUI
       value: 
       objectReference: {fileID: 1409212973}
+    - target: {fileID: 114055977519979616, guid: 43cef7daf1f091044a9133aa606c1843,
+        type: 2}
+      propertyPath: m_maxActionPoints
+      value: 6000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43cef7daf1f091044a9133aa606c1843, type: 2}
   m_IsPrefabParent: 0
