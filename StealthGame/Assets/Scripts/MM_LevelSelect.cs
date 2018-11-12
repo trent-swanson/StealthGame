@@ -31,6 +31,12 @@ public class MM_LevelSelect : MonoBehaviour {
     public GameObject backButton;
     public Animator creditsButtonAnim;
 
+    [Header("Dance")]
+    public Animator tinkerAnim;
+    public Animator feliciaAnim;
+    public Animator cameraAnim;
+    public GameObject title;
+
     // Use this for initialization
     void Start () {
 
@@ -70,18 +76,30 @@ public class MM_LevelSelect : MonoBehaviour {
     public void RollCredits()
     {
         //Credit button Fade + Move Credits
+        creditsButtonAnim.SetBool("CreditFade", true);
         creditAnim.SetBool("RollCredits", true);
         //StartButton Fade
         startButtonImage.gameObject.GetComponent<Animator>().SetBool("FadeOut", true);
         SwapInBack(true);
+        //Dance on
+        tinkerAnim.SetBool("Dance", true);
+        feliciaAnim.SetBool("Dance", true);
+        cameraAnim.SetBool("CameraIn", true);
+        title.SetActive(false);
     }
 
     public void BackButton()
     {
+        creditsButtonAnim.SetBool("CreditFade", false);
         SwapInBack(false);
         startButtonImage.gameObject.GetComponent<Animator>().SetBool("FadeOut", false);
         //Turns off credits scroll
         creditAnim.SetBool("RollCredits", false);
+        //Dance off
+        tinkerAnim.SetBool("Dance", false);
+        feliciaAnim.SetBool("Dance", false);
+        cameraAnim.SetBool("CameraIn", false);
+        title.SetActive(true);
     }
     public void SwapInBack(bool backButtonOn)
     {
