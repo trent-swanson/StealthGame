@@ -72,6 +72,10 @@ public class PlayerState_Perform : PlayerState
 
             //Get new path to interactable node
             m_playerController.m_path = m_parentStateMachine.GetPath(m_parentStateMachine.m_currentSelectedNode);
+
+            Safe safe = m_playerController.m_targetInteractable.GetComponent<Safe>();
+            if (safe != null)
+                safe.PlaySafeClick();
         }
         else if (m_parentStateMachine.m_currentSelectedNode.GetDownedAgent(m_playerController.m_team) != null)//Reviving team mate
         {
