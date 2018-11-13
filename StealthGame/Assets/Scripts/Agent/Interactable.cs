@@ -67,7 +67,8 @@ public class Interactable : MonoBehaviour
             }
         }
 
-        m_interactableCanvas.SetActive(false);
+        if(m_interactableCanvas!= null)
+            m_interactableCanvas.SetActive(false);
     }
 
     public void FullCanvas()
