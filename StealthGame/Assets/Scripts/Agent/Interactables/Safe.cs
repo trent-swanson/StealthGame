@@ -57,4 +57,9 @@ public class Safe : Interactable
     {
         m_soundController.PlaySound(SoundController.SOUND.DOOR_SAFE);
     }
+
+    public void PlaySafeClick()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.CLICK_MOVE_0);
+    }
 }
