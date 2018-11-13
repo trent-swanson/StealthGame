@@ -98,7 +98,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4457008431882006
 Transform:
   m_ObjectHideFlags: 1
@@ -330,6 +330,8 @@ MonoBehaviour:
   - {fileID: 0}
   m_animation: {fileID: 0}
   m_interactableCanvas: {fileID: 1956713467454752}
+  m_customAnimation: 
+  m_nextInteractable: {fileID: 0}
   m_requiredPlayerCount: 2
 --- !u!222 &222004348538202796
 CanvasRenderer:

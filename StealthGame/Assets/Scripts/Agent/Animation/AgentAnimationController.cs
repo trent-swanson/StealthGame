@@ -7,7 +7,7 @@ public class AgentAnimationController : MonoBehaviour
     private Agent m_agent = null;
     private Animator m_animator = null;
     public string m_rotateLeftRightName = "TurnRight";
-    public  float m_rotateLeftRightTime;
+    public float m_rotateLeftRightTime;
     public string m_rotateTurnAroundName = "TurnAround";
     public float m_rotateTurnAroundTime;
     [Tooltip("The number of 'frames' to rotate")]
@@ -35,7 +35,7 @@ public class AgentAnimationController : MonoBehaviour
             {
                 m_rotateLeftRightTime = animatorClips[i].length * 0.9f;//reduction on turning to allow for minor float inacuracies '
             }
-            else if(animatorClips[i].name == m_rotateTurnAroundName)
+            else if (animatorClips[i].name == m_rotateTurnAroundName)
             {
                 m_rotateTurnAroundTime = animatorClips[i].length * 0.9f;//reduction on turning to allow for minor float inacuracies '
             }
@@ -45,16 +45,17 @@ public class AgentAnimationController : MonoBehaviour
         m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
     }
 
-    private void Update()
-    {
-    }
-
     public void EndAnimationState()
     {
-        if(m_animationSteps.Count > 0)
+        if (m_animationSteps.Count > 0)
+        {
             m_animationSteps.RemoveAt(0);
+        }
+
         m_animator.SetBool(m_currentAnimation, false);
         m_playNextAnimation = true;
+
+        PlayNextAnimation();
     }
 
     public void PlayNextAnimation()
@@ -119,7 +120,7 @@ public class AgentAnimationController : MonoBehaviour
                     {
                         interactable.PerformAction(m_agent);
 
-                        if(interactable.m_customAnimation == "")
+                        if (interactable.m_customAnimation == "")
                             m_currentAnimation = "Interact";
                         else
                             m_currentAnimation = interactable.m_customAnimation;
@@ -137,12 +138,16 @@ public class AgentAnimationController : MonoBehaviour
                     //Determine atrtack direction, if guard knows of player then guard attacks, else same as normal
                     PlayerController playerAttacker = m_agent.GetComponent<PlayerController>();
 
-                    if(playerAttacker != null)
+                    if (playerAttacker != null)
                     {
                         NPC NPCDefender = playerAttacker.m_targetAgent.GetComponent<NPC>();
 
-                        if(NPCDefender!=null && NPCDefender.KnowsOfPlayer(playerAttacker))
+                        if (NPCDefender != null && NPCDefender.KnowsOfPlayer(playerAttacker))
                         {
+                            //Add rotation animaiton
+                            AnimationManager.GetRotation(ref NPCDefender.m_facingDir, Agent.GetFacingDir(playerAttacker.m_currentNavNode.m_nodeTop - NPCDefender.m_currentNavNode.m_nodeTop), ref NPCDefender.m_agentAnimationController.m_animationSteps);
+
+                            //Add attacking
                             NPCDefender.m_agentAnimationController.m_animationSteps.Add(AnimationManager.ANIMATION_STEP.ATTACK);
                             NPCDefender.m_agentAnimationController.PlayNextAnimation();
 
@@ -150,7 +155,6 @@ public class AgentAnimationController : MonoBehaviour
                             NPCDefender.RemoveTarget(playerAttacker);
 
                             playerAttacker.Knockout();
-                            m_playerTurn.AutoEndTurn();
                         }
                         else
                         {
@@ -195,7 +199,7 @@ public class AgentAnimationController : MonoBehaviour
                     }
 
                     PlayerController playerController = m_agent.GetComponent<PlayerController>();
-                    if(playerController != null)
+                    if (playerController != null)
                     {
                         playerController.m_playerStateMachine.m_currentlyHiding = true;
                     }
@@ -212,7 +216,7 @@ public class AgentAnimationController : MonoBehaviour
                     break;
             }
 
-            if(m_currentAnimation!="")
+            if (m_currentAnimation != "")
             {
                 m_animator.SetBool(m_currentAnimation, true);
                 m_playNextAnimation = false;
@@ -235,7 +239,7 @@ public class AgentAnimationController : MonoBehaviour
         }
     }
 
-    public enum ROTATION_DIR { LEFT = -1, RIGHT = 1}
+    public enum ROTATION_DIR { LEFT = -1, RIGHT = 1 }
 
     public void RotateLeftRight(ROTATION_DIR rotationDir)
     {
@@ -251,7 +255,6 @@ public class AgentAnimationController : MonoBehaviour
 
     public IEnumerator Rotate(float angle, float totalTime)
     {
-
         float steptime = totalTime / m_rotationSteps;
         float stepAmount = angle / m_rotationSteps;
 
@@ -279,7 +282,7 @@ public class AgentAnimationController : MonoBehaviour
 
         if (newDir == -1)
             newDir = 3;
-        else if(newDir == 4)
+        else if (newDir == 4)
             newDir = 0;
 
         agent.m_facingDir = (FACING_DIR)newDir;

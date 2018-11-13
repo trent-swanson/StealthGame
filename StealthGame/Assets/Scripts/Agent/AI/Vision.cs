@@ -55,7 +55,19 @@ public class Vision : MonoBehaviour
             }
         }
 
+        Vector3 heightOffset = new Vector3(0.0f, 0.5f, 0.0f); 
+        Vector3 startingPos = agent.m_currentNavNode.m_nodeTop + heightOffset;
+        for (int i = 0; i < visibleNodes.Count; i++)
+        {
+            Vector3 dir = visibleNodes[i].m_nodeTop + heightOffset - startingPos;//Get dir between node tops
 
+            RaycastHit hit;
+            if (Physics.Raycast(startingPos, dir, out hit, dir.magnitude, LayerManager.m_enviromentLayer))
+            {
+                visibleNodes.RemoveAt(i);
+                i--;
+            }
+        }
 
         return visibleNodes;
     }

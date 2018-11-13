@@ -22,6 +22,8 @@ public class PipeValve : Interactable
 
     public override void PerformAction(Agent agent)
     {
+        base.PerformAction(agent);
+
         foreach (EnviromentHazard enviromentalHazard in m_activatedHazards)
         {
             enviromentalHazard.ActivateHazard();

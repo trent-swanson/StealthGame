@@ -89,6 +89,7 @@ public class PlayerState_Perform : PlayerState
         transform.position = m_playerController.m_path[0].m_nodeTop;//Move to top of node to remove any minor offsets due to float errors
 
         m_agentAnimationController.m_animationSteps.AddRange(AnimationManager.GetPlayerAnimationSteps(this.m_playerController, m_playerController.m_path, m_playerController.m_interaction));
+        m_agentAnimationController.PlayNextAnimation();
 
         m_playerUI.UpdateNodeVisualisation(PlayerUI.MESH_STATE.REMOVE_NAVMESH, m_parentStateMachine.m_selectableNodes, m_parentStateMachine.m_currentSelectedNode);//Remove UI
     }
@@ -100,17 +101,13 @@ public class PlayerState_Perform : PlayerState
     //-------------------
     public override bool UpdateState()
     {
-        if (m_agentAnimationController.m_playNextAnimation)//End of animation
+        if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
         {
-            if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
-            {
-                m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
-                return true;
-            }
-
-            m_agentAnimationController.PlayNextAnimation();
-            m_playerUI.UpdateUI();
+            m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
+            return true;
         }
+
+        m_playerUI.UpdateUI();
 
         return false;
     }

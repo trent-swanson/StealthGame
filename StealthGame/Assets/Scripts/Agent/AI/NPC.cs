@@ -93,9 +93,6 @@ public class NPC : Agent
         if (!m_agentAnimationController.m_playNextAnimation) //Currently animating, dont need any logic
             return AGENT_UPDATE_STATE.PERFORMING_ACTIONS;
 
-        if (m_currentActionPoints == 0) //Early break on no aciotn points
-            return AGENT_UPDATE_STATE.END_TURN;
-
         //Check for update in world state
         if (m_agentWorldState.m_modifiedFlag)
         {
@@ -113,6 +110,8 @@ public class NPC : Agent
                 return AGENT_UPDATE_STATE.END_TURN;
             }
         }
+        if (m_currentActionPoints == 0) //Early break on no aciotn points
+            return AGENT_UPDATE_STATE.END_TURN;
 
         GOAP.GOAP_UPDATE_STATE actionState = m_GOAP.GOAPUpdate();
 

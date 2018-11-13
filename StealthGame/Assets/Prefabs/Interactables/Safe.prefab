@@ -145,7 +145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1350662308669906
 GameObject:
   m_ObjectHideFlags: 1
@@ -1126,6 +1126,7 @@ MonoBehaviour:
   m_animation: {fileID: 0}
   m_interactableCanvas: {fileID: 1245620734062392}
   m_customAnimation: Safehack
+  m_nextInteractable: {fileID: 0}
   m_item: {fileID: 114151978106209578, guid: 7f6ba73057c9017429116e3be3c0be47, type: 2}
   m_health: 3
 --- !u!114 &114531990258285836

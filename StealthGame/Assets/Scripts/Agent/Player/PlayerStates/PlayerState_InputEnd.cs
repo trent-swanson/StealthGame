@@ -26,15 +26,11 @@ public class PlayerState_InputEnd : PlayerState
     //-------------------
     public override bool UpdateState()
     {
-        if (m_agentAnimationController.m_playNextAnimation)//End of animation
-        {
-            if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
-            {
-                m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
-                return true;
-            }
 
-            m_agentAnimationController.PlayNextAnimation();
+        if (m_agentAnimationController.m_animationSteps.Count == 0)//End of move
+        {
+            m_playerController.ChangeCurrentNavNode(m_playerController.m_path[m_playerController.m_path.Count - 1]);
+            return true;
         }
 
         return false;
@@ -62,29 +58,5 @@ public class PlayerState_InputEnd : PlayerState
     public override bool IsValid()
     {
         return true;
-    }
-
-    public FACING_DIR GetLargestThreatDir()
-    {
-        //Get closest guard
-        List<Agent> m_guards = m_playerController.m_NPCTurn.m_team;
-
-        float closestDistance = Mathf.Infinity;
-        Agent closestGuard = null;
-        foreach (Agent guard in m_guards)
-        {
-            float distance = Vector3.Distance(transform.position, guard.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestGuard = guard;
-            }
-        }
-
-        if (closestGuard != null)
-        {
-            return Agent.GetFacingDir(closestGuard.transform.position - transform.position);
-        }
-        return FACING_DIR.NONE;
     }
 }

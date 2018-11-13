@@ -18,6 +18,9 @@ public class Interactable : MonoBehaviour
     public string m_customAnimation = "";
 
     protected GameController m_gameController = null;
+    protected SoundController m_soundController = null;
+
+    public Interactable m_nextInteractable = null;
 
     static Color m_fullColour = new Color(1, 1, 1, 1);
     static Color m_fadedColour = new Color(0.2f, 0.2f, 0.2f, 0.8f);
@@ -35,7 +38,9 @@ public class Interactable : MonoBehaviour
             }
         }
         m_interactableCanvas.SetActive(false);
+
         m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        m_soundController = m_gameController.GetComponent<SoundController>();
     }
 
     public virtual bool CanPerform(Agent agent)
@@ -45,7 +50,8 @@ public class Interactable : MonoBehaviour
 
     public virtual void PerformAction(Agent agent)
     {
-
+        if (m_nextInteractable != null)
+            m_nextInteractable.ToggleCanvas(true);
     }
 
     public void DisableInteractable()
@@ -64,7 +70,6 @@ public class Interactable : MonoBehaviour
 
     public void FullCanvas()
     {
-        m_interactableCanvas.SetActive(true);
         foreach (Image canvasImage in GetComponentsInChildren<Image>())
         {
             canvasImage.color = m_fullColour;
@@ -73,15 +78,14 @@ public class Interactable : MonoBehaviour
 
     public void FadeCanvas()
     {
-        m_interactableCanvas.SetActive(true);
         foreach (Image canvasImage in m_interactableCanvas.GetComponentsInChildren<Image>())
         {
             canvasImage.color = m_fadedColour;
         }
     }
 
-    public void RemoveCanvas()
+    public void ToggleCanvas(bool val)
     {
-        m_interactableCanvas.SetActive(false);
+        m_interactableCanvas.SetActive(val);
     }
 }

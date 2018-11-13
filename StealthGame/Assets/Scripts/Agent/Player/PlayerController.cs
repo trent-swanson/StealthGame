@@ -52,11 +52,16 @@ public class PlayerController : Agent
     //Runs when agent is removed from team list, end of turn
     public override void AgentTurnEnd()
     {
-        base.AgentTurnEnd();
         EndTurn();
         m_playerStateMachine.TurnEndStateMachine();
         m_playerUI.UpdateUI();
         m_agentInventoryUI.DisableInventory();
+    }
+
+    public override void Knockout()
+    {
+        base.Knockout();
+        StartCoroutine(KnockoutDelay());
     }
 
     //Wall hiding for end of turn
@@ -102,21 +107,7 @@ public class PlayerController : Agent
             }
         }
 
-        StartCoroutine(EndTurnAnimationUpdate());
-    }
-
-    private IEnumerator EndTurnAnimationUpdate()
-    {
-        yield return 0;
-        if (m_agentAnimationController.m_playNextAnimation)//End of animation
-        {
-            m_agentAnimationController.PlayNextAnimation();
-        }
-
-        if (m_agentAnimationController.m_animationSteps.Count > 0)
-        {
-            StartCoroutine(EndTurnAnimationUpdate());
-        }
+        m_agentAnimationController.PlayNextAnimation();
     }
 
     private FACING_DIR GetLargestThreatDir()
@@ -147,5 +138,13 @@ public class PlayerController : Agent
     {
         if (m_goldBag != null)
             m_goldBag.SetActive(true);
+    }
+
+    //Used to delay camera movement on player death
+    public IEnumerator KnockoutDelay()
+    {
+        yield return new WaitForSeconds(m_playerTurn.m_showDeathDelay);
+
+        m_playerTurn.NextPlayer();
     }
 }

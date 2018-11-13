@@ -7,6 +7,14 @@ public class GameController : MonoBehaviour
 {
     public GameState m_currentState = null;
     public Agent.TEAM m_currentTeam = Agent.TEAM.NPC;
+
+    [HideInInspector]
+    public SoundController m_soundController = null;
+
+    private void Start()
+    {
+        m_soundController = GetComponent<SoundController>();
+    }
     private void Update()
     {
         //State completed

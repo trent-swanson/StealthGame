@@ -42,6 +42,7 @@ public class Safe : Interactable
         if (playerController != null)
             playerController.AddGoldBag();
 
+        base.PerformAction(agent);
         HideObjects();
     }
 
@@ -50,5 +51,10 @@ public class Safe : Interactable
         boozeGroup.SetActive(false);
         sparkleParticle.SetActive(false);
         boozeEmpty.SetActive(true);
+    }
+
+    public void PlaySafeOpening()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.DOOR_SAFE);
     }
 }

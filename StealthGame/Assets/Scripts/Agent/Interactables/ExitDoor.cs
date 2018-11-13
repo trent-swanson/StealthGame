@@ -36,6 +36,14 @@ public class ExitDoor : Interactable
 
     public override void PerformAction(Agent agent)
     {
+        base.PerformAction(agent);
         m_playerTurn.m_objectiveAchived = true;
+
+        PlayDoorOpening();
+    }
+
+    public void PlayDoorOpening()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.DOOR_ENTRANCE_0);
     }
 }

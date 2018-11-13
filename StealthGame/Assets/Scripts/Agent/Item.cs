@@ -16,6 +16,8 @@ public class Item : MonoBehaviour
 
 	NavNode m_currentNode;
 
+    public Interactable m_nextInteractable = null;
+
 	public Color m_highlightColour;
 
     public AIAction m_action;
@@ -43,6 +45,9 @@ public class Item : MonoBehaviour
 
             //Move away from sight
             transform.position = m_itemTempStorage;
+
+            if (m_nextInteractable != null)
+                m_nextInteractable.ToggleCanvas(true);
         }
     }
 

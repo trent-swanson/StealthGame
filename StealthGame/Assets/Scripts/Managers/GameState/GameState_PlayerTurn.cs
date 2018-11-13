@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class GameState_PlayerTurn : GameState_Turn
 {
+    [HideInInspector]
     public bool m_objectiveAchived = false;
+    public float m_showDeathDelay = 2.0f; 
     private bool m_endTurn = false;
 
     private GameState_NPCTurn m_NPCTurn = null;
@@ -20,8 +22,8 @@ public class GameState_PlayerTurn : GameState_Turn
     /// <returns>True when state is completed</returns>
     public override bool UpdateState()
     {
-        if (Input.GetAxisRaw("Cancel") != 0)//Quit game
-            Application.Quit();
+        //if (Input.GetAxisRaw("Cancel") != 0)//Quit game
+        //    Application.Quit();
 
         if (Input.GetKeyDown(KeyCode.Tab))//Swap players
         {
