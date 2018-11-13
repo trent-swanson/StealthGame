@@ -55,7 +55,7 @@ public class Vision : MonoBehaviour
             }
         }
 
-        Vector3 heightOffset = new Vector3(0.0f, 0.5f, 0.0f); 
+        Vector3 heightOffset = new Vector3(0.0f, 0.2f, 0.0f); 
         Vector3 startingPos = agent.m_currentNavNode.m_nodeTop + heightOffset;
         for (int i = 0; i < visibleNodes.Count; i++)
         {
