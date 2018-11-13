@@ -23,6 +23,7 @@ public class SoundController : MonoBehaviour
     public AudioSource m_slide0 = null;
     public AudioSource m_slide1 = null;
     public AudioSource m_slide2 = null;
+    public AudioSource m_slide3 = null;
 
     public AudioSource m_doorSafe = null;
     public AudioSource m_doorEntrance0 = null;
@@ -52,6 +53,7 @@ public class SoundController : MonoBehaviour
         m_soundArray[(int)SOUND.SLIDE_0] = m_slide0;
         m_soundArray[(int)SOUND.SLIDE_1] = m_slide1;
         m_soundArray[(int)SOUND.SLIDE_2] = m_slide2;
+        m_soundArray[(int)SOUND.SLIDE_3] = m_slide3;
         m_soundArray[(int)SOUND.DOOR_SAFE] = m_doorSafe;
         m_soundArray[(int)SOUND.DOOR_ENTRANCE_0] = m_doorEntrance0;
         m_soundArray[(int)SOUND.DOOR_ENTRANCE_1] = m_doorEntrance1;
