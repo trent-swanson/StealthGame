@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 33512380051139268}
   - component: {fileID: 23586474097174700}
   - component: {fileID: 95241052084247784}
+  - component: {fileID: 114998094030941916}
   m_Layer: 0
   m_Name: Safe_Door_mesh
   m_TagString: Untagged
@@ -473,7 +474,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1943767198063932}
   m_LocalRotation: {x: -0, y: -1, z: -0, w: 0.00000058114523}
-  m_LocalPosition: {x: -6.9787865, y: 0.013951145, z: 10.84606}
+  m_LocalPosition: {x: 7, y: 0, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4356891122311188}
@@ -1229,6 +1230,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71cdfa945aebef2478819a191543a588, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114998094030941916
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1173656265853942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2642dbd2342ed1446a0ca003362369e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!198 &198595051842706064
