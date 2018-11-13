@@ -59,28 +59,4 @@ public class PlayerState_InputEnd : PlayerState
     {
         return true;
     }
-
-    public FACING_DIR GetLargestThreatDir()
-    {
-        //Get closest guard
-        List<Agent> m_guards = m_playerController.m_NPCTurn.m_team;
-
-        float closestDistance = Mathf.Infinity;
-        Agent closestGuard = null;
-        foreach (Agent guard in m_guards)
-        {
-            float distance = Vector3.Distance(transform.position, guard.transform.position);
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestGuard = guard;
-            }
-        }
-
-        if (closestGuard != null)
-        {
-            return Agent.GetFacingDir(closestGuard.transform.position - transform.position);
-        }
-        return FACING_DIR.NONE;
-    }
 }

@@ -110,7 +110,8 @@ public class PlayerUI : MonoBehaviour
 
     private void ClearPathRender()
     {
-        m_pathRenderer.positionCount = 0;
+        if(m_pathRenderer!=null)
+            m_pathRenderer.positionCount = 0;
     }
 
     private Vector3[] GetPathPos(List<NavNode> nodes)

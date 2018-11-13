@@ -52,7 +52,6 @@ public class PlayerController : Agent
     //Runs when agent is removed from team list, end of turn
     public override void AgentTurnEnd()
     {
-        base.AgentTurnEnd();
         EndTurn();
         m_playerStateMachine.TurnEndStateMachine();
         m_playerUI.UpdateUI();
@@ -107,6 +106,8 @@ public class PlayerController : Agent
                 m_playerStateMachine.m_currentlyHiding = true;
             }
         }
+
+        m_agentAnimationController.PlayNextAnimation();
     }
 
     private FACING_DIR GetLargestThreatDir()
