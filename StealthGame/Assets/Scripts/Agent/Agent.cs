@@ -15,6 +15,7 @@ public class Agent : MonoBehaviour
 
     public Animator m_characterAnimator = null;
     public AgentAnimationController m_agentAnimationController = null;
+    protected SoundController m_soundController = null;
 
     public AgentInventory m_agentInventory = null;
     public InventoryUI m_agentInventoryUI = null;
@@ -82,9 +83,11 @@ public class Agent : MonoBehaviour
         m_agentAnimationController = GetComponent<AgentAnimationController>();
         m_agentInventory = GetComponent<AgentInventory>();
 
-        m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
-        m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
         m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        m_playerTurn = m_gameController.GetComponent<GameState_PlayerTurn>();
+        m_soundController = m_gameController.GetComponent<SoundController>();
+        m_NPCTurn = m_gameController.GetComponent<GameState_NPCTurn>();
+
         m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
 
         m_colliderExtents = GetComponent<CapsuleCollider>().bounds.extents;
@@ -181,5 +184,56 @@ public class Agent : MonoBehaviour
             default:
                 return Vector3.zero;
         }
+    }
+
+    //Animation Sounds
+    private int m_walkSoundIndex = 0;
+    public void PlayWalk()
+    {
+        switch (m_walkSoundIndex)
+        {
+            case 0:
+                m_soundController.PlaySound(SoundController.SOUND.WALK_0);
+                m_walkSoundIndex++;
+                break;
+            case 1:
+                m_soundController.PlaySound(SoundController.SOUND.WALK_1);
+                m_walkSoundIndex++;
+                break;
+            case 2:
+                m_soundController.PlaySound(SoundController.SOUND.WALK_2);
+                m_walkSoundIndex++;
+                break;
+            case 3:
+                m_soundController.PlaySound(SoundController.SOUND.WALK_3);
+                m_walkSoundIndex++;
+                break;
+            case 4:
+                m_soundController.PlaySound(SoundController.SOUND.WALK_4);
+                m_walkSoundIndex = 0;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void PlaySlideStart()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.SLIDE_2);
+    }
+
+    public void PlaySlideEnd()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.SLIDE_3);
+    }
+
+    public void PlayAttack()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.PUNCH);
+    }
+
+    public void PlayDeath()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.DEATH);
     }
 }

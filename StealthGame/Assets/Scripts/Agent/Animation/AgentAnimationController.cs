@@ -18,16 +18,11 @@ public class AgentAnimationController : MonoBehaviour
 
     public List<AnimationManager.ANIMATION_STEP> m_animationSteps = new List<AnimationManager.ANIMATION_STEP>();
 
-    #region Turn States
     private GameState_NPCTurn m_NPCTurn = null;
     private GameState_PlayerTurn m_playerTurn = null;
-    #endregion
-
 
     private void Start()
     {
-
-
         m_agent = GetComponent<Agent>();
         m_animator = GetComponentInChildren<Animator>();
 
@@ -48,10 +43,6 @@ public class AgentAnimationController : MonoBehaviour
 
         m_NPCTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_NPCTurn>();
         m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
-    }
-
-    private void Update()
-    {
     }
 
     public void EndAnimationState()
@@ -295,7 +286,5 @@ public class AgentAnimationController : MonoBehaviour
             newDir = 0;
 
         agent.m_facingDir = (FACING_DIR)newDir;
-
-
     }
 }

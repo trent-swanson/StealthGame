@@ -18,6 +18,7 @@ public class Interactable : MonoBehaviour
     public string m_customAnimation = "";
 
     protected GameController m_gameController = null;
+    protected SoundController m_soundController = null;
 
     public Interactable m_nextInteractable = null;
 
@@ -37,7 +38,9 @@ public class Interactable : MonoBehaviour
             }
         }
         m_interactableCanvas.SetActive(false);
+
         m_gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        m_soundController = m_gameController.GetComponent<SoundController>();
     }
 
     public virtual bool CanPerform(Agent agent)

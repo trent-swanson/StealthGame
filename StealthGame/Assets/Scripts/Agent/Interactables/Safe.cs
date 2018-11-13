@@ -52,4 +52,9 @@ public class Safe : Interactable
         sparkleParticle.SetActive(false);
         boozeEmpty.SetActive(true);
     }
+
+    public void PlaySafeOpening()
+    {
+        m_soundController.PlaySound(SoundController.SOUND.DOOR_SAFE);
+    }
 }

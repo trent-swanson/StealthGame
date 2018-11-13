@@ -7,7 +7,6 @@ using TMPro;
 
 public class UIController : MonoBehaviour
 {
-
     public bool m_soloMode = false;
 
     public List<Image> m_portraitImages = new List<Image>();
@@ -37,6 +36,8 @@ public class UIController : MonoBehaviour
     //Very big hack but hey it works
     public Image m_UIBlocker = null;
 
+    private SoundController m_soundController = null;
+
     void Start()
     {
         if (m_endNextBtn != null)
@@ -51,6 +52,8 @@ public class UIController : MonoBehaviour
 
         if (m_soloMode)
             m_endNextBtnText.text = m_endTurnString;
+
+        m_soundController = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundController>();
     }
 
     public void UpdateUI(List<Agent> agents)
@@ -93,6 +96,8 @@ public class UIController : MonoBehaviour
             m_playerTurn.SwapAgents(index);
 
         SwapEndTurnButton();
+
+        m_soundController.PlaySound(SoundController.SOUND.UI_BUTTON_0);
     }
 
     public void SwapEndTurnButton()
@@ -131,6 +136,8 @@ public class UIController : MonoBehaviour
         }
         else
             m_playerTurn.EndTurn();
+
+        m_soundController.PlaySound(SoundController.SOUND.UI_BUTTON_0);
     }
 
     public void FadeTurnStart(Image imageToFade)
