@@ -67,7 +67,7 @@ public class PlayerController : Agent
     //Wall hiding for end of turn
     public void EndTurn()
     {
-        if (m_playerStateMachine.m_currentlyHiding)
+        if (m_playerStateMachine.m_currentlyHiding || m_knockedout)
             return;
 
         FACING_DIR m_largestThreatDir = GetLargestThreatDir();
