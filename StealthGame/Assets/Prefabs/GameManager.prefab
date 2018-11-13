@@ -121,7 +121,7 @@ MonoBehaviour:
   m_currentAgentIndex: 0
   m_currentAgentState: 2
   m_gameController: {fileID: 0}
-  m_autoStandupTime: 5
+  m_autoStandupTime: 3
 --- !u!114 &114932985727434244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -133,6 +133,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4b4bee25381154480924ed9bdfce8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_clickMove0: {fileID: 0}
+  m_clickMove1: {fileID: 0}
+  m_clickMove2: {fileID: 0}
+  m_clickMove3: {fileID: 0}
+  m_UIButton0: {fileID: 0}
+  m_UIButton1: {fileID: 0}
+  m_walk0: {fileID: 0}
+  m_walk1: {fileID: 0}
+  m_walk2: {fileID: 0}
+  m_walk3: {fileID: 0}
+  m_walk4: {fileID: 0}
+  m_slide0: {fileID: 0}
+  m_slide1: {fileID: 0}
+  m_slide2: {fileID: 0}
+  m_doorSafe: {fileID: 0}
+  m_doorEntrance0: {fileID: 0}
+  m_doorEntrance1: {fileID: 0}
+  m_punch: {fileID: 0}
+  m_meleeWeapon: {fileID: 0}
+  m_death: {fileID: 0}
 --- !u!114 &114935651520854332
 MonoBehaviour:
   m_ObjectHideFlags: 1
