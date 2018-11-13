@@ -66,6 +66,8 @@ public class Interactable : MonoBehaviour
                 interactionNode.SetupNodeType();
             }
         }
+
+        m_interactableCanvas.SetActive(false);
     }
 
     public void FullCanvas()
