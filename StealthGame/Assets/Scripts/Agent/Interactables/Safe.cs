@@ -53,11 +53,6 @@ public class Safe : Interactable
         boozeEmpty.SetActive(true);
     }
 
-    public void PlaySafeOpening()
-    {
-        m_soundController.PlaySound(SoundController.SOUND.DOOR_SAFE);
-    }
-
     public void PlaySafeClick()
     {
         m_soundController.PlaySound(SoundController.SOUND.CLICK_MOVE_0);
