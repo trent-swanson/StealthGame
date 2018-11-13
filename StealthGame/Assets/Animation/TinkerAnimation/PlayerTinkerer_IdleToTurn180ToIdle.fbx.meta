@@ -288,10 +288,11 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'idleToTurn180ToIdleNoRoot' has import animation
-      warnings that might lower retargeting quality:\nNote: Activate translation DOF
-      on avatar to improve retargeting quality.\n\t'JNT_Spine0' has translation animation
-      that will be discarded.\n"
+    animationImportWarnings: "\nClip 'idleToTurn180ToIdle' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'JNT_Spine0' has translation animation that
+      will be discarded.\nEvent PlayWalk has a time (0.754792) outside the clip's
+      valid range (0.000000..0.566667). It will never be fired"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -327,8 +328,22 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.21662618
+        functionName: PlayWalk
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.98451144
         functionName: EndAnimationState
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6269417
+        functionName: PlayWalk
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

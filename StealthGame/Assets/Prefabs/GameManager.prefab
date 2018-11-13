@@ -442,6 +442,7 @@ GameObject:
   - component: {fileID: 114512113158640800}
   - component: {fileID: 114935651520854332}
   - component: {fileID: 114890809852153942}
+  - component: {fileID: 114466291678553642}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -947,7 +948,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 68cc387a53c41eb4991fbdd1c4b90a9f, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1027,7 +1028,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 846d7f47ef1887d468d85a9ba53f6f11, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1427,7 +1428,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b232e3d4280944e40a1dfad1a9a7f418, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1827,7 +1828,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 06c3398ef4a36064d8f6535d34cc14e5, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1907,7 +1908,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ff1395d59b959044091b0a4cedba6d09, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2067,7 +2068,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: e417a7c191d256e43b0272355fe8d160, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2467,7 +2468,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: fcaefa79aae60314090afbeb7a3a137f, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2627,7 +2628,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 2029ab761214bd64bb6bfde702c6078c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2707,7 +2708,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5666daae3ff56f04fa1bebb4332d988e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2787,7 +2788,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0e7f122f4b9566f4ba59414789dfdeba, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2962,6 +2963,21 @@ MonoBehaviour:
   m_currentState: {fileID: 114512113158640800}
   m_currentTeam: 1
   m_soundController: {fileID: 0}
+--- !u!114 &114466291678553642
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1987652157899944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b30d52958016a4ab8643a12747e582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_tileSize: {x: 2, y: 1, z: 2}
+  m_navGridWidth: 0
+  m_navGridDepth: 0
+  m_navGridHeight: 0
 --- !u!114 &114512113158640800
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3007,7 +3023,6 @@ MonoBehaviour:
   m_team:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
   m_currentAgentIndex: 0
   m_currentAgentState: 2
   m_gameController: {fileID: 0}
@@ -3037,6 +3052,7 @@ MonoBehaviour:
   m_slide0: {fileID: 82477064307642534}
   m_slide1: {fileID: 82005631363118254}
   m_slide2: {fileID: 82823451727547186}
+  m_slide3: {fileID: 0}
   m_doorSafe: {fileID: 82072855995810738}
   m_doorEntrance0: {fileID: 82107639287003500}
   m_doorEntrance1: {fileID: 82553785786126796}
