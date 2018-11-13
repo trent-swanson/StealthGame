@@ -44,7 +44,7 @@ public class GotoNode : AIAction
         m_isDone = false;
         if (NPCAgent.m_currentNavNode != null)
         {
-            navPath = Navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent);
+            navPath = Navigation.GetNavPath(NPCAgent.m_currentNavNode, m_targetNode, NPCAgent, true);
 
             if(navPath.Count == 0)//Unable to reach navnode, attempt to get to adjacent node
             {
@@ -79,7 +79,7 @@ public class GotoNode : AIAction
 
             NPCAgent.m_agentAnimationController.m_animationSteps = AnimationManager.GetNPCAnimationSteps(NPCAgent, navPath);
 
-            NPCAgent.m_currentActionPoints -= navPath.Count;
+            NPCAgent.m_currentActionPoints -= m_baseActionCost;
 
             NPCAgent.m_agentAnimationController.PlayNextAnimation();
         }
@@ -102,7 +102,7 @@ public class GotoNode : AIAction
 
         foreach (NavNode adjacentNode in targetNode.m_adjacentNodes)
         {
-            List<NavNode> tempPath = Navigation.GetNavPath(startingNode, adjacentNode, agent);
+            List<NavNode> tempPath = Navigation.GetNavPath(startingNode, adjacentNode, agent, true);
             if(tempPath.Count != 0 && tempPath.Count < distance)
             {
                 distance = tempPath.Count;

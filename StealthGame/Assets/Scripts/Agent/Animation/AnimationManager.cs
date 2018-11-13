@@ -69,7 +69,9 @@ public class AnimationManager : MonoBehaviour
 
         GetInteraction(ref agentDir, interactionDir, transitionSteps, interactionType);
 
-        return transitionSteps;
+        List<ANIMATION_STEP> singleStep = new List<ANIMATION_STEP>();
+        singleStep.Add(transitionSteps[0]);
+        return singleStep;
     }
 
     private static void GetActionStepsForSingleStep(ref FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode)

@@ -265,7 +265,7 @@ public class Navigation : MonoBehaviour
     //----------------
     //A* stuff
     //----------------
-    public static List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent)
+    public static List<NavNode> GetNavPath(NavNode startingNode, NavNode goalNode, Agent agent, bool moveThroughCharacters)
     {
         if (startingNode == goalNode)//Already at position
             return new List<NavNode>();
@@ -286,27 +286,42 @@ public class Navigation : MonoBehaviour
             if (currentNode == goalNode)
                 return GetPath(currentNode, startingNode);
 
-            AddNextNodes(currentNode, goalNode, openNodes, closedNodes, agent);
+            AddNextNodes(currentNode, goalNode, openNodes, closedNodes, agent, moveThroughCharacters);
 
             currentNode = GetLowestFScore(openNodes);
         }
         return new List<NavNode>();
     }
 
-    private static void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent)
+    private static void AddNextNodes(NavNode currentNode, NavNode goalNode, List<NavNode> openNodes, List<NavNode> closedNodes, Agent agent, bool moveThroughCharacters)
     {
         openNodes.Remove(currentNode);
         closedNodes.Add(currentNode);
 
         foreach (NavNode nextNode in currentNode.m_adjacentNodes)
         {
-            //Only add nodes which have not already been considered, are walkable and not already obstructed, unless it is obstructed by an enemy as attacking should take place.
-            if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) && 
-                nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE ||
-                (nextNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED && nextNode.m_obstructingAgent != null && nextNode.m_obstructingAgent.m_team != agent.m_team))
+            //Case of moving through enemies
+            if (moveThroughCharacters)
             {
-                openNodes.Add(nextNode);
-                nextNode.Setup(openNodes, closedNodes, goalNode);
+                //Only add nodes which have not already been considered, are walkable and not already obstructed, unless it is obstructed by an enemy as attacking should take place.
+                if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) &&
+                    nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE ||
+                    nextNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED)
+                {
+                    openNodes.Add(nextNode);
+                    nextNode.Setup(openNodes, closedNodes, goalNode);
+                }
+            }
+            else
+            {
+                //Only add nodes which have not already been considered, are walkable and not already obstructed, unless it is obstructed by an enemy as attacking should take place.
+                if (!openNodes.Contains(nextNode) && !closedNodes.Contains(nextNode) &&
+                    nextNode.m_nodeType == NavNode.NODE_TYPE.WALKABLE || nextNode.m_nodeType == NavNode.NODE_TYPE.INTERACTABLE ||
+                    (nextNode.m_nodeType == NavNode.NODE_TYPE.OBSTRUCTED && nextNode.m_obstructingAgent != null && nextNode.m_obstructingAgent.m_team != agent.m_team))
+                {
+                    openNodes.Add(nextNode);
+                    nextNode.Setup(openNodes, closedNodes, goalNode);
+                }
             }
         }
     }
