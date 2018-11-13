@@ -327,15 +327,29 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9866944
-        functionName: EndAnimationState
+      - time: 0.025679346
+        functionName: PlaySlideEnd
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.025679346
+      - time: 0.21297641
+        functionName: PlayWalk
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6618078
         functionName: PlaySlideEnd
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9866944
+        functionName: EndAnimationState
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
