@@ -34,7 +34,7 @@ public class SoundController : MonoBehaviour
 
     private AudioSource[] m_soundArray;
 
-    private void Start()
+    private void Start() //This is gud -Nick
     {
         m_soundArray = new AudioSource[(int)SOUND.COUNT];
 
