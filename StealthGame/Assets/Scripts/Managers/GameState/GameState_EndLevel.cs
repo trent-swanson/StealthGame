@@ -17,17 +17,13 @@ public class GameState_EndLevel : GameState
         return true;
     }
 
+
+    public GameObject levelCompleteUI;
+    public GameObject endTurnButton;
     public override void StartState()
     {
-        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
-        {
-            SceneManager.LoadScene(nextSceneIndex);
-        }
-        else
-        {
-            SceneManager.LoadScene(0);
-        }
+        levelCompleteUI.SetActive(true);
+        endTurnButton.SetActive(false);
     }
 
     public override void EndState()
@@ -38,5 +34,18 @@ public class GameState_EndLevel : GameState
     public override bool IsValid()
     {
         return m_playerState.m_objectiveAchived;
+    }
+
+    public void SceneChange()
+    {
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (SceneManager.sceneCountInBuildSettings > nextSceneIndex)
+        {
+            SceneManager.LoadScene(nextSceneIndex);
+        }
+        else
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 }
