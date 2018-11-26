@@ -21,6 +21,10 @@ public class AgentAnimationController : MonoBehaviour
     private GameState_NPCTurn m_NPCTurn = null;
     private GameState_PlayerTurn m_playerTurn = null;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    // Prep turning time
+    //--------------------------------------------------------------------------------------
     private void Start()
     {
         m_agent = GetComponent<Agent>();
@@ -45,6 +49,9 @@ public class AgentAnimationController : MonoBehaviour
         m_playerTurn = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameState_PlayerTurn>();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Called by animtion event, lets controller know when animtation has ended
+    //--------------------------------------------------------------------------------------
     public void EndAnimationState()
     {
         if (m_animationSteps.Count > 0)
@@ -58,6 +65,9 @@ public class AgentAnimationController : MonoBehaviour
         PlayNextAnimation();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Play the next set animtion based off m_animationSteps
+    //--------------------------------------------------------------------------------------
     public void PlayNextAnimation()
     {
         if (m_animationSteps.Count > 0)
@@ -226,6 +236,9 @@ public class AgentAnimationController : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // On a movemnt based animation, update node based off agent path
+    //--------------------------------------------------------------------------------------
     public void UpdateGridPos()
     {
         List<NavNode> path = m_agent.m_path;
@@ -241,18 +254,38 @@ public class AgentAnimationController : MonoBehaviour
 
     public enum ROTATION_DIR { LEFT = -1, RIGHT = 1 }
 
+    //--------------------------------------------------------------------------------------
+    // On a rotation based animation, update facing direction
+    // Start rotation coroutein
+    // 
+    // Param
+    //		rotationDir: direction to rotate towards
+    //--------------------------------------------------------------------------------------
     public void RotateLeftRight(ROTATION_DIR rotationDir)
     {
         float totalRotateAmount = 90 * (int)rotationDir;
         StartCoroutine(Rotate(totalRotateAmount, m_rotateLeftRightTime));
     }
 
+    //--------------------------------------------------------------------------------------
+    // On a rotation based animation, update facing direction
+    // Always a 180 turn
+    // Start rotation coroutein
+    //--------------------------------------------------------------------------------------
     public void RotateTurnAround()
     {
         float totalRotateAmount = 180;
         StartCoroutine(Rotate(totalRotateAmount, m_rotateTurnAroundTime));
     }
 
+    //--------------------------------------------------------------------------------------
+    // Rotation of agent over turning time
+    // setup all rotation corouteins
+    // 
+    // Param
+    //		angle: angle to roate in each step
+    //		totalTime: how long the rotation will take
+    //--------------------------------------------------------------------------------------
     public IEnumerator Rotate(float angle, float totalTime)
     {
         float steptime = totalTime / m_rotationSteps;
@@ -269,12 +302,26 @@ public class AgentAnimationController : MonoBehaviour
         transform.rotation = finalRotation;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Rotation of agent in fixed step
+    // 
+    // Param
+    //		delay:  long to wait till roation occurs
+    //		rotateAmount: how far to rotate
+    //--------------------------------------------------------------------------------------
     public IEnumerator RotateOverTime(float delay, float rotateAmount)
     {
         yield return new WaitForSeconds(delay);
         transform.RotateAround(transform.position, Vector3.up, rotateAmount);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Given forwards dir, roate left or right. E.g. facing north, turn left, facing now west
+    // 
+    // Param
+    //		agent: agent to base foward values off
+    //		rotationDir: left/right
+    //--------------------------------------------------------------------------------------
     public void RotateFacingDir(Agent agent, ROTATION_DIR rotationDir)
     {
         FACING_DIR currentDir = agent.m_facingDir;

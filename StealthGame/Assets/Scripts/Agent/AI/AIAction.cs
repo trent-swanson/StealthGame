@@ -7,8 +7,6 @@ public abstract class AIAction : ScriptableObject {
     [SerializeField]
     public List<WorldState.WORLD_STATE> m_satisfiedWorldStates = new List<WorldState.WORLD_STATE>();
 
-
-
     [System.Serializable]
     public struct RequiredWorldState
     {

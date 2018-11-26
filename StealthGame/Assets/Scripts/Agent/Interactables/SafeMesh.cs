@@ -6,12 +6,17 @@ public class SafeMesh : MonoBehaviour
 {
     private SoundController m_soundController = null;
 
-    // Use this for initialization
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     void Start ()
     {
         m_soundController = GameObject.FindGameObjectWithTag("GameController").GetComponent<SoundController>();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Play safe opening sound
+    //--------------------------------------------------------------------------------------
     public void PlaySafeOpening()
     {
         m_soundController.PlaySound(SoundController.SOUND.DOOR_SAFE);

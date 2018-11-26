@@ -16,6 +16,9 @@ public class PlayerStateMachine : MonoBehaviour
     public PlayerController m_playerController = null;
     public PlayerUI m_playerUI = null;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     public void Start()
     {
         m_playerController = GetComponent<PlayerController>();

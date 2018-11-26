@@ -24,6 +24,12 @@ public class Interactable : MonoBehaviour
 
     static Color m_fullColour = new Color(1, 1, 1, 1);
     static Color m_fadedColour = new Color(0.2f, 0.2f, 0.2f, 0.8f);
+
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    // Ensure interactable has a conected canvas
+    // Set navigation nodes to be a item based interatable 
+    //--------------------------------------------------------------------------------------
     protected virtual void Start()
     {
 #if UNITY_EDITOR
@@ -43,17 +49,35 @@ public class Interactable : MonoBehaviour
         m_soundController = m_gameController.GetComponent<SoundController>();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Can agent use this interactable
+    // 
+    // Param
+    //		agent: agent to check condition against
+    // Return:
+    //      bool when usable
+    //--------------------------------------------------------------------------------------
     public virtual bool CanPerform(Agent agent)
     {
         return false;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Perform interactables actions
+    // 
+    // Param
+    //		agent: agent to perform action
+    //--------------------------------------------------------------------------------------
     public virtual void PerformAction(Agent agent)
     {
         if (m_nextInteractable != null)
             m_nextInteractable.ToggleCanvas(true);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Set interactable as no longer usable
+    // Update all navnodes, disable canvas
+    //--------------------------------------------------------------------------------------
     public void DisableInteractable()
     {
         m_usable = false;
@@ -71,6 +95,9 @@ public class Interactable : MonoBehaviour
             m_interactableCanvas.SetActive(false);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Set canvas transparancy to be full
+    //--------------------------------------------------------------------------------------
     public void FullCanvas()
     {
         foreach (Image canvasImage in GetComponentsInChildren<Image>())
@@ -79,6 +106,9 @@ public class Interactable : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Set canvas transparancy to be faded
+    //--------------------------------------------------------------------------------------
     public void FadeCanvas()
     {
         foreach (Image canvasImage in m_interactableCanvas.GetComponentsInChildren<Image>())
@@ -87,6 +117,12 @@ public class Interactable : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Set canvas as visble or not
+    // 
+    // Param
+    //		val: toggle value to set canvas as
+    //--------------------------------------------------------------------------------------
     public void ToggleCanvas(bool val)
     {
         m_interactableCanvas.SetActive(val);

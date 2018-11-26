@@ -7,6 +7,13 @@ public class ExitDoor : Interactable
     public int m_requiredPlayerCount = 2;
     private GameState_PlayerTurn m_playerTurn = null;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    // Ensure interactable has a conected canvas
+    // Set navigation nodes to be a item based interatable 
+    //
+    // Set up visual ques 
+    //--------------------------------------------------------------------------------------
     protected override void Start()
     {
         base.Start();
@@ -16,6 +23,15 @@ public class ExitDoor : Interactable
             m_requiredPlayerCount = m_interactionNodes.Count;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Can agent use this interactable
+    // Requires both agents to be on a nav node, with one having a requred item
+    //
+    // Param
+    //		agent: agent to check condition against
+    // Return:
+    //      bool when usable
+    //--------------------------------------------------------------------------------------
     public override bool CanPerform(Agent agent)
     {
         int playerCount = 0;
@@ -34,6 +50,13 @@ public class ExitDoor : Interactable
         return haveItem && playerCount >= m_requiredPlayerCount;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Perform interactables actions
+    // Set objective achieved as true
+    //
+    // Param
+    //		agent: agent to perform action
+    //--------------------------------------------------------------------------------------
     public override void PerformAction(Agent agent)
     {
         base.PerformAction(agent);
@@ -42,6 +65,9 @@ public class ExitDoor : Interactable
         PlayDoorOpening();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Play sounds
+    //--------------------------------------------------------------------------------------
     public void PlayDoorOpening()
     {
         m_soundController.PlaySound(SoundController.SOUND.DOOR_ENTRANCE_0);

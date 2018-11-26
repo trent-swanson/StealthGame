@@ -5,8 +5,20 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
+    //All possible animations
     public enum ANIMATION_STEP {IDLE, STEP, TURN_RIGHT, TURN_LEFT, TURN_AROUND, WALK, CLIMB_UP_IDLE, CLIMB_UP_WALK, CLIMB_DOWN_IDLE, CLIMB_DOWN_WALK, WALL_HIDE_RIGHT, WALL_HIDE_LEFT, ATTACK, WALL_ATTACK, RANGED_ATTACK, INTERACTABLE, PICKUP_ITEM, DEATH, REVIVE }//Animation states
 
+    //--------------------------------------------------------------------------------------
+    // Build player animtaion step list
+    // 
+    // Param
+    //		agent: agent to build list for
+    //		pathNodes: path of an agent to take if moving
+    //		interactionType: if agent is performing na interaction, what is it
+    //		interactionDir: what direction will interaction occur with, e.g puching may be facing north, punch requires southward direction
+    // Return:
+    //      animtaion step list
+    //--------------------------------------------------------------------------------------
     public static List<ANIMATION_STEP> GetPlayerAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE, FACING_DIR interactionDir = FACING_DIR.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
@@ -45,6 +57,17 @@ public class AnimationManager : MonoBehaviour
         return transitionSteps;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Build NPC animtaion step list
+    // Cut down version of GetPlayerAnimationSteps, doesnt encounter need for interation dir
+    // 
+    // Param
+    //		agent: agent to build list for
+    //		pathNodes: path of an agent to take if moving
+    //		interactionType: if agent is performing na interaction, what is it
+    // Return:
+    //      animtaion step list
+    //--------------------------------------------------------------------------------------
     public static List<ANIMATION_STEP> GetNPCAnimationSteps(Agent agent, List<NavNode> pathNodes, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
@@ -74,6 +97,15 @@ public class AnimationManager : MonoBehaviour
         return singleStep;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Animaiton for a single step, excludes need to add idle to end of animation list
+    // 
+    // Param
+    //		playerDir: ref to agent facing dir, updates as needed
+    //		transitionSteps: steps to perform for desired animaiton list
+    //		currentNode: current node of animaiton list
+    //		nextNode: what the next node will be
+    //--------------------------------------------------------------------------------------
     private static void GetActionStepsForSingleStep(ref FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode)
     {
         FACING_DIR nextDir = Agent.GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
@@ -96,6 +128,16 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Animaiton for a running movement, requires need to add idle to end of animation list
+    // 
+    // Param
+    //		playerDir: ref to agent facing dir, updates as needed
+    //		transitionSteps: steps to perform for desired animaiton list
+    //		currentNode: current node of animaiton list
+    //		nextNode: what the next node will be
+    //      futureNode: on null future node, require idle to be used to go from running to stop
+    //--------------------------------------------------------------------------------------
     private static void GetActionStepsForRunning(ref FACING_DIR playerDir, List<ANIMATION_STEP> transitionSteps, NavNode currentNode, NavNode nextNode, NavNode futureNode = null)
     {
         FACING_DIR nextDir = Agent.GetFacingDir(nextNode.m_nodeTop - currentNode.m_nodeTop);
@@ -139,6 +181,15 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Build animaiton list for an interaction
+    // 
+    // Param
+    //		playerDir: ref to agent facing dir, updates as needed
+    //      interactionDir: if interaction requires a given direction, modify rotation to face this way
+    //		transitionSteps: steps to perform for desired animaiton list
+    //		interactionType: what the interaction will be, alters what aniamtion step is added
+    //--------------------------------------------------------------------------------------
     private static void GetInteraction(ref FACING_DIR playerDir, FACING_DIR interactionDir, List<ANIMATION_STEP> transitionSteps, INTERACTION_TYPE interactionType = INTERACTION_TYPE.NONE)
     {
         if(interactionDir!= FACING_DIR.NONE)
@@ -167,6 +218,13 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // On player turn end, find closest wall to hide to, if not null, this is called.
+    // 
+    // Param
+    //		wallHideDir: wall to hide against, effect rotation
+    //      agent: agent to perform hding action to
+    //--------------------------------------------------------------------------------------
     public static List<ANIMATION_STEP> EndTurnWallHide(FACING_DIR wallHideDir, Agent agent)
     {
         List<ANIMATION_STEP> transitionSteps = new List<ANIMATION_STEP>();
@@ -179,6 +237,14 @@ public class AnimationManager : MonoBehaviour
         return transitionSteps;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Rotate towards a given direction
+    // 
+    // Param
+    //		currentDir: current facing direction, modified as needed
+    //      nextDir: the direction agent is required to face
+    //      transitionSteps: steps to perform for desired animaiton list
+    //--------------------------------------------------------------------------------------
     public static void GetRotation(ref FACING_DIR currentDir, FACING_DIR nextDir, ref List<ANIMATION_STEP> transitionSteps)
     {
         if (currentDir != nextDir && nextDir != FACING_DIR.NONE)

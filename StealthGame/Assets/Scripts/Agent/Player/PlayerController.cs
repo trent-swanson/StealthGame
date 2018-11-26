@@ -13,6 +13,9 @@ public class PlayerController : Agent
 
     public GameObject m_goldBag = null;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     protected override void Start()
     {
         base.Start();

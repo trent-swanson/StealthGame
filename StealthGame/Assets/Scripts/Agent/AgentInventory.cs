@@ -10,6 +10,9 @@ public class AgentInventory : MonoBehaviour
     private InventoryUI m_inventoryUI = null;
     private UIController m_UIController = null;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     private void Start()
     {
         m_inventoryUI = GetComponent<Agent>().m_agentInventoryUI;
@@ -19,6 +22,14 @@ public class AgentInventory : MonoBehaviour
         m_UIController = GameObject.FindGameObjectWithTag("UI").GetComponent<UIController>();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Determine if agent has a given item
+    // 
+    // Param
+    //		item: item to check in inventory
+    // Return:
+    //      false when not in inventory
+    //--------------------------------------------------------------------------------------
     public bool AgentHasItem(Item item)
     {
         foreach (Item currentItem in m_currentItems)
@@ -29,6 +40,14 @@ public class AgentInventory : MonoBehaviour
         return false;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Modify agent inventory
+    // TODO, split to two funcitons
+    // 
+    // Param
+    //		functionType: should we add or remove an item
+    //		item: item to add/remove
+    //--------------------------------------------------------------------------------------
     public void ItemManagement(ADD_REMOVE_FUNCTION functionType, Item item)
     {
         switch (functionType)

@@ -24,6 +24,10 @@ public class Item : MonoBehaviour
     public Sprite m_icon;
     public string m_description;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    // Set current navigation node to be a item based navnode 
+    //--------------------------------------------------------------------------------------
     void Start()
     {
 		RaycastHit hit;
@@ -34,7 +38,14 @@ public class Item : MonoBehaviour
         }
 	}
 
-	public void EquipItem(Agent agent)
+    //--------------------------------------------------------------------------------------
+    // Pickup of item
+    // Add item to agents inventory, remove item
+    // 
+    // Param
+    //		agent: agent to be handed item
+    //--------------------------------------------------------------------------------------
+    public void EquipItem(Agent agent)
     {
         if (!agent.m_agentInventory.AgentHasItem(this))
         {
@@ -51,7 +62,10 @@ public class Item : MonoBehaviour
         }
     }
 
-	public void TurnOnOutline() {
+    //--------------------------------------------------------------------------------------
+    // Turn on outline shader 
+    //--------------------------------------------------------------------------------------
+    public void TurnOnOutline() {
 		Shader outlineShader = Shader.Find("Custom/Outline");
 		if (outlineShader != null) {
 			Renderer renderer = GetComponent<Renderer>();
@@ -63,7 +77,10 @@ public class Item : MonoBehaviour
         m_canvas.SetActive(true);
     }
 
-	public void TurnOffOutline() {
+    //--------------------------------------------------------------------------------------
+    // Turn off outline shader
+    //--------------------------------------------------------------------------------------
+    public void TurnOffOutline() {
 		Shader standardShader = Shader.Find("Standard");
 		if (standardShader != null) {
 			Renderer renderer = GetComponent<Renderer>();

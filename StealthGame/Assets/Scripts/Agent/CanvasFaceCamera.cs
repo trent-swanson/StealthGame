@@ -5,6 +5,10 @@ using UnityEngine;
 public class CanvasFaceCamera : MonoBehaviour
 {
     private CameraController m_cameraController = null;
+
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     private void Start()
     {
         m_cameraController = GameObject.FindGameObjectWithTag("CamPivot").GetComponent<CameraController>();
@@ -15,6 +19,9 @@ public class CanvasFaceCamera : MonoBehaviour
 #endif
     }
 
+    //--------------------------------------------------------------------------------------
+    // Rotate canvas to face the cameras pivot 
+    //--------------------------------------------------------------------------------------
     private void Update ()
     {
         transform.rotation = m_cameraController.m_cameraPivot.transform.rotation;

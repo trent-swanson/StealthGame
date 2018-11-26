@@ -12,6 +12,13 @@ public class Safe : Interactable
     private GameObject boozeEmpty;
     private GameObject sparkleParticle;
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    // Ensure interactable has a conected canvas
+    // Set navigation nodes to be a item based interatable 
+    //
+    // Set up visual ques 
+    //--------------------------------------------------------------------------------------
     protected override void Start()
     {
         base.Start();
@@ -22,12 +29,27 @@ public class Safe : Interactable
         boozeEmpty.SetActive(false);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Can agent use this interactable
+    // Requires agent to have the required item
+    // 
+    // Param
+    //		agent: agent to check condition against
+    // Return:
+    //      bool when usable
+    //--------------------------------------------------------------------------------------
     public override bool CanPerform(Agent agent)
     {
         return m_usable && agent.m_agentInventory.AgentHasItem(m_requiredItem);
     }
 
-
+    //--------------------------------------------------------------------------------------
+    // Perform interactables actions
+    // Play safe opening, give agent the item in safe
+    //
+    // Param
+    //		agent: agent to perform action
+    //--------------------------------------------------------------------------------------
     public override void PerformAction(Agent agent)
     {
         Item newItem = Instantiate(m_item);
@@ -46,6 +68,9 @@ public class Safe : Interactable
         HideObjects();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Remove attached objects to graphically show player taking items
+    //--------------------------------------------------------------------------------------
     private void HideObjects()
     {
         boozeGroup.SetActive(false);
@@ -53,6 +78,9 @@ public class Safe : Interactable
         boozeEmpty.SetActive(true);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Play sounds
+    //--------------------------------------------------------------------------------------
     public void PlaySafeClick()
     {
         m_soundController.PlaySound(SoundController.SOUND.CLICK_MOVE_0);

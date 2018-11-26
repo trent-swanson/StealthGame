@@ -18,6 +18,9 @@ public class PlayerUI : MonoBehaviour
     public Sprite m_unselectedSprite = null;
     public enum MESH_STATE { DRAW_NAVMESH, DRAW_PATH, REMOVE_NAVMESH, REMOVE_PATH}
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     private void Start()
     {
         m_pathRenderer = GetComponentInChildren<LineRenderer>();
@@ -31,6 +34,9 @@ public class PlayerUI : MonoBehaviour
 #endif
     }
 
+    //--------------------------------------------------------------------------------------
+    // On players turn start, display UI
+    //--------------------------------------------------------------------------------------
     public void StartUI()
     {
         ShowInteractables();
@@ -38,12 +44,18 @@ public class PlayerUI : MonoBehaviour
         m_APImage.sprite = m_selectedSprite;
     }
 
+    //--------------------------------------------------------------------------------------
+    // On players turn end, remove UI
+    //--------------------------------------------------------------------------------------
     public void EndUI()
     {
         RemoveInteractables();
         m_APImage.sprite = m_unselectedSprite;
     }
 
+    //--------------------------------------------------------------------------------------
+    // During players turn update UI as needed
+    //--------------------------------------------------------------------------------------
     public void UpdateUI()
     {
         if(m_playerController!=null)
@@ -53,6 +65,16 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Given a navnode setup its UI
+    // 
+    // Param
+    //		state: state of nav node UI
+    //		selectableNodes: List of all selectable navNodes
+    //		currentSelectedNode: Whatis currently selcted navnode, has different UI colour
+    //		newSelectedNode: What is the new slected navnode, on change from previous selected, swap UI
+    //		nodePath: path to draw using path renderer
+    //--------------------------------------------------------------------------------------
     public void UpdateNodeVisualisation(MESH_STATE state, List<NavNode> selectableNodes, NavNode currentSelectedNode = null, NavNode newSelectedNode = null, List<NavNode> nodePath = null)
     {
         if (state == MESH_STATE.DRAW_NAVMESH) //draw just navmesh
@@ -84,6 +106,13 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Set up Nav node UI, alter sprite renderer/transparancy 
+    // 
+    // Param
+    //		navNodes: all navnodes to alter UI of
+    //		state: state of nav node UI
+    //--------------------------------------------------------------------------------------
     private void SetNodeStates(List<NavNode> navNodes, NavNode.NODE_STATE state)
     {
         foreach (NavNode navNode in navNodes)
@@ -101,6 +130,12 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
+    //--------------------------------------------------------------------------------------
+    // Set up path renderer
+    // 
+    // Param
+    //		nodePath: path of navnodes
+    //--------------------------------------------------------------------------------------
     private void CalculatePathRender(List<NavNode> nodePath)
     {
         Vector3[] pathPos = GetPathPos(nodePath);
@@ -108,12 +143,23 @@ public class PlayerUI : MonoBehaviour
         m_pathRenderer.SetPositions(pathPos);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Remove path renderer
+    //--------------------------------------------------------------------------------------
     private void ClearPathRender()
     {
         if(m_pathRenderer!=null)
             m_pathRenderer.positionCount = 0;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Get path positions
+    // Postion starts from top of nav node plus some
+    // On navnode change in height, add aditional positions on edges
+    // 
+    // Param
+    //		nodes: NavNodes to build path from
+    //--------------------------------------------------------------------------------------
     private Vector3[] GetPathPos(List<NavNode> nodes)
     {
         List<Vector3> pathPos = new List<Vector3>();
@@ -142,8 +188,10 @@ public class PlayerUI : MonoBehaviour
         }
         return pathPos.ToArray();
     }
-
-    //highlight interactable objects in range
+    
+    //--------------------------------------------------------------------------------------
+    // Highlight interactable objects in range
+    //--------------------------------------------------------------------------------------
     private void ShowInteractables()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_playerController.m_highlightInteractablesRange, LayerManager.m_interactableLayer);
@@ -160,6 +208,9 @@ public class PlayerUI : MonoBehaviour
         m_uiController.ShowInteractables(m_agentInventory);
     }
 
+    //--------------------------------------------------------------------------------------
+    // Remove highlighted interactable objects
+    //--------------------------------------------------------------------------------------
     private void RemoveInteractables()
     {
         foreach (Item pickUp in m_visiblePickups)

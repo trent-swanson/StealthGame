@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class Vision : MonoBehaviour
 {
+    //--------------------------------------------------------------------------------------
+    // Build a NPC vision cone
+    // Basic vision setup, based off direction/distance, move to next line of possible nodes
+    // Check if within vision cone angle and close enough, if so add to vision 
+    // Finally at end, raycast back for each node to ensure possible vision. Stop vision bending around corners
+    // 
+    // Param
+    //		agent: agenet to start at
+    //		visionDistance: how far to travel in units. One tile is currently 2 units
+    //		visionCone: angle to base building of nodes off
+    //		playerTurn: On player turn, start at agent and adjacent left/right nodes. Otherwise just current node
+    // Return:
+    //      List of navnodes within vision
+    //--------------------------------------------------------------------------------------
     public static List<NavNode> BuildVisionList(Agent agent, float visionDistance, float visionCone, bool playerTurn)
     {
         FACING_DIR facingDir = agent.m_facingDir ;
@@ -72,6 +86,20 @@ public class Vision : MonoBehaviour
         return visibleNodes;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Get next layer of nav nodes
+    // Potential nav nodes are wihtin distance, wihtin vision cone from previous node, and in states obstructed/walkable/interatacble 
+    //
+    // Param
+    //		agent: agenet to start at
+    //		startingNode: node to base distance/angle from
+    //		openNodes: all nodes that are valid vions nodes
+    //		facingDir: direction to base forward direction as, this determins the angle
+    //		visionDistance: how far to travel in units. One tile is currently 2 units
+    //		visionCone: angle to base building of nodes off
+    // Return:
+    //      List of navnodes within vision
+    //--------------------------------------------------------------------------------------
     private static List<NavNode> GetNextLayer(Agent agent, NavNode startingNode, List<NavNode> openNodes, FACING_DIR facingDir, float visionDistance, float visionCone)
     {
         List<NavNode> newOpenNodes = new List<NavNode>();
@@ -105,6 +133,18 @@ public class Vision : MonoBehaviour
         return newOpenNodes;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Get potential nav node. Conditions are wihtin distance, wihtin vision cone from previous node, and in states obstructed/walkable/interatacble 
+    //
+    // Param
+    //		agent: agenet to start at
+    //		startingNode: node to base distance/angle from
+    //		facingDir: direction to base forward direction as, this determins the angle
+    //		visionDistance: how far to travel in units. One tile is currently 2 units
+    //		visionCone: angle to base building of nodes off
+    // Return:
+    //      List of navnode, if null, node is not valid
+    //--------------------------------------------------------------------------------------
     private static NavNode GetNavNode(Agent agent, NavNode startingNode, NavNode currentNavNode, FACING_DIR facingDir, float visionDistance, float visionCone)
     {
         List<NavNode> possibleNodes = new List<NavNode>();
@@ -131,6 +171,15 @@ public class Vision : MonoBehaviour
         return null;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Get next direction based of a forwards direction
+    //
+    // Param
+    //		facingDir: Forwards direction to be checked against
+    //		relativeDir: given forwards dir, get left or right relative direction
+    // Return:
+    //      relative direction
+    //--------------------------------------------------------------------------------------
     private enum LEFT_RIGHT {RIGHT = 1, LEFT = -1 }
     private static FACING_DIR GetRelativeDir(FACING_DIR facingDir, LEFT_RIGHT relativeDir)
     {

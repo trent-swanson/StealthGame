@@ -6,6 +6,11 @@ public class EnviromentHazard_SteamPipe : EnviromentHazard
 {
     public GameObject m_activatedSteamObj = null;
 
+    //--------------------------------------------------------------------------------------
+    // Hazard is activated
+    // All steam objets attached activate
+    // Knocks out agents in selected effective area
+    //--------------------------------------------------------------------------------------
     public override void ActivateHazard()
     {
         m_activatedSteamObj.SetActive(true);

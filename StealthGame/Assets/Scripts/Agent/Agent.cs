@@ -63,6 +63,9 @@ public class Agent : MonoBehaviour
     [HideInInspector]
     public List<NavNode> m_path = new List<NavNode>();
 
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
     protected virtual void Start()
     {
 #if UNITY_EDITOR
@@ -95,23 +98,32 @@ public class Agent : MonoBehaviour
         m_facingDir = GetFacingDir(transform.forward);
     }
 
-    //Start of turn, only runs once per turn
+    //--------------------------------------------------------------------------------------
+    // Start of turn, only runs once per turn
+    //--------------------------------------------------------------------------------------
     public virtual void AgentTurnInit()
     {
         m_currentActionPoints = m_maxActionPoints;
     }
 
+    //--------------------------------------------------------------------------------------
     //Runs every time a agent is selected, this can be at end of an action is completed
+    //--------------------------------------------------------------------------------------
     public virtual void AgentSelected() { }
 
     public enum AGENT_UPDATE_STATE {AWAITING_INPUT, PERFORMING_ACTIONS, END_TURN}
     //Constant update while agent is selected
     public virtual AGENT_UPDATE_STATE AgentTurnUpdate() { return AGENT_UPDATE_STATE.END_TURN; }
 
+    //--------------------------------------------------------------------------------------
     //Runs when agent is removed from team list, end of turn
+    //-------------------------------------------------------------------------------------- 
     public virtual void AgentTurnEnd(){}
 
-	public virtual void Knockout()
+    //--------------------------------------------------------------------------------------
+    //Agent gets knocked out, setup tile, play death animation
+    //-------------------------------------------------------------------------------------- 
+    public virtual void Knockout()
     {
 		m_knockedout = true;
 
@@ -127,6 +139,9 @@ public class Agent : MonoBehaviour
         m_agentAnimationController.PlayNextAnimation();
     }
 
+    //--------------------------------------------------------------------------------------
+    //Agent gets revived,play revive animation. No AP added
+    //-------------------------------------------------------------------------------------- 
     public virtual void Revive()
     {
         m_knockedout = false;
@@ -141,6 +156,9 @@ public class Agent : MonoBehaviour
         m_agentAnimationController.PlayNextAnimation();
     }
 
+    //--------------------------------------------------------------------------------------
+    //Change the current state of agent tile/ Update new tile
+    //-------------------------------------------------------------------------------------- 
     public void ChangeCurrentNavNode(NavNode navNode)
     {
         m_currentNavNode.m_obstructingAgent = null;
@@ -152,6 +170,14 @@ public class Agent : MonoBehaviour
         m_currentNavNode.SetupNodeType();
     }
 
+    //--------------------------------------------------------------------------------------
+    // Convert Vector3 direction to closest facing direction
+    // 
+    // Param
+    //		dir: direction to be converted, doesnt have to be normalised
+    // Return:
+    //      closest facing direction, defualt to none
+    //--------------------------------------------------------------------------------------
     public static FACING_DIR GetFacingDir(Vector3 dir)
     {
         dir.y = 0; //Dont need to use y 
@@ -168,6 +194,14 @@ public class Agent : MonoBehaviour
         return FACING_DIR.NONE;
     }
 
+    //--------------------------------------------------------------------------------------
+    // Convert facing direction to vector3
+    // 
+    // Param
+    //		facingDir: direection to convert
+    // Return:
+    //      direction based off facing dir, defualt to Vector.zero
+    //--------------------------------------------------------------------------------------
     public static Vector3 FacingDirEnumToVector3(FACING_DIR facingDir)
     {
         switch (facingDir)
@@ -236,4 +270,17 @@ public class Agent : MonoBehaviour
     {
         m_soundController.PlaySound(SoundController.SOUND.DEATH);
     }
+
+    //--------------------------------------------------------------------------------------
+    // Initialisation
+    //--------------------------------------------------------------------------------------
+
+    //--------------------------------------------------------------------------------------
+    // Convert Vector3 direction to closest facing direction
+    // 
+    // Param
+    //		dir: direction to be converted, doesnt have to be normalised
+    // Return:
+    //      closest facing direction, defualt to none
+    //--------------------------------------------------------------------------------------
 }
