@@ -84,7 +84,7 @@ public class PlayerState_InputStart : PlayerState
                     {
                         int distance = currentBFSNode.m_BFSDistance - 1;
 
-                        if (nextBFSNode.m_BFSDistance < distance && distance >= 0)
+                        if (nextBFSNode.m_BFSDistance <= distance && distance >= 0)
                         {
                             nextBFSNode.m_BFSDistance = distance;
                             nextBFSNode.m_BFSPreviousNode = currentBFSNode;

@@ -59,6 +59,13 @@ public class PlayerController : Agent
         m_playerStateMachine.TurnEndStateMachine();
         m_playerUI.UpdateUI();
         m_agentInventoryUI.DisableInventory();
+
+        //Reset all nav node BFS vals to -1
+        foreach (NavNode navNode in m_playerStateMachine.m_selectableNodes)
+        {
+            navNode.m_BFSDistance = -1;
+        }
+        m_currentNavNode.m_BFSDistance = -1;
     }
 
     public override void Knockout()
