@@ -8893,7 +8893,7 @@ Prefab:
     - target: {fileID: 224190998726596228, guid: d8aabd001159ce642bcb30e558e249a9,
         type: 2}
       propertyPath: m_SizeDelta.x
-      value: -3.7539062
+      value: -3.7622833
       objectReference: {fileID: 0}
     - target: {fileID: 114390414010563648, guid: d8aabd001159ce642bcb30e558e249a9,
         type: 2}
@@ -12516,6 +12516,11 @@ Prefab:
         type: 2}
       propertyPath: m_camDirection
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114139308935103816, guid: 039578e9aa2a2d347940488ff179178f,
+        type: 2}
+      propertyPath: m_edgeDetection
+      value: 0.015
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 039578e9aa2a2d347940488ff179178f, type: 2}
