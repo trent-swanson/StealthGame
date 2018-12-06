@@ -19,6 +19,13 @@ public class PlayerState_Perform : PlayerState
     {
         m_playerController.m_currentActionPoints = m_parentStateMachine.m_currentSelectedNode.m_BFSDistance;//Set action points to node value
 
+        foreach (NavNode navNode in m_parentStateMachine.m_selectableNodes)
+        {
+            navNode.m_BFSDistance = -1;
+        }
+        m_playerController.m_currentNavNode.m_BFSDistance = -1;
+
+
         //Get animation steps
         m_agentAnimationController.m_animationSteps.Clear();
 

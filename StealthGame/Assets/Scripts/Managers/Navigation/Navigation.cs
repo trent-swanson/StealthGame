@@ -173,6 +173,8 @@ public class Navigation : MonoBehaviour
     //----------------
     private void UpdateNeighbourNodes(NavNode currentNode, NavNode[,,] navNodeGrid)
     {
+
+
         Vector3 initialRaycastPos = currentNode.transform.position;
         initialRaycastPos.y = m_minYPos;
 
@@ -200,8 +202,13 @@ public class Navigation : MonoBehaviour
 
     private void BuildNodeBranches(NavNode currentNode)
     {
-      
-        if(currentNode!=null)
+        currentNode.m_northNodes.Clear();
+        currentNode.m_southNodes.Clear();
+        currentNode.m_eastNodes.Clear();
+        currentNode.m_westNodes.Clear();
+        currentNode.m_adjacentNodes.Clear();
+
+        if (currentNode!=null)
         {
             Vector3Int currentGridPos = currentNode.m_gridPos;
 
@@ -230,6 +237,7 @@ public class Navigation : MonoBehaviour
             currentNode.m_adjacentNodes.AddRange(currentNode.m_eastNodes);
             currentNode.m_adjacentNodes.AddRange(currentNode.m_southNodes);
             currentNode.m_adjacentNodes.AddRange(currentNode.m_westNodes);
+
         }
     }
 
@@ -247,15 +255,6 @@ public class Navigation : MonoBehaviour
             nodes.Add(m_navGrid[gridOffset.x, gridOffset.y - 1, gridOffset.z]);
 
         return nodes;
-    }
-
-    public NavNode GetAdjacentNode(Vector3Int gridPos, Vector3Int gridOffset)
-    {
-        //Ensure offset is within range
-        if (gridPos.x + gridOffset.x < 0 || gridPos.x + gridOffset.x > m_navGridWidth - 1 || gridPos.y + gridOffset.y < 0 || gridPos.y + gridOffset.y > m_navGridHeight - 1 || gridPos.z + gridOffset.z < 0 || gridPos.z + gridOffset.z > m_navGridDepth - 1)
-            return null;
-
-        return m_navGrid[gridPos.x + gridOffset.x, gridPos.y + gridOffset.y, gridPos.z + gridOffset.z]; //Get offset node
     }
 
     //----------------

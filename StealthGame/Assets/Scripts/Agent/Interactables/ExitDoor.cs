@@ -42,7 +42,7 @@ public class ExitDoor : Interactable
             if (interactableNode.m_obstructingAgent != null && interactableNode.m_obstructingAgent.m_team == Agent.TEAM.PLAYER)
             {
                 playerCount++;
-                if (agent.m_agentInventory.AgentHasItem(m_requiredItem))
+                if (interactableNode.m_obstructingAgent.m_agentInventory.AgentHasItem(m_requiredItem))
                     haveItem = true;
             }
         }

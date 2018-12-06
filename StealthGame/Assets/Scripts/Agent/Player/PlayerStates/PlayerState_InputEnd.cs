@@ -41,18 +41,14 @@ public class PlayerState_InputEnd : PlayerState
     //-------------------
     public override void StateEnd()
     {
-        foreach (NavNode selectableNode in m_parentStateMachine.m_selectableNodes)
+        if(m_playerController.m_currentActionPoints == 0)
         {
-            selectableNode.m_BFSDistance = - 100; //Default to remove abliity to click again
+            m_playerController.m_playerTurn.AutoEndTurn();
         }
 
         m_parentStateMachine.m_selectableNodes.Clear();
         m_parentStateMachine.m_currentSelectedNode = null;
 
-        if(m_playerController.m_currentActionPoints == 0)
-        {
-            m_playerController.m_playerTurn.AutoEndTurn();
-        }
     }
 
     //-------------------

@@ -60,6 +60,8 @@ public class NavNode : MonoBehaviour
 
     void Start()
     {
+        m_BFSDistance = -1;
+
         m_spriteRenderer = m_selectableUI.GetComponent<SpriteRenderer>();
         spriteColor = m_spriteRenderer.color;
         Vector3 colliderExtents = GetComponent<BoxCollider>().size;
